@@ -8,9 +8,9 @@ struct Triple {
 };
 
 struct Obj {
-    u32 unk0, unk4, unk8, unkC, unk10, unk14;
-    u8 unk18[4];
-    u32 unk1C, unk20, unk24, state, id, unk30, unk34, entered;
+    u32 unk0, channel, timeLow, timeHigh, unk10, systemProfileChanged;
+    u8 userProfile[4];
+    u32 userProfileSize, unk20, userProfileChanged, state, id, unk30, unk34, entered;
 };
 
 struct Node {
@@ -18,7 +18,7 @@ struct Node {
     Obj *value;
 };
 struct It;
-extern "C" void ov45_02236E58(It *it);
+extern "C" void LobbyTreeIterator_Advance(It *it);
 
 struct It {
     Node *n;
@@ -31,7 +31,7 @@ struct It {
     }
 
     It &operator++() {
-        ov45_02236E58(this);
+        LobbyTreeIterator_Advance(this);
         return *this;
     }
 
@@ -54,7 +54,7 @@ struct It {
 
 struct Handler {
     void *unk0, *unk4, *unk8;
-    void (*func)(u32, Triple *, void *, u32);
+    void (*onPlayerEnter)(u32, Triple *, void *, u32);
 };
 
 struct Tree {
@@ -102,20 +102,20 @@ extern "C" void PPWLobbyPlayers_UpdateStates(Map *m) {
                 break;
             case 2: {
                 Obj *obj = it.n->value;
-                obj->unk14 = zero;
+                obj->systemProfileChanged = zero;
                 o2 = it.n->value;
-                o2->unk24 = zero;
-                const Triple &t = (Triple) { .c = obj->unk4, .a = obj->unk8, .b = obj->unkC };
+                o2->userProfileChanged = zero;
+                const Triple &t = (Triple) { .c = obj->channel, .a = obj->timeLow, .b = obj->timeHigh };
                 Triple b = t;
-                x = o2->unk1C;
+                x = o2->userProfileSize;
                 y = it.n->value->id;
                 Handler *h = PPWLobby_GetWork();
-                h->func(y, &b, LobbyByteVector_Data(o2->unk18), x);
+                h->onPlayerEnter(y, &b, LobbyByteVector_Data(o2->userProfile), x);
                 it.n->value->entered = 1;
                 break;
             }
             }
-            ov45_02236E58(&it);
+            LobbyTreeIterator_Advance(&it);
         } while (it.n != end);
     }
 }

@@ -313,7 +313,7 @@
 .public Field2DCommandQueue_Push
 .public Field2DCommandQueue_Pop
 .public WiFiPlazaWork_HasError
-.public WiFiPlazaWork_TakeLobbyFlag131
+.public WiFiPlazaWork_TakeExcessFlood
 .public WiFiPlazaWork_TakePlayerEntered
 .public WiFiPlazaWork_TakePlayerLeft
 .public WiFiPlazaWork_IsEventFlagSet

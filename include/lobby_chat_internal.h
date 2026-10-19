@@ -107,14 +107,14 @@ typedef void (*VoidFunc)(void);
 extern struct {
     LobbyChatManager *manager;
     void *buf;
-} ov45_022577E8;
+} gLobbyMemReserve;
 
 void LobbyChat_StripChannelPrefix(Str *out, LobbyChatManager *manager, Str *name);
 void LobbyChat_StripChannelPrefixes(LobbyU32Vector *out, LobbyChatManager *manager, int n, u32 *arr);
 void LobbyChat_FormatNick(char *buf, int userId);
 
 extern VoidFunc gLobbyMemOutOfMemoryHandler;
-extern u8 ov45_02255228[];
+extern u8 sLobbyRequestMapInsertFlags[];
 extern char sStr_Empty_17[];
 extern char sStr_normal[];
 extern char sStr_voice[];

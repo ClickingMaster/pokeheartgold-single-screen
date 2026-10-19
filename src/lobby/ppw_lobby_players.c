@@ -83,7 +83,7 @@ BOOL PPWLobbyPlayers_Remove(SessionMgr *m, int id) {
             PPWLobbyPlayerSet_Erase(&tmp, &m->list, it);
             return TRUE;
         }
-        ov45_02236E58(&it);
+        LobbyTreeIterator_Advance(&it);
     }
     return FALSE;
 }
@@ -107,7 +107,7 @@ Session *PPWLobbyPlayers_Find(SessionMgr *m, int id) {
     a.it.current = first;
     b.it.current = first;
     while (((NodeIter *)&b.it)->current != hdr && id != ((Node *)((NodeIter *)&b.it)->current)->val->id) {
-        ov45_02236E58((NodeIter *)&b.it);
+        LobbyTreeIterator_Advance((NodeIter *)&b.it);
     }
     e = ((NodeIter *)&b.it)->current == (Node *)&m->list.root;
     r = b.it.current;

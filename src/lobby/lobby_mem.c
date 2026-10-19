@@ -84,17 +84,17 @@ void *LobbyMem_Alloc(u32 size) {
 }
 
 void LobbyMem_OnOutOfMemoryDisconnect(void) {
-    chatDisconnect(ov45_022577E8.manager->connection);
+    chatDisconnect(gLobbyMemReserve.manager->connection);
     gLobbyMemOutOfMemoryHandler = NULL;
 }
 
 void LobbyMem_OnOutOfMemory(void) {
     LobbyChatManager *manager;
-    if (ov45_022577E8.buf != NULL) {
-        DWC_Free(0, ov45_022577E8.buf, 0);
-        ov45_022577E8.buf = NULL;
+    if (gLobbyMemReserve.buf != NULL) {
+        DWC_Free(0, gLobbyMemReserve.buf, 0);
+        gLobbyMemReserve.buf = NULL;
     }
-    manager = ov45_022577E8.manager;
+    manager = gLobbyMemReserve.manager;
     manager->lastError = 2;
     manager->state = LOBBY_CHAT_STATE_ERROR;
     gLobbyMemOutOfMemoryHandler = LobbyMem_OnOutOfMemoryDisconnect;
@@ -102,13 +102,13 @@ void LobbyMem_OnOutOfMemory(void) {
 
 BOOL LobbyMem_InstallOutOfMemoryHandler(LobbyChatManager *manager) {
     void *buf;
-    ov45_022577E8.manager = manager;
-    if (ov45_022577E8.buf != NULL) {
-        DWC_Free(0, ov45_022577E8.buf, 0);
-        ov45_022577E8.buf = NULL;
+    gLobbyMemReserve.manager = manager;
+    if (gLobbyMemReserve.buf != NULL) {
+        DWC_Free(0, gLobbyMemReserve.buf, 0);
+        gLobbyMemReserve.buf = NULL;
     }
     buf = DWC_Alloc(0, 0x400);
-    ov45_022577E8.buf = buf;
+    gLobbyMemReserve.buf = buf;
     if (buf == NULL) {
         return FALSE;
     }
@@ -117,9 +117,9 @@ BOOL LobbyMem_InstallOutOfMemoryHandler(LobbyChatManager *manager) {
 }
 
 void LobbyMem_ReleaseReserve(void) {
-    if (ov45_022577E8.buf != NULL) {
-        DWC_Free(0, ov45_022577E8.buf, 0);
-        ov45_022577E8.buf = NULL;
+    if (gLobbyMemReserve.buf != NULL) {
+        DWC_Free(0, gLobbyMemReserve.buf, 0);
+        gLobbyMemReserve.buf = NULL;
     }
 }
 
@@ -156,7 +156,7 @@ void LobbyRequestMap_DeleteAll(LobbyRequestMap *map) {
             request->vtable->destroyAndFree(request);
         }
         tmp.current = it.current;
-        ov45_02236E58(&it);
+        LobbyTreeIterator_Advance(&it);
         LobbyRequestMap_Erase(&res, map, tmp);
     }
 }
@@ -164,7 +164,7 @@ void LobbyRequestMap_DeleteAll(LobbyRequestMap *map) {
 void LobbyRequestMap_Erase(Iter *out, LobbyRequestMap *map, Iter pos) {
     LobbyRequestMapNode *n = pos.current;
     if (n == map->leftmost) {
-        ov45_02236E58(&pos);
+        LobbyTreeIterator_Advance(&pos);
         map->leftmost = pos.current;
     }
     out->current = LobbyTree_EraseRebalance(n, map->root);

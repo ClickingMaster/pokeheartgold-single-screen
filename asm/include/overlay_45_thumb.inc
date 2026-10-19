@@ -177,7 +177,7 @@
 .public WiFiPlaza_Main
 .public WiFiPlaza_Exit
 .public WiFiPlazaWork_HasError
-.public WiFiPlazaWork_TakeLobbyFlag131
+.public WiFiPlazaWork_TakeExcessFlood
 .public WiFiPlazaWork_TakePlayerEntered
 .public WiFiPlazaWork_TakePlayerLeft
 .public WiFiPlazaWork_IsEventFlagSet

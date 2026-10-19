@@ -13,7 +13,7 @@ extern "C" void DWC_GetDateTime(RTCDate *date, RTCTime *time);
 extern "C" void chatThink(void *chat);
 
 struct It;
-extern "C" void ov45_02236E58(It *it);
+extern "C" void LobbyTreeIterator_Advance(It *it);
 
 struct It {
     LobbyTimerMapNode *n;
@@ -26,13 +26,13 @@ struct It {
     }
 
     It &operator++() {
-        ov45_02236E58(this);
+        LobbyTreeIterator_Advance(this);
         return *this;
     }
 
     It operator++(int) {
         LobbyTimerMapNode *old = n;
-        ov45_02236E58(this);
+        LobbyTreeIterator_Advance(this);
         return It(old);
     }
 
@@ -133,10 +133,10 @@ extern "C" int LobbyChat_Process(void) {
     for (LobbyTimerMapNode *n = it.n; n != end; n = it.n) {
         if (!Timer_Update(n, now)) {
             LobbyTimerMapNode *saved = it.n;
-            ov45_02236E58(&it);
+            LobbyTreeIterator_Advance(&it);
             LobbyTimerMap_Erase(&w->timerMap, Iterator_Make(saved));
         } else {
-            ov45_02236E58(&it);
+            LobbyTreeIterator_Advance(&it);
         }
     }
     LobbyChatManager *g2 = gLobbyChatManager;

@@ -32,7 +32,7 @@ void LobbyChannelMap_Insert(LobbyChannelMapInsertResult *out, LobbyChannelMap *m
 void LobbyChannelMap_Erase(Iterator *out, LobbyChannelMap *map, Iterator node) {
     LobbyChannelMapNode *saved = node.current;
     if (saved == map->first) {
-        ov45_02236E58(&node);
+        LobbyTreeIterator_Advance(&node);
         map->first = node.current;
     }
     out->current = LobbyTree_EraseRebalance(saved, map->root);

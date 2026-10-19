@@ -71,9 +71,9 @@ void LobbyRequestMap_Insert(LobbyRequestMapInsertResult *out, LobbyRequestMap *m
     LobbyRequestMapNode *parent = LobbyRequestMap_FindInsertPos(map, val, &pos, &insertLeft, &isLeftmost);
     if (pos == NULL || pos->request->id < (*val)->id) {
         out->node = LobbyRequestMap_InsertNode(map, parent, insertLeft, isLeftmost, val);
-        out->inserted = ov45_02255228[1];
+        out->inserted = sLobbyRequestMapInsertFlags[1];
         return;
     }
     out->node = pos;
-    out->inserted = ov45_02255228[2];
+    out->inserted = sLobbyRequestMapInsertFlags[2];
 }

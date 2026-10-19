@@ -581,7 +581,7 @@ typedef struct WiFiPlazaLobbyClient {
     u8 channelState; // WIFI_PLAZA_CHANNEL_STATE_*
     u8 joinChannelResult;
     u8 addingLocation;
-    u8 unk_131;
+    u8 excessFlood;
     u8 requestError;
     u8 ownRecordError;
     WiFiPlazaLobbyLocation locations[20];
@@ -601,7 +601,7 @@ typedef struct WiFiPlazaLobbyClient {
 } WiFiPlazaLobbyClient;
 
 u32 WiFiPlazaWork_HasError(WiFiPlazaWork *work);
-void WiFiPlazaWork_TakeLobbyFlag131(void *a0, void *a1, void *a2);
+void WiFiPlazaWork_TakeExcessFlood(void *a0, void *a1, void *a2);
 void *WiFiPlazaWork_GetNews(WiFiPlazaWork *work);
 void *WiFiPlazaWork_GetPlaces(WiFiPlazaWork *work);
 u32 *WiFiPlazaWork_GetCurrentTimePtr(WiFiPlazaWork *work);
@@ -886,7 +886,7 @@ BOOL WiFiPlazaLobbyClient_IsInLobby(void);
 void WiFiPlazaLobbyClient_Shutdown(void);
 BOOL WiFiPlazaLobbyClient_IsDisconnected(void);
 int WiFiPlazaLobbyClient_GetState(void);
-u8 WiFiPlazaLobbyClient_TakeFlag131(void);
+u8 WiFiPlazaLobbyClient_TakeExcessFlood(void);
 int WiFiPlazaLobbyClient_GetOwnId(void);
 void WiFiPlazaLobbyClient_SetOwnPlayer(WiFiPlazaPlayer *player);
 WiFiPlazaPlayer *WiFiPlazaLobbyClient_GetPlayer(int id);
@@ -979,7 +979,7 @@ BOOL WiFiPlazaLobbyClient_OnEvent12Result(int result);
 void WiFiPlazaLobbyClient_OnSpecialVisitorsReceived(int result, const void *data, u32 size);
 void WiFiPlazaLobbyClient_OnSurveyReceived(int result, const void *data);
 void WiFiPlazaLobbyClient_OnSurveySubmitted(void);
-void WiFiPlazaLobbyClient_SetFlag131(void);
+void WiFiPlazaLobbyClient_OnExcessFlood(void);
 void WiFiPlazaLobbyClient_InitMatches(WiFiPlazaLobbyClient *client);
 
 BOOL WiFiPlazaLobbyMatches_Remove(WiFiPlazaLobbyClient *client, int index, int hostId);

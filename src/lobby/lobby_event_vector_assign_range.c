@@ -14,7 +14,7 @@ typedef struct {
     u32 size, capacity;
 } Vec;
 
-extern u32 ov45_02255198[];
+extern u32 sLobbySortEmptyBuffer[];
 extern char _ZSt7nothrow[];
 void *_ZnamRKSt9nothrow_t(u32, void *);
 void LobbySort_GetTemporaryBuffer(void *, int);
@@ -25,7 +25,7 @@ void LobbyEventVector_Reallocate(Vec *, u32, u32);
 
 void LobbySort_GetTemporaryBuffer(void *p, int n) {
     P(p, 0) = 0;
-    W(p, 4) = ov45_02255198[1];
+    W(p, 4) = sLobbySortEmptyBuffer[1];
     while (n > 0) {
         P(p, 0) = _ZnamRKSt9nothrow_t(n * 8, _ZSt7nothrow);
         if (P(p, 0)) {

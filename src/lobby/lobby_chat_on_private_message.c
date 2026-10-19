@@ -29,7 +29,7 @@ typedef struct {
 typedef struct {
     void (*onMessage)(int, void *, void *);
     void (*onExcessFlood)(int, void *);
-    u32 unk_08;
+    u32 param;
 } Callbacks;
 
 typedef struct {

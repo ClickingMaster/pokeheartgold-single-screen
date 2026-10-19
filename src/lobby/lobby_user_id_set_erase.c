@@ -12,7 +12,7 @@ extern LobbyUserIdSetNode *LobbyTree_EraseRebalance(LobbyUserIdSetNode *, void *
 void LobbyUserIdSet_Erase(Iterator *out, LobbyUserIdSet *set, Iterator node) {
     LobbyUserIdSetNode *old = node.current;
     if (node.current == set->first) {
-        ov45_02236E58(&node);
+        LobbyTreeIterator_Advance(&node);
         set->first = node.current;
     }
     out->current = LobbyTree_EraseRebalance(old, set->root);

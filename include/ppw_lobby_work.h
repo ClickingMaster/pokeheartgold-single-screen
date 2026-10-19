@@ -74,7 +74,7 @@ typedef struct PPWLobbyWork {
     int error;
     PPWLobbyCallbacks callbacks;
     u32 userId;
-    u32 unk_50;
+    u32 prefix;
     u32 unk_54;
     Str channelBaseName;
     int isNewChannel;

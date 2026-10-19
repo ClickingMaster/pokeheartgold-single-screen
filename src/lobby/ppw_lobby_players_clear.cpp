@@ -13,7 +13,7 @@ struct Node {
     Value *value;
 };
 struct It;
-extern "C" void ov45_02236E58(It *it);
+extern "C" void LobbyTreeIterator_Advance(It *it);
 
 struct It {
     Node *n;
@@ -26,7 +26,7 @@ struct It {
     }
 
     It &operator++() {
-        ov45_02236E58(this);
+        LobbyTreeIterator_Advance(this);
         return *this;
     }
 

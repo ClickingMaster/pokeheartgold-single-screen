@@ -312,8 +312,8 @@ void WiFiPlazaLobbyClient_OnSurveySubmitted(void) {
     gWiFiPlazaLobbyClient->surveySubmitState = 2;
 }
 
-void WiFiPlazaLobbyClient_SetFlag131(void) {
-    gWiFiPlazaLobbyClient->unk_131 = 1;
+void WiFiPlazaLobbyClient_OnExcessFlood(void) {
+    gWiFiPlazaLobbyClient->excessFlood = 1;
 }
 
 void WiFiPlazaLobbyClient_InitMatches(WiFiPlazaLobbyClient *client) {

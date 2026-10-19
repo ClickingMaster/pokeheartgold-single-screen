@@ -45,6 +45,6 @@ void PPWLobbyPlayers_GetEnteredIds(Vec *out, SessionMgr *m) {
                 LobbyU32Vector_PushBackSlow(out, &id, t2);
             }
         }
-        ov45_02236E58(&it);
+        LobbyTreeIterator_Advance(&it);
     }
 }

@@ -155,7 +155,7 @@ void WiFiPlazaLobbyClient_InitializeEx(int value, int mode) {
     callbacks[13] = (void (*)(void))WiFiPlazaLobbyClient_OnSpecialVisitorsReceived;
     callbacks[14] = (void (*)(void))WiFiPlazaLobbyClient_OnSurveyReceived;
     callbacks[15] = (void (*)(void))WiFiPlazaLobbyClient_OnSurveySubmitted;
-    callbacks[16] = (void (*)(void))WiFiPlazaLobbyClient_SetFlag131;
+    callbacks[16] = (void (*)(void))WiFiPlazaLobbyClient_OnExcessFlood;
     userData = FriendRoster_GetUserData(gWiFiPlazaLobbyClient->friendRoster);
     gWiFiPlazaLobbyClient->initResult = PPW_LobbyInitializeAsync("pokemonplatds", "IIup73", mode, callbacks, userData, value, gWiFiPlazaLobbyClient->playerDataSize);
     WiFiPlazaLobbyClient_CheckResult(gWiFiPlazaLobbyClient->initResult);
@@ -194,11 +194,11 @@ int WiFiPlazaLobbyClient_GetState(void) {
     return client->state;
 }
 
-u8 WiFiPlazaLobbyClient_TakeFlag131(void) {
+u8 WiFiPlazaLobbyClient_TakeExcessFlood(void) {
     u8 value;
     GF_ASSERT(gWiFiPlazaLobbyClient != NULL);
-    value = gWiFiPlazaLobbyClient->unk_131;
-    gWiFiPlazaLobbyClient->unk_131 = 0;
+    value = gWiFiPlazaLobbyClient->excessFlood;
+    gWiFiPlazaLobbyClient->excessFlood = 0;
     return value;
 }
 
@@ -346,7 +346,7 @@ void WiFiPlazaLobbyClient_GetTime(s64 *time) {
 }
 
 u32 WiFiPlazaLobbyClient_GetScheduleValue(int field) {
-    WiFiPlazaLobbySchedule *unk;
+    WiFiPlazaLobbySchedule *schedule;
     u32 result;
     GF_ASSERT(gWiFiPlazaLobbyClient != NULL);
     {
@@ -357,31 +357,31 @@ u32 WiFiPlazaLobbyClient_GetScheduleValue(int field) {
         GF_ASSERT(valid);
     }
     GF_ASSERT(field < 8);
-    unk = &gWiFiPlazaLobbyClient->schedule;
+    schedule = &gWiFiPlazaLobbyClient->schedule;
     switch (field) {
     case 0:
-        result = unk->unk_00;
+        result = schedule->unk_00;
         break;
     case 1:
-        result = unk->unk_04;
+        result = schedule->unk_04;
         break;
     case 2:
-        result = unk->roomType;
+        result = schedule->roomType;
         break;
     case 3:
-        result = unk->season;
+        result = schedule->season;
         break;
     case 4:
-        result = (unk->roomFlag & 1) != 0;
+        result = (schedule->roomFlag & 1) != 0;
         break;
     case 5:
-        result = WiFiPlazaLobbySchedule_FindValue(unk, 0x13);
+        result = WiFiPlazaLobbySchedule_FindValue(schedule, 0x13);
         break;
     case 6:
-        result = WiFiPlazaLobbySchedule_FindValue(unk, 0x10);
+        result = WiFiPlazaLobbySchedule_FindValue(schedule, 0x10);
         break;
     case 7:
-        result = WiFiPlazaLobbySchedule_FindValue(unk, 0x11);
+        result = WiFiPlazaLobbySchedule_FindValue(schedule, 0x11);
         break;
     }
     return result;

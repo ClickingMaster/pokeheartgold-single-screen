@@ -26,7 +26,7 @@ extern Owner *PPWLobby_GetWork(void);
 extern void PPWLobbyChannel_GetName(void *, void *);
 extern void LobbyChat_SetChannelMode(char *, void *);
 extern void LobbyString_Destroy(void *);
-extern u8 ov45_02254D9C[];
+extern u8 gPPWLobbyMainChannelSecretMode[];
 extern void PPWLobby_SendMessage(int, int, int, int, int, void *, int);
 
 typedef struct {
@@ -66,7 +66,7 @@ void PPWLobbySchedule_Process(W *w) {
             return;
         }
         PPWLobbyChannel_GetName(&text, PPWLobby_GetWork()->text);
-        LobbyChat_SetChannelMode(text.s.flag == 0 ? (char *)&text.bytes[1] : text.s.ptr, ov45_02254D9C);
+        LobbyChat_SetChannelMode(text.s.flag == 0 ? (char *)&text.bytes[1] : text.s.ptr, gPPWLobbyMainChannelSecretMode);
         LobbyString_Destroy(&text);
         zero = 0;
         PPWLobby_SendMessage(-1, 0, 1, 0, 0, &zero, 4);

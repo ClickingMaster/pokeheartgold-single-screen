@@ -372,7 +372,7 @@ BOOL WiFiPlazaLobbyClient_IsMatchOpen(int index);
 u32 WiFiPlazaLobbyClient_GetMatchPlayerCount(int index);
 
 // Lobby calls of the player state handlers, the Plaza Games registration and the conversations.
-BOOL WiFiPlazaWork_TakeLobbyFlag131(WiFiPlazaWork *lobby);
+BOOL WiFiPlazaWork_TakeExcessFlood(WiFiPlazaWork *lobby);
 BOOL WiFiPlazaWork_TakePlayerEntered(WiFiPlazaWork *lobby, int index);
 BOOL WiFiPlazaWork_TakePlayerLeft(WiFiPlazaWork *lobby, int index);
 BOOL WiFiPlazaWork_TakePlayerUpdated(WiFiPlazaWork *lobby, int index);

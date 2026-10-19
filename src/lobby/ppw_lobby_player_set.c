@@ -22,7 +22,7 @@ void PPWLobbyPlayerSet_Insert(InsertResult *out, List *l, Session **key) {
 void PPWLobbyPlayerSet_Erase(NodeIter *out, List *l, NodeIter it) {
     Node *n = it.current;
     if (n == l->leftmost) {
-        ov45_02236E58(&it);
+        LobbyTreeIterator_Advance(&it);
         l->leftmost = it.current;
     }
     out->current = LobbyTree_EraseRebalance(n, l->root);

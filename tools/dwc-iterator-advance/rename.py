@@ -1,7 +1,7 @@
 from pathlib import Path
 import struct,hashlib
 import shape
-CPP='_ZN8Iterator7AdvanceEv';NATIVE='ov45_02236E58'
+CPP='_ZN8Iterator7AdvanceEv';NATIVE='LobbyTreeIterator_Advance'
 def rename(raw,source):
  h,se,names,st,sy,yn=shape.parse(raw)
  assert [(names[i],s[5]) for i,s in enumerate(se) if s[2]&2 and s[5]]==[('.text',108)]

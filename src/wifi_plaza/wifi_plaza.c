@@ -300,8 +300,8 @@ u32 WiFiPlazaWork_HasError(WiFiPlazaWork *work) {
     return work->hasError;
 }
 
-void WiFiPlazaWork_TakeLobbyFlag131(void *a0, void *a1, void *a2) {
-    WiFiPlazaLobbyClient_TakeFlag131();
+void WiFiPlazaWork_TakeExcessFlood(void *a0, void *a1, void *a2) {
+    WiFiPlazaLobbyClient_TakeExcessFlood();
 }
 
 void *WiFiPlazaWork_GetNews(WiFiPlazaWork *work) {

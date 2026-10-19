@@ -249,7 +249,7 @@ extern "C" int PPW_LobbySubmitQuestionnaire(int mode) {
     x = gPPWLobbyWork->userId;
     host = gPPWLobbySubmitQuestionnaireUrl;
     name = gPPWLobbyStatsUploadKey;
-    flag = gPPWLobbyWork->unk_50 == 0 ? REQ_METHOD_GET : REQ_METHOD_POST;
+    flag = gPPWLobbyWork->prefix == 0 ? REQ_METHOD_GET : REQ_METHOD_POST;
     if (gPPWLobbyCurrentRequest == 0) {
         o = (Op *)LobbyMem_Alloc(sizeof(Op));
         PNEW(o, flag, name, host, x, (const u8 *)&p, (const u8 *)&p + sizeof(p));
@@ -779,7 +779,7 @@ extern "C" void PPWLobby_StartCheckProfile(void) {
     x = gPPWLobbyWork->userId;
     host = gPPWLobbyCheckProfileUrl;
     name = gPPWLobbyStatsUploadKey;
-    flag = gPPWLobbyWork->unk_50 == 0 ? REQ_METHOD_GET : REQ_METHOD_POST;
+    flag = gPPWLobbyWork->prefix == 0 ? REQ_METHOD_GET : REQ_METHOD_POST;
     if (gPPWLobbyCurrentRequest != 0) {
         return;
     }
@@ -2280,7 +2280,7 @@ extern "C" void PPWLobby_OnCheckProfile(int a0, int a1, int a2) {
     x = gPPWLobbyWork->userId;
     host = gPPWLobbyGetScheduleUrl;
     name = gPPWLobbyStatsUploadKey;
-    flag = gPPWLobbyWork->unk_50 == 0 ? REQ_METHOD_GET : REQ_METHOD_POST;
+    flag = gPPWLobbyWork->prefix == 0 ? REQ_METHOD_GET : REQ_METHOD_POST;
     if (gPPWLobbyCurrentRequest != 0) {
         return;
     }
@@ -2510,7 +2510,7 @@ extern "C" void PPWLobby_OnGetSchedule(int a0, int a1, int a2) {
     x = gPPWLobbyWork->userId;
     host = gPPWLobbyGetVipUrl;
     name = gPPWLobbyStatsUploadKey;
-    flag = gPPWLobbyWork->unk_50 == 0 ? REQ_METHOD_GET : REQ_METHOD_POST;
+    flag = gPPWLobbyWork->prefix == 0 ? REQ_METHOD_GET : REQ_METHOD_POST;
     if (gPPWLobbyCurrentRequest != 0) {
         return;
     }
@@ -2723,7 +2723,7 @@ extern "C" void PPWLobby_OnGetVip(int a0, int a1, int a2) {
     x = gPPWLobbyWork->userId;
     host = gPPWLobbyGetQuestionnaireUrl;
     name = gPPWLobbyStatsUploadKey;
-    flag = gPPWLobbyWork->unk_50 == 0 ? REQ_METHOD_GET : REQ_METHOD_POST;
+    flag = gPPWLobbyWork->prefix == 0 ? REQ_METHOD_GET : REQ_METHOD_POST;
     if (gPPWLobbyCurrentRequest != 0) {
         return;
     }
@@ -3629,7 +3629,7 @@ extern "C" void PPWLobby_OnPlayerLeft(char *channel, int id) {
 
 namespace OnPlayerMessage {
 extern "C" {
-void ov45_02236E58(Iterator *);
+void LobbyTreeIterator_Advance(Iterator *);
 extern int printf(const char *, ...);
 extern void abort(void);
 
@@ -3707,7 +3707,7 @@ void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
@@ -3740,7 +3740,7 @@ void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
@@ -3780,7 +3780,7 @@ void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
@@ -3824,7 +3824,7 @@ void LobbyTimerMap_Clear(struct Tree *a);
 struct TreeNode *LobbyTimerMap_InsertNode(struct Tree *a, struct TreeNode *parent, int left, int end, u32 *value);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
@@ -3977,7 +3977,7 @@ void PPWLobby_OnMessage(void *key, int index, void *name) {
 
 namespace OnChannelEvents {
 extern "C" {
-void ov45_02236E58(Iterator *);
+void LobbyTreeIterator_Advance(Iterator *);
 extern int printf(const char *, ...);
 extern void abort(void);
 
@@ -4056,7 +4056,7 @@ void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
@@ -4089,7 +4089,7 @@ void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
@@ -4129,7 +4129,7 @@ void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
@@ -4173,7 +4173,7 @@ void LobbyTimerMap_Clear(struct Tree *a);
 struct TreeNode *LobbyTimerMap_InsertNode(struct Tree *a, struct TreeNode *parent, int left, int end, u32 *value);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
@@ -4487,7 +4487,7 @@ extern "C" void PPWLobby_OnEnumUsers(int success, char *channel, int count, int 
 
 namespace OnGetChannelMode {
 extern "C" {
-void ov45_02236E58(Iterator *);
+void LobbyTreeIterator_Advance(Iterator *);
 extern int printf(const char *, ...);
 extern void abort(void);
 
@@ -4566,7 +4566,7 @@ void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
@@ -4599,7 +4599,7 @@ void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
@@ -4639,7 +4639,7 @@ void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
@@ -4683,7 +4683,7 @@ void LobbyTimerMap_Clear(struct Tree *a);
 struct TreeNode *LobbyTimerMap_InsertNode(struct Tree *a, struct TreeNode *parent, int left, int end, u32 *value);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
@@ -4839,7 +4839,7 @@ void PPWLobby_OnGetLobbyData(int ok, int a, int b, int c, void *data) {
 
 namespace Destructors {
 extern "C" {
-void ov45_02236E58(Iterator *);
+void LobbyTreeIterator_Advance(Iterator *);
 extern int printf(const char *, ...);
 extern void abort(void);
 
@@ -4946,7 +4946,7 @@ void *PPWLobbyPlayerSet_Destroy(struct PlayerSet *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
@@ -4979,7 +4979,7 @@ void *PPWLobbyPlayerSet_Destroy(struct PlayerSet *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
@@ -5019,7 +5019,7 @@ void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
@@ -5063,7 +5063,7 @@ void LobbyTimerMap_Clear(struct Tree *a);
 struct TreeNode *LobbyTimerMap_InsertNode(struct Tree *a, struct TreeNode *parent, int left, int end, u32 *value);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
@@ -5164,7 +5164,7 @@ Queue *LobbyEventDeque_Destroy(Queue *p) {
 
 namespace PlayerSetDestroy {
 extern "C" {
-void ov45_02236E58(Iterator *);
+void LobbyTreeIterator_Advance(Iterator *);
 extern int printf(const char *, ...);
 extern void abort(void);
 
@@ -5242,7 +5242,7 @@ void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
@@ -5275,7 +5275,7 @@ void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
@@ -5315,7 +5315,7 @@ void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
@@ -5359,7 +5359,7 @@ void LobbyTimerMap_Clear(struct Tree *a);
 struct TreeNode *LobbyTimerMap_InsertNode(struct Tree *a, struct TreeNode *parent, int left, int end, u32 *value);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
@@ -5426,7 +5426,7 @@ void LobbyTimerMap_Insert(Result *r, void *p, u32 *v) {
 
 namespace TimerMapErase {
 extern "C" {
-void ov45_02236E58(Iterator *);
+void LobbyTreeIterator_Advance(Iterator *);
 extern int printf(const char *, ...);
 extern void abort(void);
 
@@ -5504,7 +5504,7 @@ void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
@@ -5537,7 +5537,7 @@ void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
@@ -5577,7 +5577,7 @@ void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
@@ -5621,7 +5621,7 @@ void LobbyTimerMap_Clear(struct Tree *a);
 struct TreeNode *LobbyTimerMap_InsertNode(struct Tree *a, struct TreeNode *parent, int left, int end, u32 *value);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
@@ -5647,7 +5647,7 @@ void PPWLobby_OnGetLobbyData(int ok, int unused1, int unused2, int unused3, void
 void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node) {
     struct TreeNode *old = (struct TreeNode *)node.current;
     if (old == a->end) {
-        ov45_02236E58(&node);
+        LobbyTreeIterator_Advance(&node);
         a->end = node.current;
     }
     result->current = LobbyTree_EraseRebalance(old, a->root);
@@ -5778,7 +5778,7 @@ extern "C" Node *LobbyTimerMap_InsertNode(Tree *t, Node *parent, int left, int l
 
 namespace TimerMapDestroy {
 extern "C" {
-void ov45_02236E58(Iterator *);
+void LobbyTreeIterator_Advance(Iterator *);
 extern int printf(const char *, ...);
 extern void abort(void);
 
@@ -5856,7 +5856,7 @@ void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
@@ -5889,7 +5889,7 @@ void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
@@ -5929,7 +5929,7 @@ void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
@@ -5973,7 +5973,7 @@ void LobbyTimerMap_Clear(struct Tree *a);
 struct TreeNode *LobbyTimerMap_InsertNode(struct Tree *a, struct TreeNode *parent, int left, int end, u32 *value);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
@@ -6037,9 +6037,9 @@ static inline void *Parent(void *node) {
     return reinterpret_cast<void *>(static_cast<TreeNode *>(node)->parent & ~1UL);
 }
 
-extern "C" void ov45_02236E58(Iterator *it);
+extern "C" void LobbyTreeIterator_Advance(Iterator *it);
 
-extern "C" void ov45_02236E58(Iterator *it) {
+extern "C" void LobbyTreeIterator_Advance(Iterator *it) {
     if (Right(it->current)) {
         void *next = Right(it->current);
         void *left;
@@ -6063,7 +6063,7 @@ extern "C" void ov45_02236E58(Iterator *it) {
 
 namespace TreeInsertRebalance {
 extern "C" {
-void ov45_02236E58(Iterator *);
+void LobbyTreeIterator_Advance(Iterator *);
 
 typedef struct Node {
     void *left, *right;
@@ -6078,7 +6078,7 @@ static inline void Set(Node **p, Node *n) {
     *p = n;
 }
 
-void ov45_02236E58(Iterator *);
+void LobbyTreeIterator_Advance(Iterator *);
 extern void LobbyTree_RotateLeft(Node *, void **), LobbyTree_RotateRight(Node *, void **);
 
 static inline int Red(Node *n) {
@@ -6140,14 +6140,14 @@ void LobbyTree_InsertRebalance(Node *n, void *volatile root) {
 
 namespace TreeEraseRebalance {
 extern "C" {
-void ov45_02236E58(Iterator *);
+void LobbyTreeIterator_Advance(Iterator *);
 
 typedef struct Node {
     struct Node *left, *right;
     u32 tagged;
 } Node;
 
-extern void ov45_02236E58(Iterator *), LobbyTree_RotateLeft(Node *, void **), LobbyTree_RotateRight(Node *, void **);
+extern void LobbyTreeIterator_Advance(Iterator *), LobbyTree_RotateLeft(Node *, void **), LobbyTree_RotateRight(Node *, void **);
 Node *LobbyTree_EraseRebalance(Node *, void *);
 
 static inline Node *parent(Node *n) {
@@ -6188,7 +6188,7 @@ Node *LobbyTree_EraseRebalance(Node *node, void *root) {
     Iterator iter = { node };
     Node *removed, *child, *up;
     int left, fix;
-    ov45_02236E58(&iter);
+    LobbyTreeIterator_Advance(&iter);
     removed = node;
     if (node->left && node->right) {
         removed = (Node *)iter.current;
@@ -6315,7 +6315,7 @@ Node *LobbyTree_EraseRebalance(Node *node, void *root) {
 
 namespace TreeRotate {
 extern "C" {
-void ov45_02236E58(Iterator *);
+void LobbyTreeIterator_Advance(Iterator *);
 extern int printf(const char *, ...);
 extern void abort(void);
 
@@ -6393,7 +6393,7 @@ void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
@@ -6426,7 +6426,7 @@ void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
@@ -6466,7 +6466,7 @@ void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
@@ -6510,7 +6510,7 @@ void LobbyTimerMap_Clear(struct Tree *a);
 struct TreeNode *LobbyTimerMap_InsertNode(struct Tree *a, struct TreeNode *parent, int left, int end, u32 *value);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
@@ -6616,7 +6616,7 @@ u32 *LobbyStringVector_Destroy(u32 *p) {
 
 namespace VectorDestroy {
 extern "C" {
-void ov45_02236E58(Iterator *);
+void LobbyTreeIterator_Advance(Iterator *);
 extern int printf(const char *, ...);
 extern void abort(void);
 
@@ -6694,7 +6694,7 @@ void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
@@ -6727,7 +6727,7 @@ void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
@@ -6767,7 +6767,7 @@ void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
@@ -6811,7 +6811,7 @@ void LobbyTimerMap_Clear(struct Tree *a);
 struct TreeNode *LobbyTimerMap_InsertNode(struct Tree *a, struct TreeNode *parent, int left, int end, u32 *value);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
@@ -6903,7 +6903,7 @@ extern "C" void LobbyCharVector_Grow(Vec *v, u32 n) {
 
 namespace CharVectorAllocate {
 extern "C" {
-void ov45_02236E58(Iterator *);
+void LobbyTreeIterator_Advance(Iterator *);
 extern int printf(const char *, ...);
 extern void abort(void);
 
@@ -6981,7 +6981,7 @@ void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
@@ -7014,7 +7014,7 @@ void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
@@ -7054,7 +7054,7 @@ void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
@@ -7098,7 +7098,7 @@ void LobbyTimerMap_Clear(struct Tree *a);
 struct TreeNode *LobbyTimerMap_InsertNode(struct Tree *a, struct TreeNode *parent, int left, int end, u32 *value);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
@@ -7167,7 +7167,7 @@ void LobbyCharVector_Reallocate(Buffer *b, Allocator incoming, u32 n) {
 
 namespace CharVectorRecommendSize {
 extern "C" {
-void ov45_02236E58(Iterator *);
+void LobbyTreeIterator_Advance(Iterator *);
 extern int printf(const char *, ...);
 extern void abort(void);
 
@@ -7226,7 +7226,7 @@ void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(Vec *a, void *b, struct Alloc unused);
@@ -7259,7 +7259,7 @@ void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(Vec *a, void *b, struct Alloc unused);
@@ -7299,7 +7299,7 @@ void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(Vec *a, void *b, struct Alloc unused);
@@ -7343,7 +7343,7 @@ void LobbyTimerMap_Clear(struct Tree *a);
 struct TreeNode *LobbyTimerMap_InsertNode(struct Tree *a, struct TreeNode *parent, int left, int end, u32 *value);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
-void ov45_02236E58(Iterator *p);
+void LobbyTreeIterator_Advance(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
 void LobbyStringVector_PushBackSlow(Vec *a, void *b, struct Alloc unused);

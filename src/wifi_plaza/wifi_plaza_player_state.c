@@ -1649,7 +1649,7 @@ static BOOL WiFiPlazaPlayerState_OwnEnterAttraction(WiFiPlazaPlayerState *state,
             work->msgId = msg_0776_00022;
             work->msgBank = 0;
             WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_ATTRACTION_STEP_BACK);
-        } else if (WiFiPlazaWork_TakeLobbyFlag131(lobby) == 1) {
+        } else if (WiFiPlazaWork_TakeExcessFlood(lobby) == 1) {
             work->msgId = msg_0777_00072;
             work->msgBank = 1;
             WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_ATTRACTION_STEP_BACK);

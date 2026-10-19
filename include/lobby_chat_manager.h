@@ -19,12 +19,12 @@ enum LobbyChatState {
     LOBBY_CHAT_STATE_ERROR,
 };
 
-// What the code that started the session is told about the connection, with its parameter.
-typedef struct LobbyChatConnectCallbacks {
-    void (*onConnected)();
-    void (*onError)();
+// What the session passes on to the code that started it: private messages from users and excess flood notices.
+typedef struct LobbyChatCallbacks {
+    void (*onMessage)();
+    void (*onExcessFlood)();
     void *param;
-} LobbyChatConnectCallbacks;
+} LobbyChatCallbacks;
 
 // What a channel reports to the code that entered it, with that code's parameter.
 typedef struct LobbyChannelCallbacks {
@@ -84,7 +84,7 @@ typedef struct LobbyChatManager {
     int lastError;
     int connectedFrames;
     int disconnected;
-    LobbyChatConnectCallbacks connectCallbacks;
+    LobbyChatCallbacks callbacks;
     LobbyUserMap userMap;
     LobbyChannelMap channelMap;
     LobbyRequestMap requestMap;

@@ -11,7 +11,7 @@ typedef struct {
     void *other;
 } Iter;
 
-void ov45_02236E58(Iterator *);
+void LobbyTreeIterator_Advance(Iterator *);
 u32 LobbyU32Vector_RecommendSize(LobbyU32Vector *, u32);
 void LobbyU32Vector_Reallocate(LobbyU32Vector *, u32, u32);
 void LobbyU32Vector_AssignFromSet(LobbyU32Vector *, Iter, Iter);
@@ -40,7 +40,7 @@ void LobbyU32Vector_AssignFromSet(LobbyU32Vector *v, Iter first, Iter last) {
     n = 0;
     while (frame.count.advance.current != last.advance.current) {
         n++;
-        ov45_02236E58(&counter->advance);
+        LobbyTreeIterator_Advance(&counter->advance);
     }
     capacity = v->capacity;
     if (n > capacity) {
@@ -56,7 +56,7 @@ void LobbyU32Vector_AssignFromSet(LobbyU32Vector *v, Iter first, Iter last) {
             frame.fillFlag = 0;
             value = *(volatile int *)&node->userId;
             *out++ = value;
-            ov45_02236E58(&frame.fill.advance);
+            LobbyTreeIterator_Advance(&frame.fill.advance);
         } while (frame.fill.advance.current != last.advance.current);
         frame.tail.b = value;
         frame.tail.a = node;

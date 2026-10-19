@@ -188,7 +188,7 @@ extern "C" void *PPWLobbyPlayerSet_Destroy(Tree *);
 extern "C" Str *LobbyString_Destroy(Str *);
 extern "C" int LobbyChat_GetLastError(void);
 extern "C" int DWC_GetDateTime(RTCDate *date, RTCTime *time);
-extern "C" void ov45_02236E58(Iterator *it);
+extern "C" void LobbyTreeIterator_Advance(Iterator *it);
 extern "C" void LobbyTimerMap_Erase(Iterator *result, LobbyTimerMap *map, Iterator node);
 extern "C" void PPWLobbyPlayers_UpdateStates(void *);
 extern "C" void PPWLobbySchedule_Process(void *);
@@ -365,10 +365,10 @@ static inline void Lobby_UpdateTimers(void) {
         if (!Timer_Update((LobbyTimerMapNode *)it.current, now)) {
             void *saved = it.current;
             Iterator res;
-            ov45_02236E58(&it);
+            LobbyTreeIterator_Advance(&it);
             LobbyTimerMap_Erase(&res, &w->timers, Iterator_Make(saved));
         } else {
-            ov45_02236E58(&it);
+            LobbyTreeIterator_Advance(&it);
         }
     }
     PPWLobbyPlayers_UpdateStates(&w->sub.vt);

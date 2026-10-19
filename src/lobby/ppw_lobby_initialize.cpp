@@ -165,8 +165,8 @@ struct Work {
     int state;
     int sub;
     Config cfg;
-    u32 arg4;
-    u32 arg2;
+    u32 userId;
+    u32 prefix;
     u32 arg7;
     Str s58;
     u32 w64, w68, w6c, w70;
@@ -184,8 +184,8 @@ struct Work {
         : state(0)
         , sub(0)
         , cfg(c)
-        , arg4(userId)
-        , arg2(prefix)
+        , userId(userId)
+        , prefix(prefix)
         , arg7(a7)
         , w64(0)
         , w68(0)

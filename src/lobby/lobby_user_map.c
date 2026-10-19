@@ -20,7 +20,7 @@ extern char sStr_TreeInsertLengthError_4[];
 void LobbyUserMap_Erase(Iterator *out, LobbyUserMap *map, Iterator node) {
     LobbyUserMapNode *old = node.current;
     if (old == map->first) {
-        ov45_02236E58(&node);
+        LobbyTreeIterator_Advance(&node);
         map->first = node.current;
     }
     out->current = LobbyTree_EraseRebalance(old, map->root);

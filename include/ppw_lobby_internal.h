@@ -103,7 +103,7 @@ u32 LobbyCharVector_RecommendSize(CharVec *, u32);
 void LobbyCharVector_AppendFillSlow(CharVec *, u32, const char *);
 u32 LobbyU32Vector_RecommendSize(Vec *, u32);
 void LobbyU32Vector_AppendFillSlow(Vec *, u32, u32 *);
-void ov45_02236E58(NodeIter *);
+void LobbyTreeIterator_Advance(NodeIter *);
 Node *LobbyTree_EraseRebalance(Node *, void *);
 extern char sStr_TreeInsertLengthError_2[];
 int printf(const char *, ...);
