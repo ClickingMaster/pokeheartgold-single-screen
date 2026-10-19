@@ -1428,9 +1428,6 @@ BOOL WiFiPlazaTalk_InfoCounter(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *r
         choice = WiFiPlazaRoom_ProcessList(room);
         switch (choice) {
         default:
-            if (choice == (u32)LIST_CANCEL) {
-                goto cancelTopics;
-            }
             break;
         case 0: // Tap Toys
             WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_TAP_TOYS);
@@ -1460,8 +1457,9 @@ BOOL WiFiPlazaTalk_InfoCounter(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *r
             WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_OPEN_EVENTS);
             selected = TRUE;
             break;
-cancelTopics:
+        case (u32)LIST_CANCEL:
             PlaySE(SEQ_SE_DP_SELECT);
+            // fallthrough
         case 7: // Exit
             WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_GOODBYE);
             selected = TRUE;
@@ -1486,9 +1484,6 @@ cancelTopics:
         choice = WiFiPlazaRoom_ProcessList(room);
         switch (choice) {
         default:
-            if (choice == (u32)LIST_CANCEL) {
-                goto cancelGames;
-            }
             break;
         case 0:
             WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_FIRST_GAME);
@@ -1502,8 +1497,9 @@ cancelTopics:
             WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_THIRD_GAME);
             selected = TRUE;
             break;
-cancelGames:
+        case (u32)LIST_CANCEL:
             PlaySE(SEQ_SE_DP_SELECT);
+            // fallthrough
         case 3:
             WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_WHAT_TO_KNOW);
             selected = TRUE;
@@ -1551,9 +1547,6 @@ cancelGames:
         choice = WiFiPlazaRoom_ProcessList(room);
         switch (choice) {
         default:
-            if (choice == (u32)LIST_CANCEL) {
-                goto cancelEvents;
-            }
             break;
         case 0:
             WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_SPOTLIGHTS);
@@ -1567,8 +1560,9 @@ cancelGames:
             WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_PARADE);
             selected = TRUE;
             break;
-cancelEvents:
+        case (u32)LIST_CANCEL:
             PlaySE(SEQ_SE_DP_SELECT);
+            // fallthrough
         case 3:
             WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_WHAT_TO_KNOW);
             selected = TRUE;
@@ -1631,13 +1625,13 @@ BOOL WiFiPlazaTalk_Reception(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *roo
                 message = WiFiPlazaRoom_GetMsgString(room, 1, msg_0777_00078);
                 WiFiPlazaRoom_PrintMessage(room, message);
                 WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_RECEPTION_WAIT_MESSAGE);
-                goto done;
+                break;
             }
         } else { // the visit is nearly over
             message = WiFiPlazaRoom_GetMsgString(room, 1, msg_0777_00003);
             WiFiPlazaRoom_PrintMessage(room, message);
             WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_RECEPTION_WAIT_MESSAGE);
-            goto done;
+            break;
         }
         // what the receptionist recommends
         switch (WiFiPlazaWork_GetNextUndoneActivity(lobby)) {
@@ -1694,7 +1688,6 @@ BOOL WiFiPlazaTalk_Reception(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *roo
         return TRUE;
     }
     }
-done:
     return FALSE;
 }
 

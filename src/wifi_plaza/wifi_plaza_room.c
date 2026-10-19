@@ -672,23 +672,18 @@ void WiFiPlazaRoom_OpenYesNoMenuDefaultNo(WiFiPlazaRoomWork *room) {
 }
 
 u32 WiFiPlazaRoom_GetYesNoResult(WiFiPlazaRoomWork *room) {
-    s32 input = WiFiPlazaListMenu_ProcessInput(&room->listMenu);
-    if (input == 0) {
-        goto yes;
+    u32 input = WiFiPlazaListMenu_ProcessInput(&room->listMenu);
+    switch (input) {
+    case LIST_CANCEL:
+        PlaySE(SEQ_SE_DP_SELECT);
+        // fallthrough
+    case 1:
+        return WIFI_PLAZA_YES_NO_NO;
+    case 0:
+        return WIFI_PLAZA_YES_NO_YES;
+    default:
+        return WIFI_PLAZA_YES_NO_OPEN;
     }
-    if (input == 1) {
-        goto no;
-    }
-    if (input != LIST_CANCEL) {
-        goto open;
-    }
-    PlaySE(SEQ_SE_DP_SELECT);
-no:
-    return WIFI_PLAZA_YES_NO_NO;
-yes:
-    return WIFI_PLAZA_YES_NO_YES;
-open:
-    return WIFI_PLAZA_YES_NO_OPEN;
 }
 
 void WiFiPlazaRoom_CloseYesNoMenu(WiFiPlazaRoomWork *room) {
@@ -2275,49 +2270,36 @@ static void WiFiPlazaPlayerCard_LoadMons(WiFiPlazaPlayerCard *card, WiFiPlazaRoo
     int gender;
     const VecFx32 *pos;
     int version = WiFiPlazaPlayer_GetLobbyId(myPlayer);
-    const WiFiPlazaCardMonResources *res;
-    const u16 *cell, *anim;
     NARC *use;
     int i;
-    WiFiPlazaPlayerCard *cursor;
     SimpleSpriteTemplate template;
     SpriteResourcesHeader header;
 
     gender = WiFiPlazaPlayer_GetGender(myPlayer);
-    res = sWiFiPlazaCardMonResources;
-    i = 0;
-    cell = sWiFiPlazaCardMonCellFiles;
-    cursor = card;
-    anim = sWiFiPlazaCardMonAnimFiles;
-    for (; i < 4; i++) {
+    for (i = 0; i < 4; i++) {
         if (i == 2) {
             if (gender == 1) {
-                cursor->monPltts[0] = NULL;
-                cursor->monCells[0] = NULL;
-                cursor->monAnims[0] = NULL;
-                goto next;
+                card->monPltts[i] = NULL;
+                card->monCells[i] = NULL;
+                card->monAnims[i] = NULL;
+                continue;
             }
         } else if (i == 3) {
             if (gender == 0) {
-                cursor->monPltts[0] = NULL;
-                cursor->monCells[0] = NULL;
-                cursor->monAnims[0] = NULL;
-                goto next;
+                card->monPltts[i] = NULL;
+                card->monCells[i] = NULL;
+                card->monAnims[i] = NULL;
+                continue;
             }
         }
-        use = res->narc == 215 ? narc : panelNarc;
-        cursor->monPltts[0] = AddPlttResObjFromOpenNarc(graphics->resManagers[GF_GFX_RES_TYPE_PLTT], use, res->member, FALSE, 150 + i, NNS_G2D_VRAM_TYPE_2DSUB, res->count, heapID);
-        if (!SpriteTransfer_CreatePlttTransferTask(cursor->monPltts[0])) {
+        use = sWiFiPlazaCardMonResources[i].narc == 215 ? narc : panelNarc;
+        card->monPltts[i] = AddPlttResObjFromOpenNarc(graphics->resManagers[GF_GFX_RES_TYPE_PLTT], use, sWiFiPlazaCardMonResources[i].member, FALSE, 150 + i, NNS_G2D_VRAM_TYPE_2DSUB, sWiFiPlazaCardMonResources[i].count, heapID);
+        if (!SpriteTransfer_CreatePlttTransferTask(card->monPltts[i])) {
             GF_AssertFail();
         }
-        GF2DGfxResObj_FreeData(cursor->monPltts[0]);
-        cursor->monCells[0] = AddCellOrAnimResObjFromOpenNarc(graphics->resManagers[GF_GFX_RES_TYPE_CELL], use, *cell, FALSE, 150 + i, GF_GFX_RES_TYPE_CELL, heapID);
-        cursor->monAnims[0] = AddCellOrAnimResObjFromOpenNarc(graphics->resManagers[GF_GFX_RES_TYPE_ANIM], use, *anim, FALSE, 150 + i, GF_GFX_RES_TYPE_ANIM, heapID);
-next:
-        res++;
-        cursor = (WiFiPlazaPlayerCard *)((u8 *)cursor + 4);
-        cell++;
-        anim++;
+        GF2DGfxResObj_FreeData(card->monPltts[i]);
+        card->monCells[i] = AddCellOrAnimResObjFromOpenNarc(graphics->resManagers[GF_GFX_RES_TYPE_CELL], use, sWiFiPlazaCardMonCellFiles[i], FALSE, 150 + i, GF_GFX_RES_TYPE_CELL, heapID);
+        card->monAnims[i] = AddCellOrAnimResObjFromOpenNarc(graphics->resManagers[GF_GFX_RES_TYPE_ANIM], use, sWiFiPlazaCardMonAnimFiles[i], FALSE, 150 + i, GF_GFX_RES_TYPE_ANIM, heapID);
     }
     pos = sWiFiPlazaCardMonPositions;
     for (i = 0; i < 12; i++) {

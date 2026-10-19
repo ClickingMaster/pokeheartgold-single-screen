@@ -59,7 +59,7 @@ static void WiFiPlazaWork_CheckClosingTime(WiFiPlazaWork *work);
 static void WiFiPlazaWork_SendOwnRecord(WiFiPlazaWork *work);
 static void WiFiPlaza_ClearEventFlags(u32 *flags);
 static int WiFiPlazaSessionState_IsCoolingDown(WiFiPlazaSessionState *state);
-static void WiFiPlaza_ClearTapToyPlayedFlags(volatile u8 *buffer);
+static void WiFiPlaza_ClearTapToyPlayedFlags(u8 *buffer);
 static void WiFiPlazaTalkSession_Init(WiFiPlazaTalkSession *session);
 static void WiFiPlazaTalkSession_Reset(WiFiPlazaTalkSession *session);
 static void WiFiPlazaTalkSession_Abort(WiFiPlazaTalkSession *session);
@@ -1764,7 +1764,7 @@ u8 WiFiPlazaSessionState_DidAppQuitForClosing(WiFiPlazaSessionState *state) {
     return state->appQuitForClosing;
 }
 
-static void WiFiPlaza_ClearTapToyPlayedFlags(volatile u8 *buffer) {
+static void WiFiPlaza_ClearTapToyPlayedFlags(u8 *buffer) {
     u32 count = 20;
     do {
         *buffer++ = 0;

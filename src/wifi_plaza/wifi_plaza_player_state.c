@@ -928,22 +928,19 @@ static BOOL WiFiPlazaPlayerBounce_IsActive(WiFiPlazaPlayerBounce *bounce) {
 }
 
 static BOOL WiFiPlazaPlayerState_PlayInstrument(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u32 index) {
-    struct {
-        WiFiPlazaObj *obj;
-        WiFiPlazaWork *lobby;
-    } volatile temp;
-
     WiFiPlazaObjManager *objManager;
+    WiFiPlazaObj *obj;
+    WiFiPlazaWork *lobby;
 
     objManager = WiFiPlazaRoom_GetObjManager(room);
-    temp.obj = WiFiPlazaObj_FindById(objManager, index);
-    temp.lobby = WiFiPlazaRoom_GetLobby(room);
+    obj = WiFiPlazaObj_FindById(objManager, index);
+    lobby = WiFiPlazaRoom_GetLobby(room);
 
     switch (WiFiPlazaPlayerState_GetStep(state)) {
     case WIFI_PLAZA_PLAY_INSTRUMENT_START:
         WiFiPlazaRoom_StartInstrument(room, index);
         WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_PLAY_INSTRUMENT_WAIT);
-        if (index == WiFiPlazaWork_GetOwnSlot(temp.lobby)) {
+        if (index == WiFiPlazaWork_GetOwnSlot(lobby)) {
             WiFiPlazaRoom_SetPanelButtonDisabled(room, 0);
         }
         break;
@@ -953,15 +950,15 @@ static BOOL WiFiPlazaPlayerState_PlayInstrument(WiFiPlazaPlayerState *state, WiF
         }
         break;
     case WIFI_PLAZA_PLAY_INSTRUMENT_END:
-        if (index == WiFiPlazaWork_GetOwnSlot(temp.lobby)) {
-            WiFiPlazaObj_SetHandler(objManager, temp.obj, WIFI_PLAZA_OBJ_HANDLER_PLAYER_INPUT);
+        if (index == WiFiPlazaWork_GetOwnSlot(lobby)) {
+            WiFiPlazaObj_SetHandler(objManager, obj, WIFI_PLAZA_OBJ_HANDLER_PLAYER_INPUT);
         } else {
             if (WiFiPlazaRoom_IsPlayerCardShown(room) == TRUE) {
                 if (index != WiFiPlazaRoom_GetPlayerCardPlayer(room)) {
-                    WiFiPlazaObj_SetHandler(objManager, temp.obj, WIFI_PLAZA_OBJ_HANDLER_WANDER);
+                    WiFiPlazaObj_SetHandler(objManager, obj, WIFI_PLAZA_OBJ_HANDLER_WANDER);
                 }
             } else {
-                WiFiPlazaObj_SetHandler(objManager, temp.obj, WIFI_PLAZA_OBJ_HANDLER_WANDER);
+                WiFiPlazaObj_SetHandler(objManager, obj, WIFI_PLAZA_OBJ_HANDLER_WANDER);
             }
             WiFiPlazaRoom_SetPlayerBusy(room, (u8)index, 0);
         }
@@ -1968,17 +1965,18 @@ static BOOL WiFiPlazaPlayerState_OwnUseSurveyMonitor(WiFiPlazaPlayerState *state
         if (WiFiPlazaWork_IsClosing(lobby) == 1) {
             newWork[0] = msg_0777_00122;
             WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_SURVEY_MONITOR_STEP_BACK);
-        } else if (WiFiPlazaWork_IsLightingStarted(lobby) == TRUE) {
+            break;
+        }
+        if (WiFiPlazaWork_IsLightingStarted(lobby) == TRUE) {
             newWork[1] = WIFI_PLAZA_ROOM_RESULT_SURVEY_RESULTS;
-            goto enter;
         } else if (WiFiPlazaWork_HasAnsweredSurvey(lobby) == 1) {
             newWork[0] = msg_0777_00098;
             WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_SURVEY_MONITOR_STEP_BACK);
+            break;
         } else {
             newWork[1] = WIFI_PLAZA_ROOM_RESULT_SURVEY_ANSWER;
-enter:
-            WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_SURVEY_MONITOR_ENTER);
         }
+        WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_SURVEY_MONITOR_ENTER);
         break;
     }
     case WIFI_PLAZA_SURVEY_MONITOR_ENTER:
@@ -2824,41 +2822,41 @@ static BOOL WiFiPlazaPlayerState_PlaceOtherForActivity(WiFiPlazaPlacement *place
         if (!WiFiPlazaPlayerState_FindFreeTaggedCell(map, objManager, sWiFiPlazaActivity2Tags, 4, cell)) {
             return besideOwnPlayer;
         }
-        goto found;
+        break;
     case WIFI_PLAZA_ACTIVITY_MIME_JR_TOP:
         if (!WiFiPlazaPlayerState_FindFreeTaggedCell(map, objManager, sWiFiPlazaActivity3Tags, 4, cell)) {
             return besideOwnPlayer;
         }
-        goto found;
+        break;
     case WIFI_PLAZA_ACTIVITY_WOBBUFFET_POP:
         if (!WiFiPlazaPlayerState_FindFreeTaggedCell(map, objManager, sWiFiPlazaActivity4Tags, 4, cell)) {
             return besideOwnPlayer;
         }
-        goto found;
+        break;
     case WIFI_PLAZA_ACTIVITY_FOOTPRINT_STAMP_BOARD_0:
         direction = DIR_NORTH;
         if (!WiFiPlazaPlayerState_FindFreeTaggedCell(map, objManager, sWiFiPlazaActivity5Tags, 8, cell)) {
             return besideOwnPlayer;
         }
-        goto found;
+        break;
     case WIFI_PLAZA_ACTIVITY_FOOTPRINT_STAMP_BOARD_1:
         direction = DIR_NORTH;
         if (!WiFiPlazaPlayerState_FindFreeTaggedCell(map, objManager, sWiFiPlazaActivity6Tags, 8, cell)) {
             return besideOwnPlayer;
         }
-        goto found;
+        break;
     case WIFI_PLAZA_ACTIVITY_VISITOR_PROFILES:
         direction = DIR_EAST;
         if (!WiFiPlazaPlayerState_FindFreeTaggedCell(map, objManager, sWiFiPlazaActivity7Tags, 4, cell)) {
             return besideOwnPlayer;
         }
-        goto found;
+        break;
     case WIFI_PLAZA_ACTIVITY_PLAZA_NEWS:
         direction = DIR_NORTH;
         if (!WiFiPlazaPlayerState_FindFreeTaggedCell(map, objManager, sWiFiPlazaActivity8Tags, 4, cell)) {
             return besideOwnPlayer;
         }
-        goto found;
+        break;
     case WIFI_PLAZA_ACTIVITY_PARADE_FLOAT:
         return besideOwnPlayer;
     case WIFI_PLAZA_ACTIVITY_TALK:
@@ -2876,19 +2874,17 @@ static BOOL WiFiPlazaPlayerState_PlaceOtherForActivity(WiFiPlazaPlacement *place
         }
         direction = Field2D_GetOppositeDirection(direction);
         besideOwnPlayer = TRUE;
-        goto found;
+        break;
     case WIFI_PLAZA_ACTIVITY_NONE:
     case WIFI_PLAZA_ACTIVITY_FREE:
     case WIFI_PLAZA_ACTIVITY_EXIT:
     case WIFI_PLAZA_ACTIVITY_GAME_ENTRY:
     case WIFI_PLAZA_ACTIVITY_SURVEY:
     case 14:
-        break;
+    default:
+        return FALSE;
     }
 
-    return FALSE;
-
-found:
     packed = ((u32(*)(WiFiPlazaObj *))WiFiPlazaObj_GetGridPos)(obj);
     current.unk0 = packed;
     current.unk2 = packed >> 16;

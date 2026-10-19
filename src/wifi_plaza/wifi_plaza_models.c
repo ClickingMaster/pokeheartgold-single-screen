@@ -100,7 +100,7 @@ static void WiFiPlazaModelSet_FreeMovers(WiFiPlazaMoverResources *res, NNSFndAll
 static void WiFiPlazaModelSet_UpdateMover(WiFiPlazaMover *mover, WiFiPlazaMoverResources *res);
 static void WiFiPlazaModelSet_DrawMover(WiFiPlazaMover *mover, WiFiPlazaMoverResources *res);
 static WiFiPlazaProp *WiFiPlazaModelSet_AllocProp(WiFiPlazaModelSet *set);
-static void WiFiPlazaModelSet_LoadProps(WiFiPlazaPropResources *res, NARC *narc, NNSFndAllocator *allocator, WiFiPlazaModelsLayout *layout, volatile enum HeapID heapID);
+static void WiFiPlazaModelSet_LoadProps(WiFiPlazaPropResources *res, NARC *narc, NNSFndAllocator *allocator, WiFiPlazaModelsLayout *layout, enum HeapID heapID);
 static void WiFiPlazaModelSet_FreeProps(WiFiPlazaPropResources *res, NNSFndAllocator *allocator);
 static void WiFiPlazaModelSet_DrawProp(WiFiPlazaPropResources *res, WiFiPlazaProp *prop);
 static void WiFiPlazaModelSet_UpdateProp(WiFiPlazaModelSet *set, WiFiPlazaProp *prop);
@@ -364,17 +364,16 @@ static BOOL WiFiPlazaMover_IsAnim3Playing(WiFiPlazaMover *mover) {
 }
 
 static WiFiPlazaProp *WiFiPlazaModelSet_AddProp(WiFiPlazaModelSet *set, u32 kind, u32 x, u32 y) {
-    register WiFiPlazaModelSet *base = set;
     WiFiPlazaProp *prop;
     s32 i;
     WiFiPlazaModelsPos pos;
 
-    prop = WiFiPlazaModelSet_AllocProp(base);
-    ModelInstance_Init(&prop->instance, &base->propRes.models[kind]);
+    prop = WiFiPlazaModelSet_AllocProp(set);
+    ModelInstance_Init(&prop->instance, &set->propRes.models[kind]);
     for (i = 0; i < WIFI_PLAZA_PROP_ANIM_COUNT; i++) {
-        void *file = base->propRes.animFiles[kind][i];
+        void *file = set->propRes.animFiles[kind][i];
         if (file != NULL) {
-            ModelAnimation_InitFromFile(&prop->anims[i], (ModelResource *)((u8 *)base->propRes.models + (kind << 4)), file, &base->allocator);
+            ModelAnimation_InitFromFile(&prop->anims[i], (ModelResource *)((u8 *)set->propRes.models + (kind << 4)), file, &set->allocator);
         }
     }
     ModelInstance_SetVisible(&prop->instance, TRUE);
@@ -929,7 +928,7 @@ static WiFiPlazaProp *WiFiPlazaModelSet_AllocProp(WiFiPlazaModelSet *set) {
     return NULL;
 }
 
-static void WiFiPlazaModelSet_LoadProps(WiFiPlazaPropResources *res, NARC *narc, NNSFndAllocator *allocator, WiFiPlazaModelsLayout *layout, volatile enum HeapID heapID) {
+static void WiFiPlazaModelSet_LoadProps(WiFiPlazaPropResources *res, NARC *narc, NNSFndAllocator *allocator, WiFiPlazaModelsLayout *layout, enum HeapID heapID) {
     struct {
         u8 *model;
         NARC *narc;
@@ -944,7 +943,6 @@ static void WiFiPlazaModelSet_LoadProps(WiFiPlazaPropResources *res, NARC *narc,
     u32 *modelId = (u32 *)layout;
 
     v.model = (u8 *)res;
-    heapID = heapID;
     v.i = 0;
     v.narc = narc;
     v.animIds = modelId;
@@ -1608,7 +1606,7 @@ static void WiFiPlazaPropShow_StartFade(WiFiPlazaPropShow *show) {
 // 10 frames: the animations speed up to twice their speed, alpha falls to 0 and the scale grows by 0.18.
 static BOOL WiFiPlazaPropShow_UpdateFade(WiFiPlazaPropShow *show) {
     fx32 value;
-    register s32 alpha;
+    s32 alpha;
     if (show->fadeTimer < 10) {
         show->fadeTimer++;
         value = FX_Div((s32)(((s64)(show->fadeTimer << FX32_SHIFT) * show->animSpeed + 2048) >> 12), 10 << FX32_SHIFT);

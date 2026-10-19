@@ -348,7 +348,7 @@ static void VisitorProfilesGlobe_GetPosition(VisitorProfilesGlobe *globe, VecFx3
 static void VisitorProfilesGlobe_GetMatrix(VisitorProfilesGlobe *globe, MtxFx33 *mtx);
 static void VisitorProfilesGlobe_GetRotation(VisitorProfilesGlobe *globe, VecFx32 *dst);
 static void VisitorProfilesGlobe_SetRotation(VisitorProfilesGlobe *globe, VecFx32 *src);
-static void VisitorProfilesPlaces_Init(VisitorProfilesPlaces *places, void *visitors, VisitorProfilesGraphics *gfx, VisitorProfilesSettings settings, volatile enum HeapID heapID);
+static void VisitorProfilesPlaces_Init(VisitorProfilesPlaces *places, void *visitors, VisitorProfilesGraphics *gfx, VisitorProfilesSettings settings, enum HeapID heapID);
 static void VisitorProfilesPlaces_Free(VisitorProfilesPlaces *places);
 static void VisitorProfilesPlaces_Draw(VisitorProfilesPlaces *places, VisitorProfilesGlobe *globe);
 static int VisitorProfiles_GetVisitorMarker(void *visitors, int country, int region);
@@ -1073,21 +1073,20 @@ static u32 VisitorProfiles_Update(VisitorProfilesWork *work) {
         break;
     case VISITOR_PROFILES_MODE_EXIT_PROMPT:
         result = VisitorProfilesExitPrompt_HandleInput(&work->exitPrompt);
-        if (result != YESNORESPONSE_WAIT) {
-            if (result == YESNORESPONSE_YES) {
-                goto close;
-            }
-            if (result != YESNORESPONSE_NO) {
-                goto close;
-            }
+        switch (result) {
+        case YESNORESPONSE_WAIT:
+            break;
+        case YESNORESPONSE_NO:
             VisitorProfilesPanel_ShowHint(&work->panel);
             VisitorProfilesExitPrompt_Close(&work->exitPrompt);
             VisitorProfilesTouch_ShowExitButton(&work->touch);
             work->mode = VISITOR_PROFILES_MODE_BROWSE;
+            break;
+        case YESNORESPONSE_YES:
+        default:
+            return 1;
         }
         break;
-close:
-        return 1;
     default:
         GF_AssertFail();
         break;
@@ -1347,28 +1346,18 @@ static void VisitorProfiles_GraphicsVBlank(VisitorProfilesGraphics *gfx) {
 }
 
 static void VisitorProfiles_InitBgs(VisitorProfilesGraphics *gfx, Options *options, enum HeapID heapID) {
-    volatile int i;
-    int next;
-    const BgTemplate *template;
-    const u32 *layer;
+    int i;
     u8 frame;
 
     SetBothScreensModesAndDisable(&sVisitorProfilesGraphicsModes);
     gfx->bgConfig = BgConfig_Alloc(heapID);
     gSystem.screensFlipped = TRUE;
     GfGfx_SwapDisplay();
-    i = 0;
-    template = sVisitorProfilesBgTemplates;
-    layer = sVisitorProfilesBgLayers;
-    do {
-        InitBgFromTemplate(gfx->bgConfig, (u8)*layer, template, GF_BG_TYPE_TEXT);
-        BG_ClearCharDataRange((u8)*layer, 32, 0, heapID);
-        BgClearTilemapBufferAndCommit(gfx->bgConfig, (u8)*layer);
-        next = i + 1;
-        template ++;
-        i = next;
-        layer++;
-    } while (next < VISITOR_PROFILES_NUM_BG_LAYERS);
+    for (i = 0; i < VISITOR_PROFILES_NUM_BG_LAYERS; i++) {
+        InitBgFromTemplate(gfx->bgConfig, sVisitorProfilesBgLayers[i], &sVisitorProfilesBgTemplates[i], GF_BG_TYPE_TEXT);
+        BG_ClearCharDataRange(sVisitorProfilesBgLayers[i], 32, 0, heapID);
+        BgClearTilemapBufferAndCommit(gfx->bgConfig, sVisitorProfilesBgLayers[i]);
+    }
     GfGfxLoader_GXLoadPalFromOpenNarc(gfx->narc, 5, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_0_OFFSET, 0, heapID);
     GfGfxLoader_LoadCharDataFromOpenNarc(gfx->narc, 11, gfx->bgConfig, GF_BG_LYR_SUB_0, 0, 0, FALSE, heapID);
     GfGfxLoader_LoadScrnDataFromOpenNarc(gfx->narc, 12, gfx->bgConfig, GF_BG_LYR_SUB_0, 0, 0, FALSE, heapID);
@@ -1491,12 +1480,10 @@ static void VisitorProfilesGlobe_SetRotation(VisitorProfilesGlobe *globe, VecFx3
     globe->rotation = *src;
 }
 
-static void VisitorProfilesPlaces_Init(VisitorProfilesPlaces *places, void *visitors, VisitorProfilesGraphics *gfx, VisitorProfilesSettings settings, volatile enum HeapID heapID) {
+static void VisitorProfilesPlaces_Init(VisitorProfilesPlaces *places, void *visitors, VisitorProfilesGraphics *gfx, VisitorProfilesSettings settings, enum HeapID heapID) {
     int i;
-    enum HeapID heap = heapID;
 
-    heapID = heap;
-    VisitorProfilesPlaces_Load(places, visitors, heap);
+    VisitorProfilesPlaces_Load(places, visitors, heapID);
     for (i = 0; i < VISITOR_PROFILES_NUM_MARKER_MODELS; i++) {
         ModelResource_LoadFromNarc(&places->markerResources[i], gfx->narc, sVisitorProfilesMarkerModelFiles[i], heapID);
         ModelInstance_Init(&places->markers[i], &places->markerResources[i]);
@@ -1624,8 +1611,6 @@ static u32 VisitorProfilesPlaces_GetCount(VisitorProfilesPlaces *places) {
 }
 
 static void VisitorProfilesCamera_Init(VisitorProfilesCamera *camera, VisitorProfilesSettings settings, enum HeapID heapID) {
-    fx32 distance;
-
     camera->camera = Camera_New(heapID);
     Camera_Init_FromTargetAndPos(&sVisitorProfilesCameraTarget, &sVisitorProfilesCameraPos, 0x5C1, 0, FALSE, camera->camera);
     Camera_SetPerspectiveClippingPlane(0, FX32_CONST(100), camera->camera);
@@ -1633,13 +1618,12 @@ static void VisitorProfilesCamera_Init(VisitorProfilesCamera *camera, VisitorPro
     Camera_SetStaticPtr(camera->camera);
     if (settings.fullGlobe == 0) {
         camera->zoomedIn = 1;
-        distance = 0x50000;
+        camera->distance = 0x50000;
     } else {
         camera->zoomedIn = 0;
-        distance = 0x128000;
+        camera->distance = 0x128000;
     }
-    *(volatile fx32 *)&camera->distance = distance;
-    Camera_SetDistance(*(volatile fx32 *)&camera->distance, camera->camera);
+    Camera_SetDistance(camera->distance, camera->camera);
 }
 
 static void VisitorProfilesCamera_Free(VisitorProfilesCamera *camera) {
@@ -1670,8 +1654,8 @@ static int VisitorProfilesCamera_UpdateZoom(VisitorProfilesCamera *camera, Visit
     case 1:
         if (camera->distance > 0x58000) {
             camera->distance -= 0x8000;
-            *(volatile fx32 *)&places->markerScale.x -= 128;
-            *(volatile fx32 *)&places->markerScale.y = *(volatile fx32 *)&places->markerScale.x;
+            places->markerScale.x -= 128;
+            places->markerScale.y = places->markerScale.x;
         } else {
             camera->distance = 0x50000;
             camera->zooming = 0;
@@ -1680,8 +1664,8 @@ static int VisitorProfilesCamera_UpdateZoom(VisitorProfilesCamera *camera, Visit
     case 0:
         if (camera->distance < 0x120000) {
             camera->distance += 0x8000;
-            *(volatile fx32 *)&places->markerScale.x += 128;
-            *(volatile fx32 *)&places->markerScale.y = *(volatile fx32 *)&places->markerScale.x;
+            places->markerScale.x += 128;
+            places->markerScale.y = places->markerScale.x;
         } else {
             camera->distance = 0x128000;
             camera->zooming = 0;

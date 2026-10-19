@@ -390,16 +390,14 @@ void WiFiPlazaLobbyMatches_Update(WiFiPlazaLobbyClient *client) {
         }
     }
     for (i = 0; i < 3; i++) {
-        WiFiPlazaLobbyClient *p = (WiFiPlazaLobbyClient *)((u8 *)gWiFiPlazaLobbyClient + i * 0x4C);
-        if (*(volatile u16 *)&p->matches[0].active == 1) {
+        if (gWiFiPlazaLobbyClient->matches[i].active == 1) {
             u32 frames;
-            if (*(volatile u16 *)&p->matches[0].timer) {
-                (*(volatile u16 *)&p->matches[0].timer)--;
+            if (gWiFiPlazaLobbyClient->matches[i].timer) {
+                gWiFiPlazaLobbyClient->matches[i].timer--;
             }
             frames = WiFiPlazaLobbyMatches_CalcTimer(gWiFiPlazaLobbyClient, i);
-            p = (WiFiPlazaLobbyClient *)((u8 *)gWiFiPlazaLobbyClient + i * 0x4C);
-            if (frames < *(volatile u16 *)&p->matches[0].timer) {
-                *(volatile u16 *)&p->matches[0].timer = frames;
+            if (frames < gWiFiPlazaLobbyClient->matches[i].timer) {
+                gWiFiPlazaLobbyClient->matches[i].timer = frames;
             }
         }
     }
