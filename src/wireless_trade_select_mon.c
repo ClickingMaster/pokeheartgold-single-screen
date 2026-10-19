@@ -128,8 +128,8 @@ void Comm_StoreFriendFromPlayer(SaveData *saveData, s32 netId, s32 slot, enum He
 
 // The cursor anim of each side: own slot, partner slot, quit.
 extern const u32 sWirelessTradeSelectMonCursorAnims[][3];
-extern const u32 ov65_0221FD6C[][3];
-extern const u32 ov65_0221FD70[][3];
+extern const u32 sWirelessTradeSelectMonPartnerCursorAnims[][3];
+extern const u32 sWirelessTradeSelectMonQuitCursorAnims[][3];
 extern const BgTemplate sWirelessTradeSelectMonBgTemplate_Sub0;
 extern const BgTemplate sWirelessTradeSelectMonBgTemplate_Sub1;
 extern const BgTemplate sWirelessTradeSelectMonBgTemplate_Main1;
@@ -140,10 +140,10 @@ extern const BgTemplate sWirelessTradeSelectMonBgTemplate_Main3;
 extern const GraphicsBanks sWirelessTradeSelectMonGraphicsBanks;
 extern const TouchscreenHitbox sWirelessTradeSelectMonSlotHitboxes[];
 extern const WirelessTradeDetailSpritePos sWirelessTradeSelectMonDetailSpritePos[];
-extern const WirelessTradeDetailSpritePos ov65_0221FEA8[];
+extern const WirelessTradeDetailSpritePos sWirelessTradeSelectMonDetailSpritePosY[];
 extern const u32 sWirelessTradeSelectMonBallPalettes[];
 extern const WirelessTradeSlotPos sWirelessTradeSelectMonSlotPos[];
-extern const WirelessTradeSlotPos ov65_0221FF50[];
+extern const WirelessTradeSlotPos sWirelessTradeSelectMonSlotPosY[];
 extern const u8 sWirelessTradeSelectMonCursorMoves[][4][6];
 extern const ListMenuTemplate sWirelessTradeSelectMonRosterListTemplate;
 extern const WirelessTradeWindowPos sWirelessTradeSelectMonNameWindowPos[];
@@ -1157,7 +1157,7 @@ static void WirelessTradeSelectMon_ShowMonDetails(Window *windows, int side, Par
     sprites = work->detailSprites;
     f.sideOffset = side * sizeof(Sprite *);
     Sprite_SetDrawFlag(*(Sprite **)((u8 *)sprites + f.sideOffset), TRUE);
-    WirelessTradeSelectMon_SetSpritePos(*(Sprite **)((u8 *)sprites + f.sideOffset), sWirelessTradeSelectMonDetailSpritePos[side].x, f.yOffset + ov65_0221FEA8[side].x + 192);
+    WirelessTradeSelectMon_SetSpritePos(*(Sprite **)((u8 *)sprites + f.sideOffset), sWirelessTradeSelectMonDetailSpritePos[side].x, f.yOffset + sWirelessTradeSelectMonDetailSpritePosY[side].x + 192);
     if (side == 0) {
         ((void (*)(Sprite *, int))Sprite_SetFlipMode)(*(Sprite **)((u8 *)sprites + f.sideOffset), work->mons[f.slot].flip);
     }
@@ -1389,17 +1389,17 @@ static void WirelessTradeSelectMon_SetCursorSprite(int cursor, Sprite *sprite, i
 
     GF_ASSERT(cursor < WIRELESS_TRADE_NUM_SLOTS + 1);
     pos.x = sWirelessTradeSelectMonSlotPos[cursor].x * FX32_ONE;
-    pos.y = ov65_0221FF50[cursor].x * FX32_ONE;
+    pos.y = sWirelessTradeSelectMonSlotPosY[cursor].x * FX32_ONE;
     if (cursor == WIRELESS_TRADE_SLOT_CANCEL) {
         Sprite_SetMatrix(sprite, &pos);
-        Sprite_SetAnimCtrlSeq(sprite, ov65_0221FD70[side][0]);
+        Sprite_SetAnimCtrlSeq(sprite, sWirelessTradeSelectMonQuitCursorAnims[side][0]);
         return;
     }
     Sprite_SetMatrix(sprite, &pos);
     if (cursor < 6) {
         Sprite_SetAnimCtrlSeq(sprite, sWirelessTradeSelectMonCursorAnims[side][0]);
     } else {
-        Sprite_SetAnimCtrlSeq(sprite, ov65_0221FD6C[side][0]);
+        Sprite_SetAnimCtrlSeq(sprite, sWirelessTradeSelectMonPartnerCursorAnims[side][0]);
     }
 }
 
@@ -1916,8 +1916,8 @@ static int WirelessTradeSelectMon_StartTradeSlide(WirelessTradeSelectMon *work) 
     }
     Sprite_SetDrawFlag(work->cursorSprites[0], FALSE);
     Sprite_SetDrawFlag(work->cursorSprites[1], FALSE);
-    WirelessTradeSelectMon_InitSlide(&work->slides[0], sWirelessTradeSelectMonSlotPos[work->cursor].x + 16, ov65_0221FF50[work->cursor].x - 6, 48, 32);
-    WirelessTradeSelectMon_InitSlide(&work->slides[1], sWirelessTradeSelectMonSlotPos[work->partnerCursor].x + 16, ov65_0221FF50[work->partnerCursor].x - 6, 176, 32);
+    WirelessTradeSelectMon_InitSlide(&work->slides[0], sWirelessTradeSelectMonSlotPos[work->cursor].x + 16, sWirelessTradeSelectMonSlotPosY[work->cursor].x - 6, 48, 32);
+    WirelessTradeSelectMon_InitSlide(&work->slides[1], sWirelessTradeSelectMonSlotPos[work->partnerCursor].x + 16, sWirelessTradeSelectMonSlotPosY[work->partnerCursor].x - 6, 176, 32);
     work->slideStep = 0;
     work->callback = WirelessTradeSelectMon_UpdateTradeSlide;
     return 0;

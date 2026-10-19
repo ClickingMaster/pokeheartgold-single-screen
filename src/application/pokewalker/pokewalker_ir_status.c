@@ -6,14 +6,14 @@
 #include "application/pokewalker/pokewalker_ir_internal.h"
 
 void PokewalkerIr_RequestReceiveGifts(PokewalkerIrStatus *status, void *records) {
-    ov112_021FFAA4.status = status;
-    ov112_021FFAA4.records = records;
-    ov112_021FFB24.command = 0x60;
-    ov112_021FFB24.step = 0x20;
+    gPokewalkerIrWork.status = status;
+    gPokewalkerIrWork.records = records;
+    gPokewalkerIrTransfer.command = 0x60;
+    gPokewalkerIrTransfer.step = 0x20;
     PokewalkerIr_BeginTransfer(NULL, 0, 0xD4C);
-    ov112_021FFB24.totalSize = 0x24D8;
-    ov112_021FFB24.totalChunk = 0;
-    ov112_021FFB24.totalChunks = (ov112_021FFB24.totalSize + 0x7F) / 0x80;
+    gPokewalkerIrTransfer.totalSize = 0x24D8;
+    gPokewalkerIrTransfer.totalChunk = 0;
+    gPokewalkerIrTransfer.totalChunks = (gPokewalkerIrTransfer.totalSize + 0x7F) / 0x80;
 }
 
 void *PokewalkerIrStatus_IsConnected(void) {
@@ -22,21 +22,21 @@ void *PokewalkerIrStatus_IsConnected(void) {
 
 // Progress of the current block, 0-255.
 u8 PokewalkerIr_GetChunkProgress(void) {
-    return 255 * ov112_021FFB24.chunk / ov112_021FFB24.numChunks;
+    return 255 * gPokewalkerIrTransfer.chunk / gPokewalkerIrTransfer.numChunks;
 }
 
 // Progress of the whole request, 0-255.
 u8 PokewalkerIr_GetTotalProgress(void) {
-    return 255 * ov112_021FFB24.totalChunk / ov112_021FFB24.totalChunks;
+    return 255 * gPokewalkerIrTransfer.totalChunk / gPokewalkerIrTransfer.totalChunks;
 }
 
 // Returns the error of the last request and resets it (to 1 = not connected when the link is down).
 u32 PokewalkerIr_GetAndClearError(void) {
-    u32 error = ov112_021FFAA4.error;
+    u32 error = gPokewalkerIrWork.error;
     if (PokewalkerIr_IsConnected() != 0) {
-        ov112_021FFAA4.error = 0;
+        gPokewalkerIrWork.error = 0;
     } else {
-        ov112_021FFAA4.error = 1;
+        gPokewalkerIrWork.error = 1;
     }
     return error;
 }

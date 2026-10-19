@@ -231,7 +231,7 @@
 	.extern PokewalkerEventLog_Init
 	.extern PokewalkerEventLog_Exit
 	.extern PokewalkerEventLog_Main
-	.public _021FF500
+	.public gPokewalkerIrLinkArgs
 	.public sPokewalkerAppGraphicsModes
 	.public sPokewalkerAppGraphicsBanks
 	.public sPokewalkerAppBgTemplate_Main1
@@ -4432,7 +4432,7 @@ sTrainerHouseDailyFlags:
 
 	.data
 
-_021FF500:
+gPokewalkerIrLinkArgs:
 	.byte 0xFF, 0xFF, 0x00, 0x00
 
 sSpindaSpotPixels:

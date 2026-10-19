@@ -434,7 +434,7 @@ static void PokeathlonBlockSmashMon_UpdateExhausted(PokeathlonBlockSmashMon *mon
 static void PokeathlonBlockSmashMon_UpdateSwitch(PokeathlonBlockSmashMon *mon) {
     struct {
         s16 y, x;
-    } p2, p3, p4;
+    } ballUpPos, queuePos, ballDownPos;
 
     s16 delta;
     s8 member;
@@ -459,50 +459,50 @@ static void PokeathlonBlockSmashMon_UpdateSwitch(PokeathlonBlockSmashMon *mon) {
         }
         break;
     case BLOCK_SMASH_SWITCH_BALL_UP:
-        ManagedSprite_GetPositionXY(mon->sprites[4], &p2.x, &p2.y);
-        delta = (-64 - p2.y) / 4;
-        if (p2.y <= -52 || delta == 0) {
+        ManagedSprite_GetPositionXY(mon->sprites[4], &ballUpPos.x, &ballUpPos.y);
+        delta = (-64 - ballUpPos.y) / 4;
+        if (ballUpPos.y <= -52 || delta == 0) {
             member = (s8)(mon->member - 1);
             if (member < 0) {
                 member = 2;
             }
             PokeathlonBlockSmashMon_SetMonSprite(mon, 6, (u8)PokeathlonCourse_GetNetId(mon->course), (u8)member, FALSE);
-            p2.x = 40;
-            p2.y = -40;
+            ballUpPos.x = 40;
+            ballUpPos.y = -40;
             PokeathlonBlockSmashMon_SetWaitingPosition(mon, 6, 40, -40);
             mon->switchState++;
         } else {
-            ManagedSprite_SetPositionXYWithSubscreenOffset(mon->sprites[4], p2.x, (s16)(p2.y + delta), FX32_CONST(256));
-            ManagedSprite_GetPositionXYWithSubscreenOffset(mon->sprites[6], &p2.x, &p2.y, FX32_CONST(256));
+            ManagedSprite_SetPositionXYWithSubscreenOffset(mon->sprites[4], ballUpPos.x, (s16)(ballUpPos.y + delta), FX32_CONST(256));
+            ManagedSprite_GetPositionXYWithSubscreenOffset(mon->sprites[6], &ballUpPos.x, &ballUpPos.y, FX32_CONST(256));
             {
-                int dist = 272 - p2.y;
+                int dist = 272 - ballUpPos.y;
                 if (dist < 0) {
                     dist = -dist;
                 }
-                p2.y += dist >> 2;
+                ballUpPos.y += dist >> 2;
             }
-            p2.y = p2.y > 216 ? 216 : p2.y;
-            PokeathlonBlockSmashMon_SetWaitingPosition(mon, 6, p2.x, p2.y);
+            ballUpPos.y = ballUpPos.y > 216 ? 216 : ballUpPos.y;
+            PokeathlonBlockSmashMon_SetWaitingPosition(mon, 6, ballUpPos.x, ballUpPos.y);
         }
         break;
     case BLOCK_SMASH_SWITCH_SHIFT_QUEUE:
-        ManagedSprite_GetPositionXYWithSubscreenOffset(mon->sprites[5], &p3.x, &p3.y, FX32_CONST(256));
+        ManagedSprite_GetPositionXYWithSubscreenOffset(mon->sprites[5], &queuePos.x, &queuePos.y, FX32_CONST(256));
         {
-            int dist = 136 - p3.y;
+            int dist = 136 - queuePos.y;
             if (dist < 0) {
                 dist = -dist;
             }
             delta = (s16)(dist >> 1);
         }
-        if (p3.y < 136) {
+        if (queuePos.y < 136) {
             if (delta == 0) {
                 delta = 1;
             }
-            p3.y += delta;
-            PokeathlonBlockSmashMon_SetWaitingPosition(mon, 5, p3.x, p3.y);
-            ManagedSprite_GetPositionXYWithSubscreenOffset(mon->sprites[6], &p3.x, &p3.y, FX32_CONST(256));
-            p3.y += delta;
-            PokeathlonBlockSmashMon_SetWaitingPosition(mon, 6, p3.x, p3.y);
+            queuePos.y += delta;
+            PokeathlonBlockSmashMon_SetWaitingPosition(mon, 5, queuePos.x, queuePos.y);
+            ManagedSprite_GetPositionXYWithSubscreenOffset(mon->sprites[6], &queuePos.x, &queuePos.y, FX32_CONST(256));
+            queuePos.y += delta;
+            PokeathlonBlockSmashMon_SetWaitingPosition(mon, 6, queuePos.x, queuePos.y);
         }
         if (++mon->switchFrames >= 4) {
             tmp = mon->sprites[5];
@@ -520,9 +520,9 @@ static void PokeathlonBlockSmashMon_UpdateSwitch(PokeathlonBlockSmashMon *mon) {
         }
         break;
     case BLOCK_SMASH_SWITCH_BALL_DOWN:
-        ManagedSprite_GetPositionXY(mon->sprites[4], &p4.x, &p4.y);
+        ManagedSprite_GetPositionXY(mon->sprites[4], &ballDownPos.x, &ballDownPos.y);
         {
-            int dist = -24 - p4.y;
+            int dist = -24 - ballDownPos.y;
             if (dist < 0) {
                 dist = -dist;
             }
@@ -531,15 +531,15 @@ static void PokeathlonBlockSmashMon_UpdateSwitch(PokeathlonBlockSmashMon *mon) {
         if (delta != 0) {
             delta /= 2;
         }
-        p4.y += delta + 2;
-        if (p4.y >= 112) {
+        ballDownPos.y += delta + 2;
+        if (ballDownPos.y >= 112) {
             PlaySE(SEQ_SE_GS_BOWA2);
             ManagedSprite_SetPositionXY(mon->sprites[4], 136, 112);
             ManagedSprite_SetAnimateFlag(mon->sprites[4], TRUE);
             ManagedSprite_ResetSpriteAnimCtrlState(mon->sprites[3]);
             mon->switchState++;
         } else {
-            ManagedSprite_SetPositionXYWithSubscreenOffset(mon->sprites[4], p4.x, p4.y, FX32_CONST(256));
+            ManagedSprite_SetPositionXYWithSubscreenOffset(mon->sprites[4], ballDownPos.x, ballDownPos.y, FX32_CONST(256));
         }
         break;
     case BLOCK_SMASH_SWITCH_SHOW_MON:

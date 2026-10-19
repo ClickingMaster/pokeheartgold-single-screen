@@ -102,7 +102,7 @@ struct GtsSelector {
     s16 country;             // the result of GTS_SELECTOR_MODE_COUNTRY
     s8 gender;               // the result of GTS_SELECTOR_MODE_GENDER
     s8 levelRange;           // the result of GTS_SELECTOR_MODE_LEVEL
-    u8 filler_46[2];
+    u8 padding_46[2];
     s32 cursor;
     int state; // GtsSelectorState
     int nextState;

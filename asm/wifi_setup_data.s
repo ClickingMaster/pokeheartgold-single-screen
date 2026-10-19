@@ -223,8 +223,8 @@
 	.global gWifiSetupThread
 	.global gWifiSetupResult
 	.global ov13_0224E0B0
-	.global ov13_0224E0C4
-	.global ov13_0224E144
+	.global gWifiSetupResultWepKeys
+	.global gWifiSetupResultWpaKey
 	.global gWifiSetupReply
 	.global gWifiSetupClientSettings
 	.global gWifiSetupRecvSsid
@@ -409,10 +409,10 @@ gWifiSetupResult:
 ov13_0224E0B0:
 	.space 0x14
 
-ov13_0224E0C4:
+gWifiSetupResultWepKeys:
 	.space 0x80
 
-ov13_0224E144:
+gWifiSetupResultWpaKey:
 	.space 0x40
 
 gWifiSetupReply:

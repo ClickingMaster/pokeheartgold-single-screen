@@ -35,7 +35,7 @@ typedef struct PokewalkerIrWork {
     u16 unk_00;
     u16 unk_02;
     u32 blockIndex;
-    void *unk_08;
+    void *walkerMon;
     void *unk_0C;
     void *uploadImage;
     int error;
@@ -51,10 +51,10 @@ typedef struct PokewalkerIrWork {
     u64 transferStartTick;
     u8 *compressedSizes;
     u8 *compressBuffer;
-    u8 *sizes0;    // compressed block sizes of the first upload
-    void *upload0; // its compressed data
-    u8 *sizes1;
-    void *upload1;
+    u8 *compressedImageSizes;
+    void *compressedImage;
+    u8 *compressedStrollSizes;
+    void *compressedStroll;
 } PokewalkerIrWork;
 
 typedef struct PokewalkerIrTransfer {
@@ -75,18 +75,18 @@ typedef struct PokewalkerIrTransfer {
     volatile u16 totalSize;
 } PokewalkerIrTransfer;
 
-extern u8 _021FF500[];
+extern u8 gPokewalkerIrLinkArgs[];
 extern PokewalkerIrLink gPokewalkerIrLink;
 extern PokewalkerIrPacket gPokewalkerIrPacket;
 extern u8 gPokewalkerIrPayload[];
-extern PokewalkerIrWork ov112_021FFAA4;
-extern OSMessage ov112_021FFAC0[];
-extern u8 *ov112_021FFAF0[];
-extern u8 *ov112_021FFAF8[];
-extern OSMutex ov112_021FFB08;
-extern OSMessageQueue ov112_021FFB20;
-extern PokewalkerIrTransfer ov112_021FFB24;
-extern u8 ov112_021FFB64[];
+extern PokewalkerIrWork gPokewalkerIrWork;
+extern OSMessage gPokewalkerIrBuffers[];
+extern u8 *gPokewalkerIrImageSizes[];
+extern u8 *gPokewalkerIrStrollSizes[];
+extern OSMutex gPokewalkerIrSync;
+extern OSMessageQueue gPokewalkerIrMessageQueue;
+extern PokewalkerIrTransfer gPokewalkerIrTransfer;
+extern u8 gPokewalkerIrSendBuffer[];
 extern OSThread sPokewalkerIrThread;
 
 #endif // POKEHEARTGOLD_APPLICATION_POKEWALKER_POKEWALKER_IR_INTERNAL_H

@@ -26,9 +26,9 @@ extern void (*const sWiFiPlazaEventEffectPhaseStarts[])(WiFiPlazaEventEffect *ef
 extern const u8 sWiFiPlazaEventPhase3PropIds[];
 extern const u32 sWiFiPlazaEventPhase3PropGroups[][2];
 extern const u8 sWiFiPlazaEventPhase4Steps[];
-extern const u8 ov49_0226A83D[];
+extern const u8 sWiFiPlazaEventPhase4HideSteps[];
 extern const u32 sWiFiPlazaEventPhase5Thresholds[];
-extern const u32 ov49_0226A868[];
+extern const u32 sWiFiPlazaEventPhase5AnimSpeeds[];
 extern const u8 sWiFiPlazaEventModelIds3[];
 extern const u8 sWiFiPlazaEventModelIds4[];
 extern const u8 sWiFiPlazaEventModelIds2[];
@@ -467,7 +467,7 @@ void WiFiPlazaEventEffect_UpdatePhase4(WiFiPlazaEventEffect *effect, u32 tick) {
         return;
     }
     kind = sWiFiPlazaEventPhase4Steps[effect->step * 2];
-    WiFiPlazaEvent_GetModelList(ov49_0226A83D[effect->step * 2], &list);
+    WiFiPlazaEvent_GetModelList(sWiFiPlazaEventPhase4HideSteps[effect->step * 2], &list);
     for (i = 0; i < list.count; i++) {
         if (WiFiPlazaModels_ShowEffectProp(effect->models, list.ids[i], FALSE, 0x1000) != 1) {
             GF_AssertFail();
@@ -486,8 +486,8 @@ void WiFiPlazaEventEffect_UpdatePhase5(WiFiPlazaEventEffect *effect, u32 value) 
     u32 step = effect->step;
 
     if (step < 3 && sWiFiPlazaEventPhase5Thresholds[step * 2] < value) {
-        WiFiPlazaModels_TriggerStageShows(effect->models, ov49_0226A868[step * 2]);
-        WiFiPlazaModels_TriggerStageBursts(effect->models, ov49_0226A868[effect->step * 2]);
+        WiFiPlazaModels_TriggerStageShows(effect->models, sWiFiPlazaEventPhase5AnimSpeeds[step * 2]);
+        WiFiPlazaModels_TriggerStageBursts(effect->models, sWiFiPlazaEventPhase5AnimSpeeds[effect->step * 2]);
         PlaySE(SEQ_SE_PL_140_2);
         effect->step++;
     }

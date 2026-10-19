@@ -90,15 +90,15 @@ static void FootprintStamp_LoadPartySpriteGfx(FootprintStamp *work, NARC *narc);
 static void FootprintStamp_CreatePartySprites(FootprintStamp *work);
 static void FootprintStamp_FreePartySprites(FootprintStamp *work);
 static void FootprintStamp_LoadPlayerSpriteGfx(FootprintStamp *work, NARC *narc);
-static BOOL FootprintStamp_LoadFootprintIcon(int species, int form, ManagedSprite *sprite, NARC *narc, NARC *footprintNarc, int screen, void *unk19E0);
+static BOOL FootprintStamp_LoadFootprintIcon(int species, int form, ManagedSprite *sprite, NARC *narc, NARC *footprintNarc, int screen, void *showArceusFootprint);
 static void FootprintStamp_Setup3D(void);
 static void FootprintStamp_HighlightPartySlot(FootprintStamp *work, int slot);
 static void FootprintStamp_GetTextSize(String *string, int font, int *width, int *tiles);
 static inline int FootprintStamp_InkGaugeY(int y);
-static BOOL FootprintStampBoard_AddStamp(FootprintStamp *work, FootprintStampBoard *board, const FootprintStampMon *mon, NARC *narc, NARC *footprintNarc, void *unk19E0);
+static BOOL FootprintStampBoard_AddStamp(FootprintStamp *work, FootprintStampBoard *board, const FootprintStampMon *mon, NARC *narc, NARC *footprintNarc, void *showArceusFootprint);
 static void FootprintStampBoard_Draw(FootprintStampBoard *board);
-static FootprintStampObj *FootprintStampBoard_CreateStamp(FootprintStamp *work, FootprintStampBoard *board, const FootprintStampMon *mon, NARC *narc, NARC *footprintNarc, void *unk19E0);
-static BOOL FootprintStamp_LoadStampModel(FootprintStampBoard *board, ModelResource *model, NARC *narc, NARC *footprintNarc, FootprintStampMon *mon, void *unk19E0);
+static FootprintStampObj *FootprintStampBoard_CreateStamp(FootprintStamp *work, FootprintStampBoard *board, const FootprintStampMon *mon, NARC *narc, NARC *footprintNarc, void *showArceusFootprint);
+static BOOL FootprintStamp_LoadStampModel(FootprintStampBoard *board, ModelResource *model, NARC *narc, NARC *footprintNarc, FootprintStampMon *mon, void *showArceusFootprint);
 static BOOL FootprintStamp_AllocTextureVram(NNSG3dResTex *texture);
 
 static const s16 sFootprintStampPlayerFootprintPositions[FOOTPRINT_STAMP_PLAYERS_MAX][2] = {
@@ -932,7 +932,7 @@ void FootprintStamp_ShowParty(FootprintStamp *work) {
 }
 
 // Copies the footprint of a Pokemon (or the generic one) into the 2x2-tile character of a sprite.
-static BOOL FootprintStamp_LoadFootprintIcon(int species, int form, ManagedSprite *sprite, NARC *narc, NARC *footprintNarc, int screen, void *unk19E0) {
+static BOOL FootprintStamp_LoadFootprintIcon(int species, int form, ManagedSprite *sprite, NARC *narc, NARC *footprintNarc, int screen, void *showArceusFootprint) {
     void *file;
     NNSG2dCharacterData *charData;
     u8 *bottom;
@@ -942,7 +942,7 @@ static BOOL FootprintStamp_LoadFootprintIcon(int species, int form, ManagedSprit
     if (species == SPECIES_NONE || species > NATIONAL_DEX_COUNT) {
         return FALSE;
     }
-    if (FootprintStamp_GetFootprintType(species, form, (u32)unk19E0) == 1) {
+    if (FootprintStamp_GetFootprintType(species, form, (u32)showArceusFootprint) == 1) {
         file = GfGfxLoader_LoadFromOpenNarc(footprintNarc, species + 3, TRUE, HEAP_ID_125, TRUE);
         NNS_G2dGetUnpackedCharacterData(file, &charData);
         DC_FlushRange(charData->pRawData, 0x100);
@@ -1396,7 +1396,7 @@ BOOL FootprintStamp_UseInk(FootprintStamp *work, fx32 amount) {
 void FootprintStamp_UpdateDummy(FootprintStamp *work) {
 }
 
-void FootprintStampBoard_Init(FootprintStampBoard *board, void *unk19E0) {
+void FootprintStampBoard_Init(FootprintStampBoard *board, void *showArceusFootprint) {
     MI_CpuFill8(board, 0, sizeof(FootprintStampBoard));
 }
 
@@ -1411,7 +1411,7 @@ void FootprintStampBoard_Free(FootprintStampBoard *board) {
     }
 }
 
-static BOOL FootprintStampBoard_AddStamp(FootprintStamp *work, FootprintStampBoard *board, const FootprintStampMon *mon, NARC *narc, NARC *footprintNarc, void *unk19E0) {
+static BOOL FootprintStampBoard_AddStamp(FootprintStamp *work, FootprintStampBoard *board, const FootprintStampMon *mon, NARC *narc, NARC *footprintNarc, void *showArceusFootprint) {
     int i;
 
     if (board->cameraEffect != FOOTPRINT_STAMP_EFFECT_NONE) {
@@ -1419,7 +1419,7 @@ static BOOL FootprintStampBoard_AddStamp(FootprintStamp *work, FootprintStampBoa
     }
     for (i = 0; i < FOOTPRINT_STAMP_STAMPS_MAX; i++) {
         if (board->stamps[i] == NULL) {
-            board->stamps[i] = FootprintStampBoard_CreateStamp(work, board, mon, narc, footprintNarc, unk19E0);
+            board->stamps[i] = FootprintStampBoard_CreateStamp(work, board, mon, narc, footprintNarc, showArceusFootprint);
             if (board->stamps[i] != NULL) {
                 return TRUE;
             }
@@ -1536,7 +1536,7 @@ void FootprintStampBoard_VBlank(FootprintStampBoard *board, int phase) {
     }
 }
 
-static FootprintStampObj *FootprintStampBoard_CreateStamp(FootprintStamp *work, FootprintStampBoard *board, const FootprintStampMon *mon, NARC *narc, NARC *footprintNarc, void *unk19E0) {
+static FootprintStampObj *FootprintStampBoard_CreateStamp(FootprintStamp *work, FootprintStampBoard *board, const FootprintStampMon *mon, NARC *narc, NARC *footprintNarc, void *showArceusFootprint) {
     FootprintStampObj *stamp = Heap_Alloc(HEAP_ID_125, sizeof(FootprintStampObj));
     fx32 x, y;
 
@@ -1547,7 +1547,7 @@ static FootprintStampObj *FootprintStampBoard_CreateStamp(FootprintStamp *work, 
         GF_AssertFail();
         stamp->mon.species = SPECIES_DITTO;
     }
-    if (!FootprintStamp_LoadStampModel(board, &stamp->model, narc, footprintNarc, &stamp->mon, unk19E0)) {
+    if (!FootprintStamp_LoadStampModel(board, &stamp->model, narc, footprintNarc, &stamp->mon, showArceusFootprint)) {
         return NULL;
     }
     ModelInstance_Init(&stamp->instance, &stamp->model);
@@ -1558,7 +1558,7 @@ static FootprintStampObj *FootprintStampBoard_CreateStamp(FootprintStamp *work, 
     return stamp;
 }
 
-static BOOL FootprintStamp_LoadStampModel(FootprintStampBoard *board, ModelResource *model, NARC *narc, NARC *footprintNarc, FootprintStampMon *mon, void *unk19E0) {
+static BOOL FootprintStamp_LoadStampModel(FootprintStampBoard *board, ModelResource *model, NARC *narc, NARC *footprintNarc, FootprintStampMon *mon, void *showArceusFootprint) {
     model->file = GfGfxLoader_LoadFromOpenNarc(narc, 29, FALSE, HEAP_ID_125, FALSE);
     GF_ASSERT(model->file);
     model->set = NNS_G3dGetMdlSet(model->file);
@@ -1566,7 +1566,7 @@ static BOOL FootprintStamp_LoadStampModel(FootprintStampBoard *board, ModelResou
     model->texture = NNS_G3dGetTex(model->file);
     if (model->texture) {
         int allocated;
-        FootprintStamp_DrawFootprintTexture(model->texture, narc, footprintNarc, mon, (u32)unk19E0);
+        FootprintStamp_DrawFootprintTexture(model->texture, narc, footprintNarc, mon, (u32)showArceusFootprint);
         allocated = FootprintStamp_AllocTextureVram(model->texture);
         if (!allocated || !FootprintStampBoard_QueueTexture(board, model->texture)) {
             if (allocated == TRUE) {
@@ -1635,7 +1635,7 @@ static BOOL FootprintStamp_AllocTextureVram(NNSG3dResTex *texture) {
 
 // Draws a footprint (the Pokemon's own, or the generic one) into the 16x16 2bpp texture of a stamp model and sets
 // the stamp's ink color as palette color 1.
-void FootprintStamp_DrawFootprintTexture(NNSG3dResTex *texture, NARC *narc, NARC *footprintNarc, FootprintStampMon *mon, u32 unk19E0) {
+void FootprintStamp_DrawFootprintTexture(NNSG3dResTex *texture, NARC *narc, NARC *footprintNarc, FootprintStampMon *mon, u32 showArceusFootprint) {
     int shift;
     u8 *src;
     NNSG2dCharacterData *charData;
@@ -1649,7 +1649,7 @@ void FootprintStamp_DrawFootprintTexture(NNSG3dResTex *texture, NARC *narc, NARC
     int i;
     u8 *chars;
 
-    type = FootprintStamp_GetFootprintType(mon->species, mon->form, unk19E0);
+    type = FootprintStamp_GetFootprintType(mon->species, mon->form, showArceusFootprint);
     bitmap = (u16 *)((u8 *)texture + texture->texInfo.ofsTex);
     if (type == 1) {
         file = GfGfxLoader_LoadFromOpenNarc(footprintNarc, mon->species + 3, TRUE, HEAP_ID_125, TRUE);

@@ -8,7 +8,7 @@
 typedef struct PokewalkerIrWorkHeader {
     u16 unk_00;
     u8 unk_02[6];
-    u8 *unk_08;
+    u8 *walkerMon;
     u8 unk_0C[4];
     u8 *uploadImage;
     u32 error;
@@ -27,12 +27,12 @@ typedef struct PokewalkerIrWorkBuffers {
     u64 transferStartTick;
     u8 *compressedSizes;
     u8 *compressBuffer;
-    u8 *sizes0;  // compressed block sizes of the first upload
-    u8 *upload0; // its compressed data
-    u8 *sizes1;
-    u8 *upload1;
-    u8 *sizes2;
-    u8 *upload2;
+    u8 *compressedImageSizes;
+    u8 *compressedImage;
+    u8 *compressedStrollSizes;
+    u8 *compressedStroll;
+    u8 *compressedRecordSizes;
+    u8 *compressedRecords;
 } PokewalkerIrWorkBuffers;
 
 typedef struct PokewalkerIrWorkSync {
@@ -54,64 +54,64 @@ typedef struct PokewalkerIrWorkProgress {
     u8 buffer[0x74];
 } PokewalkerIrWorkProgress;
 
-PokewalkerIrWorkHeader ov112_021FFAA4;
-PokewalkerIrWorkBuffers ov112_021FFAC0;
-PokewalkerIrWorkSync ov112_021FFB08;
-PokewalkerIrWorkProgress ov112_021FFB5C;
+PokewalkerIrWorkHeader gPokewalkerIrWork;
+PokewalkerIrWorkBuffers gPokewalkerIrBuffers;
+PokewalkerIrWorkSync gPokewalkerIrSync;
+PokewalkerIrWorkProgress gPokewalkerIrProgress;
 
-void PokewalkerIr_RequestUpload(u8 *a, u8 *b, u8 *c) {
-    ov112_021FFAA4.uploadImage = a;
-    ov112_021FFAC0.strollData = b;
-    ov112_021FFAC0.records = c;
-    ov112_021FFB08.command = 0x32;
-    ov112_021FFB08.step = 0x20;
+void PokewalkerIr_RequestUpload(u8 *uploadImage, u8 *strollData, u8 *records) {
+    gPokewalkerIrWork.uploadImage = uploadImage;
+    gPokewalkerIrBuffers.strollData = strollData;
+    gPokewalkerIrBuffers.records = records;
+    gPokewalkerIrSync.command = 0x32;
+    gPokewalkerIrSync.step = 0x20;
     PokewalkerIr_BeginTransfer(NULL, 0, 0xD4C);
-    ov112_021FFB5C.totalSize = 0xB732;
-    ov112_021FFB5C.totalChunk = 0;
-    ov112_021FFB5C.totalChunks = (ov112_021FFB5C.totalSize + 0x7F) / 0x80;
-    if (ov112_021FFAC0.compressBuffer != NULL) {
-        ov112_021FFAC0.sizes0 = ov112_021FFAC0.compressedSizes;
-        ov112_021FFAC0.upload0 = ov112_021FFAC0.compressBuffer;
-        PokewalkerIr_CompressBlocks(ov112_021FFAA4.uploadImage, ov112_021FFAC0.upload0, 0x8C50, ov112_021FFAC0.sizes0);
-        ov112_021FFAC0.sizes1 = ov112_021FFAC0.compressedSizes + 0x119;
-        ov112_021FFAC0.upload1 = ov112_021FFAC0.compressBuffer + 0x8C80;
-        PokewalkerIr_CompressBlocks(ov112_021FFAC0.strollData, ov112_021FFAC0.upload1, 0x28BE, ov112_021FFAC0.sizes1);
-        ov112_021FFAC0.sizes2 = ov112_021FFAC0.sizes1 + 0x52;
-        ov112_021FFAC0.upload2 = ov112_021FFAC0.upload1 + 0x2900;
-        PokewalkerIr_CompressBlocks(ov112_021FFAC0.records, ov112_021FFAC0.upload2, 0x224, ov112_021FFAC0.sizes2);
+    gPokewalkerIrProgress.totalSize = 0xB732;
+    gPokewalkerIrProgress.totalChunk = 0;
+    gPokewalkerIrProgress.totalChunks = (gPokewalkerIrProgress.totalSize + 0x7F) / 0x80;
+    if (gPokewalkerIrBuffers.compressBuffer != NULL) {
+        gPokewalkerIrBuffers.compressedImageSizes = gPokewalkerIrBuffers.compressedSizes;
+        gPokewalkerIrBuffers.compressedImage = gPokewalkerIrBuffers.compressBuffer;
+        PokewalkerIr_CompressBlocks(gPokewalkerIrWork.uploadImage, gPokewalkerIrBuffers.compressedImage, 0x8C50, gPokewalkerIrBuffers.compressedImageSizes);
+        gPokewalkerIrBuffers.compressedStrollSizes = gPokewalkerIrBuffers.compressedSizes + 0x119;
+        gPokewalkerIrBuffers.compressedStroll = gPokewalkerIrBuffers.compressBuffer + 0x8C80;
+        PokewalkerIr_CompressBlocks(gPokewalkerIrBuffers.strollData, gPokewalkerIrBuffers.compressedStroll, 0x28BE, gPokewalkerIrBuffers.compressedStrollSizes);
+        gPokewalkerIrBuffers.compressedRecordSizes = gPokewalkerIrBuffers.compressedStrollSizes + 0x52;
+        gPokewalkerIrBuffers.compressedRecords = gPokewalkerIrBuffers.compressedStroll + 0x2900;
+        PokewalkerIr_CompressBlocks(gPokewalkerIrBuffers.records, gPokewalkerIrBuffers.compressedRecords, 0x224, gPokewalkerIrBuffers.compressedRecordSizes);
     }
 }
 
-void PokewalkerIr_RequestReceive(u8 *a, u8 *b, u8 *c, u8 *d) {
-    ov112_021FFAA4.unk_08 = a;
-    ov112_021FFAC0.status = b;
-    ov112_021FFAC0.blocks = c;
-    ov112_021FFAC0.records = d;
-    ov112_021FFB08.command = 0x40;
-    ov112_021FFB08.step = 0x20;
+void PokewalkerIr_RequestReceive(u8 *walkerMon, u8 *status, u8 *blocks, u8 *records) {
+    gPokewalkerIrWork.walkerMon = walkerMon;
+    gPokewalkerIrBuffers.status = status;
+    gPokewalkerIrBuffers.blocks = blocks;
+    gPokewalkerIrBuffers.records = records;
+    gPokewalkerIrSync.command = 0x40;
+    gPokewalkerIrSync.step = 0x20;
     PokewalkerIr_BeginTransfer(NULL, 0, 0xD4C);
-    ov112_021FFB5C.totalSize = 0x2BCA;
-    ov112_021FFB5C.totalChunk = 0;
-    ov112_021FFB5C.totalChunks = (ov112_021FFB5C.totalSize + 0x7F) / 0x80;
+    gPokewalkerIrProgress.totalSize = 0x2BCA;
+    gPokewalkerIrProgress.totalChunk = 0;
+    gPokewalkerIrProgress.totalChunks = (gPokewalkerIrProgress.totalSize + 0x7F) / 0x80;
 }
 
-void PokewalkerIr_RequestSendStroll(u8 *a, u8 *b, u8 *c, u8 *d) {
-    ov112_021FFAC0.strollData = a;
-    ov112_021FFAC0.records = b;
-    ov112_021FFAC0.status = c;
-    ov112_021FFAC0.blocks = d;
-    ov112_021FFB08.command = 0x52;
-    ov112_021FFB08.step = 0x20;
+void PokewalkerIr_RequestSendStroll(u8 *strollData, u8 *records, u8 *status, u8 *blocks) {
+    gPokewalkerIrBuffers.strollData = strollData;
+    gPokewalkerIrBuffers.records = records;
+    gPokewalkerIrBuffers.status = status;
+    gPokewalkerIrBuffers.blocks = blocks;
+    gPokewalkerIrSync.command = 0x52;
+    gPokewalkerIrSync.step = 0x20;
     PokewalkerIr_BeginTransfer(NULL, 0, 0xD4C);
-    ov112_021FFB5C.totalSize = 0x382E;
-    ov112_021FFB5C.totalChunk = 0;
-    ov112_021FFB5C.totalChunks = (ov112_021FFB5C.totalSize + 0x7F) / 0x80;
-    if (ov112_021FFAC0.compressBuffer != NULL) {
-        ov112_021FFAC0.sizes1 = ov112_021FFAC0.compressedSizes + 0x119;
-        ov112_021FFAC0.upload1 = ov112_021FFAC0.compressBuffer + 0x8C80;
-        PokewalkerIr_CompressBlocks(ov112_021FFAC0.strollData, ov112_021FFAC0.upload1, 0x28BE, ov112_021FFAC0.sizes1);
-        ov112_021FFAC0.sizes2 = ov112_021FFAC0.sizes1 + 0x52;
-        ov112_021FFAC0.upload2 = ov112_021FFAC0.upload1 + 0x2900;
-        PokewalkerIr_CompressBlocks(ov112_021FFAC0.records, ov112_021FFAC0.upload2, 0x224, ov112_021FFAC0.sizes2);
+    gPokewalkerIrProgress.totalSize = 0x382E;
+    gPokewalkerIrProgress.totalChunk = 0;
+    gPokewalkerIrProgress.totalChunks = (gPokewalkerIrProgress.totalSize + 0x7F) / 0x80;
+    if (gPokewalkerIrBuffers.compressBuffer != NULL) {
+        gPokewalkerIrBuffers.compressedStrollSizes = gPokewalkerIrBuffers.compressedSizes + 0x119;
+        gPokewalkerIrBuffers.compressedStroll = gPokewalkerIrBuffers.compressBuffer + 0x8C80;
+        PokewalkerIr_CompressBlocks(gPokewalkerIrBuffers.strollData, gPokewalkerIrBuffers.compressedStroll, 0x28BE, gPokewalkerIrBuffers.compressedStrollSizes);
+        gPokewalkerIrBuffers.compressedRecordSizes = gPokewalkerIrBuffers.compressedStrollSizes + 0x52;
+        gPokewalkerIrBuffers.compressedRecords = gPokewalkerIrBuffers.compressedStroll + 0x2900;
+        PokewalkerIr_CompressBlocks(gPokewalkerIrBuffers.records, gPokewalkerIrBuffers.compressedRecords, 0x224, gPokewalkerIrBuffers.compressedRecordSizes);
     }
 }

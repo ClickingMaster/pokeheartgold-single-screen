@@ -140,7 +140,7 @@ typedef struct BallCapsuleEditorCapsuleIcon {
 typedef struct BallCapsuleEditorSeal {
     BOOL active;
     SEAL seal;
-    u8 filler_7;
+    u8 padding_7;
     ManagedSprite *sprite;
     TouchscreenHitbox *hitbox; // one of BallCapsuleEditorDisplay.hitboxes
 } BallCapsuleEditorSeal;
@@ -172,7 +172,7 @@ typedef struct BallCapsuleEditor {
     SEALBAG *sealBag;
     CAPSULE savedCapsule;             // the edited capsule as it was before editing
     u8 savedSealCounts[SEAL_MAX + 1]; // the seal bag before editing
-    u8 filler_D1[3];
+    u8 padding_D1[3];
     BallCapsuleEditorDisplay display;
     TouchscreenListMenu *menu;
     void *pokepicEffect; // BallSealEffect_New

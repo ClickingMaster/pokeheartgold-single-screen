@@ -55,7 +55,7 @@ struct EasyChatApp {
     u16 newKeys;
     u16 heldKeys;
     u16 repeatedKeys;
-    u8 filler_36[2];
+    u8 padding_36[2];
     u32 touchButton;
     u8 padding_3C[4];
     TouchHitboxController *touchHitboxes;

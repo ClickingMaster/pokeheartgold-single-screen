@@ -199,7 +199,7 @@ typedef struct NintendoWfcButtonFlash {
 typedef struct NintendoWfcConnect {
     NintendoWifiConnectArgs *args;
     BgConfig *bgConfig;
-    u8 filler_0008[8];
+    u8 padding_0008[8];
     int mode; // index into the sNintendoWfcMode* tables
     int nextMode;
     int unk_0018;
@@ -214,7 +214,7 @@ typedef struct NintendoWfcConnect {
     u32 room;
     u8 downloadBuffer[0xA38];
     FrontierWifiUploadRecord uploadRecord;
-    u8 filler_0BBC[0x14];
+    u8 padding_0BBC[0x14];
     MessageFormat *msgFormat;
     MsgData *msgDataTower; // Wi-Fi Battle Tower
     MsgData *msgDataWfc;   // Nintendo WFC
@@ -230,14 +230,14 @@ typedef struct NintendoWfcConnect {
     GF_2DGfxResMan *resMan[4];
     SpriteResource *resObjs[12];
     SpriteResourcesHeader spriteHeaders[3];
-    u8 filler_0DD0[0x24];
+    u8 padding_0DD0[0x24];
     Sprite *sprites[NINTENDO_WFC_SPRITE_COUNT];
     Window msgWindow;
     Window unk_0E28;
     Window unk_0E38;
     Window titleWindow;
     Window errorWindow;
-    u8 filler_0E68[0xE4];
+    u8 padding_0E68[0xE4];
     WaitingIcon *waitingIcon;
     int dwcError;
     int dwcErrorCode;
@@ -422,7 +422,7 @@ static void NintendoWfc_PrintMessage(NintendoWfcConnect *wfc, MsgData *msgData, 
 static int NintendoWfc_GetAlignedTextX(const Window *window, String *string, int x, int alignment, int unused, int fontId);
 static void NintendoWfc_PrintAlignedText(Window *window, String *string, int x, int y, int alignment, u32 color);
 static void NintendoWfc_CreateWirelessIcon(NintendoWfcConnect *wfc);
-static void NintendoWfc_NumberInputDummy(NintendoWfcConnect *wfc, int a1, int a2);
+static void NintendoWfc_NumberInputDummy(NintendoWfcConnect *wfc, int unused1, int unused2);
 static void NintendoWfc_ShowWaitingIcon(NintendoWfcConnect *wfc);
 static void NintendoWfc_HideWaitingIcon(NintendoWfcConnect *wfc);
 static void NintendoWfc_PrintErrorMessage(NintendoWfcConnect *wfc, int msgNo);
@@ -2416,7 +2416,7 @@ static void NintendoWfc_CreateWirelessIcon(NintendoWfcConnect *wfc) {
     WirelessStatusIcon_Create();
 }
 
-static void NintendoWfc_NumberInputDummy(NintendoWfcConnect *wfc, int a1, int a2) {
+static void NintendoWfc_NumberInputDummy(NintendoWfcConnect *wfc, int unused1, int unused2) {
 }
 
 static void NintendoWfc_ShowWaitingIcon(NintendoWfcConnect *wfc) {

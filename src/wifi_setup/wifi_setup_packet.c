@@ -44,8 +44,8 @@ extern u8 gWifiSetupReply[];
 extern u8 gWifiSetupRecvWepKeys[][40];
 extern u32 gWifiSetupRecvWpaKey[18];
 extern u8 ov13_0224E0B0[];
-extern u8 ov13_0224E0C4[];
-extern WifiSetupSettings64 ov13_0224E144;
+extern u8 gWifiSetupResultWepKeys[];
+extern WifiSetupSettings64 gWifiSetupResultWpaKey;
 
 static int WifiSetup_SendDatagram(int socket, const void *address, const void *unused, const void *data, int length);
 static int WifiSetup_BroadcastDatagram(int socket, const void *data, int length);
@@ -599,7 +599,7 @@ int WifiSetup_StoreSimpleStartResult(void) {
         }
         *(u32 *)(ov13_0224E0B0 + 0x10) = *(u32 *)((u8 *)gWifiSetupRecvSecurity + 4);
         src = (u8 *)gWifiSetupRecvWepKeys;
-        out = ov13_0224E0C4;
+        out = gWifiSetupResultWepKeys;
         i = 0;
         p = buf;
         for (; i < 4; i++, src += 0x28, out += 0x20) {
@@ -640,11 +640,11 @@ int WifiSetup_StoreSimpleStartResult(void) {
         break;
     case 2:
         *(u32 *)(ov13_0224E0B0 + 0xC) = 4;
-        memcpy(&ov13_0224E144, &gWifiSetupRecvWpaKey, sizeof(WifiSetupSettings64));
+        memcpy(&gWifiSetupResultWpaKey, &gWifiSetupRecvWpaKey, sizeof(WifiSetupSettings64));
         break;
     case 3:
         *(u32 *)(ov13_0224E0B0 + 0xC) = 5;
-        memcpy(&ov13_0224E144, &gWifiSetupRecvWpaKey, sizeof(WifiSetupSettings64));
+        memcpy(&gWifiSetupResultWpaKey, &gWifiSetupRecvWpaKey, sizeof(WifiSetupSettings64));
         break;
     default:
         result = -7;

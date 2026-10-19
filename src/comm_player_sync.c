@@ -720,13 +720,13 @@ BOOL CommPlayerManager_AssignBattleSlots(void) {
     int j;
     const u16 *coords;
 
-    coords2[0] = _020FC7A0[0];
+    coords2[0] = gCommTwoPlayerBattleSpots[0];
     {
-        const u16 *src = _020FC7A8;
+        const u16 *src = gCommFourPlayerBattleSpots;
 
-        coords2[1] = _020FC7A0[1];
-        coords2[2] = _020FC7A0[2];
-        coords2[3] = _020FC7A0[3];
+        coords2[1] = gCommTwoPlayerBattleSpots[1];
+        coords2[2] = gCommTwoPlayerBattleSpots[2];
+        coords2[3] = gCommTwoPlayerBattleSpots[3];
         u32 copyCount;
         u16 *dst;
 
@@ -763,7 +763,7 @@ BOOL CommPlayerManager_AssignBattleSlots(void) {
     return result;
 }
 
-void CommPlayerManager_RecvUnkE6(int netId, int size, const u8 *data) {
+void CommPlayerManager_RecvLockOnSpot(int netId, int size, const u8 *data) {
     int value = *data;
     if (value == 3) {
         gCommPlayerManager->inputLocked[netId] = 0;

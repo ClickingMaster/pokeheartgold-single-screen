@@ -40,7 +40,7 @@ static void PokeathlonBox_SetGraphicsModes(BgConfig *bgConfig);
 static void PokeathlonBox_SetObjCharTransferTemplate();
 static void PokeathlonBox_CreateOamManager(PokeathlonBox *data);
 static void PokeathlonBox_VBlankCallback(void *data);
-static BOOL PokeathlonBox_GetLightBoxMon(PCStorage *storage, u32 boxno, u32 slotno, PokeathlonBox_BoxMon *ptr);
+static BOOL PokeathlonBox_GetLightBoxMon(PCStorage *storage, u32 boxno, u32 slotno, PokeathlonBox_BoxMon *out);
 static void PokeathlonBox_GetBoxName(String *dest, PCStorage *storage, u32 boxno);
 static void PokeathlonBox_CopySelectedMons(PokeathlonBox *data, PokeathlonBoxArgs *args);
 static void PokeathlonBox_GetPartyMonStats(Party *party, u8 slot, PokeathlonBox_MonStats *stats);
@@ -234,52 +234,52 @@ static void PokeathlonBox_VBlankCallback(void *data) {
     BoxMonSelector_VBlank(((PokeathlonBox *)data)->monSelector);
 }
 
-static BOOL PokeathlonBox_GetBoxMon(PCStorage *storage, u32 boxno, u32 slotno, PokeathlonBox_BoxMon *ptr) {
+static BOOL PokeathlonBox_GetBoxMon(PCStorage *storage, u32 boxno, u32 slotno, PokeathlonBox_BoxMon *out) {
     BoxPokemon *boxMon = PCStorage_GetMonByIndexPair(storage, boxno, slotno);
     if (GetBoxMonData(boxMon, MON_DATA_SPECIES_EXISTS, NULL)) {
-        ptr->species = GetBoxMonData(boxMon, MON_DATA_SPECIES, NULL);
-        ptr->personality = GetBoxMonData(boxMon, MON_DATA_PERSONALITY, NULL);
-        ptr->isEgg = GetBoxMonData(boxMon, MON_DATA_IS_EGG, NULL);
-        ptr->form = GetBoxMonData(boxMon, MON_DATA_FORM, NULL);
-        ptr->unkC = 0;
-        ptr->unkE = 0;
-        GetBoxMonData(boxMon, MON_DATA_NICKNAME, ptr->nickname);
-        ptr->isShiny = BoxMonIsShiny(boxMon);
-        ptr->gender = GetBoxMonData(boxMon, MON_DATA_GENDER, NULL);
+        out->species = GetBoxMonData(boxMon, MON_DATA_SPECIES, NULL);
+        out->personality = GetBoxMonData(boxMon, MON_DATA_PERSONALITY, NULL);
+        out->isEgg = GetBoxMonData(boxMon, MON_DATA_IS_EGG, NULL);
+        out->form = GetBoxMonData(boxMon, MON_DATA_FORM, NULL);
+        out->unkC = 0;
+        out->unkE = 0;
+        GetBoxMonData(boxMon, MON_DATA_NICKNAME, out->nickname);
+        out->isShiny = BoxMonIsShiny(boxMon);
+        out->gender = GetBoxMonData(boxMon, MON_DATA_GENDER, NULL);
         return TRUE;
     }
-    ptr->species = SPECIES_NONE;
-    ptr->personality = 0;
-    ptr->isEgg = 0;
-    ptr->form = 0;
-    ptr->unkC = 0;
-    ptr->unkE = 0;
-    ptr->isShiny = 0;
-    ptr->gender = 0;
+    out->species = SPECIES_NONE;
+    out->personality = 0;
+    out->isEgg = 0;
+    out->form = 0;
+    out->unkC = 0;
+    out->unkE = 0;
+    out->isShiny = 0;
+    out->gender = 0;
     return FALSE;
 }
 
-static BOOL PokeathlonBox_GetLightBoxMon(PCStorage *storage, u32 boxno, u32 slotno, PokeathlonBox_BoxMon *ptr) {
+static BOOL PokeathlonBox_GetLightBoxMon(PCStorage *storage, u32 boxno, u32 slotno, PokeathlonBox_BoxMon *out) {
     BoxPokemon *boxMon = PCStorage_GetMonByIndexPair(storage, boxno, slotno);
     if (GetBoxMonData(boxMon, MON_DATA_SPECIES_EXISTS, NULL)) {
-        ptr->species = GetBoxMonData(boxMon, MON_DATA_SPECIES, NULL);
-        ptr->personality = 0;
-        ptr->isEgg = GetBoxMonData(boxMon, MON_DATA_IS_EGG, NULL);
-        ptr->form = GetBoxMonData(boxMon, MON_DATA_FORM, NULL);
-        ptr->unkC = 0;
-        ptr->unkE = 0;
-        ptr->isShiny = 0;
-        ptr->gender = 0;
+        out->species = GetBoxMonData(boxMon, MON_DATA_SPECIES, NULL);
+        out->personality = 0;
+        out->isEgg = GetBoxMonData(boxMon, MON_DATA_IS_EGG, NULL);
+        out->form = GetBoxMonData(boxMon, MON_DATA_FORM, NULL);
+        out->unkC = 0;
+        out->unkE = 0;
+        out->isShiny = 0;
+        out->gender = 0;
         return TRUE;
     }
-    ptr->species = SPECIES_NONE;
-    ptr->personality = 0;
-    ptr->isEgg = 0;
-    ptr->form = 0;
-    ptr->unkC = 0;
-    ptr->unkE = 0;
-    ptr->isShiny = 0;
-    ptr->gender = 0;
+    out->species = SPECIES_NONE;
+    out->personality = 0;
+    out->isEgg = 0;
+    out->form = 0;
+    out->unkC = 0;
+    out->unkE = 0;
+    out->isShiny = 0;
+    out->gender = 0;
     return FALSE;
 }
 

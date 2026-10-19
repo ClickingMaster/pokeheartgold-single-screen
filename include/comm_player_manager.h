@@ -12,7 +12,7 @@ u32 CommPlayerManager_GetPositionSize(void);
 void CommPlayerManager_ReceiveHostPosition(void);
 void CommPlayerManager_ReceiveRemovePlayer(void);
 void CommPlayerManager_ReceiveMoveEnabled(void);
-void CommPlayerManager_RecvUnkE6(void);
+void CommPlayerManager_RecvLockOnSpot(void);
 void CommPlayerManager_ForcePosition();
 
 #endif // POKEHEARTGOLD_COMM_PLAYER_MANAGER_H

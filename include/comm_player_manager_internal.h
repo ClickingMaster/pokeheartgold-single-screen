@@ -51,8 +51,8 @@ struct CommPlayerManager {
 };
 
 extern CommPlayerManager *gCommPlayerManager;
-extern const u16 _020FC7A0[4];
-extern const u16 _020FC7A8[8];
+extern const u16 gCommTwoPlayerBattleSpots[4];
+extern const u16 gCommFourPlayerBattleSpots[8];
 
 BOOL CommPlayerManager_Init(CommPlayerManager *manager, FieldSystem *fieldSystem, int unused);
 void CommPlayerManager_RemoveAllAvatars(void);
@@ -97,7 +97,7 @@ int CommPlayerManager_GetHostFrontX(int netId);
 int CommPlayerManager_GetHostFrontZ(int netId);
 void CommPlayerManager_SetPlayerMoveEnabled(int netId, int value);
 BOOL CommPlayerManager_AssignBattleSlots(void);
-void CommPlayerManager_RecvUnkE6(int netId, int size, const u8 *data);
+void CommPlayerManager_RecvLockOnSpot(int netId, int size, const u8 *data);
 void CommPlayerManager_HostLockFlaggedPlayersOnSpots(void);
 void CommPlayerManager_FaceRoomCenter(void);
 BOOL CommPlayerManager_StepAllPlayersBack(void);

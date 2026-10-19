@@ -358,7 +358,7 @@ void FootprintStamp_FreeTextSprite(FootprintStampTextSprite *text);
 void FootprintStamp_UpdateInkGauge(FootprintStamp *work);
 BOOL FootprintStamp_UseInk(FootprintStamp *work, fx32 amount);
 void FootprintStamp_UpdateDummy(FootprintStamp *work);
-void FootprintStampBoard_Init(FootprintStampBoard *board, void *unk19E0);
+void FootprintStampBoard_Init(FootprintStampBoard *board, void *showArceusFootprint);
 void FootprintStampBoard_Free(FootprintStampBoard *board);
 void FootprintStampBoard_Update(FootprintStampBoard *board, Camera *camera, int phase, u32 inkColumn);
 void FootprintStampBoard_ResolveChains(FootprintStampBoard *board);
@@ -366,7 +366,7 @@ void FootprintStampBoard_VBlank(FootprintStampBoard *board, int phase);
 BOOL FootprintStampBoard_QueueTexture(FootprintStampBoard *board, NNSG3dResTex *texture);
 void FootprintStampBoard_UnqueueTexture(FootprintStampBoard *board, NNSG3dResTex *texture);
 
-void FootprintStamp_DrawFootprintTexture(NNSG3dResTex *texture, NARC *narc, NARC *footprintNarc, FootprintStampMon *mon, u32 unk19E0);
+void FootprintStamp_DrawFootprintTexture(NNSG3dResTex *texture, NARC *narc, NARC *footprintNarc, FootprintStampMon *mon, u32 showArceusFootprint);
 
 void FootprintStamp_DeleteStamp(FootprintStampObj *stamp);
 void FootprintStampBoard_RemoveStamp(FootprintStampBoard *board, FootprintStampObj *stamp, int slot);
@@ -417,7 +417,7 @@ void FootprintStamp_PrintPlayerName(MsgData *msgData, MessageFormat *msgFormat, 
 void FootprintStamp_ClearPlayerNameWindow(Window *windows, u32 index);
 u16 FootprintStamp_GetInkColor(u32 column, u32 otId);
 u32 FootprintStamp_GetTouchedPartySlot(const FootprintStampMon *party, int current);
-u32 FootprintStamp_GetFootprintType(u32 species, int form, u32 unk19E0);
+u32 FootprintStamp_GetFootprintType(u32 species, int form, u32 showArceusFootprint);
 int FootprintStamp_RegisterLinkCommands(FootprintStamp *work);
 BOOL FootprintStamp_SendStamp(FootprintStampMon *mon);
 void FootprintStamp_HandlePlayerJoined(u32 playerId, void *data, u32 unused, FootprintStamp *work);

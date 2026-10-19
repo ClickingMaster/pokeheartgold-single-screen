@@ -263,8 +263,8 @@ typedef struct MimeJrTopDoneFlags {
 
 typedef struct MimeJrTopRoutine {
     int timer;
-    int frames;
-    int start;
+    int count;
+    int speed;
     int frontPalettes[3];
     int backPalettes[3];
     SysTaskFunc func;
@@ -287,10 +287,10 @@ typedef struct MimeJrTopPlayerPalettes {
 typedef void (*MimeJrTopSetPaletteOffsetFunc)(ManagedSprite *sprite, int offset);
 typedef void (*MimeJrTopInitTemplateFunc)(ManagedSpriteTemplate *template, u16 x, u16 y, u32 vram, int pal, int resId);
 typedef void (*MimeJrTopStartBurstFunc)(MimeJrTopGame *game, s16 x, s16 y);
-typedef void (*MimeJrTopRosterInitFunc)(PlazaGameRoster *roster, u32 fromLobby, SaveData *saveData, u32 unkA, PlazaGameArgs *args);
+typedef void (*MimeJrTopRosterInitFunc)(PlazaGameRoster *roster, u32 fromLobby, SaveData *saveData, u32 voiceChat, PlazaGameArgs *args);
 
-extern const VecFx32 ov92_02263878;
-extern const VecFx32 ov92_02263884;
+extern const VecFx32 sMimeJrTopDemoTurnTiltAxis;
+extern const VecFx32 sMimeJrTopDemoSpinTiltAxis;
 extern const MimeJrTopGraphicsModes sMimeJrTopGraphicsModes;
 extern const MimeJrTopTopModels sMimeJrTopTopModels;
 extern const u16 sMimeJrTopEdgeColors[];
@@ -310,16 +310,16 @@ extern const MimeJrTopRivalAnims sMimeJrTopRivalAnims;
 extern const MimeJrTopRivalAnims sMimeJrTopRivalSetAnims;
 extern const s16 sMimeJrTopRivalNamePositions[3][3][4];
 extern const MimeJrTopTouchData sMimeJrTopTouchData;
-extern const TouchscreenHitbox ov92_02263C3C[];
-extern const VecFx32 ov92_02263C5C;
-extern const VecFx32 ov92_02263C68;
-extern const VecFx32 ov92_02263C74;
-extern const VecFx32 ov92_02263C80;
-extern const VecFx32 ov92_02263C8C;
+extern const TouchscreenHitbox sMimeJrTopSelectionHitboxes[];
+extern const VecFx32 sMimeJrTopSpinTiltAxis;
+extern const VecFx32 sMimeJrTopTurnTiltAxis;
+extern const VecFx32 sMimeJrTopSettleTiltAxis;
+extern const VecFx32 sMimeJrTopSettleTouchTiltAxis;
+extern const VecFx32 sMimeJrTopWobbleTiltAxis;
 extern const int sMimeJrTopTierModels[][2];
-extern const int ov92_02263CD4[][2];
+extern const int sMimeJrTopTierChangeModels[][2];
 extern const MimeJrTopWobbleChoice sMimeJrTopWobbleChoices[][4];
-extern const s32 ov92_02263D88[][8];
+extern const s32 sMimeJrTopWobbleWeights[][8];
 extern const u16 sMimeJrTopPopupLimits[];
 extern const MimeJrTopDoneFlags sMimeJrTopDance3DoneFlags;
 extern const MimeJrTopDoneFlags sMimeJrTopDance2DoneFlags;
@@ -330,8 +330,8 @@ extern const MimeJrTopStarOrigins sMimeJrTopStarOrigins;
 extern const MimeJrTopOffsets sMimeJrTopBurstOffsetsX;
 extern const MimeJrTopOffsets sMimeJrTopBurstOffsetsY;
 extern const MimeJrTopRoutine sMimeJrTopRoutines[];
-extern const MimeJrTopRoutineValue ov92_02263EA4[];
-extern const MimeJrTopRoutineValue ov92_02263EA8[];
+extern const MimeJrTopRoutineValue sMimeJrTopRoutineCounts[];
+extern const MimeJrTopRoutineValue sMimeJrTopRoutineSpeeds[];
 extern const MimeJrTopRoutineTask sMimeJrTopRoutineTasks[];
 extern MimeJrTopPlayerPalettes sMimeJrTopPlayerPalettes[];
 
@@ -568,8 +568,8 @@ BOOL MimeJrTop_Init(OverlayManager *man, int *state) {
 
 // The demo shown before the start: a hand rubbing the screen at (x, y); (0, 0) lets go.
 void MimeJrTopGame_RubDemo(MimeJrTopGame *game, int x, int y) {
-    VecFx32 vec1;
-    VecFx32 vec2;
+    VecFx32 spinAxis;
+    VecFx32 turnAxis;
     f32 a;
     int v;
     if (x == 0 && y == 0) {
@@ -577,8 +577,8 @@ void MimeJrTopGame_RubDemo(MimeJrTopGame *game, int x, int y) {
         game->lastTouchY = 0;
         if (game->top.spinFrames) {
             MimeJrTopModel_ContinueSpin(&game->top, 1.0f);
-            vec1 = ov92_02263884;
-            MTX_MultVec43(&vec1, &game->mimeJr[0].rotationFx, &game->tilt);
+            spinAxis = sMimeJrTopDemoSpinTiltAxis;
+            MTX_MultVec43(&spinAxis, &game->mimeJr[0].rotationFx, &game->tilt);
             return;
         }
         game->top.spinX = 0;
@@ -597,8 +597,8 @@ void MimeJrTopGame_RubDemo(MimeJrTopGame *game, int x, int y) {
         game->lastTouchY = y;
     }
     MimeJrTopModel_Turn(&game->top, x, y, game->lastTouchX, game->lastTouchY, 2.0f, TRUE);
-    vec2 = ov92_02263878;
-    MTX_MultVec43(&vec2, &game->mimeJr[0].rotationFx, &game->tilt);
+    turnAxis = sMimeJrTopDemoTurnTiltAxis;
+    MTX_MultVec43(&turnAxis, &game->mimeJr[0].rotationFx, &game->tilt);
     if (!IsSEPlaying(SEQ_SE_PL_KIRAKIRA)) {
         PlaySE(SEQ_SE_PL_KIRAKIRA);
     }
@@ -2146,7 +2146,7 @@ void MimeJrTopTierModels_Task(SysTask *sysTask, MimeJrTopTierModelsTask *task) {
         task->state++;
         return;
     case MIME_JR_TOP_TIER_MODELS_LOAD_CHANGE:
-        MimeJrTopModel_Load(b, task->resources->narc, ov92_02263CD4[index][0]);
+        MimeJrTopModel_Load(b, task->resources->narc, sMimeJrTopTierChangeModels[index][0]);
         MimeJrTopModel_Init(b, task->selection);
         task->state++;
         return;
@@ -2371,8 +2371,8 @@ void MimeJrTopGame_Update(MimeJrTopGame *game) {
 
 // Rubbing the touch screen turns the top (and Mime Jr. with it), which tilts the balance.
 void MimeJrTopGame_HandleTouch(MimeJrTopGame *game) {
-    VecFx32 vec1;
-    VecFx32 vec2;
+    VecFx32 spinAxis;
+    VecFx32 turnAxis;
     u32 x, y;
     int hit;
     f32 a;
@@ -2381,7 +2381,7 @@ void MimeJrTopGame_HandleTouch(MimeJrTopGame *game) {
     System_GetTouchHeldCoords(&x, &y);
     game->touched = FALSE;
     if (game->selection) {
-        hit = TouchscreenHitbox_FindHitboxAtPoint(ov92_02263C3C, x, y);
+        hit = TouchscreenHitbox_FindHitboxAtPoint(sMimeJrTopSelectionHitboxes, x, y);
     } else {
         hit = TouchscreenHitbox_FindHitboxAtPoint(sMimeJrTopTouchData.hitboxes, x, y);
     }
@@ -2391,8 +2391,8 @@ void MimeJrTopGame_HandleTouch(MimeJrTopGame *game) {
         if (game->top.spinFrames) {
             MimeJrTopModel_ContinueSpin(&game->top, 1.0f);
             MimeJrTopModel_ContinueSpin(&game->mimeJr[0], 0.5f);
-            vec1 = ov92_02263C5C;
-            MTX_MultVec43(&vec1, &game->mimeJr[0].rotationFx, &game->tilt);
+            spinAxis = sMimeJrTopSpinTiltAxis;
+            MTX_MultVec43(&spinAxis, &game->mimeJr[0].rotationFx, &game->tilt);
             game->touched = TRUE;
             return;
         }
@@ -2418,8 +2418,8 @@ void MimeJrTopGame_HandleTouch(MimeJrTopGame *game) {
     }
     MimeJrTopModel_Turn(&game->top, x, y, game->lastTouchX, game->lastTouchY, 2.0f, TRUE);
     MimeJrTopModel_Turn(&game->mimeJr[0], x, y, game->lastTouchX, game->lastTouchY, b, TRUE);
-    vec2 = ov92_02263C68;
-    MTX_MultVec43(&vec2, &game->mimeJr[0].rotationFx, &game->tilt);
+    turnAxis = sMimeJrTopTurnTiltAxis;
+    MTX_MultVec43(&turnAxis, &game->mimeJr[0].rotationFx, &game->tilt);
     game->touched = TRUE;
     if (game->everTouched == FALSE) {
         game->everTouched = TRUE;
@@ -2457,9 +2457,9 @@ void MimeJrTopGame_UpdateLevel(MimeJrTopGame *game) {
 // Random kicks that tip the top over; harder the higher the tier.
 void MimeJrTopGame_UpdateWobble(MimeJrTopGame *game) {
     MimeJrTopWobbleIntervals intervals;
-    VecFx32 v1;
-    VecFx32 v2;
-    VecFx32 v3;
+    VecFx32 wobbleAxis;
+    VecFx32 settleAxis;
+    VecFx32 settleTouchAxis;
     s16 x;
     s32 y;
     s32 oldX;
@@ -2510,8 +2510,8 @@ void MimeJrTopGame_UpdateWobble(MimeJrTopGame *game) {
         }
         MimeJrTopModel_Turn(&game->top, 0, 0, x, y, 1.88f, FALSE);
         if (MimeJrTopModel_Turn(&game->mimeJr[0], 0, 0, x, y, 0.8f, FALSE)) {
-            v1 = ov92_02263C8C;
-            MTX_MultVec43(&v1, &game->mimeJr[0].rotationFx, &game->tilt);
+            wobbleAxis = sMimeJrTopWobbleTiltAxis;
+            MTX_MultVec43(&wobbleAxis, &game->mimeJr[0].rotationFx, &game->tilt);
         }
         game->wobbleStep++;
         game->wobbleTime--;
@@ -2526,16 +2526,16 @@ void MimeJrTopGame_UpdateWobble(MimeJrTopGame *game) {
         x = (s16)(game->settleX.value >> 12);
         MimeJrTopModel_Turn(&game->top, 0, 0, x, y, 1.88f, FALSE);
         if (MimeJrTopModel_Turn(&game->mimeJr[0], 0, 0, x, y, 0.8f, FALSE)) {
-            v2 = ov92_02263C74;
-            MTX_MultVec43(&v2, &game->mimeJr[0].rotationFx, &game->tilt);
+            settleAxis = sMimeJrTopSettleTiltAxis;
+            MTX_MultVec43(&settleAxis, &game->mimeJr[0].rotationFx, &game->tilt);
         }
     } else if (game->touched == TRUE && game->settled == TRUE) {
         y = (s16)(game->settleY.value >> 12);
         x = (s16)(game->settleX.value >> 12);
         MimeJrTopModel_Turn(&game->top, 0, 0, x, y, 1.88f, FALSE);
         if (MimeJrTopModel_Turn(&game->mimeJr[0], 0, 0, x, y, 0.8f, FALSE)) {
-            v3 = ov92_02263C80;
-            MTX_MultVec43(&v3, &game->mimeJr[0].rotationFx, &game->tilt);
+            settleTouchAxis = sMimeJrTopSettleTouchTiltAxis;
+            MTX_MultVec43(&settleTouchAxis, &game->mimeJr[0].rotationFx, &game->tilt);
         }
     }
     if (game->wobbling != FALSE && (game->wobbleDue != TRUE || game->settled != TRUE)) {
@@ -2546,7 +2546,7 @@ void MimeJrTopGame_UpdateWobble(MimeJrTopGame *game) {
     rnd = LCRandom();
     SetLCRNGSeed(seed);
     rnd = (u32)rnd % 100;
-    total = ov92_02263D88[game->tier][0];
+    total = sMimeJrTopWobbleWeights[game->tier][0];
     for (i = 0; i < 3; i++) {
         if (rnd < total) {
             break;
@@ -3543,9 +3543,9 @@ void MimeJrTopDance_Task(SysTask *sysTask, void *data) {
         if (dance->timer == 0 && level != 0 && level < 8) {
             dance->timer = sMimeJrTopRoutines[level].timer;
             dance->routineState = 0;
-            dance->count = ov92_02263EA4[level].value - 1;
-            dance->backSpeed = ov92_02263EA8[level].value;
-            dance->frontSpeed = ov92_02263EA8[level].value + 5;
+            dance->count = sMimeJrTopRoutineCounts[level].value - 1;
+            dance->backSpeed = sMimeJrTopRoutineSpeeds[level].value;
+            dance->frontSpeed = sMimeJrTopRoutineSpeeds[level].value + 5;
             for (i = 0; i < 2; i++) {
                 ((MimeJrTopSetPaletteOffsetFunc)ManagedSprite_SetPaletteOverrideOffset)(dance->dancers[i].sprite, sMimeJrTopRoutines[level].frontPalettes[i] + 4);
                 ((MimeJrTopSetPaletteOffsetFunc)ManagedSprite_SetPaletteOverrideOffset)(dance->dancers[2 + i].sprite, sMimeJrTopRoutines[level].backPalettes[i]);

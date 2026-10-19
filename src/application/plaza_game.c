@@ -69,18 +69,18 @@ extern const fx32 sPlazaGameTitleBounceBackVelocity[];
 extern const fx32 sPlazaGameTitleSlideInStartX[];
 extern const GraphicsModes sPlazaGameResultsGraphicsModes;
 extern const s16 sPlazaGamePlayerSpritePositions[];
-extern const s16 ov90_0225C276[];
+extern const s16 sPlazaGamePlayerSpriteY[];
 extern const u8 sPlazaGameSeatOrders[][4];
 extern const ObjCharTransferTemplate sPlazaGameObjCharTransfer;
 extern const GraphicsModes sPlazaGameEntryGraphicsModes;
 extern const VecFx32 sPlazaGameSignWindowSpritePositions[2];
 extern const GraphicsBanks sPlazaGameEntryBanks;
 extern const GraphicsBanks sPlazaGameResultsBanks;
-extern const u8 ov90_0225C310[][12];
-extern const u8 ov90_0225C314[][12];
-extern const u8 ov90_0225C318[][12];
-extern const u8 ov90_0225C31C[][12];
-extern const u8 ov90_0225C324[][12];
+extern const u8 sPlazaGameSeatRowsByCount[][12];
+extern const u8 sPlazaGameScreenRowsByCount[][12];
+extern const u8 sPlazaGameSeatAnimsByCount[][12];
+extern const u8 sPlazaGameSeatRows[][12];
+extern const u8 sPlazaGameSeatAnims[][12];
 extern const u16 sPlazaGameAltMessages[20][2];
 extern const PlazaGameBgTemplate sPlazaGameEntryBgTemplates[];
 extern const PlazaGameBgTemplate sPlazaGameResultsBgTemplates[];
@@ -200,7 +200,7 @@ enum PlazaGameTeamState {
     PLAZA_GAME_TEAM_FINISH,
 };
 
-void PlazaGameRoster_Init(PlazaGameRoster *roster, u32 fromLobby, SaveData *saveData, u8 unkA, PlazaGameArgs *args) {
+void PlazaGameRoster_Init(PlazaGameRoster *roster, u32 fromLobby, SaveData *saveData, u8 voiceChat, PlazaGameArgs *args) {
     int netId;
     int localNetId;
     int count;
@@ -222,7 +222,7 @@ void PlazaGameRoster_Init(PlazaGameRoster *roster, u32 fromLobby, SaveData *save
         roster->launchedFromField = TRUE;
     }
     roster->saveData = saveData;
-    roster->voiceChat = unkA;
+    roster->voiceChat = voiceChat;
     roster->args = args;
 }
 
@@ -1095,13 +1095,13 @@ void PlazaGamePlayer_Init(PlazaGamePlayer *player, int count, int game, NNSG2dSc
     SetBgPriority(GF_BG_LYR_MAIN_1, 2);
     SetBgPriority(GF_BG_LYR_MAIN_0, 1);
     tableOffset = count * 12;
-    row = ((const u8 *)ov90_0225C310 + tableOffset)[seat];
+    row = ((const u8 *)sPlazaGameSeatRowsByCount + tableOffset)[seat];
     AddWindowParameterized(bg->bgConfig, &player->window, GF_BG_LYR_MAIN_0, 5, row + 1, 26, 4, 12, index * 104 + 513);
     FillWindowPixelBuffer(&player->window, 0);
-    CopyToBgTilemapRect(bg->bgConfig, GF_BG_LYR_MAIN_1, 0, row, 32, 6, screen->rawData, 0, ((const u8 *)ov90_0225C314 + tableOffset)[index], screen->screenWidth >> 3, screen->screenHeight >> 3);
+    CopyToBgTilemapRect(bg->bgConfig, GF_BG_LYR_MAIN_1, 0, row, 32, 6, screen->rawData, 0, ((const u8 *)sPlazaGameScreenRowsByCount + tableOffset)[index], screen->screenWidth >> 3, screen->screenHeight >> 3);
     y = row * 8;
-    anim = ((const u8 *)ov90_0225C318 + tableOffset)[seat];
-    spriteY = ov90_0225C276[anim * 2];
+    anim = ((const u8 *)sPlazaGameSeatAnimsByCount + tableOffset)[seat];
+    spriteY = sPlazaGamePlayerSpriteY[anim * 2];
     Sprite_SetAnimCtrlSeq(player->sprite = PlazaGameGfx_CreateSprite(gfxRes, sprites->spriteList, (u8)sPlazaGamePlayerSpritePositions[anim * 2], (u8)(spriteY + y), 0, heapId), anim);
     Sprite_SetPalOffset(player->sprite, index);
     Sprite_SetDrawFlag(player->sprite, FALSE);
@@ -1218,11 +1218,11 @@ int PlazaGamePlayer_UpdateSlide(PlazaGamePlayer *player) {
 
 void PlazaGamePlayer_SetSpritePos(PlazaGamePlayer *player, u32 x) {
     VecFx32 pos;
-    const u8(*rows)[12] = ov90_0225C31C;
+    const u8(*rows)[12] = sPlazaGameSeatRows;
     u32 table = player->count - 1;
-    const u8(*anims)[12] = ov90_0225C324;
+    const u8(*anims)[12] = sPlazaGameSeatAnims;
     u8 anim = anims[table][player->seat];
-    u8 y = ov90_0225C276[anim * 2] + rows[table][player->seat] * 8;
+    u8 y = sPlazaGamePlayerSpriteY[anim * 2] + rows[table][player->seat] * 8;
     u8 spriteX = sPlazaGamePlayerSpritePositions[anim * 2];
     pos.x = (spriteX + x) << FX32_SHIFT;
     pos.y = y << FX32_SHIFT;
@@ -1287,7 +1287,7 @@ void PlazaGameLineScroll_SetPlayer(PlazaGameLineScroll *lineScroll, PlazaGamePla
     stride = 12;
     for (i = 0; i < 48; i++) {
         int offset = i - 1;
-        int line = offset + ov90_0225C31C[player->count - 1][player->seat] * 8;
+        int line = offset + sPlazaGameSeatRows[player->count - 1][player->seat] * 8;
         if (line < 0) {
             line += 192;
         }
@@ -2095,7 +2095,7 @@ void PlazaGameResults_FreeFlashPalette(PlazaGameResults *results) {
     Heap_Free(results->flashPlttRaw);
 }
 
-void PlazaGameContinue_Init(PlazaGameContinue *prompt, PlazaGameBg *bg, u8 unk01, enum HeapID heapId) {
+void PlazaGameContinue_Init(PlazaGameContinue *prompt, PlazaGameBg *bg, u8 voiceChat, enum HeapID heapId) {
     memset(prompt, 0, sizeof(PlazaGameContinue));
     prompt->template.bgConfig = bg->bgConfig;
     prompt->template.bgId = GF_BG_LYR_SUB_0;
@@ -2105,7 +2105,7 @@ void PlazaGameContinue_Init(PlazaGameContinue *prompt, PlazaGameBg *bg, u8 unk01
     prompt->template.y = 8;
     prompt->template.shapeParam = 0;
     prompt->prompt = YesNoPrompt_Create(heapId);
-    prompt->voiceChat = unk01;
+    prompt->voiceChat = voiceChat;
     prompt->allYes = TRUE;
 }
 

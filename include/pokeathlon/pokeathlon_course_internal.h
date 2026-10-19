@@ -314,9 +314,9 @@ typedef struct PokeathlonCourseResults {
 } PokeathlonCourseResults;
 
 typedef struct PokeathlonCourseLayout {
-    u32 field_0[4];
+    u32 padding_00[4];
     u8 padding_10[0x14C];
-    u8 field_15C;
+    u8 padding_15C;
     u8 padding_15D[0x83];
     const PokeathlonCourseEvent *event;
     void *work;

@@ -74,7 +74,7 @@
 	.public sWiFiPlazaInstrumentInitFuncs
 	.public sWiFiPlazaInstrumentStartSEs
 	.public sWiFiPlazaInstrumentSignalSteps
-	.public ov49_0226A67C
+	.public sWiFiPlazaInstrumentSignalNextSteps
 	.public sWiFiPlazaInstrumentModelDescs
 	.public sWiFiPlazaInstrumentPopModel1
 	.public sWiFiPlazaInstrumentPopModel2
@@ -96,10 +96,10 @@
 	.public sWiFiPlazaEventModelIds6
 	.public sWiFiPlazaEventModelIds0
 	.public sWiFiPlazaEventPhase4Steps
-	.public ov49_0226A83D
+	.public sWiFiPlazaEventPhase4HideSteps
 	.public sWiFiPlazaEventEffectPhaseUpdates
 	.public sWiFiPlazaEventPhase5Thresholds
-	.public ov49_0226A868
+	.public sWiFiPlazaEventPhase5AnimSpeeds
 	.public sWiFiPlazaEventEffectPhaseStarts
 	.public sWiFiPlazaEventPhase3PropGroups
 	.public sWiFiPlazaEventPhase3PropIds
@@ -238,7 +238,7 @@ sWiFiPlazaInstrumentStartSEs:
 sWiFiPlazaInstrumentSignalSteps:
 	.byte 0xA9, 0x05, 0x00, 0x00
 
-ov49_0226A67C:
+sWiFiPlazaInstrumentSignalNextSteps:
 	.byte 0x00, 0x00, 0x01, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00
@@ -327,7 +327,7 @@ sWiFiPlazaEventModelIds0:
 sWiFiPlazaEventPhase4Steps:
 	.byte 0x00
 
-ov49_0226A83D:
+sWiFiPlazaEventPhase4HideSteps:
 	.byte 0x05, 0x01, 0x06
 	.byte 0x02, 0x00, 0x03, 0x01, 0x04, 0x02, 0x05, 0x03, 0x06, 0x04, 0x00, 0x00
 
@@ -342,7 +342,7 @@ sWiFiPlazaEventEffectPhaseUpdates:
 sWiFiPlazaEventPhase5Thresholds:
 	.byte 0x0A, 0x00, 0x00, 0x00
 
-ov49_0226A868:
+sWiFiPlazaEventPhase5AnimSpeeds:
 	.byte 0x00, 0x10, 0x00, 0x00, 0x2D, 0x00, 0x00, 0x00
 	.byte 0x00, 0x10, 0x00, 0x00, 0x50, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00
 

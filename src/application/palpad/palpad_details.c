@@ -42,7 +42,7 @@ extern const WindowTemplate sPalPadDetailsProfileWindowTemplates[8];
 extern const u8 sPalPadDetailsTabX[2][8];
 extern const u8 sPalPadDetailsTabWidths[2][8];
 extern const u8 sPalPadDetailsTabSrcY[2];
-extern const u16 _0222ED5C[];
+extern const u16 sPalPadTables[];
 extern const PalPadDetailsPagePrinter sPalPadDetailsPagePrinters[3];
 extern const PalPadDetailsPagePrinter sPalPadDetailsFrontierPagePrinters[8];
 
@@ -554,12 +554,12 @@ static void PalPadDetails_LoadScreens(PalPadDetailsScreen *screens, PalPadGfx *g
     u16 *fileId;
     int i;
 
-    fileIds[0] = _0222ED5C[23];
-    fileIds[1] = _0222ED5C[24];
+    fileIds[0] = sPalPadTables[23];
+    fileIds[1] = sPalPadTables[24];
     fileId = fileIds;
     i = 0;
-    fileIds[2] = _0222ED5C[25];
-    fileIds[3] = _0222ED5C[26];
+    fileIds[2] = sPalPadTables[25];
+    fileIds[3] = sPalPadTables[26];
     for (; i < 4; i++) {
         screens->file = GfGfxLoader_GetScrnDataFromOpenNarc(gfx->narc, *fileId, TRUE, &screens->data, heapId);
         screens++;

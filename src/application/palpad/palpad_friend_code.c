@@ -36,7 +36,7 @@ typedef struct PalPadButtonPalettes {
 extern const struct {
     u8 unk0;
     PalPadButtonPalettes returnButton;
-} _0222ED5C;
+} sPalPadTables;
 
 extern const TouchscreenHitbox sPalPadFriendCodeHitboxes[];
 
@@ -254,7 +254,7 @@ static void PalPadFriendCode_Hide(PalPadFriendCode *friendCode, PalPadGfx *gfx) 
 }
 
 static void PalPadFriendCode_HighlightReturn(PalPadFriendCode *friendCode, PalPadGfx *gfx, int highlight) {
-    PalPadButtonPalettes button = _0222ED5C.returnButton;
+    PalPadButtonPalettes button = sPalPadTables.returnButton;
 
     BgTilemapRectChangePalette(gfx->bgConfig, GF_BG_LYR_MAIN_2, 17, 20, 14, 4, button.palettes[highlight]);
     ScheduleBgTilemapBufferTransfer(gfx->bgConfig, GF_BG_LYR_MAIN_2);

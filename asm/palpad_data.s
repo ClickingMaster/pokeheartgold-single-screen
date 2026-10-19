@@ -12,7 +12,7 @@
 	.extern PalPadDetails_PrintBattleArcadePage
 	.extern PalPadDetails_PrintWiFiPlazaPage
 	.extern PalPadDetails_PrintReturnPage
-	.public _0222ED5C
+	.public sPalPadTables
 	.public sPalPadDetailsPagePrinters
 	.public sPalPadRosterPageBaseTiles
 	.public sPalPadFriendCodeHitboxes
@@ -50,7 +50,7 @@
 
 	.rodata
 
-_0222ED5C:
+sPalPadTables:
 	.byte 0x02, 0x02, 0x09
 sPalPadDetailsPage4WindowSpecs:
 	.byte 0x02, 0x05, 0x1A, 0x0B

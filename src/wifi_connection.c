@@ -79,7 +79,7 @@ struct WifiConnection {
     u8 recvBufferFromGameHeap[4];
     u8 disconnectWhenAlone;
     u8 friendDataChanged;
-    u8 filler_10E7[0x1108 - 0x10E7];
+    u8 padding_10E7[0x1108 - 0x10E7];
 };
 
 WifiConnection *gWifiConnection;

@@ -126,7 +126,7 @@ typedef struct PlazaNewsTitleTemplate {
     u8 x;
     u8 y;
     u8 alignment;
-    u8 filler_0A[2];
+    u8 padding_0A[2];
     u32 color;
 } PlazaNewsTitleTemplate;
 

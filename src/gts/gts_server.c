@@ -29,7 +29,7 @@ void GtsServer_Update(void) {
             return;
         case GAME_STATS_STATE_DONE:
             gGtsServer.state = GTS_SERVER_STATE_DONE;
-            switch (ov70_02246920.shortResponse[0]) {
+            switch (gGtsServerAnswer.shortResponse[0]) {
             case 1:
                 gGtsServer.result = 0;
                 break;
@@ -81,7 +81,7 @@ void GtsServer_Update(void) {
             return;
         case GAME_STATS_STATE_DONE:
             gGtsServer.state = GTS_SERVER_STATE_DONE;
-            switch (ov70_02246920.shortResponse[0]) {
+            switch (gGtsServerAnswer.shortResponse[0]) {
             case 1:
                 gGtsServer.result = 0;
                 break;
@@ -118,7 +118,7 @@ void GtsServer_Update(void) {
             if (GameStats_GetResponseLength() == GTS_RECORD_SIZE) {
                 gGtsServer.result = 0;
             } else {
-                switch (ov70_02246900.response[0]) {
+                switch (gGtsServerPending.response[0]) {
                 case 5:
                     gGtsServer.result = -3;
                     break;
@@ -150,7 +150,7 @@ void GtsServer_Update(void) {
             if (GameStats_GetResponseLength() == GTS_RECORD_SIZE) {
                 gGtsServer.result = 1;
             } else {
-                switch (ov70_02246900.response[0]) {
+                switch (gGtsServerPending.response[0]) {
                 case 5:
                     gGtsServer.result = -3;
                     break;
@@ -182,7 +182,7 @@ void GtsServer_Update(void) {
             return;
         case GAME_STATS_STATE_DONE:
             gGtsServer.state = GTS_SERVER_STATE_DONE;
-            switch (ov70_02246920.shortResponse[0]) {
+            switch (gGtsServerAnswer.shortResponse[0]) {
             case 1:
                 gGtsServer.result = 0;
                 break;
@@ -213,7 +213,7 @@ void GtsServer_Update(void) {
             return;
         case GAME_STATS_STATE_DONE:
             gGtsServer.state = GTS_SERVER_STATE_DONE;
-            switch (ov70_02246920.shortResponse[0]) {
+            switch (gGtsServerAnswer.shortResponse[0]) {
             case 1:
                 gGtsServer.result = 0;
                 break;
@@ -253,7 +253,7 @@ void GtsServer_Update(void) {
                 gGtsServer.result = (u32)GameStats_GetResponseLength() / GTS_RECORD_SIZE;
             } else if (responseLength == 0) {
                 gGtsServer.result = 0;
-            } else if (ov70_02246900.response[0] == 14) {
+            } else if (gGtsServerPending.response[0] == 14) {
                 gGtsServer.result = -2;
             } else {
                 gGtsServer.result = -13;
@@ -275,7 +275,7 @@ void GtsServer_Update(void) {
             if (GameStats_GetResponseLength() == GTS_RECORD_SIZE) {
                 gGtsServer.result = 0;
             } else {
-                switch (ov70_02246900.response[0]) {
+                switch (gGtsServerPending.response[0]) {
                 case 2:
                     gGtsServer.result = -5;
                     break;
@@ -319,7 +319,7 @@ void GtsServer_Update(void) {
             return;
         case GAME_STATS_STATE_DONE:
             gGtsServer.state = GTS_SERVER_STATE_DONE;
-            switch (ov70_02246920.shortResponse[0]) {
+            switch (gGtsServerAnswer.shortResponse[0]) {
             case 1:
                 gGtsServer.result = 0;
                 break;
@@ -346,7 +346,7 @@ void GtsServer_Update(void) {
             return;
         case GAME_STATS_STATE_DONE:
             gGtsServer.state = GTS_SERVER_STATE_DONE;
-            switch (ov70_02246920.shortResponse[0]) {
+            switch (gGtsServerAnswer.shortResponse[0]) {
             case 1:
                 gGtsServer.result = 0;
                 break;
@@ -380,7 +380,7 @@ void GtsServer_Update(void) {
             if (GameStats_GetResponseLength() == 8) {
                 gGtsServer.result = 0;
             } else {
-                switch (ov70_02246920.shortResponse[0]) {
+                switch (gGtsServerAnswer.shortResponse[0]) {
                 case 1:
                     gGtsServer.result = 0;
                     break;

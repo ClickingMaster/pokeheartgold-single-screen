@@ -37,12 +37,12 @@ extern u16 Comm_GetLocalNetId(void);
 extern int Comm_IsNetIdConnected(u16 slot);
 extern BOOL Comm_IsActive(void);
 extern void CommRandom_Init(void *seed);
-extern void CommState_ConnectToSlot(int a0);
+extern void CommState_ConnectToSlot(int slot);
 extern int CommState_IsLinked(void);
 extern void CommState_RequestShutdown(void);
 extern int Comm_SendParentCommandNoCopy(int command, void *data, void *size);
-extern void CommState_StartMysteryGiftParent(void *saveData, void *a1);
-extern void CommState_StartMysteryGiftChild(void *saveData, int a1);
+extern void CommState_StartMysteryGiftParent(void *saveData, void *linkMode);
+extern void CommState_StartMysteryGiftChild(void *saveData, int linkMode);
 extern void *CommWireless_GetParentMail(int slot);
 
 #define VOLATILE_WORK (*(MysteryGiftCommWork *volatile *)&sMysteryGiftCommWork)

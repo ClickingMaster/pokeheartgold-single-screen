@@ -126,13 +126,13 @@ typedef struct GeonetGlobe {
     Camera *camera;
     u8 padding_C2E0[8];
     u16 zoomedIn;
-    u8 filler_C2EA[2];
+    u8 padding_C2EA[2];
     VecFx32 lightVector;
     u32 drawState;
     u32 unk_C2FC;
     u32 isJapanese;
     u16 freeRotation;
-    u8 filler_C306[2];
+    u8 padding_C306[2];
     GeonetGlobeTouch touch;
     u32 playerCountry;
     u32 playerRegion;

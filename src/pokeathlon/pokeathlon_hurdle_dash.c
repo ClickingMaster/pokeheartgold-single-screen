@@ -353,14 +353,14 @@ BOOL PokeathlonHurdleDash_Init(PokeathlonCourseData *course) {
             PokeathlonCourseSpritePool_CreateSprite(hurdleDash->scene, 1, 1, 104, 7);
             PokeathlonCourseSpritePool_CreateSprite(hurdleDash->scene, 1, 1, 105, 8);
         }
-        hurdleDash->unk3A8 = PokeathlonCourseSpritePool_CreateAndTake(hurdleDash->scene, 1, 1, 106, 9);
-        PokeathlonCourseSpritePoolSprite_SetAnim(hurdleDash->unk3A8, 0);
+        hurdleDash->timerLabel = PokeathlonCourseSpritePool_CreateAndTake(hurdleDash->scene, 1, 1, 106, 9);
+        PokeathlonCourseSpritePoolSprite_SetAnim(hurdleDash->timerLabel, 0);
         mainPos.z = 0;
         mainPos.x = FX32_CONST(160);
         mainPos.y = FX32_CONST(456);
-        PokeathlonCourseSpritePoolSprite_SetPosition(hurdleDash->unk3A8, &mainPos);
-        PokeathlonCourseSpritePoolSprite_Show(hurdleDash->unk3A8, TRUE, TRUE);
-        PokeathlonCourseSpritePoolSprite_SetDrawPriority(hurdleDash->unk3A8, 1);
+        PokeathlonCourseSpritePoolSprite_SetPosition(hurdleDash->timerLabel, &mainPos);
+        PokeathlonCourseSpritePoolSprite_Show(hurdleDash->timerLabel, TRUE, TRUE);
+        PokeathlonCourseSpritePoolSprite_SetDrawPriority(hurdleDash->timerLabel, 1);
         for (i = 0; i < 6; i++) {
             hurdleDash->sprites[i] = PokeathlonCourse_CreateTimerDigitSprite(hurdleDash->spriteResources, PokeathlonCourseSpritePool_GetSpriteList(hurdleDash->scene), 0, hurdleDash->heapId);
             Sprite_SetDrawFlag(hurdleDash->sprites[i], TRUE);

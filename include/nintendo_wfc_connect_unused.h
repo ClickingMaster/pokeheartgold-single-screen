@@ -86,7 +86,7 @@ typedef struct BattleRoomDownload BattleRoomDownload;
 typedef struct NintendoWfcUnused {
     NintendoWifiConnectArgs *args;
     BgConfig *bgConfig;
-    u8 filler_0008[8];
+    u8 padding_0008[8];
     int mode; // index into sNintendoWfcUnusedModes
     int nextMode;
     int unk_0018;
@@ -101,7 +101,7 @@ typedef struct NintendoWfcUnused {
     u32 room;
     u8 downloadBuffer[0xA38];
     FrontierWifiUploadRecord uploadRecord;
-    u8 filler_0BBC[0x14];
+    u8 padding_0BBC[0x14];
     MessageFormat *msgFormat;
     MsgData *msgDataTower; // Wi-Fi Battle Tower
     MsgData *msgDataWfc;   // Nintendo WFC
@@ -116,16 +116,16 @@ typedef struct NintendoWfcUnused {
     G2dRenderer renderer;
     GF_2DGfxResMan *resMan[4];
     SpriteResource *resObjs[4];
-    u8 filler_0D44[0x20];
+    u8 padding_0D44[0x20];
     SpriteResourcesHeader spriteHeader;
-    u8 filler_0D88[0x48];
+    u8 padding_0D88[0x48];
     Sprite *arrows[2]; // up/down arrows next to the number windows
     Window msgWindow;
     Window rankWindow;
     Window roomWindow;
     Window titleWindow;
     Window errorWindow;
-    u8 filler_0E28[0xE4];
+    u8 padding_0E28[0xE4];
     WaitingIcon *waitingIcon;
     int dwcError;
     int dwcErrorCode;

@@ -274,7 +274,7 @@ static void SpinTradeGroup_FreeAvatarGraphics(SpinTradeGroupApp *app);
 static int SpinTradeGroup_GetTextSpeed(SpinTradeGroupApp *app);
 static void SpinTradeGroup_SetMaxConnections(SpinTradeGroupApp *app, int extraEntries);
 static int SpinTradeGroup_CheckMembers(SpinTradeGroupApp *app, int extraEntries);
-static void SpinTradeGroup_SaveDummy(void *a0, void *a1);
+static void SpinTradeGroup_SaveDummy(void *saveData, void *buffer);
 
 static const WindowTemplate sSpinTradeGroupYesNoWindowTemplate = {
     .bgId = GF_BG_LYR_MAIN_0,
@@ -1608,7 +1608,7 @@ static int SpinTradeGroup_CheckMembers(SpinTradeGroupApp *app, int extraEntries)
     return 1;
 }
 
-static void SpinTradeGroup_SaveDummy(void *a0, void *a1) {
-#pragma unused(a0)
-#pragma unused(a1)
+static void SpinTradeGroup_SaveDummy(void *saveData, void *buffer) {
+#pragma unused(saveData)
+#pragma unused(buffer)
 }

@@ -43,7 +43,7 @@ typedef struct ApricornBoxScreen {
     u8 numBlending;   // apricorns in the blender (ApricornBox_CountQueuedApricorns, at most 5)
     u8 mixStage;      // ApricornBox_GetMixProgressLevel
     u8 apricornCounts[7];
-    u8 filler_21;
+    u8 padding_21;
     u8 juiceRecord[8]; // ApricornJuice (unaligned)
     ApricornBoxJuice juice;
     u32 steps;

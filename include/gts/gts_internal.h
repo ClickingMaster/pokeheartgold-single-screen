@@ -109,23 +109,23 @@ typedef struct GtsFriendKey {
     u32 hi;
 } GtsFriendKey;
 
-typedef struct GtsServerAt100 {
-    u8 filler_00[0x38];
+typedef struct GtsServerPending {
+    u8 padding_00[0x38];
     void *exchangeArg; // sent after the record by exchange.asp
-    u8 filler_3C[4];
+    u8 padding_3C[4];
     u8 *response; // buffer of the request in flight
-} GtsServerAt100;
+} GtsServerPending;
 
-typedef struct GtsServerAt120 {
-    u8 filler_00[0x1C];
+typedef struct GtsServerAnswer {
+    u8 padding_00[0x1C];
     u8 shortResponse[4]; // [0] is the server's answer code
-} GtsServerAt120;
+} GtsServerAnswer;
 
 extern volatile GtsServer gGtsServer; // polled every frame (GtsServer_Update)
 extern GtsFriendKey gGtsServerFriendKey;
 extern u8 gGtsServerRequest[];
-extern GtsServerAt100 ov70_02246900;
-extern volatile GtsServerAt120 ov70_02246920; // written by the response callback
+extern GtsServerPending gGtsServerPending;
+extern volatile GtsServerAnswer gGtsServerAnswer; // written by the response callback
 extern u8 gGtsServerShortResponse[];
 
 // Gts_Main states; the screen functions return the next one
@@ -207,7 +207,7 @@ typedef struct GtsPaletteAnim {
 struct GtsApp {
     GtsArgs *args;
     BgConfig *bgConfig;
-    u8 filler_0008[0xC];
+    u8 padding_0008[0xC];
     int screen; // index into sGtsScreens
     int nextScreen;
     int statusCheckCaller;
@@ -218,7 +218,7 @@ struct GtsApp {
     int nextState;
     u16 mainMenuShown;   // the main menu was entered before
     u16 hasDepositedMon; // the player has a Pokemon on the GTS
-    u8 filler_0038[2];
+    u8 padding_0038[2];
     u16 timer;            // frames until the GTS may be checked again
     int serverResult;     // of the failed request (screen 7 picks the error message from it)
     int connectionResult; // of a failed Wi-Fi connection (DWC_GetLastErrorEx)
@@ -233,9 +233,9 @@ struct GtsApp {
     EvolutionTaskData *evolutionTask;
     u32 reloadGraphics; // the screen asks Gts_Main to rebuild the graphics
     u16 unk_0118;
-    u8 filler_011A[2];
+    u8 padding_011A[2];
     u16 menuCursor;
-    u8 filler_011E[2];
+    u8 padding_011E[2];
     u16 selectedBox;         // shown by screen 5, GTS_BOX_PARTY for the party
     u16 selectedSlot;        // screen 5's cursor: slot 0..29, 30 BACK, 31 the box name
     BoxPokemon *selectedMon; // the Pokemon to deposit or to trade
@@ -250,7 +250,7 @@ struct GtsApp {
     GtsWantedMon depositWanted;   // what the player wants for it
     GtsWantedMon searchCriteria;  // of SEEK POKEMON
     GtsWantedMon lastSearch;
-    u8 filler_0B96[2];
+    u8 padding_0B96[2];
     u32 lastSearchCountry;
     MessageFormat *msgFormat;
     MsgData *gtsMsgData;
@@ -269,12 +269,12 @@ struct GtsApp {
     G2dRenderer renderer;
     GF_2DGfxResMan *resourceManagers[4]; // char/pltt/cell/anim
     SpriteResource *resources[8];        // [main/sub screen][char/pltt/cell/anim]
-    u8 filler_0D50[0x10];
+    u8 padding_0D50[0x10];
     SpriteResourcesHeader headers[2];
-    u8 filler_0DA8[0x24];
+    u8 padding_0DA8[0x24];
     Sprite *cursorSprite;
     Sprite *selectorCursorSprite;
-    u8 filler_0DD4[4];
+    u8 padding_0DD4[4];
     Sprite *monIconSprites[30]; // of the shown box
     Sprite *heldItemSprites[30];
     Sprite *capsuleSprites[6]; // the party's Ball Capsules
@@ -285,7 +285,7 @@ struct GtsApp {
     Sprite *panelSprite;        // of the sub screen panel
     int scrollY;                // of a search result's screens
     Window waitingIconWindow;   // also the message window
-    u8 filler_0F28[0x10];
+    u8 padding_0F28[0x10];
     Window titleWindow;
     Window boxNameWindow;   // of screen 5; screen 0's Wi-Fi error window
     Window windows[16];     // each screen's own windows
@@ -297,7 +297,7 @@ struct GtsApp {
     GtsSelector *selector; // the species/gender/level/country selector
     ListMenuItem *listItems;
     struct ListMenu2D *disconnectMenu; // only read by screen 0 (GtsConnection_HandleDisconnectMenu)
-    u8 filler_11B4[8];
+    u8 padding_11B4[8];
     WaitingIcon *waitingIcon;
     int waitFrames;
     GtsSearchCursor *searchCursor;
@@ -322,7 +322,7 @@ struct GtsApp {
     GtsVBlankFunc vblankTask;  // run once
     GtsVBlankFunc vblankFunc;  // run every frame
     s16 avatarPositions[8][2]; // {x, y} of avatarSprites
-    u8 filler_122C[8];
+    u8 padding_122C[8];
     GtsCursorValueTable unk_1234;
     WifiServerProfile profile;  // sent by GtsServer_RequestSetProfile (screen 0)
     u32 profileResponse[2];     // its answer

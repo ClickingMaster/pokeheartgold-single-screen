@@ -104,7 +104,7 @@ enum PhotoAlbumDeletePromptState {
 
 typedef struct PhotoEntry {
     u8 idx;
-    u8 filler_01[3];
+    u8 padding_01[3];
     Photo *photo;
 } PhotoEntry;
 
@@ -154,7 +154,7 @@ typedef struct PhotoAlbumApp {
     void *pageArrowsFile;
     u8 numPhotosPrev;
     u8 numPhotos;
-    u8 filler_C6[0x2];
+    u8 padding_C6[0x2];
     Photo *photos;
     PhotoEntry entries[PHOTO_ALBUM_MAX];
     PhotoAlbum *photoAlbum;

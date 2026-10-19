@@ -48,10 +48,10 @@ typedef struct AprijuiceMon {
     u8 gender;
     u8 slot;
     u8 hFlip;
-    u8 filler_0A[2];
+    u8 padding_0A[2];
     String *name;
     PartyExtraSub aprijuice;
-    u8 filler_15;
+    u8 padding_15;
     struct PokeathlonPerformanceStars stars;
     struct PokeathlonTodayPerformance performance;
 } AprijuiceMon;
@@ -83,7 +83,7 @@ typedef struct AprijuiceScreen {
     u8 starsShown;
     s8 starDelta[5];
     u8 numChanged;
-    u8 filler_3F;
+    u8 padding_3F;
     u16 subState;
     u16 animState;
     MenuInputState menuInputState;
@@ -93,11 +93,11 @@ typedef struct AprijuiceScreen {
     u8 textFrameDelay;
     u8 frame;
     u8 textPrinterId;
-    u8 filler_4E;
+    u8 padding_4E;
     u8 activeTasks;
-    u8 filler_50;
+    u8 padding_50;
     u8 timer;
-    u8 filler_52[2];
+    u8 padding_52[2];
     BgConfig *bgConfig;
     u8 padding_58[4];
     MsgData *msgData;
@@ -121,9 +121,9 @@ typedef struct AprijuiceScreen {
 typedef struct AprijuiceStarTask {
     AprijuiceScreen *owner;
     u8 hide;
-    u8 filler_05;
+    u8 padding_05;
     u8 timer;
-    u8 filler_07;
+    u8 padding_07;
     fx32 scaleStep;
     u16 angle;
     s16 angleStep;

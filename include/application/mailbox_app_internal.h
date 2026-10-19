@@ -76,7 +76,7 @@ typedef struct MailboxAppData {
     String *string;
     u8 printerId;
     u8 waitForInput;
-    u8 filler_236[2];
+    u8 padding_236[2];
     YesNoPrompt *yesNoPrompt;
     u32 yesNoQuestion;
     TouchscreenListMenuSpawner *listMenuSpawner;

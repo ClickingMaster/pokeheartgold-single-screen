@@ -49,7 +49,7 @@ typedef union MailViewIcon {
 } MailViewIcon;
 
 typedef struct MailViewShiftedArgs {
-    u8 filler_00[offsetof(MailViewArgs, monIcons)];
+    u8 padding_00[offsetof(MailViewArgs, monIcons)];
     MailViewIcon icon;
 } MailViewShiftedArgs;
 

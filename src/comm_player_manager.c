@@ -5,8 +5,8 @@
 #include "sys_task_api.h"
 
 // Player positions in the link lobby, 2 and 4 players; CommPlayerManager_AssignBattleSlots matches the players to them.
-const u16 __attribute__((aligned(4))) _020FC7A0[4] = { 4, 7, 11, 7 };
-const u16 _020FC7A8[8] = { 4, 6, 11, 6, 4, 8, 11, 8 };
+const u16 __attribute__((aligned(4))) gCommTwoPlayerBattleSpots[4] = { 4, 7, 11, 7 };
+const u16 gCommFourPlayerBattleSpots[8] = { 4, 6, 11, 6, 4, 8, 11, 8 };
 CommPlayerManager *gCommPlayerManager;
 
 BOOL CommPlayerManager_Init(CommPlayerManager *manager, FieldSystem *fieldSystem, int unused) {

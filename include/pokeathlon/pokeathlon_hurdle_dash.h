@@ -113,7 +113,7 @@ typedef struct PokeathlonHurdleDash {
     PokeathlonHurdleDashCpuRunner cpuRunners[9]; // 3 per participant without a player
     PokeathlonCourseSpriteResources *spriteResources;
     void *monSpriteManager;
-    PokeathlonCourseSpritePoolSprite *unk3A8;
+    PokeathlonCourseSpritePoolSprite *timerLabel;
     Sprite *sprites[6];
     u16 rankTimer;
     u8 ranksShown;

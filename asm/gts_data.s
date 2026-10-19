@@ -292,8 +292,8 @@
 	.public sGtsConnectionStates
 	.public gGtsServerFriendKey
 	.public gGtsServerRequest
-	.public ov70_02246900
-	.public ov70_02246920
+	.public gGtsServerPending
+	.public gGtsServerAnswer
 	.public gGtsServerShortResponse
 	.public gGtsGlobals
 	.include "overlay_70.inc"
@@ -897,10 +897,10 @@ gGtsServerFriendKey:
 gGtsServerRequest:
 	.space 0xEC
 
-ov70_02246900:
+gGtsServerPending:
 	.space 0x20
 
-ov70_02246920:
+gGtsServerAnswer:
 	.space 0x1C
 
 gGtsServerShortResponse:

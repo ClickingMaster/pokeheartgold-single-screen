@@ -121,7 +121,7 @@ typedef struct MoveRelearner {
     u8 question; // enum MoveRelearnerQuestion
     u8 unk_1BB;
     u8 unk_1BC;
-    u8 filler_1BD[3];
+    u8 padding_1BD[3];
     void *screenFile;
     NNSG2dScreenData *screenData; // button tiles copied to the bottom screen
     GridInputHandler *gridInput;

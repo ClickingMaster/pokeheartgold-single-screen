@@ -258,7 +258,7 @@ typedef struct PlazaGameResults {
     u32 fanfareState;
 } PlazaGameResults;
 
-void PlazaGameRoster_Init(PlazaGameRoster *roster, u32 fromLobby, SaveData *saveData, u8 unkA, PlazaGameArgs *args);
+void PlazaGameRoster_Init(PlazaGameRoster *roster, u32 fromLobby, SaveData *saveData, u8 voiceChat, PlazaGameArgs *args);
 int PlazaGameRoster_GetIndexOfNetId(const PlazaGameRoster *roster, u32 netId);
 u8 PlazaGameRoster_GetNetId(const PlazaGameRoster *roster, u32 index);
 u32 PlazaGameRoster_IsSpecialVisitor(const PlazaGameRoster *roster, u32 netId);
@@ -374,7 +374,7 @@ void PlazaGameResults_LoadFlashPalette(PlazaGameResults *results, NARC *narc, en
 void PlazaGameResults_StartFlash(PlazaGameResults *results);
 void PlazaGameResults_UpdateFlash(PlazaGameResults *results);
 void PlazaGameResults_FreeFlashPalette(PlazaGameResults *results);
-void PlazaGameContinue_Init(PlazaGameContinue *prompt, PlazaGameBg *bg, u8 unk01, enum HeapID heapId);
+void PlazaGameContinue_Init(PlazaGameContinue *prompt, PlazaGameBg *bg, u8 voiceChat, enum HeapID heapId);
 void PlazaGameContinue_Free(PlazaGameContinue *prompt);
 BOOL PlazaGameContinue_Run(PlazaGameContinue *prompt, PlazaGameMessageBox *messageBox, PlazaGameText *text, int game, enum HeapID heapId);
 u8 PlazaGameContinue_GetResult(const PlazaGameContinue *prompt);

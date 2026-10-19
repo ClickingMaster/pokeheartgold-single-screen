@@ -1384,11 +1384,11 @@ u32 FootprintStamp_GetTouchedPartySlot(const FootprintStampMon *party, int curre
 }
 
 // 0: generic footprint, 1: the species' own footprint.
-u32 FootprintStamp_GetFootprintType(u32 species, int form, u32 unk19E0) {
+u32 FootprintStamp_GetFootprintType(u32 species, int form, u32 showArceusFootprint) {
     if (species == SPECIES_GIRATINA && form > 0) {
         return 0;
     }
-    if (species == SPECIES_ARCEUS && unk19E0 == 0) {
+    if (species == SPECIES_ARCEUS && showArceusFootprint == 0) {
         return 0;
     }
     return sFootprintStampSpeciesFootprints[species * 4];

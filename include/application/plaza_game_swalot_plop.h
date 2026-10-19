@@ -404,7 +404,7 @@ typedef struct SwalotPlopApp {
 typedef struct SwalotPlopCommand {
     void (*handler)(int netId, int size, void *data, void *context);
     u32 (*getSize)(void);
-    void *unk08;
+    void *getBuffer;
 } SwalotPlopCommand;
 
 BOOL SwalotPlop_Init(OverlayManager *man, int *state);

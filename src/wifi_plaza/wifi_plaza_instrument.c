@@ -61,7 +61,7 @@ extern const WiFiPlazaInstrumentUpdateFunc sWiFiPlazaInstrumentUpdateFuncs[];
 extern const WiFiPlazaInstrumentInitFunc sWiFiPlazaInstrumentInitFuncs[];
 extern const u32 sWiFiPlazaInstrumentStartSEs[];
 extern const WiFiPlazaInstrumentStep sWiFiPlazaInstrumentSignalSteps[][12];
-extern const WiFiPlazaInstrumentStep ov49_0226A67C[][12];
+extern const WiFiPlazaInstrumentStep sWiFiPlazaInstrumentSignalNextSteps[][12];
 extern const WiFiPlazaInstrumentModelDesc sWiFiPlazaInstrumentModelDescs[];
 extern const WiFiPlazaInstrumentModelDesc sWiFiPlazaInstrumentPopModel1[];
 extern const WiFiPlazaInstrumentModelDesc sWiFiPlazaInstrumentPopModel2[];
@@ -1637,7 +1637,7 @@ static BOOL WiFiPlazaInstrument_UpdateSignalSequence(WiFiPlazaInstrumentManager 
             prev = sWiFiPlazaInstrumentSignalSteps[kind][step];
             ModelInstance_SetVisible(&effect->models[prev.model], FALSE);
         }
-        cur = ov49_0226A67C[kind][step];
+        cur = sWiFiPlazaInstrumentSignalNextSteps[kind][step];
         if (cur.frame != 0) {
             WiFiPlazaInstrument_SetAnimFrame(manager, effect, cur.model, 0, FX32_CONST(cur.frame));
             WiFiPlazaInstrument_SetAnimFrame(manager, effect, cur.model, 1, FX32_CONST(cur.frame));
