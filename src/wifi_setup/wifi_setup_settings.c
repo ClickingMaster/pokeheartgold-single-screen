@@ -399,7 +399,7 @@ static void WifiSetupSettings_HandleScrollBar(void) {
     }
     switch (WifiSetupScrollBar_GetEvent()) {
     case 0:
-        goto end;
+        break;
     case 1:
         gWifiSetupSettings.work->scrollBarHeld = 1;
         return;
@@ -458,10 +458,8 @@ static void WifiSetupSettings_HandleScrollBar(void) {
         gWifiSetupSettings.work->scrollBarAtEnd = 0;
         return;
     default:
-        goto end;
+        break;
     }
-end:
-    return;
 }
 
 static void WifiSetupSettings_StartClose(void) {
@@ -776,8 +774,8 @@ static void WifiSetupSettings_SetButtonOam(unsigned type, int option, int row) {
     if (gWifiSetupSettingsButtonTemplates[type][option]) {
         WifiSetupOamTemplate_Copy(0, gWifiSetupSettingsButtonTemplates[type][option], *oam);
         {
-            u32 value = *(volatile u16 *)&x[type];
-            GXOamAttr *obj = *(GXOamAttr *volatile *)oam;
+            u32 value = x[type];
+            GXOamAttr *obj = *oam;
             obj->attr01 = ((value << 23) >> 7) | (obj->attr01 & 0xfe00ff00);
         }
         (*oam)->attr2 = ((*oam)->attr2 & ~0xc00) | 0xc00;

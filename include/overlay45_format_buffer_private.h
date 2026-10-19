@@ -23,7 +23,7 @@ public:
 extern "C" {
 #endif
 
-Str *LobbyString_InitFromCStr(Str *, char *);
+Str *LobbyString_InitFromCStr(Str *, const char *);
 Str *LobbyString_Destroy(Str *);
 LobbyCharVector *LobbyCharVector_Destroy(LobbyCharVector *);
 char *LobbyCharVector_Data(LobbyCharVector *);
@@ -32,7 +32,7 @@ void LobbyCharVector_AppendZerosSlow(LobbyCharVector *, u32);
 
 #ifdef __cplusplus
 void LobbyCharVector_AppendZeros(LobbyCharVector *, u32, LobbyCharVectorTypes::ResizeDispatch);
-Str *LobbyString_ReplaceRange(Str *, u32, u32, char *, char *, LobbyStringTypes::RangeDispatch);
+Str *LobbyString_ReplaceRange(Str *, u32, u32, const char *, const char *, LobbyStringTypes::RangeDispatch);
 void LobbyString_Reserve(Str *, u32);
 }
 

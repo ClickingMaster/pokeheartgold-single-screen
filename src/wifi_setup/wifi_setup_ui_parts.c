@@ -36,7 +36,7 @@ extern u16 gWifiSetupMessageTextX[];
 extern u16 gWifiSetupMessageTextY[];
 extern u8 gWifiSetupLanguageLetters[];
 extern u8 gWifiSetupCursorPairTemplates[];
-extern u8 gWifiSetupSignalIconTemplates[][4];
+extern const u8 gWifiSetupSignalIconTemplates[][4];
 extern u8 gWifiSetupKeyboardButtonTemplates[];
 extern u8 gWifiSetupKeyboardExtraKeyTemplates[];
 extern char sStr_CharJtNullNscL[];
@@ -63,7 +63,7 @@ void WifiSetupBusyIcon_Task(void *task) {
     gWifiSetupBusyIcon->frameCounter = FX_ModS32(gWifiSetupBusyIcon->frameCounter + 1, 40);
     {
         int templ = FX_DivS32(gWifiSetupBusyIcon->frameCounter, 5) + 71;
-        WifiSetupOamTemplate_Copy(0, templ, (*(WifiSetupBusyIcon *volatile *)&gWifiSetupBusyIcon)->oam);
+        WifiSetupOamTemplate_Copy(0, templ, gWifiSetupBusyIcon->oam);
     }
     oam = gWifiSetupBusyIcon->oam;
     oam->attr2 = (oam->attr2 & ~0xc00) | 0x400;
@@ -434,7 +434,7 @@ void WifiSetupSignalIcon_Create(int type) {
     }
     {
         WifiSetupSignalIcon *icon = WifiSetupHeap_AllocZeroed(sizeof(WifiSetupSignalIcon), 4);
-        templ = *(volatile u8 *)&gWifiSetupSignalIconTemplates[type][0];
+        templ = gWifiSetupSignalIconTemplates[type][0];
         gWifiSetupSignalIcon = icon;
         icon->type = type;
     }
@@ -458,15 +458,13 @@ void WifiSetupSignalIcon_Destroy(void) {
 // Shows the current link level (0 when no channel is allowed) at (229, 38).
 static void WifiSetupSignalIcon_Task(void) {
     int level = 0;
-    u16 ime = *(vu16 *)0x4000208;
     GXOamAttr *oam;
-    *(vu16 *)0x4000208 = 0;
+    BOOL enabled = OS_DisableIrq();
     if (WM_GetAllowedChannel() != 0x8000) {
         level = WM_GetLinkLevel();
     }
-    (void)*(vu16 *)0x4000208;
-    *(vu16 *)0x4000208 = ime;
-    WifiSetupOamTemplate_Copy(0, ((u8 *)gWifiSetupSignalIconTemplates + gWifiSetupSignalIcon->type * 4)[level], gWifiSetupSignalIcon->oam);
+    OS_RestoreIrq(enabled);
+    WifiSetupOamTemplate_Copy(0, gWifiSetupSignalIconTemplates[gWifiSetupSignalIcon->type][level], gWifiSetupSignalIcon->oam);
     oam = gWifiSetupSignalIcon->oam;
     oam->attr01 = (oam->attr01 & 0xfe00ff00) | 0xe50026;
     oam = gWifiSetupSignalIcon->oam;
@@ -477,12 +475,8 @@ void WifiSetupKeyboard_Create(void) {
     WifiSetupTextBox box = { 0, 0, 0, 0 };
     u32 numObjs;
 
-    struct {
-        int offset;
-        u16 code;
-        volatile u16 unused;
-    } pre;
-
+    int offset;
+    u16 label[2];
     u8 *templ;
     int i, j, k;
     box.width = 17;
@@ -512,17 +506,17 @@ void WifiSetupKeyboard_Create(void) {
         }
     }
     i = 0;
-    pre.unused = i;
+    label[1] = i;
     for (; i < 3; i++) {
-        pre.offset = 0;
+        offset = 0;
         for (j = 0; j < 4; j++) {
             gWifiSetupKeyboard->rows[i][j] = WifiSetupText_AllocObjCanvas(0, 28, 2, 0, &numObjs, 0);
             box.x = 0;
             {
                 int index = 0;
-                for (k = pre.offset; index < 12;) {
-                    pre.code = gWifiSetupKeyboardPageLabels[i][k];
-                    WifiSetupText_DrawInRect(gWifiSetupKeyboard->rows[i][j], box.x, box.y, box.width, box.height, 2, 1152, &pre.code);
+                for (k = offset; index < 12;) {
+                    label[0] = gWifiSetupKeyboardPageLabels[i][k];
+                    WifiSetupText_DrawInRect(gWifiSetupKeyboard->rows[i][j], box.x, box.y, box.width, box.height, 2, 1152, label);
                     index++;
                     box.x += 18;
                     k++;
@@ -531,7 +525,7 @@ void WifiSetupKeyboard_Create(void) {
             if (i == 0) {
                 gWifiSetupKeyboard->rowBlocks[j] = WifiSetupOamBlock_Alloc(0, numObjs, 1);
             }
-            pre.offset += 12;
+            offset += 12;
         }
     }
     gWifiSetupKeyboard->cursor = WifiSetupOamTemplate_AllocBlock(0, 64, 1);

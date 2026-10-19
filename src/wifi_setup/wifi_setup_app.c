@@ -33,7 +33,6 @@ static void *WifiSetupApp_AossClientAlloc(u32 size);
 static void WifiSetupApp_AossClientFree(void *ptr);
 static BOOL WifiSetupApp_SetParams(int language, u32 flags);
 static void WifiSetupApp_InitSystem(void);
-static inline void ResetWindows(vu32 *dispcnt);
 static void WifiSetupApp_InitDisplay(void);
 static void WifiSetupApp_Shutdown(void);
 static u8 WifiSetupApp_GetLanguageCode(void);
@@ -184,25 +183,14 @@ static void WifiSetupApp_InitSystem(void) {
     WifiSetupHeap_FreeAndClear(&work);
 }
 
-// Clears the window and OBJ-window enables of a DISPCNT register and the master brightness next to it.
-static inline void ResetWindows(vu32 *dispcnt) {
-    u32 value = *dispcnt;
-    value &= ~0x1f00;
-    *dispcnt = value;
-    value = *dispcnt;
-    value &= ~0xe000;
-    *dispcnt = value;
-    GXx_SetMasterBrightness_((vu16 *)((u8 *)dispcnt + 0x6c), 0);
-}
-
 // Main screen: BG mode 0, BG VRAM bank A, OBJ bank B (1D mapping); sub screen: banks H and I.
 static void WifiSetupApp_InitDisplay(void) {
     GX_VBlankIntr(FALSE);
     GX_SetBankForBG(GX_VRAM_BG_128_A);
     GX_SetBankForOBJ(GX_VRAM_OBJ_128_B);
     GX_SetGraphicsMode(GX_DISPMODE_GRAPHICS, GX_BGMODE_0, GX_BG0_AS_2D);
-    reg_GX_DISPCNT &= ~0x1f00;
-    reg_GX_DISPCNT &= ~0xe000;
+    GX_SetVisiblePlane(0);
+    GX_SetVisibleWnd(0);
     GXx_SetMasterBrightness_(&reg_GX_MASTER_BRIGHT, 0);
     reg_GX_DISPCNT = (reg_GX_DISPCNT & 0xffcfffef) | 0x10 | 0x200000;
     reg_G2_BG0CNT &= ~64;
@@ -217,7 +205,9 @@ static void WifiSetupApp_InitDisplay(void) {
     GX_SetBankForSubBG(GX_VRAM_SUB_BG_32_H);
     GX_SetBankForSubOBJ(GX_VRAM_SUB_OBJ_16_I);
     GXS_SetGraphicsMode(GX_BGMODE_0);
-    ResetWindows(&reg_GXS_DB_DISPCNT);
+    GXS_SetVisiblePlane(0);
+    GXS_SetVisibleWnd(0);
+    GXx_SetMasterBrightness_(&reg_GXS_DB_MASTER_BRIGHT, 0);
     reg_GXS_DB_DISPCNT = (reg_GXS_DB_DISPCNT & 0xffcfffef) | 0x10;
     reg_G2S_DB_BG0CNT &= ~64;
     reg_G2S_DB_BG1CNT &= ~64;

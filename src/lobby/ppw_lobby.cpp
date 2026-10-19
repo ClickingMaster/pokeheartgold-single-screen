@@ -44,7 +44,53 @@ void DWC_Free(int, void *, u32);
 
 int LobbyString_Compare(const Str *, const Str *);
 int LobbyString_CompareCStr(const Str *, const char *);
+Str *LobbyString_InitCopy(Str *, const Str *);
+Str *LobbyString_Assign(Str *, const Str *);
+LobbyStringVector *LobbyStringVector_Destroy(LobbyStringVector *);
 }
+
+// The strings of the PPW lobby code: empty when made without a value, released with Destroy().
+class PPWString {
+public:
+    Str str;
+
+    PPWString() {
+        u32 i;
+        u32 *p = str.words;
+        for (i = 0; i < 3; i++) {
+            p[i] = 0;
+        }
+    }
+
+    PPWString(const char *text) {
+        LobbyString_InitFromCStr(&str, text);
+    }
+
+    PPWString(const PPWString &other) {
+        LobbyString_InitCopy(&str, &other.str);
+    }
+
+    PPWString &operator=(const PPWString &other) {
+        LobbyString_Assign(&str, &other.str);
+        return *this;
+    }
+
+    void Destroy() {
+        LobbyString_Destroy(&str);
+    }
+
+    const char *CStr() const {
+        return str.c_str();
+    }
+
+    u32 size() const {
+        return str.size();
+    }
+
+    bool operator==(const char *text) const {
+        return LobbyString_CompareCStr(&str, text) == 0;
+    }
+};
 
 extern "C" char sStr_WebEncLobbySubmitQuestionnaireAsp[], sStr_WebEncLobbyGetQuestionnaireAsp[], sStr_StatsUploadKey[], sStr_WebEncLobbyGetScheduleAsp[], sStr_WebEncLobbyGetVIP_Asp[], sStr_WebEncLobbyCheckProfileAsp[];
 #pragma explicit_zero_data on
@@ -62,33 +108,6 @@ extern "C" u8 gLobbyTimerMapNotInserted = 0;
 
 namespace SubmitQuestionnaire {
 extern "C" void OS_GetMacAddress(u8 *);
-struct Str;
-extern "C" Str *LobbyString_InitFromCStr(Str *, const char *);
-
-struct Str {
-    union {
-        struct {
-            u32 flag : 1;
-            u32 capacity : 31;
-            u32 size;
-            char *data;
-        } l;
-
-        struct {
-            u8 flag : 1;
-            u8 size : 7;
-            char data[11];
-        } s;
-    } raw;
-
-    Str(const char *c) {
-        LobbyString_InitFromCStr(this, c);
-    }
-
-    const char *CStr() const {
-        return !raw.l.flag ? raw.s.data : raw.l.data;
-    }
-};
 
 enum ReqMethod {
     REQ_METHOD_GET,
@@ -170,8 +189,8 @@ struct Op {
     const OpVtbl *vtbl;
     int kind;
     int flag;
-    Str a;
-    Str b;
+    PPWString a;
+    PPWString b;
     int id;
     Vec vec;
     void (*cb)(void);
@@ -337,57 +356,8 @@ int PPW_LobbyInitResultToLastError(int x) {
 }
 
 namespace SendMessage {
-class Str;
-extern "C" Str *LobbyString_Destroy(Str *);
-extern "C" Str *LobbyString_InitCopy(Str *, const Str *);
-extern "C" int LobbyString_CompareCStr(const Str *, const char *);
-
-class Str {
-public:
-    union {
-        struct {
-            u32 flag : 1;
-            u32 capacity : 31;
-            u32 size;
-            char *data;
-        } l;
-
-        struct {
-            u8 flag : 1;
-            u8 size : 7;
-            char data[11];
-        } s;
-
-        u32 words[3];
-    } raw;
-
-    Str() {
-        u32 i;
-        u32 *p = raw.words;
-        for (i = 0; i < 3; i++) {
-            p[i] = 0;
-        }
-    }
-
-    Str(const Str &o) {
-        LobbyString_InitCopy(this, &o);
-    }
-
-    void Destroy() {
-        LobbyString_Destroy(this);
-    }
-
-    const char *CStr() const {
-        return !raw.l.flag ? raw.s.data : raw.l.data;
-    }
-
-    bool operator==(const char *t) const {
-        return LobbyString_CompareCStr(this, t) == 0;
-    }
-};
-
 extern "C" char sStr_Empty_15[];
-extern "C" Str PPWLobby_GetChannelName(PPWLobbyChannel *, int);
+extern "C" PPWString PPWLobby_GetChannelName(PPWLobbyChannel *, int);
 extern "C" int PPWLobby_EncodeMessage(int, int, int, int, int, Str *);
 extern "C" int LobbyChat_SendUserMessage(int, const char *);
 extern "C" int LobbyChat_SendChannelMessage(const char *, const char *);
@@ -425,8 +395,8 @@ extern "C" int PPWLobby_SendMessage(int id, int key, int a, int b, int c, int d,
     if (id == -1 && key == 5) {
         return 3;
     }
-    Str value;
-    if (!PPWLobby_EncodeMessage(a, b, c, d, e, &value)) {
+    PPWString value;
+    if (!PPWLobby_EncodeMessage(a, b, c, d, e, &value.str)) {
         value.Destroy();
         return 3;
     }
@@ -436,7 +406,7 @@ extern "C" int PPWLobby_SendMessage(int id, int key, int a, int b, int c, int d,
         value.Destroy();
         return result;
     }
-    Str name = PPWLobby_GetChannelName(&gPPWLobbyWork->mainChannel, key);
+    PPWString name = PPWLobby_GetChannelName(&gPPWLobbyWork->mainChannel, key);
     if (name == sStr_Empty_15) {
         name.Destroy();
         value.Destroy();
@@ -516,35 +486,6 @@ int PPWLobby_SetChannelData(int id, int key, const char *name, const void *data,
 
 namespace StartCheckProfile {
 extern "C" void OS_GetMacAddress(u8 *);
-struct Str;
-extern "C" Str *LobbyString_InitFromCStr(Str *, const char *);
-
-struct Str {
-    union {
-        struct {
-            u32 flag : 1;
-            u32 capacity : 31;
-            u32 size;
-            char *data;
-        } l;
-
-        struct {
-            u8 flag : 1;
-            u8 size : 7;
-            char data[11];
-        } s;
-
-        u32 words[3];
-    } raw;
-
-    Str(const char *c) {
-        LobbyString_InitFromCStr(this, c);
-    }
-
-    const char *CStr() const {
-        return !raw.l.flag ? raw.s.data : raw.l.data;
-    }
-};
 
 enum ReqMethod {
     REQ_METHOD_GET,
@@ -640,8 +581,8 @@ struct Obj {
     const ObjVtbl *vtbl;
     int kind;
     int flag;
-    Str name;
-    Str host;
+    PPWString name;
+    PPWString host;
     u32 x;
     Vec data;
     void (*cb)(int, int, int);
@@ -860,48 +801,6 @@ extern "C" void LobbyString_Format(Str *output, const char *format, ...) {
 }
 
 namespace EnterMainChannel {
-class Str;
-extern "C" Str *LobbyString_Destroy(Str *);
-extern "C" Str *LobbyString_InitCopy(Str *, const Str *);
-extern "C" Str *LobbyString_Assign(void *, const Str *);
-
-class Str {
-public:
-    union {
-        struct {
-            u32 flag : 1;
-            u32 capacity : 31;
-            u32 size;
-            char *data;
-        } l;
-
-        struct {
-            u8 flag : 1;
-            u8 size : 7;
-            char data[11];
-        } s;
-
-        u32 words[3];
-    } raw;
-
-    Str(const Str &o) {
-        LobbyString_InitCopy(this, &o);
-    }
-
-    void Destroy() const {
-        LobbyString_Destroy(const_cast<Str *>(this));
-    }
-
-    Str &operator=(const Str &o) {
-        LobbyString_Assign(this, &o);
-        return *this;
-    }
-
-    const char *CStr() const {
-        return !raw.l.flag ? raw.s.data : raw.l.data;
-    }
-};
-
 struct Callbacks {
     void (*a)();
     void (*b)();
@@ -921,8 +820,8 @@ struct Callbacks {
 };
 
 extern "C" void PPWLobby_OnPlayerJoined(), PPWLobby_OnPlayerLeft(), PPWLobby_OnMessage(), PPWLobby_OnChannelDataChanged(), PPWLobby_OnTopicChanged(), PPWLobby_OnEnterMainChannel();
-extern "C" Str PPWLobby_GetChannelBaseName(PPWLobbyWork *, int);
-extern "C" Str PPWLobby_MakeChannelName(int, const Str &);
+extern "C" PPWString PPWLobby_GetChannelBaseName(PPWLobbyWork *, int);
+extern "C" PPWString PPWLobby_MakeChannelName(int, const PPWString &);
 extern "C" int LobbyChat_EnterChannelAsync(const char *, int, int, Callbacks *, void (*)(), int);
 extern "C" int PPWLobby_EnterMainChannel(void);
 
@@ -944,8 +843,8 @@ inline int ErrorMap::Map(int r) const {
     return state;
 }
 
-inline Str MakeMainChannelName(Str t) {
-    Str n = PPWLobby_MakeChannelName(0, t);
+inline PPWString MakeMainChannelName(PPWString t) {
+    PPWString n = PPWLobby_MakeChannelName(0, t);
     t.Destroy();
     return n;
 }
@@ -956,8 +855,8 @@ struct Channel {
     int usersEnumerated;
     int modeReady;
 
-    Str &name() {
-        return *(Str *)nm;
+    PPWString &name() {
+        return *(PPWString *)nm;
     }
 
     void Destroy() {
@@ -965,17 +864,17 @@ struct Channel {
     }
 };
 
-inline void SetSelfChannel(const Str &n) {
+inline void SetSelfChannel(const PPWString &n) {
     Channel c;
     PPWLobbyWork *w;
     Channel *p = &c;
     c.kind = 0;
-    LobbyString_InitCopy(&c.name(), &n);
+    LobbyString_InitCopy(&c.name().str, &n.str);
     p->usersEnumerated = 0;
     p->modeReady = 0;
     w = gPPWLobbyWork;
     w->mainChannel.kind = c.kind;
-    LobbyString_Assign(&w->mainChannel.name, &c.name());
+    LobbyString_Assign(&w->mainChannel.name, &c.name().str);
     w->mainChannel.usersEnumerated = c.usersEnumerated;
     w->mainChannel.modeReady = c.modeReady;
     c.Destroy();
@@ -986,7 +885,7 @@ inline void SetSelfChannel(const Str &n) {
 
 extern "C" int PPWLobby_EnterMainChannel(void) {
     Callbacks cb(PPWLobby_OnPlayerJoined, PPWLobby_OnPlayerLeft, PPWLobby_OnMessage, PPWLobby_OnChannelDataChanged, PPWLobby_OnTopicChanged);
-    Str name = MakeMainChannelName(PPWLobby_GetChannelBaseName(gPPWLobbyWork, 0));
+    PPWString name = MakeMainChannelName(PPWLobby_GetChannelBaseName(gPPWLobbyWork, 0));
     int result = LobbyChat_EnterChannelAsync(name.CStr(), 0, 0x14, &cb, PPWLobby_OnEnterMainChannel, 0);
     {
         PPWLobbyWork *w = gPPWLobbyWork;
@@ -1011,26 +910,6 @@ extern "C" int PPWLobby_EnterMainChannel(void) {
 }
 
 namespace HandleReceivedData {
-struct Str;
-extern "C" Str *LobbyString_InitFromCStr(Str *, char *);
-extern "C" Str *LobbyString_Destroy(Str *);
-extern "C" Str *LobbyString_InitCopy(Str *, const Str *);
-
-struct Str {
-    u32 words[3];
-
-    Str(char *s) {
-        LobbyString_InitFromCStr(this, s);
-    }
-
-    Str(const Str &o) {
-        LobbyString_InitCopy(this, &o);
-    }
-
-    void Destroy() {
-        LobbyString_Destroy(this);
-    }
-};
 struct Vec;
 extern "C" Vec *LobbyCharVector_Destroy(Vec *);
 
@@ -1049,19 +928,19 @@ struct Vec {
     }
 };
 
-extern "C" Str PPWLobbyChannel_GetName(PPWLobbyChannel *);
-extern "C" int LobbyString_Equals(const Str &, const Str &);
+extern "C" PPWString PPWLobbyChannel_GetName(PPWLobbyChannel *);
+extern "C" int LobbyString_Equals(const PPWString &, const PPWString &);
 extern "C" int PPWLobby_DecodeMessageData(const char *, Vec *);
 extern "C" char *LobbyByteVector_Data(Vec *);
 extern "C" int PPWLobby_HandleLibraryData(int, int, int, int, int, char *, u32, int);
 extern "C" PPWLobbyPlayer *PPWLobbyPlayers_Find(void *, int);
 extern "C" void PPWLobby_HandleReceivedData(int, int, char *, int, int, const char *, int);
 
-inline int Find(PPWLobbyWork *w, const Str &name) {
-    const Str &n = name;
+inline int Find(PPWLobbyWork *w, const PPWString &name) {
+    const PPWString &n = name;
     int eq;
     {
-        Str t = PPWLobbyChannel_GetName(&w->mainChannel);
+        PPWString t = PPWLobbyChannel_GetName(&w->mainChannel);
         eq = LobbyString_Equals(t, n);
         t.Destroy();
     }
@@ -1069,7 +948,7 @@ inline int Find(PPWLobbyWork *w, const Str &name) {
         return w->mainChannel.kind;
     }
     {
-        Str t = PPWLobbyChannel_GetName(&w->subChannel);
+        PPWString t = PPWLobbyChannel_GetName(&w->subChannel);
         eq = LobbyString_Equals(t, n);
         t.Destroy();
     }
@@ -1089,7 +968,7 @@ extern "C" void PPWLobby_HandleReceivedData(int a, int b, char *channel, int id,
     int kind;
     Vec data;
     {
-        Str name(channel);
+        PPWString name(channel);
         kind = Find(gPPWLobbyWork, name);
         name.Destroy();
     }
@@ -1504,20 +1383,7 @@ done:
 
 namespace IsMainChannelReady {
 extern "C" {
-typedef union {
-    struct {
-        u32 large : 1, other : 31;
-        u32 size;
-        char *ptr;
-    } heap;
-
-    struct {
-        u8 header;
-        char data[11];
-    } small;
-} String;
-
-extern void PPWLobbyChannel_GetName(String *, void *), LobbyString_Destroy(String *);
+extern void PPWLobbyChannel_GetName(Str *, PPWLobbyChannel *);
 extern int LobbyChat_IsInChannel(char *), PPWLobbyPlayers_AllHaveProfiles(void *);
 int PPWLobby_IsMainChannelReady(void);
 
@@ -1532,11 +1398,11 @@ static inline int enough(s32 n) {
 }
 
 int PPWLobby_IsMainChannelReady(void) {
-    String local;
+    Str local;
     int empty;
     PPWLobbyWork *c;
     PPWLobbyChannel_GetName(&local, &gPPWLobbyWork->mainChannel);
-    empty = LobbyChat_IsInChannel(!local.heap.large ? local.small.data : local.heap.ptr) == 0;
+    empty = LobbyChat_IsInChannel(!local.l.isLong ? local.s.buf : local.l.ptr) == 0;
     LobbyString_Destroy(&local);
     if (empty) {
         return 0;
@@ -1643,20 +1509,7 @@ int PPWLobby_TimerRequestChannelTime(void) {
 namespace TimerRequestLobbyData {
 extern "C" {
 extern u8 sStr_b_lib_c_lobby[];
-extern void PPWLobby_OnGetLobbyData(void), PPWLobbyChannel_GetName(void *, void *), LobbyString_Destroy(void *), LobbyChat_GetChannelKeysAsync(void *, int, void *, void (*)(void), int);
-
-typedef union {
-    struct {
-        u32 flag : 1, other : 31;
-        u32 a;
-        void *pointer;
-    } longform;
-
-    struct {
-        u8 prefix;
-        u8 data[11];
-    } shortform;
-} String;
+extern void PPWLobby_OnGetLobbyData(void), PPWLobbyChannel_GetName(Str *, PPWLobbyChannel *), LobbyChat_GetChannelKeysAsync(const char *, int, const u8 *, void (*)(void), int);
 
 static inline BOOL limit(int value) {
     return value >= 4;
@@ -1665,7 +1518,7 @@ static inline BOOL limit(int value) {
 int PPWLobby_TimerRequestLobbyData(void);
 
 int PPWLobby_TimerRequestLobbyData(void) {
-    String s;
+    Str s;
     switch (limit(gPPWLobbyWork->schedule.state)) {
     case 0:
         break;
@@ -1673,7 +1526,7 @@ int PPWLobby_TimerRequestLobbyData(void) {
         return 0;
     }
     PPWLobbyChannel_GetName(&s, &gPPWLobbyWork->mainChannel);
-    LobbyChat_GetChannelKeysAsync(s.longform.flag == 0 ? s.shortform.data : s.longform.pointer, -1, sStr_b_lib_c_lobby, PPWLobby_OnGetLobbyData, 0);
+    LobbyChat_GetChannelKeysAsync(s.l.isLong == 0 ? s.s.buf : s.l.ptr, -1, sStr_b_lib_c_lobby, PPWLobby_OnGetLobbyData, 0);
     LobbyString_Destroy(&s);
     return 1;
 }
@@ -1725,35 +1578,6 @@ int PPWLobby_ParseWebResponse(int valid, u8 *data, u32 size, void **output, u32 
 
 namespace OnCheckProfile {
 extern "C" void OS_GetMacAddress(u8 *);
-struct Str;
-extern "C" Str *LobbyString_InitFromCStr(Str *, const char *);
-
-struct Str {
-    union {
-        struct {
-            u32 flag : 1;
-            u32 capacity : 31;
-            u32 size;
-            char *data;
-        } l;
-
-        struct {
-            u8 flag : 1;
-            u8 size : 7;
-            char data[11];
-        } s;
-
-        u32 words[3];
-    } raw;
-
-    Str(const char *c) {
-        LobbyString_InitFromCStr(this, c);
-    }
-
-    const char *CStr() const {
-        return !raw.l.flag ? raw.s.data : raw.l.data;
-    }
-};
 
 enum ReqMethod {
     REQ_METHOD_GET,
@@ -1823,8 +1647,8 @@ struct Obj {
     const ObjVtbl *vtbl;
     int kind;
     int flag;
-    Str name;
-    Str host;
+    PPWString name;
+    PPWString host;
     u32 x;
     Vec data;
     void (*cb)(void);
@@ -1934,35 +1758,6 @@ extern "C" void PPWLobby_OnCheckProfile(int a0, int a1, int a2) {
 
 namespace OnGetSchedule {
 extern "C" void OS_GetMacAddress(u8 *);
-struct Str;
-extern "C" Str *LobbyString_InitFromCStr(Str *, const char *);
-
-struct Str {
-    union {
-        struct {
-            u32 flag : 1;
-            u32 capacity : 31;
-            u32 size;
-            char *data;
-        } l;
-
-        struct {
-            u8 flag : 1;
-            u8 size : 7;
-            char data[11];
-        } s;
-
-        u32 words[3];
-    } raw;
-
-    Str(const char *c) {
-        LobbyString_InitFromCStr(this, c);
-    }
-
-    const char *CStr() const {
-        return !raw.l.flag ? raw.s.data : raw.l.data;
-    }
-};
 
 enum ReqMethod {
     REQ_METHOD_GET,
@@ -2038,8 +1833,8 @@ struct Obj {
     const ObjVtbl *vtbl;
     int kind;
     int flag;
-    Str name;
-    Str host;
+    PPWString name;
+    PPWString host;
     u32 x;
     Vec data;
     void (*cb)(int, int, int);
@@ -2156,35 +1951,6 @@ extern "C" void PPWLobby_OnGetSchedule(int a0, int a1, int a2) {
 
 namespace OnGetVip {
 extern "C" void OS_GetMacAddress(u8 *);
-struct Str;
-extern "C" Str *LobbyString_InitFromCStr(Str *, const char *);
-
-struct Str {
-    union {
-        struct {
-            u32 flag : 1;
-            u32 capacity : 31;
-            u32 size;
-            char *data;
-        } l;
-
-        struct {
-            u8 flag : 1;
-            u8 size : 7;
-            char data[11];
-        } s;
-
-        u32 words[3];
-    } raw;
-
-    Str(const char *c) {
-        LobbyString_InitFromCStr(this, c);
-    }
-
-    const char *CStr() const {
-        return !raw.l.flag ? raw.s.data : raw.l.data;
-    }
-};
 
 enum ReqMethod {
     REQ_METHOD_GET,
@@ -2254,8 +2020,8 @@ struct Obj {
     const ObjVtbl *vtbl;
     int kind;
     int flag;
-    Str name;
-    Str host;
+    PPWString name;
+    PPWString host;
     u32 x;
     Vec data;
     void (*cb)(void);
@@ -2708,31 +2474,6 @@ extern "C" void PPWLobby_OnEnterMainChannel(int success, void *unused, void *han
 
 namespace OnEnterSubChannel {
 extern "C" int memcmp(const void *, const void *, unsigned);
-class Str;
-extern "C" Str *LobbyString_Destroy(Str *);
-extern "C" Str *LobbyString_Assign(Str *, const Str *);
-
-class Str {
-public:
-    u32 words[3];
-
-    Str() {
-        u32 i;
-        u32 *p = words;
-        for (i = 0; i < 3; i++) {
-            p[i] = 0;
-        }
-    }
-
-    void Destroy() {
-        LobbyString_Destroy(this);
-    }
-
-    Str &operator=(const Str &o) {
-        LobbyString_Assign(this, &o);
-        return *this;
-    }
-};
 
 struct InfoHead {
     int id;
@@ -2772,12 +2513,12 @@ struct Entry {
 
 struct Peer {
     int kind;
-    Str name;
+    PPWString name;
     int a;
     int b;
 
     void Reset() {
-        Str empty;
+        PPWString empty;
         kind = 5;
         name = empty;
         a = 0;
@@ -2855,17 +2596,6 @@ extern "C" void PPWLobby_OnEnterSubChannel(int result, int unused, int arg, int 
 
 namespace OnPlayerJoined {
 extern "C" int memcmp(const void *, const void *, unsigned);
-struct Str;
-extern "C" Str *LobbyString_InitFromCStr(Str *, char *);
-extern "C" Str *LobbyString_Destroy(Str *);
-
-struct Str {
-    u32 words[3];
-
-    void Destroy() {
-        LobbyString_Destroy(this);
-    }
-};
 
 struct InfoHead {
     int id;
@@ -2944,7 +2674,7 @@ inline int Match(PPWLobbyChannel *c, const Str &name) {
     int r;
     PPWLobbyChannel_GetName(&t, c);
     r = LobbyString_Equals(&t, &name);
-    t.Destroy();
+    LobbyString_Destroy(&t);
     return r;
 }
 
@@ -2987,7 +2717,7 @@ extern "C" void PPWLobby_OnPlayerJoined(char *channel, int id) {
         Str name;
         LobbyString_InitFromCStr(&name, channel);
         kind = Find(gPPWLobbyWork, name);
-        name.Destroy();
+        LobbyString_Destroy(&name);
     }
     if (kind == 5) {
         return;
@@ -3013,17 +2743,6 @@ extern "C" void PPWLobby_OnPlayerJoined(char *channel, int id) {
 
 namespace OnPlayerLeft {
 extern "C" int memcmp(const void *, const void *, unsigned);
-struct Str;
-extern "C" Str *LobbyString_InitFromCStr(Str *, char *);
-extern "C" Str *LobbyString_Destroy(Str *);
-
-struct Str {
-    u32 words[3];
-
-    void Destroy() {
-        LobbyString_Destroy(this);
-    }
-};
 
 struct InfoHead {
     int id;
@@ -3102,7 +2821,7 @@ inline int Match(PPWLobbyChannel *c, const Str &name) {
     int r;
     PPWLobbyChannel_GetName(&t, c);
     r = LobbyString_Equals(&t, &name);
-    t.Destroy();
+    LobbyString_Destroy(&t);
     return r;
 }
 
@@ -3145,7 +2864,7 @@ extern "C" void PPWLobby_OnPlayerLeft(char *channel, int id) {
         Str name;
         LobbyString_InitFromCStr(&name, channel);
         kind = Find(gPPWLobbyWork, name);
-        name.Destroy();
+        LobbyString_Destroy(&name);
     }
     if (kind == 5) {
         return;
@@ -3187,20 +2906,16 @@ void PPWLobby_OnPlayerMessage(int a, int b, int c) {
 namespace OnMessage {
 extern "C" {
 typedef struct {
-    u32 a, b, c;
-} String;
-
-typedef struct {
     int a, b, type, kind, arg, spare;
-    String text;
+    LobbyCharVector text;
 } Message;
 
-extern void LobbyString_InitFromCStr(String *, void *), PPWLobbyChannel_GetName(String *, PPWLobbyChannel *), LobbyString_Destroy(String *), LobbyCharVector_Destroy(String *), PPWLobby_HandleSystemMessage(Message *, int, int, void *, u32);
-extern int LobbyString_Equals(String *, String *), PPWLobby_ParseMessage(String *, Message *);
+extern void PPWLobbyChannel_GetName(Str *, PPWLobbyChannel *), PPWLobby_HandleSystemMessage(Message *, int, int, void *, u32);
+extern int LobbyString_Equals(const Str *, const Str *), PPWLobby_ParseMessage(Str *, Message *);
 extern PPWLobbyPlayer *PPWLobbyPlayers_Find(void *, int);
-void PPWLobby_OnMessage(void *, int, void *);
+void PPWLobby_OnMessage(const char *, int, const char *);
 
-static inline void zeroString(String *s) {
+static inline void zeroString(LobbyCharVector *s) {
     u32 *p = (u32 *)s;
     *p++ = 0;
     *p++ = 0;
@@ -3216,13 +2931,13 @@ static inline int validEntry(PPWLobbyPlayer *p) {
     return 0;
 }
 
-void PPWLobby_OnMessage(void *key, int index, void *name) {
+void PPWLobby_OnMessage(const char *key, int index, const char *name) {
     Message m;
-    String k, tmp, b, a;
+    Str k, tmp, b, a;
     int channel = 5;
     if (key) {
         PPWLobbyWork *c;
-        String *kp;
+        Str *kp;
         int match;
         LobbyString_InitFromCStr(&k, key);
         c = gPPWLobbyWork;
@@ -3275,7 +2990,7 @@ void PPWLobby_OnMessage(void *key, int index, void *name) {
             case 1: {
                 PPWLobbyWork *c = gPPWLobbyWork;
                 void *t = LobbyByteVector_Data(&m.text);
-                c->callbacks.onMessage(index, channel, m.arg, t, m.text.b);
+                c->callbacks.onMessage(index, channel, m.arg, t, m.text.size);
                 break;
             }
             case 0: {
@@ -3289,7 +3004,7 @@ void PPWLobby_OnMessage(void *key, int index, void *name) {
         }
         case 0: {
             void *t = LobbyByteVector_Data(&m.text);
-            PPWLobby_HandleSystemMessage(&m, index, channel, t, m.text.b);
+            PPWLobby_HandleSystemMessage(&m, index, channel, t, m.text.size);
             break;
         }
         }
@@ -3320,38 +3035,17 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f) {
 }
 }
 
-namespace OnEnumChannels {
 extern "C" {
-typedef union {
-    struct {
-        u32 allocated : 1;
-        u32 capacity : 31;
-        u32 size;
-        char *data;
-    } heap;
-
-    struct {
-        u8 header;
-        char data[11];
-    } inplace;
-} String;
-
-typedef struct {
-    String *data;
-    u32 size, cap;
-} Vec;
-
 extern char sStr_Bang[];
-extern void LobbyString_InitFromCStr(String *, char *), LobbyString_Destroy(String *), LobbyStringVector_Destroy(Vec *), LobbyString_Assign(void *, String *), PPWLobby_GenerateChannelBaseName(String *);
-extern void LobbyString_Split(Vec *, String *, String *, int);
+extern void LobbyString_Split(LobbyStringVector *, Str *, Str *, int);
 void PPWLobby_OnEnumChannels(int, int, char **, int, int *);
 
 void PPWLobby_OnEnumChannels(int valid, int count, char **names, int unused, int *types) {
-    Vec parts;
-    String item;
-    String delimiter;
-    String text;
-    String empty;
+    LobbyStringVector parts;
+    Str item;
+    Str delimiter;
+    Str text;
+    Str empty;
     int i;
     if (!valid) {
         return;
@@ -3370,8 +3064,8 @@ void PPWLobby_OnEnumChannels(int valid, int count, char **names, int unused, int
             continue;
         }
         {
-            String *s = parts.data + 1;
-            char *p = s->heap.allocated == 0 ? s->inplace.data : s->heap.data;
+            Str *s = parts.data + 1;
+            char *p = s->l.isLong == 0 ? s->s.buf : s->l.ptr;
             LobbyString_InitFromCStr(&text, p);
         }
         LobbyString_Assign(&gPPWLobbyWork->channelBaseName, &text);
@@ -3386,7 +3080,6 @@ void PPWLobby_OnEnumChannels(int valid, int count, char **names, int unused, int
     LobbyString_Destroy(&empty);
     gPPWLobbyWork->isNewChannel = 1;
     gPPWLobbyWork->state = PPW_LOBBY_STATE_ENTER_MAIN_CHANNEL;
-}
 }
 }
 
@@ -3501,40 +3194,19 @@ void LobbyString_Substr(Str *a, Str *b, u32 c, u32 d) {
 }
 
 namespace OnEnumUsers {
-struct Str;
-extern "C" Str *LobbyString_InitFromCStr(Str *, char *);
-extern "C" Str *LobbyString_Destroy(Str *);
-extern "C" Str *LobbyString_InitCopy(Str *, const Str *);
-
-struct Str {
-    u32 words[3];
-
-    Str(char *s) {
-        LobbyString_InitFromCStr(this, s);
-    }
-
-    Str(const Str &o) {
-        LobbyString_InitCopy(this, &o);
-    }
-
-    void Destroy() {
-        LobbyString_Destroy(this);
-    }
-};
-
 extern "C" char sStr_b_lib_u_user[], sStr_b_lib_u_system[];
-extern "C" Str PPWLobbyChannel_GetName(PPWLobbyChannel *);
-extern "C" int LobbyString_Equals(const Str &, const Str &);
+extern "C" PPWString PPWLobbyChannel_GetName(PPWLobbyChannel *);
+extern "C" int LobbyString_Equals(const PPWString &, const PPWString &);
 extern "C" void PPWLobbyPlayers_Add(void *, int);
 extern "C" void LobbyChat_GetChannelKeysAsync(char *, int, char *, void (*)(), int);
 extern "C" void PPWLobby_OnGetChannelKeys();
 extern "C" void PPWLobby_OnEnumUsers(int, char *, int, int *);
 
-inline int Find(PPWLobbyWork *w, const Str &name) {
-    const Str &n = name;
+inline int Find(PPWLobbyWork *w, const PPWString &name) {
+    const PPWString &n = name;
     int eq;
     {
-        Str t = PPWLobbyChannel_GetName(&w->mainChannel);
+        PPWString t = PPWLobbyChannel_GetName(&w->mainChannel);
         eq = LobbyString_Equals(t, n);
         t.Destroy();
     }
@@ -3542,7 +3214,7 @@ inline int Find(PPWLobbyWork *w, const Str &name) {
         return w->mainChannel.kind;
     }
     {
-        Str t = PPWLobbyChannel_GetName(&w->subChannel);
+        PPWString t = PPWLobbyChannel_GetName(&w->subChannel);
         eq = LobbyString_Equals(t, n);
         t.Destroy();
     }
@@ -3564,7 +3236,7 @@ extern "C" void PPWLobby_OnEnumUsers(int success, char *channel, int count, int 
         return;
     }
     {
-        Str name(channel);
+        PPWString name(channel);
         PPWLobbyWork *w = gPPWLobbyWork;
         result = Find(w, name);
         name.Destroy();
@@ -4231,7 +3903,7 @@ static inline void setRed(Node *n, int r) {
 }
 
 static inline int redLoaded(Node *n, u32 *tag) {
-    u32 t = *(volatile u32 *)&n->tagged;
+    u32 t = n->tagged;
     *tag = t;
     if (t & 1) {
         return 1;
@@ -4572,7 +4244,7 @@ typedef struct {
 
 typedef struct {
     void *data;
-    volatile u32 size;
+    u32 size;
     u32 capacity;
 } Buffer;
 
@@ -4637,7 +4309,7 @@ extern "C" void LobbyCharVector_AppendZeros(LobbyCharVector *vector, u32 count, 
 }
 
 using LobbyStringTypes::RangeDispatch;
-extern "C" Str *LobbyString_InitCopy(Str *, Str *);
+extern "C" Str *LobbyString_InitCopy(Str *, const Str *);
 
 struct CharacterAllocator {
     void release(char *storage) {
@@ -4657,7 +4329,7 @@ extern "C" LobbyCharVector *LobbyCharVector_Destroy(LobbyCharVector *vector) {
     return vector;
 }
 
-extern "C" Str *LobbyString_InitCopy(Str *output, Str *input) {
+extern "C" Str *LobbyString_InitCopy(Str *output, const Str *input) {
     if (!input->l.isLong) {
         *output = *input;
     } else {
@@ -4685,7 +4357,7 @@ extern "C" Str *LobbyString_InitSubstring(Str *self, Str *str, u32 pos, u32 n) {
     return self;
 }
 
-extern "C" Str *LobbyString_InitFromCStr(Str *output, char *text) {
+extern "C" Str *LobbyString_InitFromCStr(Str *output, const char *text) {
     u32 index, length;
     RangeDispatch dispatch;
     for (index = 0; index < 3; index++) {
@@ -4770,10 +4442,10 @@ void LobbyString_Reserve(Str *w, u32 size) {
 }
 
 extern "C" {
-extern Str *LobbyString_Replace(Str *, u32, u32, Str *);
-Str *LobbyString_Assign(Str *, Str *);
+extern Str *LobbyString_Replace(Str *, u32, u32, const Str *);
+Str *LobbyString_Assign(Str *, const Str *);
 
-Str *LobbyString_Assign(Str *dst, Str *src) {
+Str *LobbyString_Assign(Str *dst, const Str *src) {
     BOOL isLong = dst->l.isLong ? TRUE : FALSE;
     if (!isLong && !src->l.isLong) {
         *dst = *src;
@@ -4785,8 +4457,8 @@ Str *LobbyString_Assign(Str *dst, Str *src) {
 
 using namespace LobbyStringTypes;
 
-extern "C" Str *LobbyString_Replace(Str *out, u32 pos, u32 remove, Str *input) {
-    char *data;
+extern "C" Str *LobbyString_Replace(Str *out, u32 pos, u32 remove, const Str *input) {
+    const char *data;
     u32 size;
     RangeDispatch dispatch;
     if (input->l.isLong) {
@@ -4946,45 +4618,7 @@ extern "C" void *memmove(void *, const void *, unsigned);
 extern "C" const char sStr_BasicStringOutOfRange[], sStr_BasicStringLengthError[];
 
 class Tag {};
-struct Str;
-extern "C" Str *LobbyString_Destroy(Str *);
 extern "C" Str *LobbyString_AssignRange(Str *, const char *, const char *, int);
-
-struct Str {
-    union {
-        struct {
-            u32 flag : 1;
-            u32 capacity : 31;
-            u32 size;
-            char *data;
-        } l;
-
-        struct {
-            u8 flag : 1;
-            u8 size : 7;
-            char data[11];
-        } s;
-
-        u32 words[3];
-    } raw;
-
-    Str() {
-        u32 i;
-        u32 *p = raw.words;
-        for (i = 0; i < 3; i++) {
-            p[i] = 0;
-        }
-    }
-
-    void Destroy() {
-        LobbyString_Destroy(this);
-    }
-
-    const char *CStr() const {
-        const Str *t = this;
-        return !t->raw.l.flag ? t->raw.s.data : t->raw.l.data;
-    }
-};
 
 inline const u32 &Min(const u32 &a, const u32 &b) {
     return b < a ? b : a;
@@ -4995,18 +4629,18 @@ extern "C" Str *LobbyString_ReplaceRange(Str *s, u32 pos, u32 n1, const char *fi
 #pragma opt_common_subs off
 
 extern "C" Str *LobbyString_ReplaceRange(Str *s, u32 pos, u32 n1, const char *first, const char *last, Tag) {
-    bool isLong = s->raw.l.flag;
+    bool isLong = s->l.isLong;
     u32 cap;
     char *data;
     u32 size;
     if (!isLong) {
         cap = 11;
-        data = s->raw.s.data;
-        size = s->raw.s.size;
+        data = s->s.buf;
+        size = s->s.len;
     } else {
-        cap = s->raw.l.capacity;
-        size = s->raw.l.size;
-        data = s->raw.l.data;
+        cap = s->l.capacity;
+        size = s->l.size;
+        data = s->l.ptr;
     }
     if (pos > size) {
         printf(sStr_BasicStringOutOfRange);
@@ -5042,16 +4676,17 @@ extern "C" Str *LobbyString_ReplaceRange(Str *s, u32 pos, u32 n1, const char *fi
                 DWC_Free(0, data, 0);
             }
         } else {
-            s->raw.l.flag = 1;
+            s->l.isLong = 1;
         }
-        s->raw.l.data = p;
-        s->raw.l.size = newSize;
-        s->raw.l.capacity = newCap;
+        s->l.ptr = p;
+        s->l.size = newSize;
+        s->l.capacity = newCap;
     } else {
-        Str tmp;
+        PPWString tmp;
         if (tail && data + pos + n2 < last && last <= data + size) {
-            LobbyString_AssignRange(&tmp, first, last, 0);
-            first = tmp.CStr();
+            LobbyString_AssignRange(&tmp.str, first, last, 0);
+            const Str *text = &tmp.str;
+            first = text->c_str();
         }
         if (tail) {
             memmove(data + pos + n2, data + pos + n, tail);
@@ -5059,9 +4694,9 @@ extern "C" Str *LobbyString_ReplaceRange(Str *s, u32 pos, u32 n1, const char *fi
         memmove(data + pos, first, n2);
         data[newSize] = gLobbyStringInPlaceTerminator;
         if (isLong) {
-            s->raw.l.size = newSize;
+            s->l.size = newSize;
         } else {
-            s->raw.s.size = newSize;
+            s->s.len = newSize;
         }
         tmp.Destroy();
     }

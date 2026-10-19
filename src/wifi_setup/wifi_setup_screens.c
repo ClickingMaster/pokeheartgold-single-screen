@@ -126,7 +126,11 @@ extern char sStr_CharJb5InfoNscL[];
 extern char gWifiSetupOptionsJbBgOptionNcgPath[];
 extern char gWifiSetupOptionsJb5OptMenuNscPath[];
 extern char gWifiSetupTransferringYb5MultiNscPath[];
-extern char gWifiSetupListScreenRescanPaletteRow[];
+typedef struct WifiSetupPaletteRow {
+    u8 row;
+} WifiSetupPaletteRow;
+
+extern const WifiSetupPaletteRow gWifiSetupListScreenRescanPaletteRow;
 extern u8 gWifiSetupTextEntryCursorRowY[];
 extern u8 gWifiSetupTextEntryColumnX[];
 extern char gWifiSetupTextEntryYbObjKbNclPath[];
@@ -960,13 +964,13 @@ static void WifiSetupSystemInfo_LoadGraphics(void) {
 static void WifiSetupSystemInfo_DrawInfo(void) {
     DwcWiFiInfo info;
     u32 parts[4];
-    u16 buf[0x14];
+    u16 buf[20];
     u8 mac[6];
     u64 id;
     int i;
     WifiSetupCanvas *win = WifiSetupText_InitBgCanvas(0, 0);
     OS_GetMacAddress(mac);
-    swprintf(buf, 0x14, gWifiSetupSystemInfoMacFormat, mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+    swprintf(buf, NELEMS(buf), gWifiSetupSystemInfoMacFormat, mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
     WifiSetupText_DrawInRect(win, 8, 0x40, 0xf0, 0x1c, 2, 0x480, buf);
     DWCi_BM_GetWiFiInfo(&info);
     if (info.userId != 0) {
@@ -977,9 +981,9 @@ static void WifiSetupSystemInfo_DrawInfo(void) {
             parts[2 - i] = id % 10000;
             id /= 10000;
         }
-        swprintf(buf, 0x14, gWifiSetupSystemInfoIdFormat, parts[0], parts[1], parts[2], parts[3]);
+        swprintf(buf, NELEMS(buf), gWifiSetupSystemInfoIdFormat, parts[0], parts[1], parts[2], parts[3]);
     } else {
-        swprintf(buf, 0x14, gWifiSetupSystemInfoNoIdText);
+        swprintf(buf, NELEMS(buf), gWifiSetupSystemInfoNoIdText);
     }
     WifiSetupText_DrawInRect(win, 8, 0x78, 0xf0, 0x1c, 2, 0x480, buf);
     WifiSetupText_MarkDirty(win);
@@ -2752,8 +2756,8 @@ static void WifiSetupListScreen_End(void) {
     WifiSetupFile_Free(gWifiSetupListScreen.work->paletteFile);
     WifiSetupDisplay_HidePlanes(1, GX_PLANEMASK_BG0);
     WifiSetupDisplay_HidePlanes(0, GX_PLANEMASK_BG0 | GX_PLANEMASK_BG2 | GX_PLANEMASK_BG3 | GX_PLANEMASK_OBJ);
-    *(volatile u32 *)0x04000010 = 0;
-    *(volatile u32 *)0x04000018 = 0;
+    G2_SetBG0Offset(0, 0);
+    G2_SetBG2Offset(0, 0);
     if (!gWifiSetupListScreen.work->confirmed) {
         WifiSetupApScan_FreeWork();
         WifiSetupConnections_Edit(WifiSetupConnections_GetEdit()[244]);
@@ -3015,10 +3019,8 @@ static void WifiSetupListScreen_StartScrollDown(void) {
 }
 
 static void WifiSetupListScreen_HighlightRescanButton(void) {
-    volatile u8 local;
-    u8 x = gWifiSetupListScreenRescanPaletteRow[0];
-    local = x;
-    WifiSetupPalette_LoadRow(gWifiSetupListScreen.work->paletteFile, x, x);
+    WifiSetupPaletteRow palette = gWifiSetupListScreenRescanPaletteRow;
+    WifiSetupPalette_LoadRow(gWifiSetupListScreen.work->paletteFile, palette.row, palette.row);
 }
 
 static void WifiSetupListScreen_WaitErrorDialog(void) {
