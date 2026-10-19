@@ -11,15 +11,15 @@
 #include "seal_case.h"
 
 typedef struct BallCapsuleEditorArgs {
-    int partyCount;                       // 0x00
-    Pokemon *mons[PARTY_SIZE];            // 0x04
-    Party *party;                         // 0x1C
-    SealCase *sealCase;                   // 0x20
-    Options *options;                     // 0x24
-    SaveData *saveData;                   // 0x28
-    MenuInputStateMgr *menuInputStatePtr; // 0x2C
-    u8 capsuleIndex;                      // 0x30, the selected capsule (kept between visits)
-    u8 setCapsuleOnMon;                   // 0x31, TRUE: open the party menu to put the capsule on a Pokémon
+    int partyCount;
+    Pokemon *mons[PARTY_SIZE];
+    Party *party;
+    SealCase *sealCase;
+    Options *options;
+    SaveData *saveData;
+    MenuInputStateMgr *menuInputStatePtr;
+    u8 capsuleIndex;    // the selected capsule (kept between visits)
+    u8 setCapsuleOnMon; // TRUE: open the party menu to put the capsule on a Pokémon
 } BallCapsuleEditorArgs;
 
 BOOL BallCapsuleEditor_Init(OverlayManager *manager, int *state);

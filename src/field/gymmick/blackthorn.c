@@ -70,12 +70,12 @@ typedef struct BlackthornGymmickPlatformData {
     BlackthornGymXZPoint rotateCollisionCheck[24];
     BlackthornGymXZPoint rightEdgeOuter[5];
     BlackthornGymXZPoint floor[18];
-} BlackthornGymmickPlatformData; // size: 0x270
+} BlackthornGymmickPlatformData;
 
 typedef struct BlackthornGymmickLocalData {
     FieldSystem *fieldSystem;
     BlackthornGymmickPlatformData platforms[3];
-} BlackthornGymmickLocalData; // size: 0x754
+} BlackthornGymmickLocalData;
 
 typedef struct BlackthornGymMovePlatformTaskData {
     BlackthornPlatformActionTaskState state;

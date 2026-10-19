@@ -13,11 +13,8 @@
 #include "map_matrix.h"
 #include "terrain_attributes.h"
 
-// Field terrain queries. FieldSystem.terrainQueries points at one of two query tables,
-// chosen by the map's useSimpleTerrainCollisions: the BDHC one reads heights from the loaded map chunks' BDHC data
-// (and the dynamic height plates) and attributes from the loaded chunks, the simple one has no heights and reads
-// attributes from the whole map's TerrainAttributes. Attribute bits: 0-7 metatile behavior, 15 collision.
-// Also searches the loaded map chunks' props by build model.
+// Field terrain queries: heights from the loaded maps' BDHC data, or none for maps with simple terrain collisions.
+// Attribute bits: 0-7 metatile behavior, 15 collision.
 
 typedef struct FieldTerrainQueries {
     int (*getHeight)(FieldSystem *fieldSystem, int height, fx32 x, fx32 z, u8 *outSource);

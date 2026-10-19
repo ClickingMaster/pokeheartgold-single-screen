@@ -17,8 +17,8 @@
 #include "task.h"
 #include "vram_transfer_manager.h"
 
-// The emote bubble that pops up above a map object (field effect renderer 0x12): one billboard that
-// rises into place, then plays one of 14 texture animations by streaming frames into its VRAM slot.
+// The emote bubble that pops up above a map object: one billboard that rises into place,
+// then plays one of 14 texture animations by streaming frames into its VRAM slot.
 
 void *BillboardObject_Delete(void *billboard);
 void BillboardObject_SetPosition(void *billboard, const VecFx32 *position);
@@ -150,7 +150,7 @@ void EmoteBubble_Free(EmoteBubble *bubble) {
     FieldEffectManager_HeapFree(bubble);
 }
 
-// Returns FALSE while another bubble is up; the success path falls off the end without a value.
+// Returns FALSE while another bubble is up.
 static BOOL EmoteBubble_Show(LocalMapObject *mapObject, int kind) {
     EmoteBubbleEffectArgs args;
     VecFx32 position;

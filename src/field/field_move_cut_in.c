@@ -73,7 +73,6 @@ static void FieldMoveCutIn_SetWindowRect(FieldMoveCutIn *cutIn, fx32 left, fx32 
 static void FieldMoveCutIn_CreateWindowTask(FieldMoveCutIn *cutIn);
 static void FieldMoveCutIn_DestroyWindowTask(FieldMoveCutIn *cutIn);
 
-// overlay 2's data block
 extern const FieldMoveCutInStep sFieldMoveCutInSteps[];
 extern const FieldMoveCutInStep sFieldMoveCutInFlySteps[];
 extern const FieldMoveCutInStep sFieldMoveCutInFlyWithObjectSteps[];

@@ -58,9 +58,8 @@
 #ifndef POKEHEARTGOLD_NITROCRYPTO_BN_H
 #define POKEHEARTGOLD_NITROCRYPTO_BN_H
 
-// Big-number arithmetic, RSA signature check and RC4 of the nitrocrypto library (OVY_74).
+// Big-number arithmetic, RSA signature check and RC4 of the nitrocrypto library.
 
-// <nitro.h> trips -W error under MWCC 1.2 (most of these modules are built with it)
 #pragma push
 #pragma warn_resultnotused off
 #include <nitro.h>
@@ -146,7 +145,7 @@ typedef struct bn_recp_ctx_st {
 
 #define BN_num_bytes(a)   ((BN_num_bits(a) + 7) / 8)
 #define BN_is_word(a, w)  (((a)->top == 1) && ((a)->d[0] == (u32)(w)))
-#define BN_is_word2(a, w) (((a)->d[0] == (u32)(w)) && ((a)->top == 1)) // because somebody would rather type stuff out in the wrong order than use the above macro
+#define BN_is_word2(a, w) (((a)->d[0] == (u32)(w)) && ((a)->top == 1))
 #define BN_is_zero(a)     (((a)->top == 0) || BN_is_word(a, 0))
 #define BN_is_one(a)      (BN_is_word((a), 1))
 #define BN_is_odd(a)      (((a)->top > 0) && ((a)->d[0] & 1))
@@ -325,7 +324,6 @@ BOOL CRYPTO_VerifySignature(const void *data, u32 dataLength, const u8 *sign, co
 // RC4
 void CRYPTO_RC4Encrypt(void *context, const void *in, u32 length, void *out);
 
-// tables in asm/nitrocrypto_data.s
 extern const u8 gNitroCryptoExpP16[];
 extern const u8 gNitroCryptoExpP2[];
 extern const u8 gNitroCryptoExpP4[];

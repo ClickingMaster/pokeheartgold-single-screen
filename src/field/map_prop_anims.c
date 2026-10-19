@@ -13,9 +13,8 @@
 #include "sound_playback.h"
 #include "task.h"
 
-// Animations of map props started by script commands: the Pokemon Center healing machine (one Poke Ball prop per
-// Pokemon, then the machine's and the balls' animations and the healing fanfare), the elevator, and the one-shot
-// animations of a two-state prop.
+// Animations of map props started by script commands: the Pokemon Center healing machine, the elevator, and the
+// one-shot animations of a two-state prop.
 
 #define MAP_PROP_HEALING_MACHINE   0x25
 #define MAP_PROP_HEALING_POKE_BALL 0x6b

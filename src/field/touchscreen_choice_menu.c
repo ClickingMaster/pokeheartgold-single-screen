@@ -34,9 +34,7 @@
 #include "text.h"
 #include "touchscreen.h"
 
-// Field bottom-screen app 3 (ScrCmd_TouchscreenMenuHide): the touch YES/NO buttons of ScrCmd_GetMenuChoice and the
-// touch multichoice list of ScrCmd_MenuExec (up to 28 rows of the field MoveTutorMenu).
-// FieldSystem_SetTouchscreenChoiceMenuState sets the state (3 YES/NO, 7 list) and the result pointer; scripts wait
+// The touch YES/NO buttons of ScrCmd_GetMenuChoice and the touch multichoice list of ScrCmd_MenuExec. Scripts wait
 // for state 6 or for *result != 0xEEEE.
 
 #define TOUCHSCREEN_CHOICE_MENU_MAX_ITEMS 28
@@ -85,11 +83,11 @@ typedef struct TouchscreenChoiceMenuData {
     u32 unk_398;
     void (*selectionCallback)(void *arg, int selection); // ScrCmd_MenuExec: MenuExec_PrintItemHelp
     void *selectionCallbackArg;
-} TouchscreenChoiceMenuData; // size: 0x3A4
+} TouchscreenChoiceMenuData;
 
 typedef BOOL (*TouchscreenChoiceMenuStateFunc)(TouchscreenChoiceMenuData *data);
 
-// {x, y} of the cursor on YES / NO; the x and the y column each have a label.
+// {x, y} of the cursor on YES / NO.
 typedef struct TouchscreenChoiceMenuCoord {
     u16 value;
     u16 nextColumn;
@@ -101,7 +99,7 @@ extern const TouchscreenHitbox sTouchscreenChoiceMenuYesNoHitboxes[];
 extern const BgTemplate sTouchscreenChoiceMenuBgTemplate_Sub0;
 extern const BgTemplate sTouchscreenChoiceMenuBgTemplate_Sub1;
 extern const BgTemplate sTouchscreenChoiceMenuBgTemplate_Sub2;
-// [itemCount - 2][selection * 3]: {x, y, anim} of the list cursor; each column has its own label.
+// [itemCount - 2][selection * 3]: {x, y, anim} of the list cursor.
 extern const u8 sTouchscreenChoiceMenuListCursorX[][24];
 extern const u8 sTouchscreenChoiceMenuListCursorY[][24];
 extern const u8 sTouchscreenChoiceMenuListCursorAnim[][24];

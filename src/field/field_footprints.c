@@ -11,11 +11,9 @@
 #include "render_animation.h"
 #include "render_model.h"
 
-// Footprints and tire tracks a map object leaves behind (field effect renderer 2): two banks of ten
-// models (four facings plus six straight/turning track pieces each), one mark per step at the tile the
-// object left, held for 16 frames and then faded out. The kind picks the bank and the piece:
-//   0 bank A by facing (sand, walking), 1 bank A track piece by previous/new facing (sand, cycling),
-//   2 bank B by facing, 3 bank B track piece (unused), 4 bank B by facing at bank A's offsets.
+// Footprints and tire tracks a map object leaves behind, one mark per step, held for 16 frames and then faded out.
+// Kinds: 0 bank A by facing (sand, walking), 1 bank A track piece (sand, cycling), 2 bank B by facing, 3 bank B
+// track piece (unused), 4 bank B by facing at bank A's offsets.
 
 #define FOOTPRINT_MODEL_COUNT 10
 

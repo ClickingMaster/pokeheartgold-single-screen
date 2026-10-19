@@ -7,7 +7,7 @@
 #include <nitro/code32.h>
 #include <string.h>
 
-// Web stats upload client of the OVY_45 network library.
+// Web stats upload client of the network library.
 
 int snprintf(char *, u32, const char *, ...);
 int sprintf(char *, const char *, ...);

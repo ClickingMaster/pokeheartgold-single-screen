@@ -13,7 +13,7 @@
 #include "field/field_effect_manager.h"
 #include "field/resource_bank.h"
 
-// Layouts of the field effect manager and its private helpers, for its own two translation units.
+// Layouts of the field effect manager and its private helpers.
 
 typedef struct FieldEffectRendererEntry {
     u32 id; // 0x17: free

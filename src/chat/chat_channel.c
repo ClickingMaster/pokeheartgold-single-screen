@@ -92,17 +92,14 @@ extern const char sStr_NickNeNULL[];
 extern const char sStr_Nick0_Ne0[];
 extern const char sStr_StrlenNickLtMAX_NAME[];
 
-// Assertion with the message, the name of the checking function and the line.
 #define ASSERT(cond, message, func, line)                               \
     if (!(cond)) {                                                      \
         __msl_assertion_failed(message, sStr_ChatChannelC, func, line); \
     }
-// A valid channel name: not NULL, not empty, shorter than 257.
 #define ASSERT_CHANNEL(name, func, line)          \
     ASSERT(name, sStr_ChannelNeNULL, func, line); \
     ASSERT(*name, sStr_Channel0_Ne0, func, line); \
     ASSERT(strlen(name) < 257, sStr_StrlenChannelLtMAX_CHANNEL, func, line);
-// A valid nick: not NULL, not empty, shorter than 128.
 #define ASSERT_NICK(nick, func, line)          \
     ASSERT(nick, sStr_UserNeNULL, func, line); \
     ASSERT(*nick, sStr_User0_Ne0, func, line); \
@@ -574,7 +571,6 @@ void ciUserChangedNick(ChatConnection *chat, const char *oldNick, const char *ne
 }
 
 void ciUserChangedMode(ChatConnection *chat, const char *nick, const char *name, int mode, BOOL set) {
-    // the callback arguments and the two lookup keys share one stack block
     struct {
         ChatUserModeArgs args;
         char nickKey[128];

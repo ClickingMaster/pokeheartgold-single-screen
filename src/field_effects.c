@@ -172,7 +172,7 @@ FieldEffect *FieldEffectPool_AddBasicEffect(FieldEffectPool *pool, const FieldEf
     return FieldEffectPool_AddEffect(pool, &full, position, parameter, userData, priority);
 }
 
-// value is a FieldEffect * (callers pass it as an int)
+// value is a FieldEffect *
 void FieldEffect_Destroy(int value) {
     FieldEffect *effect = (FieldEffect *)value;
     SysTask *task;

@@ -10,34 +10,34 @@
 #include "sys_task_api.h"
 
 typedef struct OrbitCursorSprite {
-    /* 0x00 */ ManagedSprite *sprite;
-    /* 0x04 */ s16 x;
-    /* 0x06 */ s16 y;
-    /* 0x08 */ int orbitPhase;
-    /* 0x0C */ int angle;
-} OrbitCursorSprite; // size 0x10
+    ManagedSprite *sprite;
+    s16 x;
+    s16 y;
+    int orbitPhase;
+    int angle;
+} OrbitCursorSprite;
 
 typedef struct OrbitCursor {
-    /* 0x000 */ NARC *narc;
-    /* 0x004 */ SpriteSystem *spriteSys;
-    /* 0x008 */ SpriteManager *spriteMan;
-    /* 0x00C */ PaletteData *plttData;
-    /* 0x010 */ int count;
-    /* 0x014 */ enum HeapID heapId;
-    /* 0x018 */ int resBase;
-    /* 0x01C */ int fixedPalette;
-    /* 0x020 */ fx32 yOffset;
-    /* 0x024 */ OrbitCursorSprite sprites[12];
-    /* 0x0E4 */ int state;
-    /* 0x0E8 */ int leadSprite;
-    /* 0x0EC */ int orbitingCount;
-    /* 0x0F0 */ int active;
-    /* 0x0F4 */ SysTask *task;
-    /* 0x0F8 */ int unk_F8;
-    /* 0x0FC */ int radiusX;
-    /* 0x100 */ int radiusY;
-    /* 0x104 */ int unk_104;
-} OrbitCursor; // size 0x108
+    NARC *narc;
+    SpriteSystem *spriteSys;
+    SpriteManager *spriteMan;
+    PaletteData *plttData;
+    int count;
+    enum HeapID heapId;
+    int resBase;
+    int fixedPalette;
+    fx32 yOffset;
+    OrbitCursorSprite sprites[12];
+    int state;
+    int leadSprite;
+    int orbitingCount;
+    int active;
+    SysTask *task;
+    int unk_F8;
+    int radiusX;
+    int radiusY;
+    int unk_104;
+} OrbitCursor;
 
 OrbitCursor *OrbitCursor_New(int count, enum HeapID heapId, int resBase, int fixedPalette, fx32 yOffset, SpriteSystem *spriteSys, SpriteManager *spriteMan, PaletteData *plttData);
 void OrbitCursor_ReloadPalette(OrbitCursor *p, int palette);

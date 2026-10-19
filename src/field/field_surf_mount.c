@@ -12,9 +12,8 @@
 #include "render_animation.h"
 #include "render_model.h"
 
-// The Pokemon the player rides while surfing (field effect renderer 4): one model, turned to the
-// rider's facing; while bobbing it rides along with the map object, rising and sinking between one and
-// four units and lifting the rider with it.
+// The Pokemon the player rides while surfing: one model, turned to the rider's facing; while bobbing it rises and
+// sinks under the map object, lifting the rider with it.
 
 // Renderer data, from FieldEffectManager_GetRendererData(manager, 4).
 typedef struct SurfMount {

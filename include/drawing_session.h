@@ -13,14 +13,14 @@
 #include "sprite_resource.h"
 #include "yes_no_prompt.h"
 
-// Union Room group drawing (OVY_37): up to 5 members draw on a shared canvas with 8 pen colours
+// Union Room group drawing: up to 5 members draw on a shared canvas with 8 pen colours
 // and 3 pen sizes. The leader (link id 0) collects the members' strokes and sends them to everyone;
 // the link command handlers write into this work and report events through
 // DrawingSession_HandleNetEvent.
 
 #define DRAWING_SESSION_MAX_MEMBERS 5
 
-// One frame of a member's pen: up to 2 points (first and last touch sample). Sent as is (10 bytes).
+// One frame of a member's pen: up to 2 points (first and last touch sample), sent as is.
 typedef struct DrawingSessionStroke {
     u8 xs[4];
     u8 ys[4];
@@ -43,7 +43,7 @@ typedef struct DrawingSessionMember {
     PlayerProfile *prev;
 } DrawingSessionMember;
 
-// One 1000-byte piece of the canvas picture as sent by the leader.
+// One piece of the canvas picture as sent by the leader.
 typedef struct DrawingSessionPictureChunk {
     u8 data[1000];
     u32 checksum; // XOR of the data words
@@ -66,40 +66,40 @@ struct DrawingSessionWork {
     String *memberNames[DRAWING_SESSION_MAX_MEMBERS];
     String *quitText;
     String *messageText;
-    u32 printerId; // 0xFF when the message was printed at once
+    u32 printerId; // when the message was printed at once
     SpriteList *spriteList;
     G2dRenderer renderer;
     GF_2DGfxResMan *resMans[4];
     SpriteResource *resources[8];
     SpriteResourcesHeader headers[2];
-    Sprite *penCursors[DRAWING_SESSION_MAX_MEMBERS]; // 0x1D8
+    Sprite *penCursors[DRAWING_SESSION_MAX_MEMBERS];
     u8 unk_1EC[0x24];
-    Sprite *memberIcons[DRAWING_SESSION_MAX_MEMBERS]; // 0x210
+    Sprite *memberIcons[DRAWING_SESSION_MAX_MEMBERS];
     u8 unk_224[0x24];
-    Sprite *buttons[12];                             // 0x248: 8 colours, QUIT, 3 pen sizes
-    Window nameWindows[DRAWING_SESSION_MAX_MEMBERS]; // 0x278
-    Window canvasWindow;                             // 0x2C8
-    Window messageWindow;                            // 0x2D8
-    Window quitWindow;                               // 0x2E8
+    Sprite *buttons[12]; // 8 colours, QUIT, 3 pen sizes
+    Window nameWindows[DRAWING_SESSION_MAX_MEMBERS];
+    Window canvasWindow;
+    Window messageWindow;
+    Window quitWindow;
     u8 unk_2F8[8];
-    u32 mainState;    // 0x300: copy of the OverlayManager state
-    int subState;     // 0x304: index into sDrawingSessionSubStates
-    int nextSubState; // 0x308
+    u32 mainState; // copy of the OverlayManager state
+    int subState;  // index into sDrawingSessionSubStates
+    int nextSubState;
     u32 unk_30C;
     int counter;
     int memberCount;
     int connectedCount;
     u32 connectedBitmap;
-    u32 joinedMember; // 0x320
+    u32 joinedMember;
     u8 unk_324[0x10];
-    DrawingSessionMember members[DRAWING_SESSION_MAX_MEMBERS]; // 0x334
+    DrawingSessionMember members[DRAWING_SESSION_MAX_MEMBERS];
     u8 unk_35C[0x4374 - 0x35C];
-    u16 cursorPaletteAngle; // 0x4374
+    u16 cursorPaletteAngle;
     u8 penColor;
     u8 penSize;
-    DrawingSessionStroke ownStroke;                              // 0x4378
-    DrawingSessionStroke strokes[DRAWING_SESSION_MAX_MEMBERS];   // 0x4382
-    DrawingSessionPoint lastPoints[DRAWING_SESSION_MAX_MEMBERS]; // 0x43B4
+    DrawingSessionStroke ownStroke;
+    DrawingSessionStroke strokes[DRAWING_SESSION_MAX_MEMBERS];
+    DrawingSessionPoint lastPoints[DRAWING_SESSION_MAX_MEMBERS];
     void *unk_43C8;
     int pictureChunkIndex;
     u8 picture[0x3840]; // the canvas pixels as received from the leader
@@ -108,17 +108,17 @@ struct DrawingSessionWork {
     u32 leaveConnectedCount;
     u32 leavingMask;
     u16 assignedCount;
-    s16 networkCounter;                                                              // 0x93BA
-    u8 leaveRequested;                                                               // 0x93BC
-    u8 strokeSendBuffer[DRAWING_SESSION_MAX_MEMBERS * sizeof(DrawingSessionStroke)]; // 0x93BD
-    YesNoPrompt *yesNoPrompt;                                                        // 0x93F0
+    s16 networkCounter;
+    u8 leaveRequested;
+    u8 strokeSendBuffer[DRAWING_SESSION_MAX_MEMBERS * sizeof(DrawingSessionStroke)];
+    YesNoPrompt *yesNoPrompt;
     u32 joinState;
     BOOL yesNoActive;
     u32 firstJoinSeen;
     u32 waitDisconnect;
     u32 newConnection;
     u32 newConnectionBit;
-}; // size: 0x940C
+};
 
 void DrawingSession_HandleNetEvent(DrawingSessionWork *work, int event, u32 member);
 u32 DrawingSession_GetMemberCount(void);

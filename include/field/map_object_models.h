@@ -23,7 +23,7 @@ typedef struct FollowMonBillboardWork {
     u8 spriteLoaded : 1;   // the party leader's sprite has been set (on the first resume)
     u8 shadowAnchored : 1; // the shadow stays at shadowOffsetX/Z while the Pokemon hops (follow mon interactions)
     u8 : 5;
-} FollowMonBillboardWork; // size: 0x18
+} FollowMonBillboardWork;
 
 void MapObjectManager_InitRender(MapObjectManager *mapObjectManager, int textureCount, int objectsToPreload, const int *objectIDs, int loadsPerFrame);
 void MapObjectManager_FreeRender(MapObjectManager *mapObjectManager);

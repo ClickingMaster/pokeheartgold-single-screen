@@ -7,10 +7,8 @@
 #include "field_effects.h"
 #include "map_object.h"
 
-// The billboard an apricorn tree shows when an apricorn grows back while the tree is on screen (field
-// effect renderer 16; spawned by the apricorn tree object when its save state turns to 1): one sequence
-// played five times, the middle two at double speed. Its graphics are loaded by the first running effect
-// and freed when the last one ends.
+// The billboard an apricorn tree shows when an apricorn grows back while the tree is on screen: one sequence played
+// five times, the middle two at double speed.
 
 #define APRICORN_REGROWTH_RECORD   13
 #define APRICORN_REGROWTH_RESOURCE 11

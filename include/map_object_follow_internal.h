@@ -109,8 +109,6 @@ void HiddenObjectMovement_SetRevealed(LocalMapObject *object);
 int GetMovementSpeed(u32 movement);
 void FollowMon_SpawnGrassEffects(LocalMapObject *object);
 
-// Overlay 1 functions without a (matching) header. The cover model's effect handle is the return value of
-// FieldEffectManager_CreateEffect, which HiddenObjectCover_Spawn's tail call leaves in r0.
 int HiddenObjectCover_Spawn(LocalMapObject *object, int coverType);
 void TallGrass_Spawn(LocalMapObject *object, int mode);
 void TallGrass_SpawnAt(LocalMapObject *object, int mode, int x, int z, int checkFacing);

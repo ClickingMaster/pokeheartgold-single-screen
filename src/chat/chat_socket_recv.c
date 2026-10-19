@@ -25,7 +25,6 @@ extern const char sStr_SockOutputQueueSizeBUFFER_INC_Eq0[];
 extern const char sStr_SockOutputQueueLengthGe0[];
 extern const char sStr_SockOutputQueueLengthLeSockOutputQueueSize[];
 
-// Assertion of the socket module with the message, the name of the checking function and the line.
 #define ASSERT(cond, message, func, line)                              \
     if (!(cond)) {                                                     \
         __msl_assertion_failed(message, sStr_ChatSocketC, func, line); \

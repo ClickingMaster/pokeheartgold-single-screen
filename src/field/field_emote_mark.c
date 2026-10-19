@@ -11,12 +11,8 @@
 #include "map_object.h"
 #include "sound_playback.h"
 
-// The "!" and "?" a map object shows over its head (field effect renderer 9; movement commands
-// EmoteExclamationMark and EmoteQuestionMark, a trainer spotting the player, a bite while fishing, an item
-// under a smashed rock): the mark pops up and falls back (EMOTE_MARK_POP_SPEED, slowing by
-// EMOTE_MARK_POP_GRAVITY each frame), then the effect reports done after EMOTE_MARK_HOLD_FRAMES and stays
-// until its owner destroys it. Each mark's graphics are loaded by the first running effect that needs
-// them and freed when the last one ends.
+// The "!" and "?" a map object shows over its head: the mark pops up and falls back, then the effect reports done
+// and stays until its owner destroys it.
 
 #define EMOTE_MARK_EXCLAMATION 0
 #define EMOTE_MARK_QUESTION    1
@@ -100,8 +96,8 @@ FieldEffect *EmoteMark_Spawn(LocalMapObject *mapObject, int kind, BOOL playSound
 BOOL MapObjectEmoteMarkEffect_Init(FieldEffect *effect, EmoteMarkEffect *work);
 void MapObjectEmoteMarkEffect_Update(FieldEffect *effect, EmoteMarkEffect *work);
 
-// The record parameters are { 0, 1, 0, 0, 0, 2 }. sEmoteMarkTemplate is a mark at a fixed position that
-// nothing creates; sMapObjectEmoteMarkTemplate follows a map object.
+// sEmoteMarkTemplate is a mark at a fixed position that nothing creates; sMapObjectEmoteMarkTemplate follows a
+// map object.
 extern const FieldEffectBasicTemplate sMapObjectEmoteMarkTemplate;
 extern const u32 sEmoteMarkRecordParams[6];
 

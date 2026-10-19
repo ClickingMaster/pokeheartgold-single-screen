@@ -13,34 +13,34 @@
 #define VOICE_CHAT_CALL_REQUESTING 1
 #define VOICE_CHAT_CALL_TALKING    2
 
-// 0x1AB0 bytes, 32-byte aligned inside a Heap_Alloc'd block (rawAlloc).
+// 32-byte aligned inside a Heap_Alloc'd block (rawAlloc).
 typedef struct VoiceChatWork {
-    u8 micBuffer[0x880];       // 0x0000, auto-sampling ring buffer
-    void *rawAlloc;            // 0x0880
-    void *vctBuffer;           // 0x0884, aligned
-    void *vctBufferRaw;        // 0x0888
-    u8 streamBuffer[0x880];    // 0x088C
-    u8 silenceBuffer[0x880];   // 0x110C, sent instead of the mic data while the lid is closed
-    void (*endCallback)(void); // 0x198C
-    VctSession sessions[3];    // 0x1990
-    int conferenceClients[4];  // 0x19D8
-    u32 mode;                  // 0x19E8
-    u32 callState;             // 0x19EC
-    BOOL muted;                // 0x19F0
-    u32 heapId;                // 0x19F4
-    SndStrm stream;            // 0x19F8
-    VctSession *session;       // 0x1A54
-    u8 samplingState;          // 0x1A58
-    u8 restartSampling;        // 0x1A59
-    u16 requestTimer;          // 0x1A5A
-    MICAutoParam micParam;     // 0x1A5C
-    u32 unk_1A78;              // 0x1A78
-    u32 ampGain;               // 0x1A7C
-    u32 ampGainChanged;        // 0x1A80
-    u32 unk_1A84;              // 0x1A84
-    u32 unk_1A88;              // 0x1A88
-    u16 unk_1A8C[16];          // 0x1A8C
-    u32 unk_1AAC;              // 0x1AAC
+    u8 micBuffer[0x880]; // auto-sampling ring buffer
+    void *rawAlloc;
+    void *vctBuffer; // aligned
+    void *vctBufferRaw;
+    u8 streamBuffer[0x880];
+    u8 silenceBuffer[0x880]; // sent instead of the mic data while the lid is closed
+    void (*endCallback)(void);
+    VctSession sessions[3];
+    int conferenceClients[4];
+    u32 mode;
+    u32 callState;
+    BOOL muted;
+    u32 heapId;
+    SndStrm stream;
+    VctSession *session;
+    u8 samplingState;
+    u8 restartSampling;
+    u16 requestTimer;
+    MICAutoParam micParam;
+    u32 unk_1A78;
+    u32 ampGain;
+    u32 ampGainChanged;
+    u32 unk_1A84;
+    u32 unk_1A88;
+    u16 unk_1A8C[16];
+    u32 unk_1AAC;
 } VoiceChatWork;
 
 typedef struct VoiceChat {

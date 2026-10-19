@@ -47,7 +47,6 @@ BOOL MapObject_IsMoveBlockedByBehavior(LocalMapObject *object, int x, int z, int
 void OffsetPositionInDirection(int direction, VecFx32 *position, int distance);
 int MapObject_GetMetatileBehaviorInDirection(LocalMapObject *object, int direction);
 
-// PlayerAvatar_IsBikeBlockedInDirection passes the behavior as a full word (matched against int parameters).
 #define MetatileBehavior_IsVeryTallGrass_Int(behavior) ((BOOL(*)(u32))MetatileBehavior_IsVeryTallGrass)(behavior)
 #define MetatileBehavior_IsMud_Int(behavior)           ((BOOL(*)(u32))MetatileBehavior_IsMud)(behavior)
 

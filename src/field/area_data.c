@@ -21,13 +21,13 @@
 
 #define AREA_DATA_MAX_MAP_PROPS 550
 
-// The 8-byte header of an area, member <areaDataBank> of NARC_a_0_4_2.
+// The header of an area, member <areaDataBank> of NARC_a_0_4_2.
 typedef struct AreaDataHeader {
-    u16 mapPropNarcMemberId; // 0x0: map prop id list (NARC_a_0_4_3) and map prop textures (NARC_a_0_7_0)
-    u16 mapTexNarcMemberId;  // 0x2: map textures (NARC_a_0_4_4)
-    u16 mapPropAnimFileId;   // 0x4: 0xFFFF = none
-    u8 buildModelKind;       // 0x6: 0 = room, otherwise field
-    u8 lightKind;            // 0x7
+    u16 mapPropNarcMemberId; // map prop id list (NARC_a_0_4_3) and map prop textures (NARC_a_0_7_0)
+    u16 mapTexNarcMemberId;  // map textures (NARC_a_0_4_4)
+    u16 mapPropAnimFileId;   // 0xFFFF = none
+    u8 buildModelKind;       // 0 = room, otherwise field
+    u8 lightKind;
 } AreaDataHeader;
 
 // Scratch state between AreaDataManager_Alloc and AreaDataManager_Load.
@@ -41,16 +41,16 @@ typedef struct AreaDataLoadContext {
 
 struct AreaDataManager {
     u32 unk_00;
-    NNSG3dResFileHeader *mapPropModels[AREA_DATA_MAX_MAP_PROPS]; // 0x004
-    void *mapTexFile;                                            // 0x89C
-    void *mapPropTexFile;                                        // 0x8A0
-    NNSG3dResTex *mapTex;                                        // 0x8A4
-    NNSG3dResTex *mapPropTex;                                    // 0x8A8
-    BuildModelShapes *buildModelShapes;                          // 0x8AC
-    AreaDataHeader header;                                       // 0x8B0
-    AreaDataLoadContext *loadCtx;                                // 0x8B8
-    u16 *mapPropIdList;                                          // 0x8BC: count, then the ids
-    NARC *mapPropAnimListNarc;                                   // 0x8C0
+    NNSG3dResFileHeader *mapPropModels[AREA_DATA_MAX_MAP_PROPS];
+    void *mapTexFile;
+    void *mapPropTexFile;
+    NNSG3dResTex *mapTex;
+    NNSG3dResTex *mapPropTex;
+    BuildModelShapes *buildModelShapes;
+    AreaDataHeader header;
+    AreaDataLoadContext *loadCtx;
+    u16 *mapPropIdList; // count, then the ids
+    NARC *mapPropAnimListNarc;
 };
 
 typedef struct FieldAnmRes {

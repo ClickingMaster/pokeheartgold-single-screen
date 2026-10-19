@@ -13,9 +13,8 @@
 #include "sys_task.h"
 #include "sys_task_api.h"
 
-// Particle mode of the leader effects: the main screen switches to 3D (BG0) over a captured image of the field
-// (BG2/BG3 bitmap) so particle emitters can be drawn over it. One instance, kept in gEncounterEffectState.
-// Also the HBlank BG offset wave used by several effects.
+// Particle mode of the leader effects: the main screen switches to 3D over a captured image of the field so particle
+// emitters can be drawn over it. Also the HBlank BG offset wave used by several effects.
 
 #define PARTICLE_HEAP_SIZE 0x4800
 
@@ -26,14 +25,14 @@ enum EncounterEffectParticlesState {
 };
 
 struct EncounterEffectParticles {
-    u16 state;                // 0x00
-    u8 setupDone;             // 0x02, set once the 3D setup is complete
-    u8 setupRequested;        // 0x03, set by EncounterEffect_RequestParticleSetup
-    FieldSystem *fieldSystem; // 0x04
-    SPLEmitter *system;       // 0x08
-    void *heap;               // 0x0C
-    u32 texOffset;            // 0x10, next free texture VRAM offset
-    u32 plttOffset;           // 0x14, next free palette VRAM offset
+    u16 state;
+    u8 setupDone;      // set once the 3D setup is complete
+    u8 setupRequested; // set by EncounterEffect_RequestParticleSetup
+    FieldSystem *fieldSystem;
+    SPLEmitter *system;
+    void *heap;
+    u32 texOffset;  // next free texture VRAM offset
+    u32 plttOffset; // next free palette VRAM offset
 };
 
 void ParticleSystem_CreateEmitter(SPLEmitter *system, int resNo, const VecFx32 *position);

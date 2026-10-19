@@ -25,7 +25,7 @@ enum FieldShadowState {
     FIELD_SHADOW_STATE_FADE,
 };
 
-// Renderer data of the field effect manager (renderer 0); 0x1C8 bytes.
+// Renderer data of the field effect manager.
 struct FieldShadow {
     int state;
     int timeOfDay;
@@ -46,7 +46,7 @@ typedef struct FieldShadowEffectArgs {
     LocalMapObject *mapObject;
 } FieldShadowEffectArgs;
 
-// Field effect work of one shadow; 0x20 bytes (the first word of each template).
+// Field effect work of one shadow.
 typedef struct FieldShadowEffect {
     u32 spriteId;
     u32 objectId;

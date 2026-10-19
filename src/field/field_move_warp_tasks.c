@@ -24,10 +24,8 @@
 #include "spawn_warp.h"
 #include "task.h"
 
-// The field animations of the warping field moves: Escape Rope, Dig and Teleport take the player (and the following
-// Pokemon) away, spinning while the camera zooms in and the screen fades out, then warp; the arrival task plays the
-// spin the other way round after the warp. Dig and Teleport either let the following Pokemon perform the move (when it
-// is the Pokemon that knows it and walks next to the player) or show the Pokemon's cut-in first.
+// Escape Rope, Dig and Teleport: the player (and the following Pokemon) spin away while the screen fades out, then
+// warp. Dig and Teleport are performed by the following Pokemon when it knows the move, else after the cut-in.
 
 // Return values of the state functions.
 enum FieldMoveStepResult {
@@ -68,12 +66,12 @@ struct FieldMoveTaskEnvironment {
 typedef int (*FieldMoveStepFunc)(TaskManager *taskManager, FieldSystem *fieldSystem, FieldMoveTaskEnvironment *env);
 
 // Step tables and movement scripts
-extern const FieldMoveStepFunc sFieldMoveArrivalSteps[];      // arrival
-extern const FieldMoveStepFunc sEscapeRopeSteps[];            // Escape Rope
-extern const FieldMoveStepFunc sDigWithFollowMonSteps[];      // Dig by the following Pokemon
-extern const FieldMoveStepFunc sTeleportSteps[];              // Teleport after the cut-in
-extern const FieldMoveStepFunc sTeleportWithFollowMonSteps[]; // Teleport by the following Pokemon
-extern const FieldMoveStepFunc sDigSteps[];                   // Dig after the cut-in
+extern const FieldMoveStepFunc sFieldMoveArrivalSteps[];
+extern const FieldMoveStepFunc sEscapeRopeSteps[];
+extern const FieldMoveStepFunc sDigWithFollowMonSteps[];
+extern const FieldMoveStepFunc sTeleportSteps[]; // Teleport after the cut-in
+extern const FieldMoveStepFunc sTeleportWithFollowMonSteps[];
+extern const FieldMoveStepFunc sDigSteps[]; // Dig after the cut-in
 extern const MovementScriptCommand sTeleportFollowMonSpinMovement[];
 extern const MovementScriptCommand sEscapeRopeSpinMovement[];
 extern const MovementScriptCommand sDigHoleMovement[];

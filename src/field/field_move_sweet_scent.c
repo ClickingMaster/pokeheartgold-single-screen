@@ -21,7 +21,7 @@
 
 // Replaces the FieldMoveData in the task environment (partySlot carried over).
 typedef struct SweetScentFieldEnv {
-    void *effect;    // the field move effect of the user (overlay 02)
+    void *effect;    // the field move effect of the user
     void *honeyWork; // GetHoneySweetScentWorkSize() block for Task_HoneyOrSweetScent
     u32 partySlot;
 } SweetScentFieldEnv;

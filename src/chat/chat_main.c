@@ -119,13 +119,11 @@ extern const struct {
 extern char ciCookieBuffer[];
 extern int ciCookieCounter;
 
-// Assertion with the message, the name of the checking function and the line.
 #define ASSERT(cond, message, func, line)                            \
     if (!(cond)) {                                                   \
         __msl_assertion_failed(message, sStr_ChatMainC, func, line); \
     }
 #define ASSERT_CHAT(chat, func, line) ASSERT(chat, sStr_ChatNeNULL_4, func, line)
-// A valid channel name: not NULL and not empty.
 #define ASSERT_CHANNEL(name, func, line)            \
     ASSERT(name, sStr_ChannelNeNULL_3, func, line); \
     ASSERT(*name, sStr_Channel0_Ne0_3, func, line);

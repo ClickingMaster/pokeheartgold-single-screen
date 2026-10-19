@@ -30,12 +30,10 @@ extern const char sStr_LenLeSHRT_MAX[];
 extern const char sStr_LenLeBufferLength[];
 extern const char sStr_SockNeNULL[];
 
-// Assertion of the socket module with the message, the name of the checking function and the line.
 #define ASSERT(cond, message, func, line)                              \
     if (!(cond)) {                                                     \
         __msl_assertion_failed(message, sStr_ChatSocketC, func, line); \
     }
-// A valid buffer: size a multiple of 0x2000, 0 <= length <= size.
 #define ASSERT_BUFFER(buffer, func, line)                                            \
     ASSERT(buffer, sStr_BufferNeNULL_3, func, line);                                 \
     ASSERT((buffer)->size >= 0, sStr_BufferSizeGe0, func, line);                     \

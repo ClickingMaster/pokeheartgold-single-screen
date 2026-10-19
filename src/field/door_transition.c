@@ -68,30 +68,30 @@ enum StairsFadeState {
 };
 
 typedef struct DoorTransitionWork {
-    int state;                               // 0x00
-    int x;                                   // 0x04
-    int z;                                   // 0x08
-    u8 animTag;                              // 0x0C
-    u8 cameraStep;                           // 0x0D
-    u16 cameraAngle;                         // 0x0E
-    BOOL adjustCamera;                       // 0x10
-    u32 unk_14;                              // 0x14
-    GFCameraTranslationWrapper *translation; // 0x18
-    u16 translationDone;                     // 0x1C
-    u16 cameraPathIndex;                     // 0x1E
-} DoorTransitionWork;                        // size: 0x20
+    int state;
+    int x;
+    int z;
+    u8 animTag;
+    u8 cameraStep;
+    u16 cameraAngle;
+    BOOL adjustCamera;
+    u32 unk_14;
+    GFCameraTranslationWrapper *translation;
+    u16 translationDone;
+    u16 cameraPathIndex;
+} DoorTransitionWork;
 
 typedef struct DoorTransitionTaskWork {
-    u8 state;             // 0x00
-    u8 cameraStep;        // 0x01
-    u16 cameraAngle;      // 0x02
-    BOOL adjustCamera;    // 0x04
-} DoorTransitionTaskWork; // size: 0x08
+    u8 state;
+    u8 cameraStep;
+    u16 cameraAngle;
+    BOOL adjustCamera;
+} DoorTransitionTaskWork;
 
-// Same layout as MapPropAnimListFile; a nonzero door type marks a prop as a door and selects its sound effects.
+// A nonzero door type marks a prop as a door and selects its sound effects.
 typedef struct DoorAnimListEntry {
     u32 unk_00;
-    u8 doorType; // 0x04
+    u8 doorType;
     u8 filler05[0x13];
 } DoorAnimListEntry;
 

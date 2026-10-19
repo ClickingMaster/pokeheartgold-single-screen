@@ -3,10 +3,8 @@
 
 #include "global.h"
 
-// Request/response client for the game-stats web service used by the GTS screens.
-// A request is "<url>?pid=<pid>"; the server answers with a 32-character challenge, the client then
-// sends "&hash=<sha1 hex of salt + challenge>&data=<obfuscated payload, base64>" and stores the
-// response.
+// Client for the game-stats web service used by the GTS screens: the server answers "<url>?pid=<pid>" with a
+// challenge, then the client sends "&hash=<sha1 hex of salt + challenge>&data=<obfuscated payload, base64>".
 
 typedef enum GameStatsRequestState {
     GAME_STATS_STATE_IDLE = 1,
@@ -19,19 +17,19 @@ typedef enum GameStatsRequestState {
 } GameStatsRequestState;
 
 typedef struct GameStatsRequest {
-    int state;            // 0x00, GameStatsRequestState
-    int requestId;        // 0x04, HTTP library request handle, -1 when none
-    int error;            // 0x08
-    int responseLength;   // 0x0C
-    int pid;              // 0x10, also the payload obfuscation key
-    void *payload;        // 0x14
-    int payloadSize;      // 0x18
-    void *response;       // 0x1C
-    int responseCapacity; // 0x20
-    char *url;            // 0x24, full request text, heap allocated
-    char *hashText;       // 0x28, position of the hash after "&hash="
-    char *dataText;       // 0x2C, position of the payload after "&data="
-    int dataTextSize;     // 0x30
+    int state;     // GameStatsRequestState
+    int requestId; // HTTP library request handle, -1 when none
+    int error;
+    int responseLength;
+    int pid; // also the payload obfuscation key
+    void *payload;
+    int payloadSize;
+    void *response;
+    int responseCapacity;
+    char *url;      // full request text, heap allocated
+    char *hashText; // position of the hash after "&hash="
+    char *dataText; // position of the payload after "&data="
+    int dataTextSize;
 } GameStatsRequest;
 
 extern GameStatsRequest gGameStatsRequest;

@@ -321,7 +321,6 @@ void GraphicsObject_InitFromTemplate(GraphicsObject *object, GraphicsObjectTempl
     u32 width, height;
     int i;
     GraphicsImage *image = template->image;
-    // template->image is volatile: the loop bounds are re-read on every pass
     int bound = image->proxy.attr.sizeS;
 
     width = 8;

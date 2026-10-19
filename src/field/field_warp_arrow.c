@@ -13,9 +13,8 @@
 #include "render_animation.h"
 #include "render_model.h"
 
-// The arrow shown on the tile ahead of the player while it stands on a warp entrance (door mat, cave exit,
-// ...) facing the way out (field effect renderer 3, created with the player avatar): a model turned to the
-// exit direction that steps 2 units towards it and back every 16 frames.
+// The arrow shown on the tile ahead of the player while it stands on a warp entrance facing the way out; it steps
+// towards the exit and back every 16 frames.
 
 #define WARP_ARROW_FRAME_TIME 16
 

@@ -199,13 +199,6 @@ void FieldTextureManager_KeepTextures(FieldTextureManager *textureManager) {
     textureManager->keepTextures = 1;
 }
 
-/**
- * @brief Creates the weather manager and initializes with default values
- *
- * @param fieldSystem
- *
- * @return WeatherManager *
- */
 WeatherManager *WeatherManager_New(FieldSystem *fieldSystem) {
     WeatherManager *weatherManager = Heap_Alloc(HEAP_ID_FIELD1, sizeof(WeatherManager));
 
@@ -223,11 +216,6 @@ WeatherManager *WeatherManager_New(FieldSystem *fieldSystem) {
     return weatherManager;
 }
 
-/**
- * @brief Deletes and frees the weather manager and embedded structs
- *
- * @param weatherManager
- */
 void WeatherManager_Delete(WeatherManager *weatherManager) {
     if (weatherManager->task) {
         SysTask_Destroy(weatherManager->task);

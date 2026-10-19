@@ -38,7 +38,7 @@ typedef struct ClockWipe {
     int maskSwapPending; // the window's inside/outside masks are swapped once the sweep passes half a turn
     WindowRegisterQueue *regQueue;
     void *blankPair;
-} ClockWipe; // size: 0x4C
+} ClockWipe;
 
 // Window register writes queued for VBlank, one slot per screen (and window)
 typedef struct WindowVisibleArgs {
@@ -74,7 +74,7 @@ struct WindowRegisterQueue {
     u8 unk50[0x18];
     WindowOutsideArgs outside[2];
     WindowRectArgs rect[2][2]; // [screen][window]
-}; // size: 0xC0
+};
 
 void ClockWipe_Begin(ScreenFade *fade, const ClockWipeConfig *config);
 BOOL ClockWipe_Update(ScreenFade *fade);

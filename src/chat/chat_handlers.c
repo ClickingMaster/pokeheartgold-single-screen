@@ -9,9 +9,7 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-// Handlers of the lines received from the chat server (the command table): messages, the user and channel
-// commands, errors and invitations, the channel user list, topic and WHO replies, and nick errors. The server
-// command of each handler is noted above it.
+// Handlers of the lines received from the chat server, one per server command.
 
 extern void __msl_assertion_failed(const char *, const char *, const char *, int);
 extern char *strchr(const char *, int);
@@ -188,7 +186,6 @@ void ciPrivmsgHandler(ChatConnection *chat, ChatMessage *message) {
     }
 }
 
-// NOTICE
 void ciNoticeHandler(ChatConnection *chat, ChatMessage *message) {
     char *target, *text;
     ChatPrivateMessageArgs privateArgs;
@@ -230,7 +227,6 @@ void ciNoticeHandler(ChatConnection *chat, ChatMessage *message) {
     }
 }
 
-// UTM
 void ciUTMHandler(ChatConnection *chat, ChatMessage *message) {
     char *target, *text;
     ChatChannelCallbacks *callbacks;
@@ -272,7 +268,6 @@ void ciUTMHandler(ChatConnection *chat, ChatMessage *message) {
     ciAddCallback_(chat, CALLBACK_CHANNEL_MESSAGE, callbacks->message, (u32 *)&channelArgs, callbacks->param, 0, target, sizeof(channelArgs));
 }
 
-// ATM
 void ciATMHandler(ChatConnection *chat, ChatMessage *message) {
     ChatPrivateMessageArgs privateArgs;
     ChatChannelMessageArgs channelArgs;
@@ -321,7 +316,7 @@ void ciPingHandler(ChatConnection *chat, ChatMessage *message) {
     ciSocketSendf(&chat->socket, sFmt_PONG, message->trailing);
 }
 
-// NICK: a user (maybe the own one) changed the nick.
+// NICK: a user, the own one included, changed the nick.
 void ciNickHandler(ChatConnection *chat, ChatMessage *message) {
     char *oldNick, *newNick;
     ChatRequest *request;
@@ -470,7 +465,7 @@ void ciPartHandler(ChatConnection *chat, ChatMessage *message) {
     }
 }
 
-// KICK: a user (maybe the own one) was kicked from a channel.
+// KICK: a user, the own one included, was kicked from a channel.
 void ciKickHandler(ChatConnection *chat, ChatMessage *message) {
     ChatKickedArgs kickedArgs;
     ChatUserLeftArgs args;
@@ -597,7 +592,6 @@ void ciKillEnumChannelsCallback(ChatConnection *chat, const char *nick, ChatChan
     ciAddCallback_(chat, CALLBACK_USER_LIST_UPDATED, callbacks->usersChanged, &usersChangedArg, callbacks->param, 0, channel->name, sizeof(usersChangedArg));
 }
 
-// KILL
 void ciKillHandler(ChatConnection *chat, ChatMessage *message) {
     ASSERT(message->paramCount == 2, sStr_MessageNumParamsEq2, sStr_ciKillHandler, 2137);
     if (message->paramCount != 2) {
@@ -1482,7 +1476,6 @@ void ciRplGetChanKeyHandler(ChatConnection *chat, ChatMessage *message) {
                 newKeys = DWCi_GsRealloc(keys, size);
                 newValues = DWCi_GsRealloc(values, size);
                 if (!newKeys || !newValues) {
-                    // (the arrays are still used after this cleanup)
                     DWCi_GsFree(name);
                     DWCi_GsFree(value);
                     while (count--) {

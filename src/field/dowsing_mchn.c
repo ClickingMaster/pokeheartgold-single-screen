@@ -37,10 +37,8 @@
 #include "text.h"
 #include "touchscreen.h"
 
-// Field bottom-screen app 4: the Dowsing Machine (Task_ActivateDowsingMchnUI).
-// While the stylus is held in the search circle, four indicators turn toward the nearest hidden
-// item, a signal meter rises and a tile grid lights up around the touch point; the dowsing SE
-// plays with a pitch from the signal. Also hosts the action, running shoes and EXIT buttons.
+// The Dowsing Machine: while the stylus is held in the search circle, four indicators turn toward the nearest hidden
+// item, a signal meter rises and a tile grid lights up around the touch point.
 
 #define DOWSING_MCHN_NUM_STRINGS       5
 #define DOWSING_MCHN_NUM_ANGLES        4
@@ -88,9 +86,9 @@ typedef struct DowsingMchn {
     u16 seTimer;
     s16 sePitch;
     BOOL touchActive;
-} DowsingMchn; // size: 0x340
+} DowsingMchn;
 
-// Sprite parameter block of DowsingMchn_CreateSprite on the stack.
+// Sprite parameters of DowsingMchn_CreateSprite.
 typedef struct DowsingMchnSpriteParams {
     u8 x;
     u8 y;

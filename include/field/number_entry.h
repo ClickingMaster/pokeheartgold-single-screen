@@ -4,11 +4,8 @@
 #include "bg_window.h"
 #include "sys_task.h"
 
-// Numeric entry app (sub-screen number pad, field bottom-screen app 5). Started by
-// ScrCmd_BankTransaction for the deposit/withdraw amount.
-//
-// args->max is the upper bound on the entered value; args->result is set to
-// -1 on launch, the entered value on confirm, or 0 on cancel.
+// Number pad on the bottom screen, started by ScrCmd_BankTransaction for the deposit/withdraw amount.
+// args->result is -1 while running, the entered value (at most args->max) on confirm, or 0 on cancel.
 typedef struct NumberEntryArgs {
     u32 max;
     int result;

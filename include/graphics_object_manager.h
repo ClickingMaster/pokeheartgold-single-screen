@@ -30,17 +30,17 @@ typedef struct GraphicsObject {
     u16 color;
     u8 alpha;
     u8 padding_3F;
-} GraphicsObject; // size: 0x40
+} GraphicsObject;
 
 typedef struct GraphicsImage {
     NNSGfdTexKey key; // 0 = free
     NNSG2dImageProxy proxy;
-} GraphicsImage; // size: 0x28
+} GraphicsImage;
 
 typedef struct GraphicsPalette {
     NNSGfdPlttKey key; // 0 = free
     NNSG2dImagePaletteProxy proxy;
-} GraphicsPalette; // size: 0x18
+} GraphicsPalette;
 
 typedef struct GraphicsManager {
     GraphicsObject *objects;

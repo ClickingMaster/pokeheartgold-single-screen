@@ -7,9 +7,8 @@
 #include "filesystem.h"
 #include "sprite.h"
 
-// Fly arrival (FlyLanding_Start's task): the flying Pokemon swoops in carrying the trainer sprite, drops them, flies off
-// into the distance, then the trainer sprite is swapped for the player object. A field effect of the task's pool;
-// its update runs the step table of the current phase until a step returns FALSE.
+// Fly arrival: the flying Pokemon swoops in carrying the trainer sprite, drops them and flies off, then the trainer
+// sprite is swapped for the player object. The update runs the current phase's steps until one returns FALSE.
 
 enum FlyLandingStatus {
     FLY_LANDING_RUNNING = 0,

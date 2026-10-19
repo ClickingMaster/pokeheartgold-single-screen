@@ -8,13 +8,9 @@
 #include "sprite.h"
 #include "sys_task.h"
 
-// Screen transitions played when a battle starts. Overlay 01 keeps a table of one callback per
-// effect id (BattleStartGetTransition picks the id); it loads the overlay holding the effect and
-// runs the callback as a SysTask until the effect calls EncounterEffect_Finish.
-//   0-5   wild battles (overlay 120)          6-11  trainer battles (overlay 119)
-//   12-27 gym leaders, 28 rival, 29-32 Elite Four, 33 champion (overlay 115)
-//   39-44 Team Rocket (overlay 117)           45    Kimono Girls (overlay 118)
-//   46    PKMN Trainer Red (overlay 120)
+// Screen transitions played when a battle starts: one callback per effect id (BattleStartGetTransition picks the
+// id), run as a SysTask until the effect calls EncounterEffect_Finish. Ids: 0-5 wild battles, 6-11 trainer battles,
+// 12-27 gym leaders, 28 rival, 29-32 Elite Four, 33 champion, 39-44 Team Rocket, 45 Kimono Girls, 46 Red.
 
 typedef struct EncounterEffectTask {
     u32 state;
@@ -28,7 +24,7 @@ typedef struct EncounterEffectTask {
     NARC *narc; // deleted by EncounterEffect_Finish
 } EncounterEffectTask;
 
-// Interpolators run by overlay 01 (one step per frame, value in fx32 or plain units)
+// Interpolators (one step per frame, value in fx32 or plain units)
 typedef struct EncounterEffectInterp {
     s32 value;
     s32 start;
@@ -46,7 +42,7 @@ typedef struct EncounterEffectQuadInterp {
     s32 duration;
 } EncounterEffectQuadInterp;
 
-// Sprite manager and one resource set (character, palette, cell, animation) set up by overlay 01
+// Sprite manager and one resource set (character, palette, cell, animation)
 typedef struct EncounterEffectSpriteManager {
     SpriteList *spriteList;
     G2dRenderer renderer;
@@ -58,7 +54,7 @@ typedef struct EncounterEffectSpriteResources {
     SpriteResourcesHeader header;
 } EncounterEffectSpriteResources;
 
-// HBlank BG offset wave run by overlay 01
+// HBlank BG offset wave
 typedef struct EncounterEffectHBlankWave {
     ScanlineEffect *effect;
     SysTask *task; // swaps the scanline buffers every other frame
@@ -151,7 +147,7 @@ BOOL EncounterEffect_UpdateParticles(void);
 BOOL EncounterEffect_AreParticlesDone(void);
 void EncounterEffect_FreeParticles(void);
 
-// Effect callbacks (entries of overlay 01's effect table)
+// Effect callbacks (entries of the effect table)
 void EncounterEffect_WildRowsWhite(SysTask *task, EncounterEffectTask *effect);
 void EncounterEffect_WildRowsBlack(SysTask *task, EncounterEffectTask *effect);
 void EncounterEffect_WildWaveWhite(SysTask *task, EncounterEffectTask *effect);

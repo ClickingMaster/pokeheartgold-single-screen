@@ -12,31 +12,30 @@
 // Window wipes used by the trainer encounter effects, and BG graphics loaders shared by the effects.
 // Both wipes start their tasks from a VWait task so the per-scanline HBlank handler begins on a frame boundary.
 
-// BG0-3 and OBJ
 #define WND_PLANEMASK_ALL (GX_WND_PLANEMASK_BG0 | GX_WND_PLANEMASK_BG1 | GX_WND_PLANEMASK_BG2 | GX_WND_PLANEMASK_BG3 | GX_WND_PLANEMASK_OBJ)
 
 // The screen is cut into horizontal stripes of stripeHeight lines; every other stripe slides right, the
 // others slide left, until the window closes the screen.
 struct StripeWipe {
-    EncounterEffectQuadInterp offset; // 0x00, fx32 pixels
-    u32 stripeHeight;                 // 0x18
-    u32 state;                        // 0x1C
-    HBlankSystem *hBlankSystem;       // 0x20
-    HBlankTask *hBlankTask;           // 0x24
-    SysTask *task;                    // 0x28
-    BOOL *done;                       // 0x2C
+    EncounterEffectQuadInterp offset; // fx32 pixels
+    u32 stripeHeight;
+    u32 state;
+    HBlankSystem *hBlankSystem;
+    HBlankTask *hBlankTask;
+    SysTask *task;
+    BOOL *done;
 };
 
 // The top half of the screen shrinks towards the top left corner, the bottom half towards the bottom right.
 struct SplitWipe {
-    EncounterEffectQuadInterp x; // 0x00, fx32 pixels
-    EncounterEffectQuadInterp y; // 0x18, fx32 pixels
-    u32 middleLine;              // 0x30
-    u32 state;                   // 0x34
-    HBlankSystem *hBlankSystem;  // 0x38
-    HBlankTask *hBlankTask;      // 0x3C
-    SysTask *task;               // 0x40
-    BOOL *done;                  // 0x44
+    EncounterEffectQuadInterp x; // fx32 pixels
+    EncounterEffectQuadInterp y; // fx32 pixels
+    u32 middleLine;
+    u32 state;
+    HBlankSystem *hBlankSystem;
+    HBlankTask *hBlankTask;
+    SysTask *task;
+    BOOL *done;
 };
 
 enum EncounterWipeState {

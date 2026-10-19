@@ -6,7 +6,6 @@
 #include "gf_rtc.h"
 #include "heap.h"
 
-// Todo: move back probably
 typedef struct MapPropAnimation {
     NNSG3dAnmObj *animObj;
     void *res;
@@ -58,20 +57,18 @@ typedef struct Field3dRenderObjManager {
     int objectMax;
 } Field3dRenderObjManager;
 
-// TimeOfDayVisual?
 typedef struct TimeOfDayPropAnimSet {
     u32 active;
     int numAnims;
     MapPropAnimation *animations[4];
     NNSG3dRenderObj *renderObj;
-} TimeOfDayPropAnimSet; // Size: 0x1C
+} TimeOfDayPropAnimSet;
 
-// TimeOfDayVisualManager?
 typedef struct TimeOfDayPropAnimManager {
     TIMEOFDAY timeOfDay;
     int numSets;
     TimeOfDayPropAnimSet sets[4];
-} TimeOfDayPropAnimManager; // Size: 0x78
+} TimeOfDayPropAnimManager;
 
 typedef struct ResAnim_4004 {
     u32 unk0;
@@ -118,12 +115,10 @@ void TimeOfDayPropAnimManager_AddProp(TimeOfDayPropAnimManager *manager, NNSG3dR
 void TimeOfDayPropAnimManager_Update(TimeOfDayPropAnimManager *manager);
 u8 TimeOfDayPropAnimManager_GetVisualState(TimeOfDayPropAnimManager *manager);
 
-// These are nnsys things that do not seem to be in the project right now or are not decompiled in this project.
 void *NNS_FndAllocFromAllocator(NNSFndAllocator *pAllocator, u32 size);
 
 typedef struct NNSG3dMatAnmResult NNSG3dMatAnmResult;
 typedef void (*NNSG3dFuncAnmMat)(NNSG3dMatAnmResult *, const NNSG3dAnmObj *, u32);
-// void NNSi_G3dAnmCalcNsBta(NNSG3dMatAnmResult *pResult, const NNSG3dAnmObj *pAnmObj, u32 dataIdx);
 extern NNSG3dFuncAnmMat gAnmCalcFuncNsBta; // NNS_G3dFuncAnmMatNsBtaDefault = &NNSi_G3dAnmCalcNsBta
 
 #endif // POKEHEARTGOLD_FIELD_MAP_PROP_RENDER_H

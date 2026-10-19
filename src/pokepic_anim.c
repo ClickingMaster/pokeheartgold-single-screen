@@ -8,17 +8,15 @@
 #include "pokepic_anim_internal.h"
 #include "sys_task_api.h"
 
-// Animation scripts of Pokemon pictures (NARC a/0/9/0, one per animation): a word stream of commands
-// (sPokepicAnimCommands, by opcode) that read their arguments from the stream. Commands work on 8 variables and on
-// a transform (position offsets, scale, rotation) that is applied to the Pokepic; up to 4 motions animate one
-// transform field per frame until they end.
+// Animation scripts of Pokemon pictures: a word stream of commands that work on 8 variables and on a transform
+// (position offsets, scale, rotation) applied to the Pokepic; up to 4 motions animate one transform field each.
 
 typedef struct PokepicScriptAnim PokepicScriptAnim;
 
 typedef struct PokepicMotion {
     u32 active;
 
-    union { // 0x04, read from the script; the argument count is per motion type (sPokepicMotionTypes)
+    union { // read from the script; the argument count is per motion type (sPokepicMotionTypes)
         int args[7];
 
         struct {
@@ -48,47 +46,47 @@ typedef struct PokepicMotion {
     };
 
     u8 unk_20[4];
-    int *value; // 0x24 accumulator in values
-    int *dest;  // 0x28 the PokepicScriptAnim field the motion drives
-    u8 op;      // 0x2C 0x18 set, 0x19 base + value, 0x1A add
-    u8 delay;   // 0x2D frames before the first update
+    int *value; // accumulator in values
+    int *dest;  // the PokepicScriptAnim field the motion drives
+    u8 op;      // 0x18 set, 0x19 base + value, 0x1A add
+    u8 delay;   // frames before the first update
     u8 unk_2E[2];
-    int base; // 0x30 *dest when the motion started
+    int base; // *dest when the motion started
     u8 unk_34[8];
-    int values[5];                                                         // 0x3C one per target: dx, dy, scaleX, scaleY, rotation
-    void (*update)(struct PokepicMotion *motion, PokepicScriptAnim *anim); // 0x50
+    int values[5]; // one per target: dx, dy, scaleX, scaleY, rotation
+    void (*update)(struct PokepicMotion *motion, PokepicScriptAnim *anim);
 } PokepicMotion;
 
 struct PokepicScriptAnim {
     Pokepic *pic;
     SysTask *task;
-    void *data;    // 0x08 the script
-    void **cursor; // 0x0C current script word
+    void *data;    // the script
+    void **cursor; // current script word
     u32 active;
-    u32 scriptId;     // 0x14 NARC member
-    u32 yield;        // 0x18 set by a command that ends the frame
-    u32 done;         // 0x1C the script ended
-    u32 state;        // 0x20 1 = idle
-    s32 vars[8];      // 0x24
-    s32 commandCount; // 0x44 commands run this frame
-    s32 loopCount;    // 0x48
-    s32 loopIndex;    // 0x4C
-    void **loopStart; // 0x50
-    u32 delay;        // 0x54 frames to wait
-    s32 baseX;        // 0x58 position of the picture when the animation started
+    u32 scriptId; // NARC member
+    u32 yield;    // set by a command that ends the frame
+    u32 done;     // the script ended
+    u32 state;    // 1 = idle
+    s32 vars[8];
+    s32 commandCount; // commands run this frame
+    s32 loopCount;
+    s32 loopIndex;
+    void **loopStart;
+    u32 delay; // frames to wait
+    s32 baseX; // position of the picture when the animation started
     s32 baseY;
-    s32 x; // 0x60
+    s32 x;
     s32 y;
-    s32 dx; // 0x68 offsets, usually driven by motions
+    s32 dx; // offsets, usually driven by motions
     s32 dy;
-    s32 scaleX; // 0x70 added to 0x100
+    s32 scaleX; // added to 0x100
     s32 scaleY;
-    s32 rotation;             // 0x78
-    PokepicMotion motions[4]; // 0x7C
-    u8 reverseX;              // 0x1CC
-    u8 runMotions;            // 0x1CD
-    u8 scaleMode;             // 0x1CE 0x1B, 0x1C or 0x1D (see PokepicScriptAnimCmd_ApplyTransform)
-    u8 waitPaletteFade;       // 0x1CF
+    s32 rotation;
+    PokepicMotion motions[4];
+    u8 reverseX;
+    u8 runMotions;
+    u8 scaleMode; // 0x1B, 0x1C or 0x1D (see PokepicScriptAnimCmd_ApplyTransform)
+    u8 waitPaletteFade;
 };
 
 struct PokepicAnimManager {

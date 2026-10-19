@@ -29,7 +29,7 @@
 #include "text.h"
 #include "touchscreen.h"
 
-// Field bottom-screen app 6: when the Friend Roster is full, the player picks the entry to delete.
+// When the Friend Roster is full, the player picks the entry to delete.
 // *result: -1 while running, -2 = QUIT, otherwise the roster index.
 
 #define FRIEND_ROSTER_APP_NUM_WINDOWS    18
@@ -91,7 +91,7 @@ typedef struct FriendRosterAppData {
     u8 bufferToggle;
     int selection;
     int *result;
-} FriendRosterAppData; // size: 0x2B4
+} FriendRosterAppData;
 
 static void FriendRosterApp_SetVramBanks(void);
 static void FriendRosterApp_InitBgs(BgConfig *bgConfig);

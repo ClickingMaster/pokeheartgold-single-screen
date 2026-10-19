@@ -10,9 +10,7 @@
 #include "map_object.h"
 #include "map_object_movement_utilities.h"
 
-// Field effect renderer 13: a billboard over a map object's tile in the style of the grass effects (two
-// frames, then held while the object stays on the tile). Nothing creates it: its template, sUnusedBillboardEffectTemplate,
-// is referenced from nowhere.
+// A billboard over a map object's tile in the style of the grass effects. Nothing creates it.
 
 #define UNUSED_BILLBOARD_RECORD   10
 #define UNUSED_BILLBOARD_RESOURCE 8

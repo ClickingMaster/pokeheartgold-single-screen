@@ -51,8 +51,7 @@
 #include "wireless_status_icon.h"
 
 // The evolution scene: the old and the new Pokemon's pictures flash and swap scale while particles play, then the
-// Pokemon's data is updated and any moves it learns at its new level are taught (with the move summary screen when
-// it already knows four moves). Started from the field, after battles and after trades.
+// Pokemon's data is updated and any moves it learns at its new level are taught.
 
 typedef struct ParticleScene ParticleScene;
 
@@ -138,62 +137,62 @@ enum EvolutionMenuResult {
 #define EVO_FLAG_PRINT_WHAT (1 << 1) // "What?" before "<mon> is evolving!"
 
 struct EvolutionTaskData {
-    BgConfig *bgConfig;                     // 0x00
-    Window *window;                         // 0x04, message box
-    MsgData *msgData;                       // 0x08
-    MessageFormat *msgFormat;               // 0x0C
-    String *string;                         // 0x10
-    PaletteData *paletteData;               // 0x14
-    PokepicManager *pokepicManager;         // 0x18
-    Pokepic *oldPokepic;                    // 0x1C, current species
-    Pokepic *newPokepic;                    // 0x20, species it evolves into
-    Party *party;                           // 0x24
-    Pokemon *mon;                           // 0x28
-    Options *options;                       // 0x2C
-    ParticleScene *particleScene;           // 0x30
-    GF3DVramMan *vramMan;                   // 0x34
-    OverlayManager *summaryApp;             // 0x38
-    PokemonSummaryArgs *summaryArgs;        // 0x3C
-    u8 unk_40[4];                           // 0x40
-    PokepicAnimManager *pokepicAnimManager; // 0x44
-    Pokedex *pokedex;                       // 0x48
-    Bag *bag;                               // 0x4C
-    GameStats *gameStats;                   // 0x50
-    u8 unk_54[4];                           // 0x54
-    PaletteBlink *paletteBlink;             // 0x58
-    enum HeapID heapId;                     // 0x5C
-    u16 species;                            // 0x60
-    u16 newSpecies;                         // 0x62
-    u8 state;                               // 0x64, enum EvolutionSceneState
-    u8 printerId;                           // 0x65
-    u8 timer;                               // 0x66
-    u8 done;                                // 0x67
-    int learnsetCursor;                     // 0x68, MonTryLearnMoveOnLevelUp
-    u16 newMove;                            // 0x6C
-    u8 moveSlot;                            // 0x6E, the move chosen on the summary screen
-    u8 unk_6F;                              // 0x6F
-    u8 scaleOscillation;                    // 0x70, 0 = off; bit 0 = which picture grows
-    u8 scaleStep;                           // 0x71
-    u8 wnd0Left;                            // 0x72
-    u8 wnd0Top;                             // 0x73
-    u8 wnd0Right;                           // 0x74
-    u8 wnd0Bottom;                          // 0x75
-    u8 unk_76[2];                           // 0x76
-    int evolutionCondition;                 // 0x78, EVO_*
-    u32 flags;                              // 0x7C, EVO_FLAG_*
-    u8 form;                                // 0x80
-    u8 unk_81[3];                           // 0x81
-    NARC *pokegraNarc;                      // 0x84
-    u8 speciesCryDelay;                     // 0x88, NARC_ReadPokepicCryDelay of species
-    u8 newSpeciesCryDelay;                  // 0x89, NARC_ReadPokepicCryDelay of newSpecies
-    u8 menuState;                           // 0x8A
-    u8 menuResult;                          // 0x8B, enum EvolutionMenuResult
-    Window menuWindows[2];                  // 0x8C
-    SpriteSystem *spriteSystem;             // 0xAC
-    SpriteManager *spriteManager;           // 0xB0
-    ManagedSprite *cursorSprite;            // 0xB4
-    BOOL spritesReady;                      // 0xB8
-}; // size: 0xBC
+    BgConfig *bgConfig;
+    Window *window; // message box
+    MsgData *msgData;
+    MessageFormat *msgFormat;
+    String *string;
+    PaletteData *paletteData;
+    PokepicManager *pokepicManager;
+    Pokepic *oldPokepic; // current species
+    Pokepic *newPokepic; // species it evolves into
+    Party *party;
+    Pokemon *mon;
+    Options *options;
+    ParticleScene *particleScene;
+    GF3DVramMan *vramMan;
+    OverlayManager *summaryApp;
+    PokemonSummaryArgs *summaryArgs;
+    u8 unk_40[4];
+    PokepicAnimManager *pokepicAnimManager;
+    Pokedex *pokedex;
+    Bag *bag;
+    GameStats *gameStats;
+    u8 unk_54[4];
+    PaletteBlink *paletteBlink;
+    enum HeapID heapId;
+    u16 species;
+    u16 newSpecies;
+    u8 state; // enum EvolutionSceneState
+    u8 printerId;
+    u8 timer;
+    u8 done;
+    int learnsetCursor; // MonTryLearnMoveOnLevelUp
+    u16 newMove;
+    u8 moveSlot; // the move chosen on the summary screen
+    u8 unk_6F;
+    u8 scaleOscillation; // 0 = off; bit 0 = which picture grows
+    u8 scaleStep;
+    u8 wnd0Left;
+    u8 wnd0Top;
+    u8 wnd0Right;
+    u8 wnd0Bottom;
+    u8 unk_76[2];
+    int evolutionCondition; // EVO_*
+    u32 flags;              // EVO_FLAG_*
+    u8 form;
+    u8 unk_81[3];
+    NARC *pokegraNarc;
+    u8 speciesCryDelay;    // NARC_ReadPokepicCryDelay of species
+    u8 newSpeciesCryDelay; // NARC_ReadPokepicCryDelay of newSpecies
+    u8 menuState;
+    u8 menuResult; // enum EvolutionMenuResult
+    Window menuWindows[2];
+    SpriteSystem *spriteSystem;
+    SpriteManager *spriteManager;
+    ManagedSprite *cursorSprite;
+    BOOL spritesReady;
+};
 
 enum EvolutionMenuState {
     EVO_MENU_STATE_INPUT,

@@ -26,7 +26,7 @@ typedef struct SaveFashionMon {
     u8 unk_34;
 } SaveFashionMon;
 
-// The real layout of SaveFashionDataSub (size 0x74)
+// One dressed-up Pokemon entry.
 typedef struct FashionEntry {
     u32 magic;
     SaveFashionMon mon;
@@ -38,7 +38,7 @@ typedef struct FashionEntry {
     u8 padding_72[2];
 } FashionEntry;
 
-// The real layout of SaveFashionDataSub3FC (size 0x98); only the magic is accessed here
+// One of the larger entries; only the magic is accessed here.
 typedef struct FashionEntryLarge {
     u32 magic;
     u8 data[0x94];
@@ -457,7 +457,7 @@ void FashionEntry_PlaceItem(SaveFashionDataSub *entry_, FashionSource *source, i
         GF_AssertFail();
     }
     y = (s16)coords.yCopy;
-    // y < 256, read back from its stack slot
+    // y < 256
     if (((volatile int *)&coords)[-1] >= 256) {
         GF_AssertFail();
     }

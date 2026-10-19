@@ -33,10 +33,8 @@
 #include "sys_vars.h"
 #include "task.h"
 
-// The second half of the field move cut-in: its HBlank window, the Pokemon sprite
-// resources, the effects drawn in the cut-in (scrolling banner sprites, the Pokemon flying off with the trainer,
-// the trainer's jump, the trainer clipped to the window, the 3D model at a second map object), the Fly landing
-// task, and the roamer updates after a battle.
+// The effects drawn in the field move cut-in (banner sprites, the Pokemon flying off with the trainer, the trainer's
+// jump, the 3D model at a second map object), the Fly landing task, and the roamer updates after a battle.
 
 void *FieldEffectPool_New(enum HeapID heapID, u32 count);
 void FieldEffectPool_Delete(void *pool);
@@ -76,24 +74,24 @@ enum CutInFlyerMode {
 typedef struct CutInFlyer {
     u8 mode;
     u8 step;
-    u8 status;      // read by FieldMoveCutIn_GetFlyerStatus
-    int timer;      // 0x04
-    VecFx32 origin; // 0x08
-    VecFx32 offset; // 0x14
+    u8 status; // read by FieldMoveCutIn_GetFlyerStatus
+    int timer;
+    VecFx32 origin;
+    VecFx32 offset;
     u8 filler_20[0xC];
-    VecFx32 scale; // 0x2C
-    fx32 rotation; // 0x38, degrees
+    VecFx32 scale;
+    fx32 rotation; // degrees
     int unk_3C;
-    fx32 angle; // 0x40, degrees, direction of the motion
+    fx32 angle; // degrees, direction of the motion
     int unk_44;
-    fx32 distance;                  // 0x48
-    fx32 speed;                     // 0x4C
-    fx32 scaleSpeed;                // 0x50
-    fx32 trainerOffsetY;            // 0x54
-    Sprite *sprite;                 // 0x58
-    FieldMoveCutIn *cutIn;          // 0x5C
-    FieldEffect *trainerJumpEffect; // 0x60
-    SysTask *cameraZoom;            // 0x64
+    fx32 distance;
+    fx32 speed;
+    fx32 scaleSpeed;
+    fx32 trainerOffsetY;
+    Sprite *sprite;
+    FieldMoveCutIn *cutIn;
+    FieldEffect *trainerJumpEffect;
+    SysTask *cameraZoom;
 } CutInFlyer;
 
 typedef BOOL (*CutInFlyerStep)(CutInFlyer *flyer);

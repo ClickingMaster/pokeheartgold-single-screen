@@ -48,12 +48,10 @@ extern const char sStr_Space_4[];
 // Line buffer of ciSocketSendf (4096 bytes).
 extern char ciSendfBuffer[];
 
-// Assertion with the message, the name of the checking function and the line.
 #define ASSERT(cond, message, func, line)                              \
     if (!(cond)) {                                                     \
         __msl_assertion_failed(message, sStr_ChatSocketC, func, line); \
     }
-// A valid socket: state 0 .. 2 and both buffers consistent.
 #define ASSERT_SOCKET(sock, func, line)                                                                            \
     ASSERT(sock, sStr_SockNeNULL_2, func, line);                                                                   \
     ASSERT((sock)->state <= ciDisconnected, sStr_SockConnectStateEqCiNotConnectedOrSock, func, line);              \

@@ -36,7 +36,6 @@ extern const char sStr_SrcParamsNumBansGe0[];
 extern const char sStr_SrcParamsNumSuggestedNicksGe0[];
 extern const char sStr_SrcParamsNumGe0[];
 
-// Assertion messages of the callback checks, with the name of the checking function and the line.
 #define ASSERT_CHAT(chat, func, line)                                             \
     if (!(chat)) {                                                                \
         __msl_assertion_failed(sStr_ChatNeNULL, sStr_ChatCallbacksC, func, line); \

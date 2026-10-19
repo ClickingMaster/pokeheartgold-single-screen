@@ -14,24 +14,24 @@
 // One time slot of an area light file (data/*light.txt): until endTime (seconds since midnight / 2), the four
 // lights (enabled in lightMask) and the material colors to use.
 struct AreaLightEntry {
-    u32 endTime;          // 0x00
-    u8 lightMask;         // 0x04
-    u8 padding05;         // 0x05
-    GXRgb lightColors[4]; // 0x06
-    s16 lightDirs[4][3];  // 0x0E
-    GXRgb diffuse;        // 0x26
-    GXRgb ambient;        // 0x28
-    GXRgb specular;       // 0x2A
-    GXRgb emission;       // 0x2C
-    u16 padding2E;        // 0x2E
+    u32 endTime;
+    u8 lightMask;
+    u8 padding05;
+    GXRgb lightColors[4];
+    s16 lightDirs[4][3];
+    GXRgb diffuse;
+    GXRgb ambient;
+    GXRgb specular;
+    GXRgb emission;
+    u16 padding2E;
 };
 
 struct AreaLightManager {
-    u32 count;                        // 0x00
-    AreaLightEntry *entries;          // 0x04
-    u32 activeIndex;                  // 0x08
-    ModelAttributes *modelAttributes; // 0x0C
-    u32 applyChanges;                 // 0x10
+    u32 count;
+    AreaLightEntry *entries;
+    u32 activeIndex;
+    ModelAttributes *modelAttributes;
+    u32 applyChanges;
 };
 
 static char sAreaLightFileDun20_01[24] = "data/dun20_01light.txt";

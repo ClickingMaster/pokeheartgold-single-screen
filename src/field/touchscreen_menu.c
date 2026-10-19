@@ -63,10 +63,8 @@
 #include "text.h"
 #include "touchscreen.h"
 
-// Field bottom-screen app 0, the touchscreen start menu (ScrCmd_TouchscreenMenuShow): the start-menu icons
-// (msg 196), the running shoes and action buttons, the two registered-item buttons, the Safari / Park / Sport ball
-// counters and the Pokegear caller name. Touching an icon writes *lastTouchMenuInput (1 = MENU, menu index + 2),
-// which the field start menu and field control consume.
+// The touchscreen start menu on the bottom screen. Touching an icon writes *lastTouchMenuInput (1 = MENU, menu
+// index + 2), which the field start menu and field control consume.
 
 FS_EXTERN_OVERLAY(ds_protect);
 
@@ -152,10 +150,10 @@ typedef struct TouchscreenMenuData {
     u32 registeredItemAnim : 2;
     u32 unused : 24;
     TouchscreenMenuPhoneRing phoneRing;
-} TouchscreenMenuData; // size: 0x540
+} TouchscreenMenuData;
 
 typedef struct TouchscreenMenuIconInfo {
-    u16 charFileId; // 0xFFFF: the Bug Contest mon icon
+    u16 charFileId; // the Bug Contest mon icon
     u16 msgId : 15;
     u16 enabled : 1;
 } TouchscreenMenuIconInfo;
@@ -177,8 +175,7 @@ typedef struct TouchscreenMenuWindowPos {
     u32 y;
 } TouchscreenMenuWindowPos;
 
-// The three NARC 14 file tables interleave as rows of {palette, char, screen}; each column is
-// addressed through its own label, so one entry of each is {fileId, the other two columns}.
+// The NARC 14 file tables interleave as rows of {palette, char, screen}.
 typedef struct TouchscreenMenuBgFile {
     u32 fileId;
     u32 otherColumns[2];
@@ -874,7 +871,7 @@ static void TouchscreenMenu_LoadIconResources(FieldSystem *fieldSystem, GF_2DGfx
     GF2DGfxResObj_FreeData(resObjs[GF_GFX_RES_TYPE_PLTT]);
 }
 
-// Pixel coordinate to fx32, rounded away from zero (the float conversion is what the code does).
+// Pixel coordinate to fx32, rounded away from zero.
 static inline s32 TouchscreenMenu_RoundToFx32(int x) {
     float f;
     if (x > 0) {
@@ -910,7 +907,7 @@ static void TouchscreenMenu_CreateSprites(TouchscreenMenuData *data) {
     SpriteResourcesHeader *header;
     int i;
     int y;
-    int ballX = 100; // a variable, so the float rounding stays a runtime conversion
+    int ballX = 100;
     BugContest *contest;
     const TouchscreenMenuPos *pos;
 
@@ -937,8 +934,7 @@ static void TouchscreenMenu_CreateSprites(TouchscreenMenuData *data) {
         Sprite_SetAffineOverwriteMode(data->sprites[i], NNS_G2D_RND_AFFINE_OVERWRITE_NORMAL);
     }
     {
-        // Sprites 9-14 share the button resources. The loop steps a TouchscreenMenuData pointer by one
-        // sprite slot and passes the rounding constant in a variable.
+        // Sprites 9-14 share the button resources.
         TouchscreenMenuData *slot;
         int j;
         float half;

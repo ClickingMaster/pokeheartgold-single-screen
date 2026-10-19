@@ -4,8 +4,6 @@
 // Software particle library: types and prototypes shared by the library's own modules. Callers outside
 // the library use spl.h.
 
-// The library is built with MWCC 1.2, which warns (an error under -W error) about inline helpers in
-// the NitroSDK headers that drop a call's result.
 #pragma push
 #pragma warn_resultnotused off
 #include <nitro.h>
@@ -13,15 +11,12 @@
 
 #include "spl.h"
 
-// NitroSDK vector functions the nitro headers do not declare
 fx32 VEC_Fx16DotProduct(const VecFx16 *a, const VecFx16 *b);
 void VEC_Fx16CrossProduct(const VecFx16 *a, const VecFx16 *b, VecFx16 *axb);
 void VEC_CrossProduct(const VecFx32 *a, const VecFx32 *b, VecFx32 *axb);
-// matrix functions the nitro headers do not declare
 void MTX_MultVec43(const VecFx32 *vec, const MtxFx43 *m, VecFx32 *dst);
 void G3_LoadMtx43(const MtxFx43 *m);
 void G3_MultMtx43(const MtxFx43 *m);
-// GX_load3d.h declares these without a parameter list
 void GX_BeginLoadTex(void);
 void GX_LoadTex(const void *pSrc, u32 destSlotAddr, u32 szByte);
 void GX_EndLoadTex(void);

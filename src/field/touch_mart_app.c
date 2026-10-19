@@ -117,7 +117,7 @@ typedef struct TouchMartAppData {
     u32 printerId;
     String *string;
     u32 unk_18C;
-} TouchMartAppData; // size: 0x190
+} TouchMartAppData;
 
 typedef struct TouchMartWindowPos {
     u32 x;

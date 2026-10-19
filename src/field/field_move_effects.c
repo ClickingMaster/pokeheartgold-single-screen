@@ -29,9 +29,8 @@
 #include "sys_task.h"
 #include "task.h"
 
-// Hall of Fame Poke Ball animation and the 3D effects of the field moves: Cut, Rock Smash, Headbutt (started by
-// script, at the player or at the following Pokemon), Waterfall, Whirlpool and the rock debris of Rock Climb.
-// The models and animations are in NARC_a_1_3_4; the task templates and tables are in the overlay's data block.
+// Hall of Fame Poke Ball animation and the 3D effects of the field moves: Cut, Rock Smash, Headbutt, Waterfall,
+// Whirlpool and the rock debris of Rock Climb.
 
 #define HALL_OF_FAME_MACHINE  BUILD_MODEL_YO_H02
 #define HALL_OF_FAME_BALL     BUILD_MODEL_TN_GYMBASE

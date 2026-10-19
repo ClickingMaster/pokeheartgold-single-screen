@@ -22,13 +22,9 @@
 #include "sys_task_api.h"
 #include "system.h"
 
-// The field keeps a 2x2 window of maps (map matrix cells of 32x32 tiles) loaded around the player:
-//   maps[0] maps[1]
-//   maps[2] maps[3]
-// The quadrant of its map the player stands in decides which cell of the window that map is, so the window always
-// holds the three neighbours the player is closest to. Walking into another quadrant scrolls the window: the two
-// maps falling out are reset and the two new ones are loaded over several frames by a load slot (model and BDHC
-// load tasks), while the tracked target position is followed tile by tile.
+// The field keeps a 2x2 window of maps loaded around the player; the quadrant of its map the player stands in
+// decides which cell that map is. Walking into another quadrant scrolls the window and loads the two new maps over
+// several frames.
 
 #define MAP_LOAD_NONE 0xFFFF
 #define MAP_TILE_SIZE FX32_CONST(16)
@@ -96,7 +92,7 @@ typedef struct MapLoadSlot {
     BOOL finished;
     BOOL active;
     u8 direction;
-} MapLoadSlot; // size: 0x30
+} MapLoadSlot;
 
 // A scroll requested while both load slots were busy
 typedef struct MapLoadQueued {

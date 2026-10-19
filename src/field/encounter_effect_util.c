@@ -24,27 +24,27 @@ void GXx_SetMasterBrightness_(vu16 *reg, s32 brightness);
 // A width x height rectangle filled with fill, moved from (x.start, y.start) to (x.end, y.end); positions are
 // the rectangle's centre in pixels.
 struct FilledRect {
-    EncounterEffectInterp x; // 0x00
-    EncounterEffectInterp y; // 0x14
-    Window *window;          // 0x28
-    u8 width;                // 0x2C
-    u8 height;               // 0x2D
-    u8 active;               // 0x2E
-    u8 fill;                 // 0x2F
+    EncounterEffectInterp x;
+    EncounterEffectInterp y;
+    Window *window;
+    u8 width;
+    u8 height;
+    u8 active;
+    u8 fill;
 };
 
 // 32x32 blocks fall one after another (every delay frames, columns in sBlockWipeColumnOrder, bottom row first)
 // and stack up until they cover the window.
 struct BlockWipe {
-    Window *window;                        // 0x00
-    FilledRect *blocks[BLOCK_WIPE_BLOCKS]; // 0x04
-    u8 started;                            // 0xC4
-    u8 finished;                           // 0xC5
-    u8 duration;                           // 0xC6
-    u8 delay;                              // 0xC7
-    s8 timer;                              // 0xC8
-    u8 fill;                               // 0xC9
-    u8 active;                             // 0xCA
+    Window *window;
+    FilledRect *blocks[BLOCK_WIPE_BLOCKS];
+    u8 started;
+    u8 finished;
+    u8 duration;
+    u8 delay;
+    s8 timer;
+    u8 fill;
+    u8 active;
 };
 
 enum ZigzagWipeState {
@@ -55,13 +55,13 @@ enum ZigzagWipeState {
 // Window 0 is closed from the left; its left edge is a zigzag (lines[], period lines per stroke) that moves
 // with the interpolated value.
 struct ZigzagWipe {
-    EncounterEffectInterp edge; // 0x00
-    u32 state;                  // 0x14
-    u8 lines[192];              // 0x18
-    HBlankSystem *hBlankSystem; // 0xD8
-    HBlankTask *hBlankTask;     // 0xDC
-    SysTask *task;              // 0xE0
-    BOOL *done;                 // 0xE4
+    EncounterEffectInterp edge;
+    u32 state;
+    u8 lines[192];
+    HBlankSystem *hBlankSystem;
+    HBlankTask *hBlankTask;
+    SysTask *task;
+    BOOL *done;
 };
 
 extern u8 sBlockWipeColumnOrder[];

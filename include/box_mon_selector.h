@@ -30,12 +30,12 @@ typedef struct BoxMonSelectorMon {
     u16 heldItem;
     u16 unk_0E;
     u8 callerData[0x20];
-} BoxMonSelectorMon; // size: 0x30
+} BoxMonSelectorMon;
 
 typedef struct BoxMonSelectorIcon {
     Sprite *sprite;
     BoxMonSelectorMon mon;
-} BoxMonSelectorIcon; // size: 0x34
+} BoxMonSelectorIcon;
 
 // Icon graphics read from the icon NARC, copied to OBJ VRAM by the V-Blank task.
 typedef struct BoxMonSelectorIconChars {
@@ -43,7 +43,7 @@ typedef struct BoxMonSelectorIconChars {
     u32 palette;
     Sprite *sprite; // NULL: nothing to transfer
     u8 chars[0x200];
-} BoxMonSelectorIconChars; // size: 0x20C
+} BoxMonSelectorIconChars;
 
 // A picked Pokemon's mark on its box icon.
 typedef struct BoxMonSelectorMark {
@@ -79,66 +79,66 @@ typedef void (*BoxMonSelectorCursorCallback)(int page, int slot, void *arg); // 
 typedef void (*BoxMonSelectorCallback)(BoxMonSelectorIconChars *);
 
 typedef struct BoxMonSelector {
-    BgConfig *bgConfig;                                         // 0x0000
-    enum HeapID heapId;                                         // 0x0004
-    YesNoPrompt *yesNoPrompt;                                   // 0x0008
-    u8 unused_0C;                                               // 0x000C
-    u8 maxPicks;                                                // 0x000D
-    u8 numPicked;                                               // 0x000E
-    u8 page;                                                    // 0x000F
-    u8 numPages;                                                // 0x0010
-    u8 unused_11;                                               // 0x0011
-    u8 unused_12;                                               // 0x0012
-    u8 canCancel;                                               // 0x0013
-    u32 state;                                                  // 0x0014
-    SpriteList *spriteList;                                     // 0x0018
-    G2dRenderer renderer;                                       // 0x001C
-    GF_2DGfxResMan *resManagers[6];                             // 0x0144
-    SpriteResource *spriteResources[4];                         // 0x015C char, palette, cell, anim
-    u8 unused_16C[8];                                           // 0x016C
-    SpriteResourcesHeader spriteHeader;                         // 0x0174
-    BoxMonSelectorIcon boxIcons[BOX_MON_SELECTOR_BOX_SLOTS + 1]; // 0x0198 last: the icon being dragged
-    TouchscreenHitbox *hitboxes;                                // 0x07E4
-    BoxMonSelectorIcon pickIcons[BOX_MON_SELECTOR_MAX_PICKS];   // 0x07E8
-    BoxMonSelectorPick picks[BOX_MON_SELECTOR_MAX_PICKS];       // 0x0884
-    Sprite *cancelButton;                                       // 0x08B4
-    Sprite *nextPageArrow;                                      // 0x08B8
-    Sprite *prevPageArrow;                                      // 0x08BC
-    Sprite *handCursor;                                         // 0x08C0
-    Sprite *releaseEffect;                                      // 0x08C4
-    Sprite *emptyPickSlots[BOX_MON_SELECTOR_MAX_PICKS - 1];     // 0x08C8
-    BoxMonSelectorMark *marks;                                  // 0x08D0
-    BoxMonSelectorIconChars iconChars[BOX_MON_SELECTOR_BOX_SLOTS]; // 0x08D4
-    void *storage;                                              // 0x463C
-    Party *party;                                               // 0x4640
-    BoxMonSelectorCallback vblankTask;                          // 0x4644
-    BoxMonSelectorGetMon getMon;                                // 0x4648
-    BoxMonSelectorGetPageName getPageName;                      // 0x464C
-    Window pageNameWindow;                                      // 0x4650
-    Window messageWindow;                                       // 0x4660
-    Window cancelWindow;                                        // 0x4670
-    BOOL dragging;                                              // 0x4680
-    int dragIndex;                                              // 0x4684
-    VecFx32 dragOrigin;                                         // 0x4688
-    u32 touchX;                                                 // 0x4694
-    u32 touchY;                                                 // 0x4698
-    int dragSource;                                             // 0x469C 1: box, 2: picks
-    BoxMonSelectorIcon *dragIcons;                              // 0x46A0
-    BoxMonSelectorDropArea *pickDropAreas;                      // 0x46A4
-    BoxMonSelectorDropArea boxDropArea;                         // 0x46A8
-    int lastPick;                                               // 0x46B0
-    BoxMonSelectorResult *results;                              // 0x46B4
-    GridCursor *cursor;                                         // 0x46B8
-    BOOL keyDragging;                                           // 0x46BC
-    BOOL touchHeld;                                             // 0x46C0
-    BOOL touchStarted;                                          // 0x46C4
-    void *screenFiles[2];                                       // 0x46C8 party, box
-    NNSG2dScreenData *screens[2];                               // 0x46D0
-    BoxMonSelectorCursorCallback onCursorMove;                  // 0x46D8
-    void *onCursorMoveArg;                                      // 0x46DC
-    int lastCursorSlot;                                         // 0x46E0
-    int lastCursorPage;                                         // 0x46E4
-} BoxMonSelector; // size: 0x46E8
+    BgConfig *bgConfig;
+    enum HeapID heapId;
+    YesNoPrompt *yesNoPrompt;
+    u8 unused_0C;
+    u8 maxPicks;
+    u8 numPicked;
+    u8 page;
+    u8 numPages;
+    u8 unused_11;
+    u8 unused_12;
+    u8 canCancel;
+    u32 state;
+    SpriteList *spriteList;
+    G2dRenderer renderer;
+    GF_2DGfxResMan *resManagers[6];
+    SpriteResource *spriteResources[4]; // char, palette, cell, anim
+    u8 unused_16C[8];
+    SpriteResourcesHeader spriteHeader;
+    BoxMonSelectorIcon boxIcons[BOX_MON_SELECTOR_BOX_SLOTS + 1]; // last: the icon being dragged
+    TouchscreenHitbox *hitboxes;
+    BoxMonSelectorIcon pickIcons[BOX_MON_SELECTOR_MAX_PICKS];
+    BoxMonSelectorPick picks[BOX_MON_SELECTOR_MAX_PICKS];
+    Sprite *cancelButton;
+    Sprite *nextPageArrow;
+    Sprite *prevPageArrow;
+    Sprite *handCursor;
+    Sprite *releaseEffect;
+    Sprite *emptyPickSlots[BOX_MON_SELECTOR_MAX_PICKS - 1];
+    BoxMonSelectorMark *marks;
+    BoxMonSelectorIconChars iconChars[BOX_MON_SELECTOR_BOX_SLOTS];
+    void *storage;
+    Party *party;
+    BoxMonSelectorCallback vblankTask;
+    BoxMonSelectorGetMon getMon;
+    BoxMonSelectorGetPageName getPageName;
+    Window pageNameWindow;
+    Window messageWindow;
+    Window cancelWindow;
+    BOOL dragging;
+    int dragIndex;
+    VecFx32 dragOrigin;
+    u32 touchX;
+    u32 touchY;
+    int dragSource; // 1: box, 2: picks
+    BoxMonSelectorIcon *dragIcons;
+    BoxMonSelectorDropArea *pickDropAreas;
+    BoxMonSelectorDropArea boxDropArea;
+    int lastPick;
+    BoxMonSelectorResult *results;
+    GridCursor *cursor;
+    BOOL keyDragging;
+    BOOL touchHeld;
+    BOOL touchStarted;
+    void *screenFiles[2]; // party, box
+    NNSG2dScreenData *screens[2];
+    BoxMonSelectorCursorCallback onCursorMove;
+    void *onCursorMoveArg;
+    int lastCursorSlot;
+    int lastCursorPage;
+} BoxMonSelector;
 
 BoxMonSelector *BoxMonSelector_New(enum HeapID heapId, int maxPicks, int numPages);
 void BoxMonSelector_Delete(BoxMonSelector *selector);

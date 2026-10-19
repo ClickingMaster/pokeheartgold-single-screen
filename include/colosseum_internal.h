@@ -15,10 +15,8 @@
 #include "pokemon_summary.h"
 #include "task.h"
 
-// Colosseum: the link battle room. Once both players have taken their seats, each one chooses the Pokemon to enter
-// in the party menu (message bank 14: "Please choose the Pokemon to be entered"). In a Mix Battle (link mode 3) the
-// players then send each other their three Pokemon, pick one of the opponent's and exchange the picks. Talking to
-// the player sitting opposite shows their Trainer Card.
+// Colosseum: the link battle room. Both players choose the Pokemon to enter; in a Mix Battle they then send each
+// other their three Pokemon and exchange one each. Talking to the player opposite shows their Trainer Card.
 
 typedef void (*ColosseumEntryCallback)(BOOL ready, Party *party);
 
@@ -45,52 +43,52 @@ enum ColosseumMenuInput {
 #define COLOSSEUM_EXCHANGE_DONE     (COLOSSEUM_EXCHANGE_SENT | COLOSSEUM_EXCHANGE_RECEIVED)
 
 typedef struct ColosseumEntry {
-    PokemonSummaryArgs *summaryArgs; // 0x00
-    PartyMenuArgs *partyMenuArgs;    // 0x04
-    ColosseumEntryCallback callback; // 0x08
-    String *message;                 // 0x0C
-    String *expandedMessage;         // 0x10
-    Window messageWindow;            // 0x14
-    FieldSystem *fieldSystem;        // 0x24
-    MessageFormat *msgFormat;        // 0x28
-    MsgData *msgData;                // 0x2C
-    int printerId;                   // 0x30
-    int state;                       // 0x34
-    int partyMenuResult;             // 0x38: enum ColosseumPartyMenuResult
-    u8 partySlot;                    // 0x3C
-    u8 selectedOrder[6];             // 0x3D
-    u8 timer;                        // 0x43
-    u8 delay;                        // 0x44
-    u8 *receivedMons;                // 0x48: the opponent's 3 Pokemon, then their ready flag
-    u8 *sentMons;                    // 0x4C: ours, same layout
-    Party *party;                    // 0x50: the Pokemon entered (Mix Battle: after the exchange)
-    Window monListWindow;            // 0x54
-    Window choiceWindow;             // 0x64: SUMMARY / OK / CANCEL
-    PlayerProfile *opponentProfile;  // 0x74
-    struct ListMenuCursor *cursor;   // 0x78
-    Window *menuWindow;              // 0x7C
-    u8 menuCount;                    // 0x80
-    s8 menuCursor;                   // 0x81
-    u8 ready;                        // 0x82: we confirmed our Pokemon (Mix Battle)
-    u8 opponentReady;                // 0x83
-    u8 choice;                       // 0x84: index of the opponent's Pokemon we picked
-    u8 opponentChoice;               // 0x85: index of our Pokemon the opponent picked
-    u16 netId;                       // 0x86
-    u8 linkMode;                     // 0x88
-    u8 exchangeFlags;                // 0x89
-} ColosseumEntry;                    // size: 0x8C
+    PokemonSummaryArgs *summaryArgs;
+    PartyMenuArgs *partyMenuArgs;
+    ColosseumEntryCallback callback;
+    String *message;
+    String *expandedMessage;
+    Window messageWindow;
+    FieldSystem *fieldSystem;
+    MessageFormat *msgFormat;
+    MsgData *msgData;
+    int printerId;
+    int state;
+    int partyMenuResult; // enum ColosseumPartyMenuResult
+    u8 partySlot;
+    u8 selectedOrder[6];
+    u8 timer;
+    u8 delay;
+    u8 *receivedMons; // the opponent's 3 Pokemon, then their ready flag
+    u8 *sentMons;     // ours, same layout
+    Party *party;     // the Pokemon entered (Mix Battle: after the exchange)
+    Window monListWindow;
+    Window choiceWindow; // SUMMARY / OK / CANCEL
+    PlayerProfile *opponentProfile;
+    struct ListMenuCursor *cursor;
+    Window *menuWindow;
+    u8 menuCount;
+    s8 menuCursor;
+    u8 ready; // we confirmed our Pokemon (Mix Battle)
+    u8 opponentReady;
+    u8 choice;         // index of the opponent's Pokemon we picked
+    u8 opponentChoice; // index of our Pokemon the opponent picked
+    u16 netId;
+    u8 linkMode;
+    u8 exchangeFlags;
+} ColosseumEntry;
 
 // Shown by Task_ColosseumTrainerCard; the card itself is copied into the env before the app is launched.
 typedef struct ColosseumTrainerCard {
-    String *strings[2];          // 0x00: message, expanded message
-    Window window;               // 0x08
-    MessageFormat *msgFormat;    // 0x18
-    MsgData *msgData;            // 0x1C
-    u32 printerId;               // 0x20
-    u32 netId;                   // 0x24
-    u32 state;                   // 0x28
-    TrainerCardAppArgs cardArgs; // 0x2C
-} ColosseumTrainerCard;          // size: 0x6A8
+    String *strings[2]; // message, expanded message
+    Window window;
+    MessageFormat *msgFormat;
+    MsgData *msgData;
+    u32 printerId;
+    u32 netId;
+    u32 state;
+    TrainerCardAppArgs cardArgs;
+} ColosseumTrainerCard;
 
 BOOL Colosseum_FinishPartyMenu(ColosseumEntry *entry, FieldSystem *fieldSystem);
 void Colosseum_StartEntry(FieldSystem *fieldSystem, ColosseumEntryCallback callback);

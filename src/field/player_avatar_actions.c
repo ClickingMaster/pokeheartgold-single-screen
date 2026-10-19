@@ -47,11 +47,11 @@
 // The Pokemon shown using a field move: either the cut-in animation of the party Pokemon (FieldMoveCutIn_Start), or the
 // following Pokemon, which is recalled first.
 typedef struct FieldMoveAnim {
-    BOOL useCutIn; // 0x00
-    u32 gender;    // 0x04
-    Pokemon *mon;  // 0x08
-    void *cutIn;   // 0x0C
-} FieldMoveAnim;   // size: 0x10
+    BOOL useCutIn;
+    u32 gender;
+    Pokemon *mon;
+    void *cutIn;
+} FieldMoveAnim;
 
 enum PushBoulderState {
     PUSH_BOULDER_STATE_START,
@@ -79,71 +79,71 @@ enum StopSurfingState {
 };
 
 typedef struct PushBoulderWork {
-    u32 state;                  // 0x00
-    u32 direction;              // 0x04
-    FieldSystem *fieldSystem;   // 0x08
-    PlayerAvatar *playerAvatar; // 0x0C
-    LocalMapObject *boulder;    // 0x10
-} PushBoulderWork;              // size: 0x14
+    u32 state;
+    u32 direction;
+    FieldSystem *fieldSystem;
+    PlayerAvatar *playerAvatar;
+    LocalMapObject *boulder;
+} PushBoulderWork;
 
 typedef struct SurfWork {
-    int state;                  // 0x00
-    int direction;              // 0x04
-    int timer;                  // 0x08
-    FieldMoveAnim anim;         // 0x0C
-    FieldSystem *fieldSystem;   // 0x1C
-    PlayerAvatar *playerAvatar; // 0x20
-    LocalMapObject *mapObject;  // 0x24
-    u32 surfMount;              // 0x28
-} SurfWork;                     // size: 0x2C
+    int state;
+    int direction;
+    int timer;
+    FieldMoveAnim anim;
+    FieldSystem *fieldSystem;
+    PlayerAvatar *playerAvatar;
+    LocalMapObject *mapObject;
+    u32 surfMount;
+} SurfWork;
 
 typedef struct StopSurfingWork {
-    u16 state;                  // 0x00
-    u16 timer;                  // 0x02
-    int direction;              // 0x04
-    FieldSystem *fieldSystem;   // 0x08
-    PlayerAvatar *playerAvatar; // 0x0C
-    LocalMapObject *mapObject;  // 0x10
-    u32 surfMount;              // 0x14
-} StopSurfingWork;              // size: 0x18
+    u16 state;
+    u16 timer;
+    int direction;
+    FieldSystem *fieldSystem;
+    PlayerAvatar *playerAvatar;
+    LocalMapObject *mapObject;
+    u32 surfMount;
+} StopSurfingWork;
 
 typedef struct RockClimbWork {
-    u16 state;                  // 0x00
-    u16 climbState;             // 0x02, step to resume at while the next tile is rock climb too
-    int direction;              // 0x04
-    int timer;                  // 0x08
-    FieldSystem *fieldSystem;   // 0x0C
-    PlayerAvatar *playerAvatar; // 0x10
-    LocalMapObject *mapObject;  // 0x14
-    u32 effect;                 // 0x18
-    FieldMoveAnim anim;         // 0x1C
-    Field3dObjectTask *debris;  // 0x2C
-} RockClimbWork;                // size: 0x30
+    u16 state;
+    u16 climbState; // step to resume at while the next tile is rock climb too
+    int direction;
+    int timer;
+    FieldSystem *fieldSystem;
+    PlayerAvatar *playerAvatar;
+    LocalMapObject *mapObject;
+    u32 effect;
+    FieldMoveAnim anim;
+    Field3dObjectTask *debris;
+} RockClimbWork;
 
 // Waterfall (up and down) and Whirlpool.
 typedef struct WaterfallWork {
-    int state;                  // 0x00
-    int direction;              // 0x04
-    int counter;                // 0x08
-    int targetX;                // 0x0C
-    int targetY;                // 0x10
-    int targetZ;                // 0x14
-    int progress;               // 0x18
-    VecFx32 step;               // 0x1C
-    VecFx32 targetPos;          // 0x28
-    FieldSystem *fieldSystem;   // 0x34
-    PlayerAvatar *playerAvatar; // 0x38
-    LocalMapObject *mapObject;  // 0x3C
-    FieldMoveAnim anim;         // 0x40
-    Field3dObjectTask *effect;  // 0x50
-} WaterfallWork;                // size: 0x54
+    int state;
+    int direction;
+    int counter;
+    int targetX;
+    int targetY;
+    int targetZ;
+    int progress;
+    VecFx32 step;
+    VecFx32 targetPos;
+    FieldSystem *fieldSystem;
+    PlayerAvatar *playerAvatar;
+    LocalMapObject *mapObject;
+    FieldMoveAnim anim;
+    Field3dObjectTask *effect;
+} WaterfallWork;
 
 typedef struct PlayerSavingPoseWork {
-    int unk_00;                 // 0x00
-    int state;                  // 0x04
-    FieldSystem *fieldSystem;   // 0x08
-    PlayerAvatar *playerAvatar; // 0x0C
-} PlayerSavingPoseWork;         // size: 0x10
+    int unk_00;
+    int state;
+    FieldSystem *fieldSystem;
+    PlayerAvatar *playerAvatar;
+} PlayerSavingPoseWork;
 
 // Ice Path B1F boulders and the flag of the boulder that appears on the floor below once one is pushed into its hole.
 typedef struct BoulderHole {

@@ -30,18 +30,18 @@ enum PoisonEffectSeq {
 // Screen shake shown when a poisoned party loses HP while walking: every HBlank shifts the 3D layer
 // horizontally by an offset that alternates sign every 10 lines; the amplitude ramps up and down over 6 frames.
 struct PoisonEffect {
-    u32 state;                  // 0x000
-    s32 counter;                // 0x004
-    u32 seqNo;                  // 0x008
-    u16 buffers[2][192];        // 0x00C, 0x18C
-    DoubleBuffer *doubleBuffer; // 0x30C
-    HBlankSystem *hBlankSystem; // 0x310
-    HBlankTask *hblankTask;     // 0x314
-    u32 hblankReady;            // 0x318
-    SysTask *mainTask;          // 0x31C
-    SysTask *vblankTask;        // 0x320
-    SysTask *swapTask;          // 0x324
-}; // 0x328
+    u32 state;
+    s32 counter;
+    u32 seqNo;
+    u16 buffers[2][192];
+    DoubleBuffer *doubleBuffer;
+    HBlankSystem *hBlankSystem;
+    HBlankTask *hblankTask;
+    u32 hblankReady;
+    SysTask *mainTask;
+    SysTask *vblankTask;
+    SysTask *swapTask;
+};
 
 static void PoisonEffect_Task(SysTask *task, void *data);
 static void PoisonEffect_ApplyNextLineOffset(PoisonEffect *effect);

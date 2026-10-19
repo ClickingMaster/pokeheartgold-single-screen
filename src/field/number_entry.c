@@ -70,29 +70,29 @@ typedef struct NumberEntryBlink {
 } NumberEntryBlink;
 
 typedef struct NumberEntryData {
-    BgConfig *bgConfig;                            // 0x000
-    void *lastTouchMenuInput;                      // 0x004
-    void *fieldSystem;                             // 0x008
-    NumberEntryArgs *argsCopy;                     // 0x00C
-    NumberEntryArgs *args;                         // 0x010
-    SysTask *task;                                 // 0x014
-    SpriteList *spriteList;                        // 0x018
-    G2dRenderer renderer;                          // 0x01C
-    GF_2DGfxResMan *resMans[4];                    // 0x144
-    SpriteResource *padResObjs[4];                 // 0x154
-    SpriteResource *digitResObjs[4];               // 0x164
-    Sprite *sprites[NUMBER_ENTRY_SPRITE_DIGIT_0];  // 0x174 (the all-sprite loops index past this into digitSprites)
-    Sprite *digitSprites[NUMBER_ENTRY_MAX_DIGITS]; // 0x188
-    Window windows[3];                             // 0x1A0
-    GridInputHandler *gridInput;                   // 0x1D0
-    NumberEntryBlink blink;                        // 0x1D4
-    u32 digits[NUMBER_ENTRY_MAX_DIGITS];           // 0x1DC
-    int cursor;                                    // 0x1F4
-    u16 state;                                     // 0x1F8
-    u16 nextState;                                 // 0x1FA
-    u32 numDigits;                                 // 0x1FC
-    u32 value;                                     // 0x200
-} NumberEntryData;                                 // size: 0x204
+    BgConfig *bgConfig;
+    void *lastTouchMenuInput;
+    void *fieldSystem;
+    NumberEntryArgs *argsCopy;
+    NumberEntryArgs *args;
+    SysTask *task;
+    SpriteList *spriteList;
+    G2dRenderer renderer;
+    GF_2DGfxResMan *resMans[4];
+    SpriteResource *padResObjs[4];
+    SpriteResource *digitResObjs[4];
+    Sprite *sprites[NUMBER_ENTRY_SPRITE_DIGIT_0]; // the all-sprite loops index past this into digitSprites
+    Sprite *digitSprites[NUMBER_ENTRY_MAX_DIGITS];
+    Window windows[3];
+    GridInputHandler *gridInput;
+    NumberEntryBlink blink;
+    u32 digits[NUMBER_ENTRY_MAX_DIGITS];
+    int cursor;
+    u16 state;
+    u16 nextState;
+    u32 numDigits;
+    u32 value;
+} NumberEntryData;
 
 static void NumberEntry_SetVramBanks(void);
 static void NumberEntry_InitBgs(BgConfig *bgConfig);
@@ -128,27 +128,27 @@ static void NumberEntry_ComputeValue(NumberEntryData *data);
 
 // The number entry screen's constant tables.
 typedef struct NumberEntryRodata {
-    u8 xOffsets1[1];                             // 0x000
-    TouchscreenHitbox hitboxes1[2];              // 0x001
-    TouchscreenHitbox hitboxes2[3];              // 0x009
-    TouchscreenHitbox hitboxes3[4];              // 0x015 (+3 pad)
-    GridCallbacks gridCallbacks;                 // 0x028
-    TouchscreenHitbox hitboxes4[5];              // 0x038
-    TouchscreenHitbox hitboxes5[6];              // 0x04C
-    WindowTemplate windowTemplates[3];           // 0x064
-    TouchscreenHitbox hitboxes6[7];              // 0x07C
-    const TouchscreenHitbox *hitboxes[7];        // 0x098
-    BgTemplate bgTemplate4;                      // 0x0B4
-    const u8 *xOffsets[7];                       // 0x0D0
-    BgTemplate bgTemplate5;                      // 0x0EC
-    u8 spriteSpecs[NUMBER_ENTRY_NUM_SPRITES][4]; // 0x108
-    TouchscreenHitbox padHitboxes[14];           // 0x134
-    DpadMenuBox padDpadBoxes[13];                // 0x16C
-    u8 xOffsets2[4];                             // 0x1D4
-    u8 xOffsets3[4];                             // 0x1D8
-    u8 xOffsets4[4];                             // 0x1DC
-    u8 xOffsets5[8];                             // 0x1E0
-    u8 xOffsets6[8];                             // 0x1E8
+    u8 xOffsets1[1];
+    TouchscreenHitbox hitboxes1[2];
+    TouchscreenHitbox hitboxes2[3];
+    TouchscreenHitbox hitboxes3[4];
+    GridCallbacks gridCallbacks;
+    TouchscreenHitbox hitboxes4[5];
+    TouchscreenHitbox hitboxes5[6];
+    WindowTemplate windowTemplates[3];
+    TouchscreenHitbox hitboxes6[7];
+    const TouchscreenHitbox *hitboxes[7];
+    BgTemplate bgTemplate4;
+    const u8 *xOffsets[7];
+    BgTemplate bgTemplate5;
+    u8 spriteSpecs[NUMBER_ENTRY_NUM_SPRITES][4];
+    TouchscreenHitbox padHitboxes[14];
+    DpadMenuBox padDpadBoxes[13];
+    u8 xOffsets2[4];
+    u8 xOffsets3[4];
+    u8 xOffsets4[4];
+    u8 xOffsets5[8];
+    u8 xOffsets6[8];
 } NumberEntryRodata;
 
 static const NumberEntryRodata sRodata = {

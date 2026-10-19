@@ -19,9 +19,8 @@
 #include "sound_playback.h"
 #include "task.h"
 
-// The darkening of Honey and Sweet Scent: a BG2 tint faded in (blend alpha), an encounter check, then faded out
-// with a "nothing happened" script when no wild Pokemon appears. Field_UseItem (Honey) and the Sweet Scent field
-// move run Task_HoneyOrSweetScent with a GetHoneySweetScentWorkSize() block.
+// The darkening of Honey and Sweet Scent: a tint faded in, an encounter check, then faded out with a "nothing
+// happened" script when no wild Pokemon appears.
 
 // The data block of the fade Field3dObjectTasks.
 typedef struct HoneySweetScentFade {

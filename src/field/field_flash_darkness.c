@@ -11,10 +11,8 @@
 #include "gf_3d_render.h"
 #include "map_object.h"
 
-// The darkness of a cave that needs Flash (field effect renderer 19, used by the WEATHER_FLASH and
-// WEATHER_FLASH_2 weather tasks): a model with a lit hole in the middle, kept a third of the way from the
-// player to the camera. Using Flash scales it up from 1x to 4x, widening the hole; after Flash it is
-// created at 4x.
+// The darkness of a cave that needs Flash: a model with a lit hole in the middle, kept a third of the way from the
+// player to the camera. Using Flash scales it up from 1x to 4x, widening the hole.
 
 #define FLASH_DARKNESS_MODEL_FILE 0x6A
 

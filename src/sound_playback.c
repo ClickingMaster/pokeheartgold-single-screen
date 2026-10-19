@@ -13,10 +13,8 @@
 #include "sound_system.h"
 #include "sys_task_api.h"
 
-// Starting and stopping sequences by kind: BGM (BGM player 7 / field player 1), sound effects on the four SE
-// handles, Pokemon cries (PV and chorus handles, the wave-out channels for reversed cries, a delayed-cry queue)
-// and fanfares (ME handle; the BGM is paused meanwhile). Sound_StartSeq substitutes the GB-sounds version of a
-// sequence when that option is on.
+// Starting and stopping sequences by kind: BGM, sound effects, Pokemon cries and fanfares (the BGM is paused
+// meanwhile). Sound_StartSeq substitutes the GB-sounds version of a sequence when that option is on.
 
 typedef struct CryStopTaskData {
     int frames;

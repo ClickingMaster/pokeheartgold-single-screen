@@ -42,16 +42,16 @@ struct WaitingIcon {
     u8 unused : 1;
     u8 state : 2;
     u8 unused2 : 6;
-}; // size: 0x48C
+};
 
 struct PokemonPicWindow {
-    FieldSpriteManager spriteManager; // 0x000
-    ManagedSprite *sprite;            // 0x164
-    BgConfig *bgConfig;               // 0x168
-    u8 layer;                         // 0x16C
-    u8 x;                             // 0x16D
-    u8 y;                             // 0x16E
-    u8 state;                         // 0x16F
+    FieldSpriteManager spriteManager;
+    ManagedSprite *sprite;
+    BgConfig *bgConfig;
+    u8 layer;
+    u8 x;
+    u8 y;
+    u8 state;
 };
 
 static const TileRect sPokemonPicFrame1Rect = {

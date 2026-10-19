@@ -60,7 +60,7 @@ typedef struct MapObjectRenderQueue {
     SysTask *createTask;
     SysTask *transferTask;
     SysTask *releaseTask;
-} MapObjectRenderQueue; // size: 0x28
+} MapObjectRenderQueue;
 
 // Model / gfx sequence NARC member of a billboard model or sequence id, 0xFF-terminated
 typedef struct BillboardModelEntry {

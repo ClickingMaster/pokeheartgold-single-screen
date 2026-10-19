@@ -5,11 +5,10 @@
 #include "heap.h"
 #include "sprite.h"
 
-typedef struct FontSystem FontSystem; // size: 0x68
+typedef struct FontSystem FontSystem;
 typedef struct TextOBJLayout TextOBJLayout;
 typedef struct FontOAMSprite FontOAMSprite;
 
-// TODO: rename
 typedef struct TextOBJTemplate {
     FontSystem *fontSystem;
     Window *window;

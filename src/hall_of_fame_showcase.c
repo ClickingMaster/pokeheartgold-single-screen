@@ -57,34 +57,34 @@ enum HallOfFameShowcaseState {
 };
 
 typedef struct HallOfFameShowcase {
-    HallOfFame *hallOfFame;                           // 0x000
-    BgConfig *bgConfig;                               // 0x004
-    Window windows[HOF_SHOWCASE_NUM_WINDOWS];         // 0x008
-    MsgData *msgData;                                 // 0x118
-    MsgData *speciesNames;                            // 0x11C
-    MsgData *moveNames;                               // 0x120
-    MessageFormat *msgFormat;                         // 0x124
-    String *stringBuf;                                // 0x128
-    String *stringBuf2;                               // 0x12C
-    SpriteSystem *spriteSystem;                       // 0x130
-    SpriteManager *spriteManager;                     // 0x134
-    ManagedSprite *sprites[HOF_SHOWCASE_NUM_SPRITES]; // 0x138
-    GridInputHandler *gridInput;                      // 0x180
-    NARC *pokegraNarc;                                // 0x184
-    SHOW_HOFMON mon;                                  // 0x188
-    String *nickname;                                 // 0x1A4
-    String *otName;                                   // 0x1A8
-    u32 numMons;                                      // 0x1AC
-    int recordNum;                                    // 0x1B0
-    int record;                                       // 0x1B4
-    int numRecords;                                   // 0x1B8
-    u32 pressedButton;                                // 0x1BC
-    u32 buttonAnimTimer;                              // 0x1C0
-    u16 monDetailSet;                                 // 0x1C4
-    u16 iconSet;                                      // 0x1C6
-    int state;                                        // 0x1C8
-    int nextState;                                    // 0x1CC
-} HallOfFameShowcase;                                 // size: 0x1D0
+    HallOfFame *hallOfFame;
+    BgConfig *bgConfig;
+    Window windows[HOF_SHOWCASE_NUM_WINDOWS];
+    MsgData *msgData;
+    MsgData *speciesNames;
+    MsgData *moveNames;
+    MessageFormat *msgFormat;
+    String *stringBuf;
+    String *stringBuf2;
+    SpriteSystem *spriteSystem;
+    SpriteManager *spriteManager;
+    ManagedSprite *sprites[HOF_SHOWCASE_NUM_SPRITES];
+    GridInputHandler *gridInput;
+    NARC *pokegraNarc;
+    SHOW_HOFMON mon;
+    String *nickname;
+    String *otName;
+    u32 numMons;
+    int recordNum;
+    int record;
+    int numRecords;
+    u32 pressedButton;
+    u32 buttonAnimTimer;
+    u16 monDetailSet;
+    u16 iconSet;
+    int state;
+    int nextState;
+} HallOfFameShowcase;
 
 extern const TouchscreenHitbox gHallOfFameShowcaseHitboxes[];
 extern const GraphicsModes sShowcaseGraphicsModes;
@@ -562,7 +562,7 @@ void HallOfFameShowcase_ChangeRecord(HallOfFameShowcase *showcase, int delta) {
         int windowIndex;
         int resIdBase;
         RTCDate date;
-    } page; // kept in one struct: matches the original stack layout
+    } page;
 
     u32 spriteIndex;
     u32 i;
@@ -709,7 +709,6 @@ void HallOfFameShowcase_ShowMonDetail(HallOfFameShowcase *showcase, u32 index) {
     }
     Save_HOF_GetMonStatsByIndexPair(showcase->hallOfFame, showcase->record, index, &showcase->mon);
     gender = GetGenderBySpeciesAndPersonality(showcase->mon.species, showcase->mon.personality);
-    // The prototype in pokemon.h has an extra, unused parameter that no caller passes.
     ((void (*)(NARC *, s8 *, u16))NARC_ReadPokepicShadowHeight)(showcase->pokegraNarc, yOffset, showcase->mon.species);
     height = GetMonPicHeightBySpeciesGenderForm(showcase->mon.species, (u8)gender, 2, showcase->mon.form, showcase->mon.personality);
     sprites = showcase->sprites;

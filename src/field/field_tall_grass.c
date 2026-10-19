@@ -10,10 +10,8 @@
 #include "map_object.h"
 #include "map_object_movement_utilities.h"
 
-// The tall grass a map object stands in (field effect renderer 8): a billboard over the tile that rustles
-// (12 frames) when the object walks in, then holds its last frame until the object leaves the tile (or
-// turns away, for grass shown ahead of it). The renderer also loads records 5-7 for a three-kind
-// billboard effect (template sTallGrassUnusedEffectTemplate) that nothing in the game creates.
+// The tall grass a map object stands in: a billboard over the tile that rustles when the object walks in, then holds
+// its last frame until the object leaves the tile.
 
 #define TALL_GRASS_RECORD 0
 
@@ -82,7 +80,7 @@ BOOL TallGrassUnusedEffect_Destroy(FieldEffect *effect, TallGrassUnusedEffect *w
 void TallGrassUnusedEffect_Update(FieldEffect *effect, TallGrassUnusedEffect *work);
 void TallGrassUnusedEffect_Draw(FieldEffect *effect, TallGrassUnusedEffect *work);
 
-extern const FieldEffectBasicTemplate gTallGrassEffectTemplate;       // tall grass effect
+extern const FieldEffectBasicTemplate gTallGrassEffectTemplate;
 extern const FieldEffectBasicTemplate sTallGrassUnusedEffectTemplate; // created nowhere
 
 static const u32 sTallGrassRecord5Params[6] = { 0, 40, 1, 0, 0, 2 };

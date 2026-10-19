@@ -26,18 +26,18 @@ typedef struct HatchEggParticles {
 
 // The "Give a nickname?" yes/no buttons on the touch screen.
 typedef struct HatchEggYesNoMenu {
-    enum HeapID heapId;           // 0x00
-    SpriteSystem *spriteSystem;   // 0x04
-    SpriteManager *spriteManager; // 0x08
-    BgConfig *bgConfig;           // 0x0C
-    ManagedSprite *cursor;        // 0x10
-    MessageFormat *msgFormat;     // 0x14
-    u8 state;                     // 0x18
-    u8 selection;                 // 0x19: 0 = none, 1 = yes, 2 = no
-    Window buttons[2];            // 0x1C
-} HatchEggYesNoMenu;              // size: 0x3C
+    enum HeapID heapId;
+    SpriteSystem *spriteSystem;
+    SpriteManager *spriteManager;
+    BgConfig *bgConfig;
+    ManagedSprite *cursor;
+    MessageFormat *msgFormat;
+    u8 state;
+    u8 selection; // 0 = none, 1 = yes, 2 = no
+    Window buttons[2];
+} HatchEggYesNoMenu;
 
-// The display state of the app; HatchEggApp_InitSpriteSystem and HatchEggApp_FreeSpriteSystem take it on its own.
+// The display state of the app.
 typedef struct HatchEggAppGraphics {
     BgConfig *bgConfig;
     PaletteData *paletteData;

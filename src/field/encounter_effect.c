@@ -37,15 +37,15 @@ typedef struct BrightnessInterp {
 
 // The screen flashes count times between 0 and brightness while the other screen fades to otherBrightness.
 typedef struct EncounterEffectFlash {
-    u32 state;                  // 0x00
-    int count;                  // 0x04
-    int flashes;                // 0x08
-    int screen;                 // 0x0C
-    int brightness;             // 0x10
-    int otherBrightness;        // 0x14
-    BrightnessInterp flash;     // 0x18
-    BrightnessInterp otherFade; // 0x30
-    BOOL *done;                 // 0x48
+    u32 state;
+    int count;
+    int flashes;
+    int screen;
+    int brightness;
+    int otherBrightness;
+    BrightnessInterp flash;
+    BrightnessInterp otherFade;
+    BOOL *done;
 } EncounterEffectFlash;
 
 void GXx_SetMasterBrightness_(vu16 *reg, s32 brightness);
@@ -233,7 +233,7 @@ BOOL EncounterEffectInterp_Update(EncounterEffectInterp *interp) {
     value += interp->start;
     interp->value = value;
     frame = interp->frame;
-    duration = *(volatile s32 *)&interp->duration; // reloads duration after the division
+    duration = *(volatile s32 *)&interp->duration;
     frame++;
     if (frame <= duration) {
         interp->frame = frame;

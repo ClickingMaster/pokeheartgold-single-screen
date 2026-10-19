@@ -1,10 +1,8 @@
 #ifndef POKEHEARTGOLD_RENDER_WINDOW_INTERNAL_H
 #define POKEHEARTGOLD_RENDER_WINDOW_INTERNAL_H
 
-// Full declarations of the window frame module: frames, the down arrow, signposts, the waiting icon and the Pokemon
-// picture window. The public header is the subset other modules use; it declares WaitingIcon_New() with a u16 tile
-// and the DrawPokemonPic* results as PokepicManager pointers (what their callers expect), so the module's own files
-// include this header instead.
+// Declarations shared by the window frame module's own files: frames, the down arrow, signposts, the waiting icon
+// and the Pokemon picture window.
 
 #include "field/field_sprite_manager.h"
 

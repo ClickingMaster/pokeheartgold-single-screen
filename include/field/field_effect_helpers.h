@@ -5,9 +5,7 @@
 
 #include "render_animation.h"
 
-// What the field effect renderers share from modules that keep it to themselves for now:
-// the model animation and render object helpers, the effect accessors and the billboard object
-// calls (billboard_lists.h has BillboardObject_SetVisible).
+// Helpers the field effect renderers share: model animations, render objects, effect accessors and billboards.
 
 void RenderAnimation_Free(RenderAnimation *animation);
 BOOL RenderAnimation_Advance(RenderAnimation *animation, fx32 step, BOOL loop);
@@ -22,8 +20,7 @@ void FieldEffect_RunUpdate(FieldEffect *effect);
 
 BOOL BillboardObject_Delete(void *billboard);
 void BillboardObject_SetPosition(void *billboard, const VecFx32 *position);
-// TRUE once a non-looping sequence has reached its last frame: the result of BillboardSequence_Step, which
-// it ends with (its definition types it void).
+// TRUE once a non-looping sequence has reached its last frame.
 BOOL BillboardObject_AdvanceFrame(void *billboard, fx32 delta);
 void BillboardObject_SetFrame(void *billboard, fx32 frame);
 fx32 BillboardObject_GetFrame(void *billboard);

@@ -33,16 +33,16 @@ typedef struct FieldCameraShiftPreset {
 // point by the preset's offset; starting the same shift again (or while it runs) moves the camera back.
 struct FieldCameraShift {
     Camera *camera;
-    u8 duration;                   // 0x04
-    u8 step;                       // 0x05
-    u8 padding6;                   // 0x06
-    u8 mode;                       // 0x07: preset number + 1
-    FieldCameraShiftMotion motion; // 0x08: target angle, offset still to apply
-    u8 filler_18[0x10];            // 0x18
-    BOOL active;                   // 0x28
-    u16 startAngle;                // 0x2C
-    u16 reverse;                   // 0x2E
-    u32 presetNo;                  // 0x30
+    u8 duration;
+    u8 step;
+    u8 padding6;
+    u8 mode;                       // preset number + 1
+    FieldCameraShiftMotion motion; // target angle, offset still to apply
+    u8 filler_18[0x10];
+    BOOL active;
+    u16 startAngle;
+    u16 reverse;
+    u32 presetNo;
 };
 
 // The shift mode that is in effect; it survives the camera being rebuilt (FieldCamera_Create reapplies it).

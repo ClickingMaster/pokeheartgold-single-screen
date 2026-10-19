@@ -246,7 +246,7 @@ typedef struct CodeEntryButtonSpriteTemplate {
     s16 z;
     u16 animation;
     int drawPriority;
-    volatile int pal; // volatile: stored twice, see below
+    volatile int pal;
     NNS_G2D_VRAM_TYPE vram;
     int resIdList[GF_GFX_RES_TYPE_MAX];
     int bgPriority;

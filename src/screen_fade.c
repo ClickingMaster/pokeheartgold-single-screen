@@ -10,9 +10,8 @@
 #include "sys_task_api.h"
 #include "system.h"
 
-// The palette fade: BeginNormalPaletteFade starts a fade of one or both screens (enum FadeMode) and
-// HandleFadeUpdateFrame advances it every frame. Each screen runs one ScreenFade whose effect is the FadeFunc of its
-// enum FadeType. The window wipes share one window register queue and one pair of HBlank callbacks, one per screen.
+// The palette fade: BeginNormalPaletteFade starts a fade of one or both screens and HandleFadeUpdateFrame advances
+// it every frame. Each screen runs one ScreenFade whose effect is the FadeFunc of its enum FadeType.
 
 typedef void (*FadeHBlankCallback)(void *data);
 
@@ -49,7 +48,7 @@ typedef struct PaletteFade {
     u8 mainFaded;
     u8 subFaded;
     u16 color; // the color of the last fade, used when a fade passes 0xFFFF
-} PaletteFade; // size: 0x154
+} PaletteFade;
 
 typedef BOOL (*FadeFunc)(ScreenFade *fade);
 

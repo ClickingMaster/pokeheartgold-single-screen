@@ -11,9 +11,8 @@
 #include "sprite.h"
 #include "sys_task_api.h"
 
-// The wild-battle effects 0-5 cover the screen with a grid of 8x6 black (or white) squares
-// of 32x32 pixels; effect 46 (PKMN Trainer Red) fills the screen in random order and then
-// flashes the palette twice, and effects 2-3 scroll two pictures in with a wavy BG.
+// The wild-battle effects 0-5 cover the screen with a grid of black (or white) squares; effect 46 (Red) fills it in
+// random order and flashes the palette twice, and effects 2-3 scroll two pictures in with a wavy BG.
 
 enum WildEffectBgLoaderState {
     BG_LOADER_STATE_LOAD,

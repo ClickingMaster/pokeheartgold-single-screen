@@ -10,9 +10,8 @@
 #include "map_object.h"
 #include "map_object_movement_utilities.h"
 
-// The very tall grass a map object stands in (field effect renderer 12): like the tall grass, a billboard
-// over the tile that rustles (12 frames) when the object walks in, then holds its last frame until the
-// object leaves the tile (or turns away, for grass shown ahead of it).
+// The very tall grass a map object stands in: like the tall grass, a billboard over the tile that rustles when the
+// object walks in, then holds its last frame until the object leaves the tile.
 
 #define VERY_TALL_GRASS_RECORD   9
 #define VERY_TALL_GRASS_RESOURCE 7

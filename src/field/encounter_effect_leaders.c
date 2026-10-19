@@ -20,9 +20,8 @@
 #include "swap_3d_buffers.h"
 #include "text.h"
 
-// Battle intros of the gym leaders and the rival (effects 12-28): the leader's picture slides
-// in over a scrolling band with the leader's name. Elite Four and champion (effects 29-33):
-// the player and the opponent slide in from both sides and shake.
+// Battle intros of the gym leaders and the rival: the leader's picture slides in over a scrolling band with the
+// leader's name. Elite Four and champion: the player and the opponent slide in from both sides and shake.
 
 typedef struct GymLeaderIntroWork {
     EncounterEffectQuadInterp slide;

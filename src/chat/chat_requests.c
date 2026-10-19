@@ -757,7 +757,6 @@ ChatModeChange *ciParseMode(const char *modes, const char **args, int argCount) 
     return changes;
 }
 
-// (read through a volatile view, as the original does)
 #define MODE_TYPE(change) (((volatile ChatModeChange *)(change))->type)
 
 // Applies the channel mode changes (up to the CHAT_MODE_END entry) to mode.

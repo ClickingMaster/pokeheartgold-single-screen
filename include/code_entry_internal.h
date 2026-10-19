@@ -79,7 +79,7 @@ typedef struct CodeEntryApp {
     CodeEntryArgs args;
     int separatorCount;
     int firstEditable;
-} CodeEntryApp; // size: 0x3F4
+} CodeEntryApp;
 typedef struct CodeEntryKeyGrid {
     int cells[3][5];
 } CodeEntryKeyGrid;

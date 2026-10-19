@@ -6,12 +6,8 @@
 #include "heap.h"
 #include "sys_task_api.h"
 
-// The effects of the palette fade (screen_fade.h): one FadeFunc per enum FadeType, called every frame for each
-// screen until it returns TRUE. FadeFunc_00/01 fade the master brightness; the others fill the backdrop with the
-// fade color and move a hardware window over the screen (screen_wipe_effects.h, screen_window_wipe.h), covering
-// the screen (fade out) or uncovering it (fade in). The shaped wipes rebuild their window's span for every
-// scanline into a WipeScanlineBuffer, or the window's on/off flag per scanline into a LineMask; an HBlank
-// callback feeds those to the window registers line by line.
+// The effects of the palette fade: one FadeFunc per enum FadeType, called every frame for each screen until it
+// returns TRUE. Most fill the backdrop with the fade color and move a hardware window over the screen.
 
 typedef struct WindowRegisterQueue WindowRegisterQueue;
 
@@ -36,7 +32,7 @@ typedef struct ScreenFade {
     u16 color;
     BOOL fadeOut; // the screen ends covered by the fade color
     BOOL isBrightnessFade;
-} ScreenFade; // size: 0x30
+} ScreenFade;
 
 // One window's horizontal span per scanline. The wipes write the next frame's spans to nextLeft/nextRight,
 // which a VBlank task copies to left/right for the HBlank callback.
@@ -45,8 +41,8 @@ typedef struct WipeScanlineBuffer {
     s16 right[192];
     s16 nextLeft[192];
     s16 nextRight[192];
-    u32 window;       // 0 = WIN0, 1 = WIN1
-} WipeScanlineBuffer; // size: 0x604
+    u32 window; // 0 = WIN0, 1 = WIN1
+} WipeScanlineBuffer;
 
 typedef struct ScreenWipeScanlines {
     WipeScanlineBuffer *buffer; // count buffers
@@ -65,7 +61,7 @@ typedef struct LineMask {
     LineMaskWindow windows[2];
     u8 count;
     u8 screen;
-} LineMask; // size: 0x30C
+} LineMask;
 
 BOOL FadeFunc_00(ScreenFade *fade);
 BOOL FadeFunc_01(ScreenFade *fade);

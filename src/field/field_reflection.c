@@ -20,10 +20,8 @@
 #include "map_object_movement_utilities.h"
 #include "player_avatar.h"
 
-// Map object reflections (field effect renderer 1): an upside-down copy of the object's billboard below it
-// while it stands on a reflective tile, showing the object's current sequence and frame. Kinds 0-2: the
-// tile is a puddle, other water, or a reflective floor (whose reflection does not ripple); kinds 3-5: the
-// same for a large following Pokemon. The rippling is a horizontal scale swinging between 0.875 and 1.125.
+// Map object reflections: an upside-down copy of the object's billboard below it while it stands on a puddle, other
+// water or a reflective floor (kinds 0-2; 3-5 for a large following Pokemon). Only water reflections ripple.
 
 #define REFLECTION_RESOURCE       2
 #define REFLECTION_RESOURCE_LARGE 13
