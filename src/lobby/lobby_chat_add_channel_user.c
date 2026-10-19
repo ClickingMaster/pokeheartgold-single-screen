@@ -18,7 +18,7 @@ void LobbyChannelMap_MakeEntry(LobbyChannelMapEntry *dst, Str *name, LobbyChanne
     dst->channel.callbacks = src->callbacks;
 }
 
-void *LobbyChat_GetChannelCallbacks(LobbyChatManager *manager, Str *key) {
+LobbyChannelCallbacks *LobbyChat_GetChannelCallbacks(LobbyChatManager *manager, Str *key) {
     LobbyChannelMap *channels = &manager->channelMap;
     Iter it;
     LobbyChannelMapNode *node;

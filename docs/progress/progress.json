@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "9f56ef510e167ba392c077b5be3f11dbc4483053",
+  "commit": "e6fbfad1ca8c7397f1b674f0138df3ea2ebc7d21",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "102f6679b40d8426106d26948236df03fad9252126e6153c769c6bdf92176cf1",
+    "ARM9": "e4d8faf49e823df94754ed950cec2f5f928424546315328089e1495744607555",
     "ARM7": "0da6130037bf22ae4d82025de682c24b6ced4ea7599a82c3eb6c6eb29c8b9efc"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -2653,7 +2653,7 @@
       "cpu": "ARM9",
       "module": "OVY_45",
       "object": "lobby_chat_callbacks.o",
-      "bytes": 512,
+      "bytes": 2724,
       "status": "c",
       "source": "src/lobby/lobby_chat_callbacks.c"
     },
@@ -2732,14 +2732,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_45",
-      "object": "lobby_chat_manager_get_nick.o",
-      "bytes": 16,
-      "status": "c",
-      "source": "src/lobby/lobby_chat_manager_get_nick.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
       "object": "lobby_chat_manager_init.o",
       "bytes": 460,
       "status": "cpp",
@@ -2760,14 +2752,6 @@
       "bytes": 248,
       "status": "c",
       "source": "src/lobby/lobby_chat_on_broadcast_key_changed.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "lobby_chat_on_channel_message.o",
-      "bytes": 356,
-      "status": "c",
-      "source": "src/lobby/lobby_chat_on_channel_message.c"
     },
     {
       "cpu": "ARM9",
@@ -2828,50 +2812,10 @@
     {
       "cpu": "ARM9",
       "module": "OVY_45",
-      "object": "lobby_chat_on_nick_error.o",
-      "bytes": 544,
-      "status": "c",
-      "source": "src/lobby/lobby_chat_on_nick_error.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
       "object": "lobby_chat_on_private_message.o",
       "bytes": 552,
       "status": "c",
       "source": "src/lobby/lobby_chat_on_private_message.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "lobby_chat_on_user_changed_nick.o",
-      "bytes": 116,
-      "status": "c",
-      "source": "src/lobby/lobby_chat_on_user_changed_nick.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "lobby_chat_on_user_joined.o",
-      "bytes": 668,
-      "status": "c",
-      "source": "src/lobby/lobby_chat_on_user_joined.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "lobby_chat_on_user_mode_changed.o",
-      "bytes": 212,
-      "status": "c",
-      "source": "src/lobby/lobby_chat_on_user_mode_changed.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "lobby_chat_on_user_parted.o",
-      "bytes": 300,
-      "status": "c",
-      "source": "src/lobby/lobby_chat_on_user_parted.c"
     },
     {
       "cpu": "ARM9",

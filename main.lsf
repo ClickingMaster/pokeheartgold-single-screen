@@ -1560,14 +1560,7 @@ Overlay OVY_45
     Object src/lobby/lobby_chat_on_disconnected.o
     Object src/lobby/lobby_chat_on_private_message.o
     Object src/lobby/lobby_chat_split_string.o
-    Object src/lobby/lobby_chat_on_channel_message.o
-    Object src/lobby/lobby_chat_on_user_joined.o
-    Object src/lobby/lobby_chat_on_user_parted.o
-    Object src/lobby/lobby_chat_on_user_changed_nick.o
-    Object src/lobby/lobby_chat_on_user_mode_changed.o
     Object src/lobby/lobby_chat_callbacks.o
-    Object src/lobby/lobby_chat_on_nick_error.o
-    Object src/lobby/lobby_chat_manager_get_nick.o
     Object src/lobby/lobby_chat_on_enum_channels.o
     Object src/lobby/lobby_request_map_find.o
     Object src/lobby/lobby_chat_on_enum_users.o

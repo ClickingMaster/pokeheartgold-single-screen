@@ -42,7 +42,7 @@ static inline BOOL StrLess(Str *a, Str *b) {
 }
 
 u32 current_time(void);
-void LobbyString_FormatN(char *buf, u32 size, const char *fmt, ...);
+void LobbyString_FormatN(Str *out, u32 width, const char *fmt, ...);
 extern char sFmt_N_UnderscoreIntUnderscoreUint[];
 extern char sStr___2[];
 void LobbyString_InitFromCStr(Str *s, const char *cstr);
@@ -98,8 +98,13 @@ static inline BOOL StrEqC(Str *a, const char *b) {
     return LobbyString_CompareCStr(a, b) == 0;
 }
 
+// The session pointer, read from memory again at every call.
+static inline LobbyChatManager *CurrentManager(void) {
+    return *(LobbyChatManager *volatile *)&gLobbyChatManager;
+}
+
 static inline int CtxState(void) {
-    return (*(LobbyChatManager *volatile *)&gLobbyChatManager)->state;
+    return CurrentManager()->state;
 }
 
 typedef void (*VoidFunc)(void);
@@ -111,7 +116,7 @@ extern struct {
 
 void LobbyChat_StripChannelPrefix(Str *out, LobbyChatManager *manager, Str *name);
 void LobbyChat_StripChannelPrefixes(LobbyU32Vector *out, LobbyChatManager *manager, int n, u32 *arr);
-void LobbyChat_FormatNick(char *buf, int userId);
+void LobbyChat_FormatNick(Str *out, int userId);
 
 extern VoidFunc gLobbyMemOutOfMemoryHandler;
 extern u8 sLobbyRequestMapInsertFlags[];
@@ -129,7 +134,7 @@ int LobbyChat_AreChannelUsersEnumerated(LobbyChatManager *manager, Str *channel)
 int LobbyChat_SetChannelUsersEnumerated(LobbyChatManager *manager, Str *channel);
 int LobbyChat_GetChannelUserLimit(LobbyChatManager *manager, Str *channel);
 int LobbyChat_AddChannelUser(LobbyChatManager *manager, Str *nick, Str *channel);
-void *LobbyChat_GetChannelCallbacks(LobbyChatManager *manager, Str *key);
+LobbyChannelCallbacks *LobbyChat_GetChannelCallbacks(LobbyChatManager *manager, Str *key);
 void LobbyChat_GetUserNick(Str *out, LobbyChatManager *manager, int userId);
 int LobbyChat_LeaveChannel(const char *channel);
 void LobbyChat_RemoveChannel(LobbyChatManager *manager, Str *channel);
@@ -174,6 +179,9 @@ LobbyUserMapNode *LobbyUserMap_FindInsertPos2(LobbyUserMap *map, int *key, Lobby
 LobbyUserMapNode *LobbyUserMap_LowerBound(LobbyUserMap *map, int *key, LobbyUserMapNode *node, LobbyUserMapNode *res);
 void LobbyUserMap_MakeEntry(LobbyUserMapEntry *out, int id, const Str *nick);
 void chatDisconnect(void *p);
+int chatGetChannelNumUsersA(void *chat, const char *channel);
+void chatRegisterUniqueNickA(void *chat, int accountSpace, const char *nick, const char *cdKey);
+void chatRetryWithNickA(void *chat, const char *nick);
 void chatLeaveChannelA(void *h, const char *name, int x);
 void chatSendChannelMessageA(void *h, const char *name, const char *msg, int x);
 void chatSendUserMessageA(void *h, const char *name, const char *msg, int x);
@@ -195,11 +203,13 @@ void LobbyChat_OnConnected(void *chat, int success);
 void LobbyChat_OnDisconnected(void);
 void LobbyChat_OnFillInUser(void *chat, void *param, char *user);
 void LobbyChat_OnInvited(void);
+void LobbyChat_OnNickError(void *chat, int type);
 void LobbyChat_OnKicked(void *chat, char *channel);
 void LobbyChat_OnRaw(void);
 void LobbyChat_OnTopicChanged(void *chat, char *channel, void *topic);
 void LobbyChat_OnUserChangedNick(void *chat, void *channel, char *oldNick, char *newNick);
 void LobbyChat_OnUserListUpdated(void);
+void LobbyChat_OnUserJoined(void *chat, const char *channel, const char *nick);
 void LobbyChat_OnUserModeChanged(int chat, int channel, int nick, int mode);
 void LobbyChat_OnUserParted(int chat, char *channel, char *nick);
 int LobbyChat_RenameUser(LobbyChatManager *manager, const Str *oldNick, const Str *newNick);
