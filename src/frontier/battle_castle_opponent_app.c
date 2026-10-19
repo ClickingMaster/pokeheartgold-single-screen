@@ -6,6 +6,7 @@
 #include "frontier/battle_arcade_data.h"
 #include "frontier/battle_castle.h"
 #include "frontier/battle_castle_setup.h"
+#include "frontier/frontier_trainers.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0033.h"
 
@@ -203,8 +204,6 @@ extern const BgTemplate gBattleCastleOpponentAppBgTemplate_Main3;
 extern const BgTemplate gBattleCastleOpponentAppBgTemplate_Sub0;
 extern const BgTemplate gBattleCastleOpponentAppBgTemplate_Sub1;
 extern const GraphicsBanks gBattleCastleOpponentAppGraphicsBanks;
-u32 Frontier_GetHpGaugeFrame(u16 hp, u16 maxHp);
-void Frontier_BufferPartnerName(MessageFormat *msgFormat, int value);
 
 enum {
     CASTLE_OPP_FADE_IN_START_SYNC,

@@ -10,7 +10,6 @@
 #include "scrcmd_9.h"
 
 #define HALL_TRAINER_COUNT         20 // 2 per battle of a round (the second for the partner), 10 battles
-#define HALL_OPPONENT_COUNT        4
 #define HALL_CELL_COUNT            18 // type cells of the board with a rank (the others are the Hall Matron's)
 #define HALL_TYPE_RANKS_SIZE       9  // 18 ranks of 4 bits
 #define HALL_LINK_MON_BUFFER_SIZE  0x200
@@ -38,8 +37,8 @@ typedef struct BattleHallData {
     u8 padding_262[2];
     Party *party;
     u16 setIds[HALL_TRAINER_COUNT]; // like trainerIds
-    FrontierMon opponentMons[HALL_OPPONENT_COUNT];
-    u8 padding_370[0x382];
+    FrontierMon opponentMons[HALL_TRAINER_COUNT]; // like trainerIds
+    u8 padding_6F0[2];
     u16 cursor;  // board cell picked in the board app
     u8 cellType; // Pokemon type of the cell
     u8 cell;     // cursor clamped to the ranked cells
@@ -93,5 +92,7 @@ void BattleHall_SetSavedTypeRank(SaveData *saveData, u8 type, s32 cell, u8 rank)
 void BattleHallData_ResetMaxedRanks(BattleHallData *data);
 void BattleHallData_UpdateLevelSqrt(BattleHallData *data);
 u16 BattleHallData_CalcOpponentLevel(BattleHallData *data);
+u16 BattleHallData_GetTrainerSprite(BattleHallData *, u32);
+BOOL BattleHallData_SendLinkMessage(BattleHallData *, u32, u32);
 
 #endif // POKEHEARTGOLD_FRONTIER_BATTLE_HALL_DATA_H

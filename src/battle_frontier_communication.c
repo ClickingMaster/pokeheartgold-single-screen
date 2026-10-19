@@ -23,14 +23,14 @@ typedef struct FrontierLinkCommand {
     void *(*getBuffer)();
 } FrontierLinkCommand;
 
-void BattleTowerLink_ReceivePartnerInfo(int sender, int unused, const u16 *src, FrontierFieldSystem *tower);
-void BattleTowerLink_ReceiveTrainers(int sender, int unused, const void *src, FrontierFieldSystem *tower);
-void BattleTowerLink_ReceiveFlag(int sender, int unused, const u16 *src, FrontierFieldSystem *tower);
-void FrontierLinkLobby_ReceiveFacility(int sender, int unused, const u16 *src, FrontierLinkLobby *lobby);
-void FrontierLinkLobby_ReceiveChoice(int sender, int unused, const u16 *src, FrontierLinkLobby *lobby);
-void FrontierLinkLobby_ReceiveParty(int sender, int unused, const u16 *src, FrontierLinkLobby *lobby);
-void FrontierLinkLobby_ReceiveValue74(int sender, int unused, const u16 *src, FrontierLinkLobby *lobby);
-void FrontierLinkLobby_ReceiveValue71(int sender, int unused, const u16 *src, FrontierLinkLobby *lobby);
+static void BattleTowerLink_ReceivePartnerInfo(int sender, int unused, const u16 *src, FrontierFieldSystem *tower);
+static void BattleTowerLink_ReceiveTrainers(int sender, int unused, const void *src, FrontierFieldSystem *tower);
+static void BattleTowerLink_ReceiveFlag(int sender, int unused, const u16 *src, FrontierFieldSystem *tower);
+static void FrontierLinkLobby_ReceiveFacility(int sender, int unused, const u16 *src, FrontierLinkLobby *lobby);
+static void FrontierLinkLobby_ReceiveChoice(int sender, int unused, const u16 *src, FrontierLinkLobby *lobby);
+static void FrontierLinkLobby_ReceiveParty(int sender, int unused, const u16 *src, FrontierLinkLobby *lobby);
+static void FrontierLinkLobby_ReceiveValue74(int sender, int unused, const u16 *src, FrontierLinkLobby *lobby);
+static void FrontierLinkLobby_ReceiveValue71(int sender, int unused, const u16 *src, FrontierLinkLobby *lobby);
 
 static const FrontierLinkCommand sFrontierLinkCommands[] = {
     { BattleFactoryLink_ReceiveRecord,          CommCmd_GetSizeVariable, NULL                              },
@@ -91,7 +91,7 @@ void FrontierLink_RegisterCommands(void *data) {
     Comm_RegisterCommandTable(sFrontierLinkCommands, NELEMS(sFrontierLinkCommands), data);
 }
 
-void BattleTowerLink_ReceivePartnerInfo(int sender, int unused, const u16 *src, FrontierFieldSystem *tower) {
+static void BattleTowerLink_ReceivePartnerInfo(int sender, int unused, const u16 *src, FrontierFieldSystem *tower) {
     u16 result = 0;
     tower->linkReceiveCount++;
     if (sender != Comm_GetLocalNetId()) {
@@ -118,14 +118,14 @@ BOOL BattleTowerLink_SendTrainers(FrontierFieldSystem *tower) {
     return FALSE;
 }
 
-void BattleTowerLink_ReceiveTrainers(int sender, int unused, const void *src, FrontierFieldSystem *tower) {
+static void BattleTowerLink_ReceiveTrainers(int sender, int unused, const void *src, FrontierFieldSystem *tower) {
     tower->linkReceiveCount++;
     if (sender != Comm_GetLocalNetId() && Comm_GetLocalNetId() != 0) {
         MI_CpuCopy8(src, tower->trainersInCurrentRound, sizeof(tower->trainersInCurrentRound));
     }
 }
 
-void BattleTowerLink_ReceiveFlag(int sender, int unused, const u16 *src, FrontierFieldSystem *tower) {
+static void BattleTowerLink_ReceiveFlag(int sender, int unused, const u16 *src, FrontierFieldSystem *tower) {
     tower->partnerCheckResult = 0;
     tower->linkReceiveCount++;
     if (sender != Comm_GetLocalNetId()) {
@@ -148,7 +148,7 @@ BOOL FrontierLinkLobby_SendFacility(FrontierLinkLobby *lobby) {
     return FALSE;
 }
 
-void FrontierLinkLobby_ReceiveFacility(int sender, int unused, const u16 *src, FrontierLinkLobby *lobby) {
+static void FrontierLinkLobby_ReceiveFacility(int sender, int unused, const u16 *src, FrontierLinkLobby *lobby) {
     lobby->receiveCount++;
     if (sender != Comm_GetLocalNetId()) {
         lobby->partnerFacility = src[0];
@@ -164,7 +164,7 @@ BOOL FrontierLinkLobby_SendChoice(FrontierLinkLobby *lobby, u16 value) {
     return FALSE;
 }
 
-void FrontierLinkLobby_ReceiveChoice(int sender, int unused, const u16 *src, FrontierLinkLobby *lobby) {
+static void FrontierLinkLobby_ReceiveChoice(int sender, int unused, const u16 *src, FrontierLinkLobby *lobby) {
     lobby->receiveCount++;
     if (sender != Comm_GetLocalNetId()) {
         lobby->partnerChoice = src[0];
@@ -199,7 +199,7 @@ BOOL FrontierLinkLobby_SendParty(FrontierLinkLobby *lobby, u16 first, u16 second
     return FALSE;
 }
 
-void FrontierLinkLobby_ReceiveParty(int sender, int unused, const u16 *src, FrontierLinkLobby *lobby) {
+static void FrontierLinkLobby_ReceiveParty(int sender, int unused, const u16 *src, FrontierLinkLobby *lobby) {
     lobby->receiveCount++;
     if (sender != Comm_GetLocalNetId()) {
         lobby->partnerSpecies[0] = src[0];
@@ -217,7 +217,7 @@ BOOL FrontierLinkLobby_SendValue74(FrontierLinkLobby *lobby, u16 value) {
     return FALSE;
 }
 
-void FrontierLinkLobby_ReceiveValue74(int sender, int unused, const u16 *src, FrontierLinkLobby *lobby) {
+static void FrontierLinkLobby_ReceiveValue74(int sender, int unused, const u16 *src, FrontierLinkLobby *lobby) {
     lobby->receiveCount++;
     if (sender != Comm_GetLocalNetId()) {
         lobby->partnerValue74 = src[0];
@@ -232,7 +232,7 @@ BOOL FrontierLinkLobby_SendValue71(FrontierLinkLobby *lobby, u16 value) {
     return FALSE;
 }
 
-void FrontierLinkLobby_ReceiveValue71(int sender, int unused, const u16 *src, FrontierLinkLobby *lobby) {
+static void FrontierLinkLobby_ReceiveValue71(int sender, int unused, const u16 *src, FrontierLinkLobby *lobby) {
     lobby->receiveCount++;
     if (sender != Comm_GetLocalNetId()) {
         lobby->partnerValue71 = src[0];

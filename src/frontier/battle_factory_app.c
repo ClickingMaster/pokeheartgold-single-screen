@@ -5,6 +5,7 @@
 
 #include "frontier/battle_factory_app_internal.h"
 #include "frontier/battle_factory_setup.h"
+#include "frontier/frontier_trainers.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0194.h"
 
@@ -81,8 +82,6 @@ typedef struct BattleFactoryAppArgs {
     Party *otherParty;
     u16 result[3];
 } BattleFactoryAppArgs;
-
-void Frontier_BufferPartnerName(MessageFormat *msgFmt, u32 field);
 
 static BOOL BattleFactoryApp_SlideIn(BattleFactoryApp *app);
 static BOOL BattleFactoryApp_ShowScreen(BattleFactoryApp *app);

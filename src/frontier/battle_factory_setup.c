@@ -8,6 +8,7 @@
 #include "frontier/battle_factory_data.h"
 #include "frontier/frontier.h"
 #include "frontier/frontier_trainer_record.h"
+#include "frontier/frontier_trainers.h"
 
 #include "assert.h"
 #include "communication_core.h"
@@ -22,7 +23,7 @@
 // Battle Factory trainers, sets and battles: the trainers of a round, the ranges of set ids their Pokemon and the
 // rentals are drawn from, and the battle setup of a factory battle.
 
-#define FACTORY_SETS_NARC 205
+#define FACTORY_SETS_NARC NARC_a_2_0_3
 
 // Battle Factory set (narc member).
 typedef struct BattleFactorySet {
@@ -48,11 +49,6 @@ extern const BattleFactorySetRange gBattleFactoryOpenLevelRentalRanges[];
 extern const BattleFactorySetRange gBattleFactoryLevel50SetRanges[];
 extern const BattleFactorySetRange gBattleFactoryOpenLevelTrainerSetRanges[];
 extern const BattleFactorySetRange *gBattleFactoryTrainerSetRanges;
-
-void FrontierData_ReadMember(void *dest, s32 fileId, int narcId);
-void FrontierTrainer_SetBattleTrainer(BattleSetup *setup, FrontierTrainerRecord *record, int count, int battler, enum HeapID heapID);
-void FrontierMon_ToPokemon(FrontierMon *frontierMon, Pokemon *mon, int level);
-void Frontier_AddRentalMonToParty(SaveData *saveData, Party *party, Pokemon *mon);
 
 int BattleFactory_GetRandomTrainerId(int type, u32 round, int battleNo) {
     u16 min;

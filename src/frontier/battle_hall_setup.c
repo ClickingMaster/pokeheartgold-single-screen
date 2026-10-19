@@ -10,6 +10,7 @@
 #include "frontier/frontier.h"
 #include "frontier/frontier_link_lobby.h"
 #include "frontier/frontier_trainer_record.h"
+#include "frontier/frontier_trainers.h"
 
 #include "communication_core.h"
 #include "communication_player_state.h"
@@ -28,8 +29,7 @@
 #define HALL_SET_COUNT           477
 #define HALL_MATRON_SILVER       307 // trainer ids of the Hall Matron, battles 50 and 170 of the single battle streak
 #define HALL_MATRON_GOLD         308
-// trainerId is HALL_MATRON_SILVER or HALL_MATRON_GOLD (0xFECD is -HALL_MATRON_SILVER as a u16)
-#define IS_HALL_MATRON(trainerId) ((u16)((trainerId) + 0xFECD) <= 1)
+#define IS_HALL_MATRON(trainerId) ((trainerId) == HALL_MATRON_SILVER || (trainerId) == HALL_MATRON_GOLD)
 
 typedef struct BattleHallSetRange {
     u16 min;
@@ -52,11 +52,7 @@ extern const u16 gBattleHallSetSpecies[];
 extern const BattleHallSetTypes gBattleHallSetTypes[];
 
 fx32 FX_Sqrt(fx32 x);
-
 u8 BattleHall_GetLevelRank(BattleHallData *data);
-void FrontierMon_ToPokemon(FrontierMon *frontierMon, Pokemon *mon, u8 level);
-void FrontierTrainer_SetBattleTrainer(BattleSetup *setup, FrontierTrainerRecord *record, int count, int battler, enum HeapID heapID);
-void FrontierMon_GenerateWithRandomOtId(FrontierMon *frontierMon, u16 setId, int index, u8 ivs, int pid, enum HeapID heapID, u32 narcId);
 
 // Picks a trainer class for each of the count trainers of the battle: from the classes of the rank (2 in 3) or of the
 // cell. BattleHall_PickTrainerIds turns them into trainer ids.
@@ -269,12 +265,13 @@ BattleSetup *BattleHall_NewBattleSetup(BattleHallData *data, FrontierLaunchArgs 
     for (i = 0; i < BATTLER_MAX; i++) {
         setup->trainer[i].data.aiFlags = aiFlags;
     }
-    BattleHall_GenerateOpponentMons((FrontierMon *)((u8 *)data->opponentMons + index * sizeof(FrontierMon)), rank, data->trainerIds[index], &data->setIds[index], opponentCount, HEAP_ID_FIELD2, 206);
+    BattleHall_GenerateOpponentMons((FrontierMon *)((u8 *)data->opponentMons + index * sizeof(FrontierMon)), rank, data->trainerIds[index], &data->setIds[index], opponentCount, HEAP_ID_FIELD2, NARC_a_2_0_4);
+    // Every opponent Pokemon of the battle (both in a double battle, and the partner's) is made from the first set.
     mon = AllocMonZeroed(HEAP_ID_FIELD2);
     for (i = 0; i < opponentCount; i++) {
         while (BattleHall_RerollPersonality(data, index) != 0) {
         }
-        FrontierMon_ToPokemon(&data->opponentMons[index], mon, BattleHall_GetOpponentLevel(data, rank));
+        FrontierMon_ToPokemon(&data->opponentMons[index], mon, (u8)BattleHall_GetOpponentLevel(data, rank));
         UpdateMonAbility(mon);
         BattleSetup_AddMonToParty(setup, mon, BATTLER_ENEMY);
     }
@@ -290,7 +287,7 @@ BattleSetup *BattleHall_NewBattleSetup(BattleHallData *data, FrontierLaunchArgs 
         mon = AllocMonZeroed(HEAP_ID_FIELD2);
         while (BattleHall_RerollPersonality(data, index) != 0) {
         }
-        FrontierMon_ToPokemon((FrontierMon *)((u8 *)data + 0x290 + index * sizeof(FrontierMon)), mon, BattleHall_GetOpponentLevel(data, rank));
+        FrontierMon_ToPokemon((FrontierMon *)((u8 *)data + offsetof(BattleHallData, opponentMons) + index * sizeof(FrontierMon)), mon, (u8)BattleHall_GetOpponentLevel(data, rank));
         UpdateMonAbility(mon);
         BattleSetup_AddMonToParty(setup, mon, BATTLER_ENEMY2);
         Heap_Free(mon);
@@ -338,7 +335,7 @@ int BattleHall_GetOpponentMonCount(int type) {
     return 1;
 }
 
-void BattleHall_GenerateOpponentMons(FrontierMon *mons, u32 rank, u32 trainerId, u16 *setIds, int count, enum HeapID heapID, u32 narcId) {
+void BattleHall_GenerateOpponentMons(FrontierMon *mons, u32 rank, u32 trainerId, u16 *setIds, int count, enum HeapID heapID, NarcId narcId) {
     int i;
     int ivs;
 

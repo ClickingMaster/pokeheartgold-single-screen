@@ -39,10 +39,8 @@ u32 BattleCastle_GetBestStreakStat(u32 type);
 u32 BattleCastle_GetPointsStat(u32 type);
 u32 BattleCastle_GetSpentPointsStat(u32 type);
 u32 BattleCastle_GetBestStreakPointsStat(u32 type);
-void Frontier_RecordLinkPlayerLocations(SaveData *saveData);
-u32 FrontierTrainer_GetClassSprite(u8 trainerClass);
-void FrontierTrainer_GenerateMons(int count, u16 trainerId, u16 partnerTrainerId, u16 *setIds, FrontierMon *mons, u8 *ivs, void **personalities, u8 hasPartner);
-void FrontierMon_ToPokemon(void *frontierMon, void *mon, int level);
+
+void FrontierTrainer_GenerateMons(int count, u16 trainerId, u16 partnerTrainerId, u16 *setIds, FrontierMon *mons, u8 *ivs, u32 *personalities, u8 hasPartner);
 
 static void BattleCastleData_SetupNewChallenge(BattleCastleData *data);
 static void BattleCastleData_RestoreChallenge(BattleCastleData *data);
@@ -188,7 +186,7 @@ static void BattleCastleData_SetupNewChallenge(BattleCastleData *data) {
     battleNo = data->battleNo;
     monCount = BattleCastle_GetOpponentMonCount(data->type, 1);
     isLink = BattleCastle_IsMultiType(data->type);
-    FrontierTrainer_GenerateMons(monCount, data->trainerIds[battleNo], data->trainerIds[battleNo + 7], data->opponentSetIds, data->opponentMons, data->opponentIVs, (void **)data->opponentPersonalities, (u8)isLink);
+    FrontierTrainer_GenerateMons(monCount, data->trainerIds[battleNo], data->trainerIds[battleNo + 7], data->opponentSetIds, data->opponentMons, data->opponentIVs, data->opponentPersonalities, (u8)isLink);
 }
 
 static void BattleCastleData_RestoreChallenge(BattleCastleData *data) {
@@ -413,7 +411,7 @@ void BattleCastleData_GenerateOpponents(BattleCastleData *data) {
         data->opponentSetIds,
         data->opponentMons,
         data->opponentIVs,
-        (void **)data->opponentPersonalities,
+        data->opponentPersonalities,
         (u8)isLink);
     BattleCastle_SetOpponentParty(data);
 }

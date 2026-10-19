@@ -9,6 +9,7 @@
 #include "battle_record.h"
 #include "bg_window.h"
 #include "fashion_case.h"
+#include "frontier_card.h"
 #include "filesystem.h"
 #include "font_sprite.h"
 #include "gf_3d_vramman.h"
@@ -29,22 +30,6 @@
 // VS Recorder app: the VS Recorder item (mode 0) and the Global Terminal data browser (modes 1-6).
 
 typedef struct VsRecorderWork VsRecorderWork;
-
-typedef struct FrontierCard FrontierCard;
-String *FrontierCard_NewNameString(const u16 *name, enum HeapID heapID); // the name is the card's first field
-u32 FrontierCard_GetGender(FrontierCard *card);
-u32 FrontierCard_GetSpecies(FrontierCard *card);
-u32 FrontierCard_GetSanitizedForm(FrontierCard *card);
-u32 FrontierCard_IsEgg(FrontierCard *card);
-u32 FrontierCard_GetCountry(FrontierCard *card);
-u32 FrontierCard_GetRegion(FrontierCard *card);
-String *FrontierCard_GetGreeting(FrontierCard *card, MailMessage *message, enum HeapID heapID);
-u32 FrontierCard_GetBirthdayMonth(FrontierCard *card);
-u32 FrontierCard_GetAvatar(FrontierCard *card);
-FrontierCard *FrontierCard_New(enum HeapID heapID);
-void FrontierCard_Delete(FrontierCard *card);
-void FrontierCard_InitFromSave(FrontierCard *card, SaveData *saveData);
-
 
 SaveFashionDataSub *FashionEntry_New(enum HeapID heapID);
 void FashionEntry_GetMonSecondText(SaveFashionDataSub *entry, String *string);

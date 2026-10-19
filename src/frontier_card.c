@@ -1,3 +1,5 @@
+#include "frontier_card.h"
+
 #include "global.h"
 
 #include "constants/species.h"
@@ -18,7 +20,7 @@
 
 // Player profile card built from the save (name, trainer ID, favorite Pokemon, greeting, country/region, CRC). The
 // getters return safe defaults for out-of-range fields, i.e. for cards received from other players.
-typedef struct FrontierCard {
+struct FrontierCard {
     u16 name[8];
     u32 trainerId;
     u8 gender;
@@ -36,21 +38,7 @@ typedef struct FrontierCard {
     u8 unk_70[12];
     u16 crc;
     u8 unk_7E[2];
-} FrontierCard;
-
-FrontierCard *FrontierCard_New(enum HeapID heapId);
-void FrontierCard_Delete(FrontierCard *card);
-void FrontierCard_InitFromSave(FrontierCard *card, SaveData *saveData);
-String *FrontierCard_NewNameString(const u16 *name, enum HeapID heapId);
-u32 FrontierCard_GetGender(FrontierCard *card);
-u32 FrontierCard_GetSpecies(FrontierCard *card);
-u32 FrontierCard_GetSanitizedForm(FrontierCard *card);
-u32 FrontierCard_IsEgg(FrontierCard *card);
-u32 FrontierCard_GetCountry(FrontierCard *card);
-u32 FrontierCard_GetRegion(FrontierCard *card);
-String *FrontierCard_GetGreeting(FrontierCard *card, MailMessage *message, enum HeapID heapId);
-u32 FrontierCard_GetBirthdayMonth(FrontierCard *card);
-u32 FrontierCard_GetAvatar(FrontierCard *card);
+};
 
 FrontierCard *FrontierCard_New(enum HeapID heapId) {
     FrontierCard *ret = Heap_Alloc(heapId, sizeof(FrontierCard));

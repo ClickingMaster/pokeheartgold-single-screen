@@ -24,8 +24,6 @@
 
 FS_EXTERN_OVERLAY(OVY_82);
 
-u32 BattleHallData_GetTrainerSprite(BattleHallData *data, u8 index);
-u32 BattleHallData_SendLinkMessage(BattleHallData *data, u32 kind, u32 value);
 void FrontierLink_RegisterCommands(void);
 
 static void BattleHall_OnAppExit(void *args);
@@ -231,6 +229,7 @@ BOOL FrtCmd_HallAction(FrontierScriptContext *ctx) {
         break;
     }
     case HALL_ACTION_REGISTER_LINK_COMMANDS:
+        // BUG: the link commands are registered without the Hall data as their context (the argument is missing).
         FrontierLink_RegisterCommands();
         break;
     case HALL_ACTION_IS_MULTI:

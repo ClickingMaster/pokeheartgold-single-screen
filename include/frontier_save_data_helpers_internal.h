@@ -5,7 +5,6 @@
 
 #include "scrcmd_9.h"
 
-u32 FrontierTrainer_GetClassSprite(u8 value);
 u32 BattleTower_NextRandom(u32 value);
 void BattleTower_GenerateTrainerMons(void *data, void *array, u32 value, u32 count, void *values1, void *values2, u32 zero, u32 word);
 void BattleTower_GetRoomTrainer(void *saveData, void *array, u32 index);

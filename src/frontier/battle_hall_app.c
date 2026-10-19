@@ -7,6 +7,7 @@
 
 #include "frontier/battle_hall_data.h"
 #include "frontier/battle_hall_setup.h"
+#include "frontier/frontier_trainers.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0441.h"
 
@@ -133,8 +134,6 @@ typedef struct BattleHallApp {
     u8 partnerAnswer;
     u8 unk_27E[6];
 } BattleHallApp;
-
-void Frontier_BufferPartnerName(MessageFormat *msgFmt, u32 field);
 
 #define MAKE_TEXT_COLOR(fg, sh, bg) ((((fg) & 0xFF) << 16) | (((sh) & 0xFF) << 8) | (((bg) & 0xFF) << 0))
 u8 AddTextPrinterParameterizedWithColor(Window *window, int fontId, String *string, u32 x, u32 y, u32 textSpeed, u32 color, void *callback);

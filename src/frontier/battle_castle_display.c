@@ -3,6 +3,7 @@
 #include "constants/sndseq.h"
 
 #include "frontier/battle_castle.h"
+#include "frontier/frontier_trainers.h"
 
 #include "bg_window.h"
 #include "char_tiles.h"
@@ -39,9 +40,6 @@
 #define TEXT_SPEED_NOTRANSFER 0xFF
 
 u8 AddTextPrinterParameterizedWithColor(Window *window, u32 fontId, String *string, u32 x, u32 y, u32 textSpeed, u32 color, PrinterCallback_t callback);
-
-void Frontier_SetSpriteAnim(Sprite *sprite, int value);
-void Frontier_SetSpritePosition(Sprite *sprite, s16 x, s16 y, int value);
 
 static Sprite *BattleCastle_CreateSprite(BattleCastleSpriteGfx *gfx, int charId, int plttId, int cellId, int animSeq, int drawPriority, int priority, u8 screen);
 static void BattleCastle_InitSpriteTransfer(void);

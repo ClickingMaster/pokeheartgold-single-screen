@@ -1,51 +1,55 @@
-#include "frontier_particles_internal.h"
+#include "frontier/frontier_particles.h"
 
-void *FrontierParticles_New(u32 heapId) {
-    u8 *manager = Heap_Alloc(heapId, 0x24);
-    MI_CpuFill8(manager, 0, 0x24);
-    *(u16 *)(manager + 0x20) = heapId;
+#include "global.h"
+
+#include "assert.h"
+#include "camera.h"
+#include "heap.h"
+#include "swap_3d_buffers.h"
+
+static void FrontierParticles_FreeSystem(SPLEmitter *system);
+static u32 FrontierParticles_AllocTexVram(u32 size, BOOL is4x4comp);
+static u32 FrontierParticles_AllocPlttVram(u32 size, BOOL is4pltt);
+
+FrontierParticles *FrontierParticles_New(enum HeapID heapId) {
+    FrontierParticles *particles = Heap_Alloc(heapId, sizeof(FrontierParticles));
+    MI_CpuFill8(particles, 0, sizeof(FrontierParticles));
+    particles->heapId = heapId;
     ParticleSystem_ZeroAll();
-    return manager;
+    return particles;
 }
 
-void FrontierParticles_Free(void *manager) {
-    void **objects = manager;
+void FrontierParticles_Free(FrontierParticles *particles) {
     s32 i;
-    for (i = 0; i < 8; i++) {
-        if (objects[i] != NULL) {
-            FrontierParticles_FreeSystem(objects[i]);
+    for (i = 0; i < FRONTIER_PARTICLE_SYSTEM_MAX; i++) {
+        if (particles->systems[i] != NULL) {
+            FrontierParticles_FreeSystem(particles->systems[i]);
         }
     }
-    Heap_Free(manager);
+    Heap_Free(particles);
 }
 
-void *FrontierParticles_CreateSystem(void *manager, u32 index, u32 member, void *camera) {
-    u8 *p = manager;
+SPLEmitter *FrontierParticles_CreateSystem(FrontierParticles *particles, u32 index, u32 member, int perspectiveType) {
     void *buffer;
-    void *object;
+    SPLEmitter *system;
     void *resource;
-    void *projection;
-    if (*(void **)(p + index * 4) != NULL) {
-        GF_AssertFail();
-    }
-    buffer = Heap_Alloc(*(u16 *)(p + 0x20), 0x4800);
-    object = ParticleSystem_New(FrontierParticles_AllocTexVram, FrontierParticles_AllocPlttVram, buffer, 0x4800, 1, *(u16 *)(p + 0x20));
-    projection = ParticleSystem_GetCamera(object);
-    Camera_SetPerspectiveClippingPlane(0x1000, 0x384000, projection);
-    ParticleSystem_SetPerspectiveType(object, camera);
-    resource = ParticleSystem_LoadResourceFile(0xBC, member, *(u16 *)(p + 0x20));
-    ParticleSystem_SetResource(object, resource, 10, 1);
-    *(void **)(p + index * 4) = object;
-    return object;
+    Camera *camera;
+    GF_ASSERT(particles->systems[index] == NULL);
+    buffer = Heap_Alloc((enum HeapID)particles->heapId, 0x4800);
+    system = ParticleSystem_New(FrontierParticles_AllocTexVram, FrontierParticles_AllocPlttVram, buffer, 0x4800, TRUE, (enum HeapID)particles->heapId);
+    camera = ParticleSystem_GetCamera(system);
+    Camera_SetPerspectiveClippingPlane(FX32_ONE, FX32_CONST(900), camera);
+    ParticleSystem_SetPerspectiveType(system, perspectiveType);
+    resource = ParticleSystem_LoadResourceFile(NARC_a_1_8_8, member, (enum HeapID)particles->heapId);
+    ParticleSystem_SetResource(system, resource, 10, TRUE);
+    particles->systems[index] = system;
+    return system;
 }
 
-void FrontierParticles_DestroySystem(void *manager, u32 index) {
-    void **objects = manager;
-    if (objects[index] == NULL) {
-        GF_AssertFail();
-    }
-    FrontierParticles_FreeSystem(objects[index]);
-    objects[index] = NULL;
+void FrontierParticles_DestroySystem(FrontierParticles *particles, u32 index) {
+    GF_ASSERT(particles->systems[index] != NULL);
+    FrontierParticles_FreeSystem(particles->systems[index]);
+    particles->systems[index] = NULL;
 }
 
 BOOL FrontierParticles_Update(void) {
@@ -60,45 +64,37 @@ BOOL FrontierParticles_Update(void) {
     return TRUE;
 }
 
-void *FrontierParticles_GetSystem(void *manager, u32 index) {
-    void **objects = manager;
-    if (objects[index] == NULL) {
-        GF_AssertFail();
-    }
-    return objects[index];
+SPLEmitter *FrontierParticles_GetSystem(FrontierParticles *particles, u32 index) {
+    GF_ASSERT(particles->systems[index] != NULL);
+    return particles->systems[index];
 }
 
-BOOL FrontierParticles_AreAllDone(void *manager) {
-    void **objects = manager;
+BOOL FrontierParticles_AreAllDone(FrontierParticles *particles) {
     s32 i;
-    for (i = 0; i < 8; i++) {
-        if (objects[i] != NULL && ParticleSystem_GetActiveEmitterCount(objects[i]) > 0) {
+    for (i = 0; i < FRONTIER_PARTICLE_SYSTEM_MAX; i++) {
+        if (particles->systems[i] != NULL && ParticleSystem_GetActiveEmitterCount(particles->systems[i]) > 0) {
             return FALSE;
         }
     }
     return TRUE;
 }
 
-void FrontierParticles_FreeSystem(void *object) {
-    void *buffer = ParticleSystem_GetHeap(object);
-    ParticleSystem_Free(object);
+static void FrontierParticles_FreeSystem(SPLEmitter *system) {
+    void *buffer = ParticleSystem_GetHeap(system);
+    ParticleSystem_Free(system);
     Heap_Free(buffer);
 }
 
-u32 FrontierParticles_AllocTexVram(u32 size, int flag) {
-    u32 key = NNS_GfdDefaultFuncAllocTexVram(size, flag, 0);
-    if (key == 0) {
-        GF_AssertFail();
-    }
+static u32 FrontierParticles_AllocTexVram(u32 size, BOOL is4x4comp) {
+    u32 key = NNS_GfdDefaultFuncAllocTexVram(size, is4x4comp, 0);
+    GF_ASSERT(key != 0);
     ParticleSystem_RegisterTexKey(key);
     return (u16)key << 3;
 }
 
-u32 FrontierParticles_AllocPlttVram(u32 size, int flag) {
-    u32 key = NNS_GfdDefaultFuncAllocPlttVram(size, flag, 1);
-    if (key == 0) {
-        GF_AssertFail();
-    }
+static u32 FrontierParticles_AllocPlttVram(u32 size, BOOL is4pltt) {
+    u32 key = NNS_GfdDefaultFuncAllocPlttVram(size, is4pltt, 1);
+    GF_ASSERT(key != 0);
     ParticleSystem_RegisterPlttKey(key);
     return (u16)key << 3;
 }

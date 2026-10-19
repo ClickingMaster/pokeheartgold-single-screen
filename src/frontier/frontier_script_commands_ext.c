@@ -95,10 +95,6 @@ typedef struct FrontierCameraPos {
 
 void *Frontier_GetMap(void *frontierWork);
 void FrontierMap_SetSpriteAnimActive(FrontierMap *map, u32 idx, u32 on);
-void *FrontierParticles_CreateSystem(void *manager, u32 index, u32 member, u32 camera);
-void FrontierParticles_DestroySystem(void *manager, u32 index);
-BOOL FrontierParticles_AreAllDone(void *manager);
-
 static BOOL FrontierScriptNative_WaitSpriteAnim(FrontierScriptContext *ctx);
 static void FrontierScript_SetObjectMovement(FrontierScriptContext *ctx, int unused, int count);
 static void FrontierScript_FreeNamingScreenArgs(void *args);
@@ -1376,14 +1372,14 @@ BOOL FrtCmd_CreateParticleSystem(FrontierScriptContext *ctx) {
     FrontierMap *map = Frontier_GetMap(ctx->frontierSystem->frontierWork);
     u16 index = FrontierScript_ReadVar(ctx);
     u16 member = FrontierScript_ReadVar(ctx);
-    u16 camera = FrontierScript_ReadVar(ctx);
-    FrontierParticles_CreateSystem((void *)map->particleManager, index, member, camera);
+    u16 perspectiveType = FrontierScript_ReadVar(ctx);
+    FrontierParticles_CreateSystem(map->particles, index, member, perspectiveType);
     return FALSE;
 }
 
 BOOL FrtCmd_DestroyParticleSystem(FrontierScriptContext *ctx) {
     FrontierMap *map = Frontier_GetMap(ctx->frontierSystem->frontierWork);
-    FrontierParticles_DestroySystem((void *)map->particleManager, FrontierScript_ReadVar(ctx));
+    FrontierParticles_DestroySystem(map->particles, FrontierScript_ReadVar(ctx));
     return FALSE;
 }
 
@@ -1391,7 +1387,7 @@ BOOL FrtCmd_CreateParticleEmitter(FrontierScriptContext *ctx) {
     FrontierMap *map = Frontier_GetMap(ctx->frontierSystem->frontierWork);
     u16 index = FrontierScript_ReadVar(ctx);
     u16 resource = FrontierScript_ReadVar(ctx);
-    ParticleSystem_CreateEmitterWithParam(FrontierParticles_GetSystem(map->particleManager, index), resource, NULL, NULL);
+    ParticleSystem_CreateEmitterWithParam(FrontierParticles_GetSystem(map->particles, index), resource, NULL, NULL);
     return FALSE;
 }
 
@@ -1401,7 +1397,7 @@ BOOL FrtCmd_WaitParticles(FrontierScriptContext *ctx) {
 }
 
 static BOOL FrontierScriptNative_WaitMapEffect(FrontierScriptContext *ctx) {
-    return FrontierParticles_AreAllDone((void *)((FrontierMap *)Frontier_GetMap(ctx->frontierSystem->frontierWork))->particleManager) == TRUE;
+    return FrontierParticles_AreAllDone(((FrontierMap *)Frontier_GetMap(ctx->frontierSystem->frontierWork))->particles) == TRUE;
 }
 
 // Shakes the map: offset x / y, flipped every interval + 1 frames, count times.

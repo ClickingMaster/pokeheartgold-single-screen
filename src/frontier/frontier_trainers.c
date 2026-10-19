@@ -58,28 +58,28 @@ typedef struct FrontierMonParam {
     u16 move;
 } FrontierMonParam;
 
-void *FrontierData_AllocMember(s32 fileId, enum HeapID heapID, NarcId narcId);
+static void *FrontierData_AllocMember(s32 fileId, enum HeapID heapID, NarcId narcId);
 void FrontierData_ReadMember(void *dest, s32 fileId, NarcId narcId);
-u32 FrontierMon_Generate(FrontierMon *mon, u32 setId, u32 otId, u32 pid, u8 iv, u8 itemIndex, BOOL useItemTable, enum HeapID heapID, NarcId narcId);
 void FrontierMon_ToPokemon(FrontierMon *frontierMon, Pokemon *mon, int level);
-u16 FrontierTrainer_GetClassSprite(u16 value);
-void Frontier_SetRentalMonOt(SaveData *saveData, Pokemon *mon);
+u16 FrontierTrainer_GetClassSprite(u8 value);
 void Frontier_AddRentalMonToParty(SaveData *saveData, Party *party, Pokemon *mon);
 void Frontier_SetSpriteAnim(Sprite *sprite, int anim);
 void Frontier_SetSpritePosition(Sprite *sprite, int x, int y, BOOL bounce);
 int Frontier_GetHpGaugeFrame(u16 hp, u16 maxHp);
 void FrontierTrainer_LoadRecord(FrontierTrainerRecord *record, int trainerId, enum HeapID heapID, NarcId narcId);
-void FrontierTrainer_SetBattleTrainer(BattleSetup *battleSetup, FrontierTrainerRecord *record, int unused, int battler);
+void FrontierTrainer_SetBattleTrainer(BattleSetup *battleSetup, FrontierTrainerRecord *record, int unused, int battler, enum HeapID unusedHeapID);
 u32 FrontierMon_GenerateWithRandomOtId(FrontierMon *mon, u16 setId, int itemIndex, u8 iv, int pid, enum HeapID heapID, NarcId narcId);
 void FrontierMon_GenerateList(FrontierMon *mons, u16 *setIds, u8 *ivs, u32 *pids, u32 *outPids, int count, enum HeapID heapID, NarcId narcId);
-int FrontierTrainer_GetMonIv(u32 trainerIndex);
-BOOL FrontierTrainer_PickMonSets(FrontierTrainerEntry *trainer, const u16 *excludedSpecies, const u16 *excludedItems, int numExcluded, int count, u16 *setIds, enum HeapID heapID);
 void FrontierTrainer_GenerateMons(u8 count, int trainerIndex, int partnerIndex, u16 *setIds, FrontierMon *mons, u8 *ivs, u32 *outPids, u8 hasPartner);
 void Frontier_BufferPartnerName(MessageFormat *msgFmt, int field);
 int Frontier_GetPlayerSpriteId(PlayerProfile *profile);
 void Frontier_RecordLinkPlayerLocations(SaveData *saveData);
+static u32 FrontierMon_Generate(FrontierMon *mon, u32 setId, u32 otId, u32 pid, u8 iv, u8 itemIndex, BOOL useItemTable, enum HeapID heapID, NarcId narcId);
+static void Frontier_SetRentalMonOt(SaveData *saveData, Pokemon *mon);
+static int FrontierTrainer_GetMonIv(u32 trainerIndex);
+static BOOL FrontierTrainer_PickMonSets(FrontierTrainerEntry *trainer, const u16 *excludedSpecies, const u16 *excludedItems, int numExcluded, int count, u16 *setIds, enum HeapID heapID);
 
-void *FrontierData_AllocMember(s32 fileId, enum HeapID heapID, NarcId narcId) {
+static void *FrontierData_AllocMember(s32 fileId, enum HeapID heapID, NarcId narcId) {
     return AllocAndReadWholeNarcMemberByIdPair(narcId, fileId, heapID);
 }
 
@@ -107,7 +107,7 @@ void *FrontierTrainer_Load(FrontierTrainerRecord *record, int trainerId, enum He
 
 static const u16 sFrontierMonItems[] = { ITEM_BRIGHTPOWDER, ITEM_LUM_BERRY, ITEM_LEFTOVERS, ITEM_QUICK_CLAW };
 
-u32 FrontierMon_Generate(FrontierMon *mon, u32 setId, u32 otId, u32 pid, u8 iv, u8 itemIndex, BOOL useItemTable, enum HeapID heapID, NarcId narcId) {
+static u32 FrontierMon_Generate(FrontierMon *mon, u32 setId, u32 otId, u32 pid, u8 iv, u8 itemIndex, BOOL useItemTable, enum HeapID heapID, NarcId narcId) {
     FrontierMonSet set;
     int friendship;
 
@@ -305,7 +305,7 @@ static const u16 sFrontierTrainerClassSprites[][2] = {
     { TRAINERCLASS_POKE_KID,            SPRITE_PIKACHU      },
 };
 
-u16 FrontierTrainer_GetClassSprite(u16 value) {
+u16 FrontierTrainer_GetClassSprite(u8 value) {
     u32 i = 0;
     const u16 *key = sFrontierTrainerClassSprites[0];
 
@@ -320,7 +320,7 @@ u16 FrontierTrainer_GetClassSprite(u16 value) {
     return 3;
 }
 
-void Frontier_SetRentalMonOt(SaveData *saveData, Pokemon *mon) {
+static void Frontier_SetRentalMonOt(SaveData *saveData, Pokemon *mon) {
     PlayerProfile *profile = Save_PlayerData_GetProfile(saveData);
     u32 otId = GetMonData(mon, MON_DATA_OT_ID, NULL);
     MsgData *msgData;
@@ -385,7 +385,7 @@ void FrontierTrainer_LoadRecord(FrontierTrainerRecord *record, int trainerId, en
     Heap_Free(FrontierTrainer_Load(record, trainerId, heapID, narcId));
 }
 
-void FrontierTrainer_SetBattleTrainer(BattleSetup *battleSetup, FrontierTrainerRecord *record, int unused, int battler) {
+void FrontierTrainer_SetBattleTrainer(BattleSetup *battleSetup, FrontierTrainerRecord *record, int unused, int battler, enum HeapID unusedHeapID) {
     battleSetup->trainerId[battler] = record->id;
     battleSetup->trainer[battler].data.trainerClass = record->trainerClass;
     CopyU16StringArray(battleSetup->trainer[battler].name, record->name);
@@ -437,7 +437,7 @@ void FrontierMon_GenerateList(FrontierMon *mons, u16 *setIds, u8 *ivs, u32 *pids
     }
 }
 
-int FrontierTrainer_GetMonIv(u32 trainerIndex) {
+static int FrontierTrainer_GetMonIv(u32 trainerIndex) {
     if (trainerIndex < 100) {
         return 3;
     }
@@ -465,7 +465,7 @@ int FrontierTrainer_GetMonIv(u32 trainerIndex) {
 // Picks count different sets (no repeated species or item) for a trainer, avoiding the excluded species and items
 // for the first 50 tries. Returns TRUE if the exclusion had to be dropped.
 // heapID is unused.
-BOOL FrontierTrainer_PickMonSets(FrontierTrainerEntry *trainer, const u16 *excludedSpecies, const u16 *excludedItems, int numExcluded, int count, u16 *setIds, enum HeapID heapID) {
+static BOOL FrontierTrainer_PickMonSets(FrontierTrainerEntry *trainer, const u16 *excludedSpecies, const u16 *excludedItems, int numExcluded, int count, u16 *setIds, enum HeapID heapID) {
     FrontierMonSet sets[6];
     u16 setId;
     int tries;

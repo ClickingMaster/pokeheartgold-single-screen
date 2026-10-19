@@ -1,5 +1,7 @@
 #include "frontier_save_data_helpers_internal.h"
 
+#include "frontier/frontier_trainers.h"
+
 void BattleTower_GenerateOpponents(void *data, void *saveData) {
     FrontierFieldSystem *tower = data;
     int i;

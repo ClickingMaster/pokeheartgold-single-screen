@@ -104,7 +104,7 @@ typedef struct FrontierMap {
     PaletteData *paletteData;
     void *frontier; // 0x08, the frontier application's work
     GF3DVramMan *vramMan;
-    u32 particleManager; // 0x10, from FrontierParticles_New (frontier/frontier_particles.h)
+    struct FrontierParticles *particles; // frontier/frontier_particles.h
     Field2DObjectManager *objectManager;
     Field2DMap *grid;
     Field2DPoint camera;

@@ -8,6 +8,7 @@
 #include "frontier/battle_factory_setup.h"
 #include "frontier/frontier_link_messages.h"
 #include "frontier/frontier_trainer_record.h"
+#include "frontier/frontier_trainers.h"
 
 #include "error_handling.h"
 #include "frontier_save_access.h"
@@ -28,10 +29,6 @@ BattleFactoryData *gBattleFactoryData;
 
 u32 BattleFactory_GetBestStreakStat(u8 type, u8 levelMode);
 u32 BattleFactory_GetBestTradeCountStat(u8 type, u8 levelMode);
-void Frontier_RecordLinkPlayerLocations(SaveData *saveData);
-int FrontierTrainer_GetClassSprite(int trainerClass);
-void FrontierMon_ToPokemon(FrontierMon *frontierMon, Pokemon *mon, int level);
-void Frontier_AddRentalMonToParty(SaveData *saveData, Party *party, Pokemon *mon);
 // opponent Pokemon count of a type
 
 static const u8 sBattleFactoryBattlePoints[12] = { 0, 5, 5, 5, 5, 7, 7, 8, 9 };

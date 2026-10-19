@@ -52,9 +52,6 @@ typedef struct FrontierLinkPartnerCheckEnv {
     u16 outputVar;
 } FrontierLinkPartnerCheckEnv;
 
-extern void FrontierData_SetTowerSeed(FrontierData *frontierData, u32 value);
-extern u32 FrontierData_GetTowerSeed(FrontierData *frontierData);
-
 static u32 FrontierPartySelect_LaunchPartyMenu(FrontierPartySelectEnv *env, FieldSystem *fieldSystem, enum HeapID heapId);
 static u32 FrontierPartySelect_WaitPartyMenu(FrontierPartySelectEnv *env, FieldSystem *fieldSystem);
 static u32 FrontierPartySelect_LaunchSummary(FrontierPartySelectEnv *env, FieldSystem *fieldSystem, enum HeapID heapId);

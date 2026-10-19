@@ -11,6 +11,7 @@
 #include "frontier/frontier_link_messages.h"
 #include "frontier/frontier_script_ui.h"
 #include "frontier/frontier_trainer_record.h"
+#include "frontier/frontier_trainers.h"
 
 #include "error_handling.h"
 #include "filesystem.h"
@@ -64,10 +65,7 @@ extern const u16 gBattleArcadeItems_Rank6[];
 
 u32 BattleArcadeData_Alloc(SaveData *saveData, u32 resume, u8 type, u8 slot0, u16 slot1, u16 slot2, u16 *resultVar);
 
-void Frontier_RecordLinkPlayerLocations(SaveData *saveData);
 void FrontierTrainer_GenerateMons(u32 count, u16 trainerId, u16 partnerTrainerId, u16 *monIds, FrontierMon *mons, u8 *ivs, u32 *outPids, u8 multiplayer);
-void FrontierMon_ToPokemon(FrontierMon *frontierMon, Pokemon *mon, int level);
-void FrontierTrainer_GetClassSprite(u8 value);
 
 static void BattleArcadeData_InitNew(ArcadeContext *ctx);
 static void BattleArcadeData_InitResume(ArcadeContext *ctx);
@@ -439,7 +437,7 @@ u32 BattleArcade_GetTrainerSprite(ArcadeContext *ctx, u8 partner) {
     void *data = FrontierTrainer_Load(&trainer, ctx->trainerIds[index], HEAP_ID_FIELD2, NARC_a_2_0_2);
 
     Heap_Free(data);
-    FrontierTrainer_GetClassSprite(trainer.trainerClass);
+    return FrontierTrainer_GetClassSprite(trainer.trainerClass);
 }
 
 u32 BattleArcade_GetTrainerIndex(ArcadeContext *ctx, u32 partner) {

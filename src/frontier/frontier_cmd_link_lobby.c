@@ -6,6 +6,7 @@
 #include "frontier/frontier_scrcmd.h"
 #include "frontier/frontier_script_commands.h"
 #include "frontier/frontier_script_context.h"
+#include "frontier/frontier_trainers.h"
 
 #include "battle_frontier_communication.h"
 #include "communication_core.h"
@@ -24,9 +25,6 @@
 
 // Script commands of the frontier link lobby and of the link
 // Battle Tower started from it (FrontierFieldSystem).
-
-void Frontier_RecordLinkPlayerLocations(SaveData *saveData);
-FrontierLinkLobby *FrontierLinkLobby_New(SaveData *saveData);
 
 static BOOL FrontierScriptNative_WaitLinkLobbyReceive(FrontierScriptContext *ctx);
 static BOOL FrontierScriptNative_WaitLinkLobbyReceiveOrAbort(FrontierScriptContext *ctx);

@@ -27,7 +27,6 @@ typedef struct FrontierLinkLobbyGlobals {
 
 extern const u8 gFrontierLinkLobbySummaryPages[];
 
-void FrontierLinkLobby_New(SaveData *saveData);
 static void FrontierLinkLobby_LaunchPartyMenu(void *frontierWork, FrontierLinkLobby *lobby, FieldSystem *fieldSystem, enum HeapID heapId);
 static void FrontierLinkLobby_ReadPartyMenuResult(void *frontierWork, FrontierLinkLobby *lobby, FieldSystem *fieldSystem, enum HeapID heapId);
 static void FrontierLinkLobby_LaunchSummary(void *frontierWork, FrontierLinkLobby *lobby, FieldSystem *fieldSystem, enum HeapID heapId);
@@ -35,10 +34,14 @@ static void FrontierLinkLobby_ReadSummaryResult(void *frontierWork, FrontierLink
 
 FrontierLinkLobbyGlobals gFrontierLinkLobby;
 
-void FrontierLinkLobby_New(SaveData *saveData) {
+FrontierLinkLobby *FrontierLinkLobby_New(SaveData *saveData) {
+    FrontierLinkLobby *lobby;
+
     gFrontierLinkLobby.lobby = Heap_Alloc(HEAP_ID_FIELD2, sizeof(FrontierLinkLobby));
     MI_CpuFill8(gFrontierLinkLobby.lobby, 0, sizeof(FrontierLinkLobby));
-    gFrontierLinkLobby.lobby->saveData = saveData;
+    lobby = gFrontierLinkLobby.lobby;
+    lobby->saveData = saveData;
+    return lobby;
 }
 
 void FrontierLinkLobby_Free(FrontierLinkLobby *lobby) {

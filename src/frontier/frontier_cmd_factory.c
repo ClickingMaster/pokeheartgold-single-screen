@@ -26,8 +26,6 @@
 
 FS_EXTERN_OVERLAY(OVY_81);
 
-void FrontierMon_ToPokemon(FrontierMon *frontierMon, Pokemon *mon, int level);
-
 static void BattleFactory_OnAppExit(void *args);
 static void BattleFactory_BgScrollTask(SysTask *task, void *data);
 static BOOL FrontierScriptNative_WaitFactoryLink(FrontierScriptContext *ctx);

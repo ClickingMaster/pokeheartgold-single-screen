@@ -9,6 +9,7 @@
 #include "frontier/battle_castle_data.h"
 #include "frontier/frontier.h"
 #include "frontier/frontier_trainer_record.h"
+#include "frontier/frontier_trainers.h"
 
 #include "assert.h"
 #include "bg_window.h"
@@ -44,9 +45,6 @@ static const BattleCastleTrainerRange sBattleCastleTrainerRanges[] = {
     { 180, 219, 220, 239 },
     { 200, 299, 200, 299 },
 };
-
-void FrontierTrainer_SetBattleTrainer(BattleSetup *setup, FrontierTrainerRecord *record, int count, int battler, enum HeapID heapID);
-void FrontierMon_ToPokemon(FrontierMon *frontierMon, Pokemon *mon, int level);
 
 int BattleCastle_GetRandomTrainerId(int type, u32 round, int battleNo) {
     int min;

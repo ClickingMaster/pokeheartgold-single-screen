@@ -37,22 +37,22 @@ typedef struct FrontierMapParams {
     u8 padding[4];
 } FrontierMapParams;
 
-void FrontierMapEffect_InitAlloc(void **args, void **effect);
-void FrontierMapEffect_ExitFree(void **args, void **effect);
-void FrontierMapEffect_InitBgAnim(void **args, void **effect);
-void FrontierMapEffect_ExitBgAnim(void **args, void **effect);
-void FrontierMapEffect_InitArcadeNone(void **args, void **effect);
-void FrontierMapEffect_ExitArcadeNone(void **args, void **effect);
-void FrontierMapEffect_InitArcadeBlend(void **args, void **effect);
-void FrontierMapEffect_ExitArcadeBlend(void **args, void **effect);
-void FrontierMapEffect_InitFactoryBgPriority(void **args, void **effect);
-void FrontierMapEffect_ExitFactoryBgPriority(void **args, void **effect);
-void FrontierMapEffect_InitFactoryBlend(void **args, void **effect);
-void FrontierMapEffect_ExitFactoryBlend(void **args, void **effect);
-void FrontierMapEffect_InitTileBlink(void **args, void **effect);
-void FrontierMapEffect_ExitTileBlink(void **args, void **effect);
-void FrontierMapEffect_InitCastleBlend(void **args, void **effect);
-void FrontierMapEffect_ExitCastleBlend(void **args, void **effect);
+static void FrontierMapEffect_InitAlloc(void **args, void **effect);
+static void FrontierMapEffect_ExitFree(void **args, void **effect);
+static void FrontierMapEffect_InitBgAnim(void **args, void **effect);
+static void FrontierMapEffect_ExitBgAnim(void **args, void **effect);
+static void FrontierMapEffect_InitArcadeNone(void **args, void **effect);
+static void FrontierMapEffect_ExitArcadeNone(void **args, void **effect);
+static void FrontierMapEffect_InitArcadeBlend(void **args, void **effect);
+static void FrontierMapEffect_ExitArcadeBlend(void **args, void **effect);
+static void FrontierMapEffect_InitFactoryBgPriority(void **args, void **effect);
+static void FrontierMapEffect_ExitFactoryBgPriority(void **args, void **effect);
+static void FrontierMapEffect_InitFactoryBlend(void **args, void **effect);
+static void FrontierMapEffect_ExitFactoryBlend(void **args, void **effect);
+static void FrontierMapEffect_InitTileBlink(void **args, void **effect);
+static void FrontierMapEffect_ExitTileBlink(void **args, void **effect);
+static void FrontierMapEffect_InitCastleBlend(void **args, void **effect);
+static void FrontierMapEffect_ExitCastleBlend(void **args, void **effect);
 
 static const FrontierMapParams sFrontierMapParams[] = {
     [0] = { .bgMode = GX_BGMODE_0, .initEffect = FrontierMapEffect_InitAlloc,             .exitEffect = FrontierMapEffect_ExitFree,              .scriptId = 4,  .msgBank = NARC_msg_msg_0035_bin,          .bgm = SEQ_GS_BATTLETOWER, .bgSize = GF_BG_SCR_SIZE_512x256, .narc = NARC_a_1_8_3, .bg3Screen = 1,   .bg3Char = 0,   .bg3Palette = 148, .bg2Screen = 3,                  .bg2Char = 0,                  .bg2Palette = 148,                .scrollMode = 0, .bg2Scrolls = 1 },
@@ -124,15 +124,15 @@ void FrontierMap_ExitEffect(void *arg, void *effect, u32 mapId) {
     }
 }
 
-void FrontierMapEffect_InitAlloc(void **args, void **effect) {
+static void FrontierMapEffect_InitAlloc(void **args, void **effect) {
     *effect = Heap_Alloc(HEAP_ID_101, 0x20);
 }
 
-void FrontierMapEffect_ExitFree(void **args, void **effect) {
+static void FrontierMapEffect_ExitFree(void **args, void **effect) {
     Heap_Free(*effect);
 }
 
-void FrontierMapEffect_InitBgAnim(void **args, void **effect) {
+static void FrontierMapEffect_InitBgAnim(void **args, void **effect) {
     *effect = FrontierMapBgAnim_Create(args[0], args[1]);
     SetBgPriority(GF_BG_LYR_MAIN_0, 1);
     SetBgPriority(GF_BG_LYR_MAIN_2, 2);
@@ -140,17 +140,17 @@ void FrontierMapEffect_InitBgAnim(void **args, void **effect) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
 }
 
-void FrontierMapEffect_ExitBgAnim(void **args, void **effect) {
+static void FrontierMapEffect_ExitBgAnim(void **args, void **effect) {
     FrontierMapBgAnim_Free(*effect);
 }
 
-void FrontierMapEffect_InitArcadeNone(void **args, void **effect) {
+static void FrontierMapEffect_InitArcadeNone(void **args, void **effect) {
 }
 
-void FrontierMapEffect_ExitArcadeNone(void **args, void **effect) {
+static void FrontierMapEffect_ExitArcadeNone(void **args, void **effect) {
 }
 
-void FrontierMapEffect_InitArcadeBlend(void **args, void **effect) {
+static void FrontierMapEffect_InitArcadeBlend(void **args, void **effect) {
     SetBgPriority(GF_BG_LYR_MAIN_0, 1);
     SetBgPriority(GF_BG_LYR_MAIN_2, 2);
     SetBgPriority(GF_BG_LYR_MAIN_3, 3);
@@ -158,33 +158,33 @@ void FrontierMapEffect_InitArcadeBlend(void **args, void **effect) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
 }
 
-void FrontierMapEffect_ExitArcadeBlend(void **args, void **effect) {
+static void FrontierMapEffect_ExitArcadeBlend(void **args, void **effect) {
 }
 
-void FrontierMapEffect_InitFactoryBgPriority(void **args, void **effect) {
+static void FrontierMapEffect_InitFactoryBgPriority(void **args, void **effect) {
     SetBgPriority(GF_BG_LYR_MAIN_2, 3);
     SetBgPriority(GF_BG_LYR_MAIN_3, 2);
 }
 
-void FrontierMapEffect_ExitFactoryBgPriority(void **args, void **effect) {
+static void FrontierMapEffect_ExitFactoryBgPriority(void **args, void **effect) {
 }
 
-void FrontierMapEffect_InitFactoryBlend(void **args, void **effect) {
+static void FrontierMapEffect_InitFactoryBlend(void **args, void **effect) {
     G2_SetBlendAlpha(GX_BLEND_PLANEMASK_BG0, GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_BG3 | GX_BLEND_PLANEMASK_OBJ | GX_BLEND_PLANEMASK_BD, 20, 20);
 }
 
-void FrontierMapEffect_ExitFactoryBlend(void **args, void **effect) {
+static void FrontierMapEffect_ExitFactoryBlend(void **args, void **effect) {
 }
 
-void FrontierMapEffect_InitTileBlink(void **args, void **effect) {
+static void FrontierMapEffect_InitTileBlink(void **args, void **effect) {
     *effect = FrontierMapTileBlink_Create(args[0]);
 }
 
-void FrontierMapEffect_ExitTileBlink(void **args, void **effect) {
+static void FrontierMapEffect_ExitTileBlink(void **args, void **effect) {
     FrontierMapTileBlink_Free(*effect);
 }
 
-void FrontierMapEffect_InitCastleBlend(void **args, void **effect) {
+static void FrontierMapEffect_InitCastleBlend(void **args, void **effect) {
     SetBgPriority(GF_BG_LYR_MAIN_1, 0);
     SetBgPriority(GF_BG_LYR_MAIN_0, 2);
     SetBgPriority(GF_BG_LYR_MAIN_2, 2);
@@ -192,5 +192,5 @@ void FrontierMapEffect_InitCastleBlend(void **args, void **effect) {
     G2_SetBlendAlpha(GX_BLEND_PLANEMASK_BG0, GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_BG3 | GX_BLEND_PLANEMASK_OBJ | GX_BLEND_PLANEMASK_BD, 20, 20);
 }
 
-void FrontierMapEffect_ExitCastleBlend(void **args, void **effect) {
+static void FrontierMapEffect_ExitCastleBlend(void **args, void **effect) {
 }

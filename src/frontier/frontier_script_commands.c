@@ -8,6 +8,7 @@
 #include "frontier/frontier_script_context.h"
 #include "frontier/frontier_script_ui.h"
 #include "frontier/frontier_system.h"
+#include "frontier/frontier_trainers.h"
 
 #include "communication_core.h"
 #include "communication_player_state.h"
@@ -61,7 +62,6 @@ static const u8 sFrontierScriptConditionTable[6][3] = {
 void *Frontier_GetMap(void *frontierWork);
 void Frontier_RequestExit(void *frontierWork);
 void Frontier_ChangeMode(void *frontierWork, u16 mode, u16 taskId);
-u16 Frontier_GetPlayerSpriteId(PlayerProfile *profile);
 
 u16 *FrontierScript_GetVarPtr(FrontierScriptContext *ctx, u32 index);
 static BOOL FrontierScriptNative_WaitFrame(FrontierScriptContext *ctx);

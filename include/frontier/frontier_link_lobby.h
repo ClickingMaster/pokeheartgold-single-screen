@@ -60,5 +60,6 @@ BOOL FrontierLinkLobby_Send(FrontierLinkLobby *lobby, int kind, u16 a, u16 b);
 void FrontierLinkLobby_RunPartyApp(void *frontierWork, FrontierLinkLobby *lobby, u32 kind);
 
 extern const u8 gBattleHallCellTypes[20];
+FrontierLinkLobby *FrontierLinkLobby_New(SaveData *);
 
 #endif // POKEHEARTGOLD_FRONTIER_LINK_LOBBY_H

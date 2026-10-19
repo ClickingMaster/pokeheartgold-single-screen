@@ -16,6 +16,7 @@
 
 #include "battle_frontier_communication.h"
 #include "frontier_save_access.h"
+#include "frontier_script_commands_misc_internal.h"
 #include "frontier_stat_ids_legacy.h"
 #include "heap.h"
 #include "launch_application.h"
@@ -23,10 +24,6 @@
 #include "pokemon.h"
 
 FS_EXTERN_OVERLAY(OVY_83);
-
-u16 *FrontierScript_GetVarPtr(FrontierScriptContext *ctx, u32 index);
-
-u32 Comm_GetLocalNetId(void);
 
 static void BattleCastle_FillAppArgs(BattleCastleAppArgs *args, BattleCastleData *data);
 static void BattleCastle_OnAppExit(void *args);

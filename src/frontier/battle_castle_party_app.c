@@ -8,6 +8,7 @@
 #include "frontier/battle_arcade_data.h"
 #include "frontier/battle_castle.h"
 #include "frontier/battle_castle_setup.h"
+#include "frontier/frontier_trainers.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0031.h"
 
@@ -257,9 +258,6 @@ extern const BgTemplate gBattleCastlePartyAppBgTemplate_Main3;
 extern const BgTemplate gBattleCastlePartyAppBgTemplate_Sub0;
 extern const BgTemplate gBattleCastlePartyAppBgTemplate_Sub1;
 extern const GraphicsBanks gBattleCastlePartyAppGraphicsBanks;
-
-u32 Frontier_GetHpGaugeFrame(u16 hp, u16 maxHp);
-void Frontier_BufferPartnerName(MessageFormat *msgFormat, int value);
 
 static void BattleCastlePartyApp_ReloadBgPalette(void);
 

@@ -433,7 +433,7 @@ BOOL FrtCmd_ArcadeAction(FrontierScriptContext *ctx) {
 
 static void BattleArcade_CreateParticleEmitter(FrontierScriptContext *ctx, ArcadeContext *arcadeCtx, u32 resourceId) {
     FrontierMap *map = FrontierSystem_GetFrontierMap(ctx->frontierSystem);
-    ParticleSystem_CreateEmitterWithParam(FrontierParticles_GetSystem(map->particleManager, 0), resourceId, BattleArcade_ParticleEmitterCallback, arcadeCtx);
+    ParticleSystem_CreateEmitterWithParam(FrontierParticles_GetSystem(map->particles, 0), resourceId, BattleArcade_ParticleEmitterCallback, arcadeCtx);
 }
 
 extern const VecFx32 gBattleArcadeParticlePosition; //{-1, 0, 0}

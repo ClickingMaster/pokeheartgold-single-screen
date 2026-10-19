@@ -9,6 +9,7 @@
 
 #include "battle/battle_setup.h"
 #include "frontier/frontier.h"
+#include "frontier/frontier_trainers.h"
 #include "msgdata/msg.naix"
 
 #include "assert.h"
@@ -56,17 +57,11 @@ extern const BattleTowerSampleTrainer gBattleTowerSampleTrainers[];
 extern const u8 gBattleTowerSampleTrainerHeaders[];
 extern const FrontierMon gBattleTowerSampleMons[];
 
-void BattleRoomDownload_GetTrainer(u32 download, FrontierTrainer *trainer, int index);
-void FrontierData_ReadMember(void *dest, s32 fileId, NarcId narcId);
-void *FrontierTrainer_Load(FrontierTrainer *trainer, int trainerId, enum HeapID heapID, NarcId narcId);
-void FrontierMon_ToPokemon(FrontierMon *frontierMon, Pokemon *mon, int level);
-void FrontierTrainer_SetBattleTrainer(BattleSetup *setup, FrontierTrainer *trainer, int count, int battler, enum HeapID heapID);
-
 u32 BattleTower_GenerateTrainerMons(FrontierFieldSystem *tower, FrontierTrainer *trainer, u16 trainerId, u32 count, u16 *partySpecies, u16 *partyItems, FrontierMultiBattleAllyData *allyData, enum HeapID heapID) {
     BattleTowerTrainerSets *sets;
     u32 replaceItem;
 
-    sets = FrontierTrainer_Load(trainer, trainerId, heapID, BattleTower_GetTrainerNarc(tower->towerMode));
+    sets = FrontierTrainer_Load((FrontierTrainerRecord *)trainer, trainerId, heapID, BattleTower_GetTrainerNarc(tower->towerMode));
     replaceItem = BattleTower_PickTrainerMonSets(tower, sets, trainerId, trainer->frontierMons, count, partySpecies, partyItems, allyData, heapID);
     Heap_Free(sets);
     return replaceItem;
@@ -322,7 +317,7 @@ void BattleTower_AddTrainerToBattle(BattleSetup *setup, FrontierTrainer *trainer
     FrontierMon *frontierMon;
     int i;
 
-    FrontierTrainer_SetBattleTrainer(setup, trainer, count, battler, heapID);
+    FrontierTrainer_SetBattleTrainer(setup, (FrontierTrainerRecord *)trainer, count, battler, heapID);
     mon = AllocMonZeroed(heapID);
     i = 0;
     if (count > 0) {

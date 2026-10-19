@@ -4,6 +4,8 @@
 
 #include "frontier/frontier.h"
 #include "frontier/frontier_map_params.h"
+#include "frontier/frontier_particles.h"
+#include "frontier/frontier_trainers.h"
 
 #include "bg_window.h"
 #include "field_bgm.h"
@@ -50,21 +52,16 @@ typedef struct FrontierMapMainBgTemplates {
 } FrontierMapMainBgTemplates;
 
 // Frontier application work
+
 FrontierMapObjectGfx *Frontier_GetMapObjectGfx(void *frontier);
 FrontierMapObject *Frontier_GetMapObjects(void *frontier);
 FrontierMapObject *Frontier_GetMapObject(void *frontier, int index);
 FrontierMapSpriteState *Frontier_GetMapSpriteState(void *frontier);
 void Frontier_ResetMapSpriteState(void *frontier);
-
 // Other frontier modules
-int Frontier_GetPlayerSpriteId(PlayerProfile *profile);
-u32 FrontierParticles_New(enum HeapID heapID);
-void FrontierParticles_Free(u32 resourceManager);
-void FrontierParticles_Update(void);
 
 ManagedSprite *FrontierMap_CreateSprite(FrontierMap *map, u16 index, u16 resourceId);
 void FrontierMap_SetSpriteAnimActive(FrontierMap *map, u16 index, u32 active);
-
 // Map parameter table fields (FrontierMap_GetParam)
 #define MAP_PARAM_BG_MODE     0
 #define MAP_PARAM_BGM         3
@@ -345,7 +342,7 @@ void *FrontierMap_Init(void *frontier) {
     GF_TouchpadResetSampling();
     GF_TouchpadStartSampling(4);
     FrontierMap_InitSpriteSystem(map);
-    map->particleManager = FrontierParticles_New(HEAP_ID_101);
+    map->particles = FrontierParticles_New(HEAP_ID_101);
     FrontierMap_InitMapObjects(map, mapId, profile);
     map->objectTask = SysTask_CreateOnMainQueue((SysTaskFunc)FrontierMap_ObjectTask, map, 60000);
     map->eventTask = SysTask_CreateOnMainQueue((SysTaskFunc)FrontierMap_EventTask, map, 61000);
@@ -377,7 +374,7 @@ void FrontierMap_Free(FrontierMap *map) {
     ToggleBgLayer(GF_BG_LYR_SUB_0, GF_PLANE_TOGGLE_OFF);
     FreeBgTilemapBuffer(map->bgConfig, GF_BG_LYR_SUB_0);
     FrontierMap_FreeSpriteSystem(map);
-    FrontierParticles_Free(map->particleManager);
+    FrontierParticles_Free(map->particles);
     GF_DestroyVramTransferManager();
     PaletteData_FreeBuffers(map->paletteData, PLTTBUF_MAIN_BG);
     PaletteData_FreeBuffers(map->paletteData, PLTTBUF_SUB_BG);

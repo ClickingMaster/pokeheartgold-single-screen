@@ -7,6 +7,7 @@
 #include "frontier/battle_hall_setup.h"
 #include "frontier/frontier_link_messages.h"
 #include "frontier/frontier_trainer_record.h"
+#include "frontier/frontier_trainers.h"
 
 #include "frontier_save_access.h"
 #include "heap.h"
@@ -35,11 +36,7 @@ u32 BattleHall_GetWinStreakStat(u8 type);
 int BattleHall_GetBestStreakStat(int type);
 int BattleHall_GetSpeciesStat(int type);
 int BattleHall_GetSpeciesRecordsType(int type);
-void FrontierTrainer_GetClassSprite(u8 trainerClass);
-void Frontier_RecordLinkPlayerLocations(SaveData *saveData);
 int BattleHall_GetLevelRank(BattleHallData *data);
-void BattleHallData_GetTrainerSprite(BattleHallData *data, u32 index);
-void BattleHallData_SendLinkMessage(BattleHallData *data, u32 kind, u32 value);
 
 static const u8 sBattleHallBattlePoints[20] = { 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 6, 6, 8, 8, 10, 10, 12 };
 
@@ -298,10 +295,10 @@ u8 BattleHallData_GetBattleNo(BattleHallData *data) {
     return data->battleNo;
 }
 
-void BattleHallData_GetTrainerSprite(BattleHallData *data, u32 index) {
+u16 BattleHallData_GetTrainerSprite(BattleHallData *data, u32 index) {
     FrontierTrainerRecord trainer;
     Heap_Free(FrontierTrainer_Load(&trainer, data->trainerIds[(u8)(index + data->battleNo * 2)], HEAP_ID_FIELD2, NARC_a_2_0_2));
-    FrontierTrainer_GetClassSprite((u8)trainer.trainerClass);
+    return FrontierTrainer_GetClassSprite((u8)trainer.trainerClass);
 }
 
 void BattleHallData_ClearRanks(BattleHallData *data) {
@@ -318,20 +315,17 @@ void BattleHallData_EndRound(BattleHallData *data) {
     BattleHallData_Save(data, 0);
 }
 
-void BattleHallData_SendLinkMessage(BattleHallData *data, u32 kind, u32 value) {
+// BUG: kinds 4-6 send nothing and return no value; the script command stores whatever was left in the return register.
+BOOL BattleHallData_SendLinkMessage(BattleHallData *data, u32 kind, u32 value) {
     switch (kind) {
     case 0:
-        BattleHallLink_SendEmptyRecord(data);
-        break;
+        return BattleHallLink_SendEmptyRecord(data);
     case 1:
-        BattleHallLink_SendTrainerIds(data);
-        break;
+        return BattleHallLink_SendTrainerIds(data);
     case 2:
-        BattleHallLink_SendSetIds(data);
-        break;
+        return BattleHallLink_SendSetIds(data);
     case 3:
-        BattleHallLink_SendValue(data, (u8)value);
-        break;
+        return BattleHallLink_SendValue(data, (u8)value);
     case 4:
         break;
     case 5:
@@ -339,8 +333,7 @@ void BattleHallData_SendLinkMessage(BattleHallData *data, u32 kind, u32 value) {
     case 6:
         break;
     case 7:
-        BattleHallLink_SendPartyMon(data);
-        break;
+        return BattleHallLink_SendPartyMon(data);
     }
 }
 
