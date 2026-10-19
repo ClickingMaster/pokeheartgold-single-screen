@@ -78,8 +78,6 @@ typedef struct DrawingSessionButtonSprite {
     u16 anim;
 } DrawingSessionButtonSprite;
 
-// Link layer functions without a public header (the headers of their units declare them with
-// placeholder types).
 extern BOOL Comm_SendParentCommand(int command, const void *data, int size);
 extern int Comm_IsParentQueueEmpty(void);
 extern int Comm_IsChildQueueEmpty(void);
@@ -515,7 +513,7 @@ BOOL DrawingSession_Exit(OverlayManager *man, int *state) {
 }
 
 static void DrawingSession_VBlankCB(void *bgConfig) {
-    // OS_SetIrqCheckFlag(OS_IE_VBLANK), with the DTCM base as a constant address
+    // OS_SetIrqCheckFlag(OS_IE_V_BLANK)
     volatile u32 *dtcm = (volatile u32 *)0x027E0000;
     GF_RunVramTransferTasks();
     OamManager_ApplyAndResetBuffers();
@@ -708,7 +706,6 @@ static void DrawingSession_CreateSprites(DrawingSessionWork *work) {
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, TRUE);
 }
 
-// man is not used.
 static void DrawingSession_AddWindows(DrawingSessionWork *work, OverlayManager *man) {
     int i;
     int baseTile;
@@ -1436,7 +1433,6 @@ static void DrawingSession_AnimateCursorPalette(u16 *angle) {
     GX_LoadOBJPltt(&color, 0x18, 2);
 }
 
-// Same body as DrawingSession_CountMembers.
 static u32 DrawingSession_CountPlayerProfiles(void) {
     int i;
     u32 count = 0;
@@ -1690,7 +1686,6 @@ static void DrawingSession_HideYesNo(DrawingSessionWork *work) {
     }
 }
 
-// work is not used.
 static BOOL DrawingSession_IsYesNoAreaTouched(DrawingSessionWork *work) {
     if (TouchscreenHitbox_FindRectAtTouchNew(sDrawingSessionYesNoHitbox) != -1) {
         return TRUE;

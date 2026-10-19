@@ -10,7 +10,7 @@
 // one beacon of the station
 typedef struct MysteryGiftBeaconPacket {
     u16 id;    // the gift's checksum
-    u16 index; // 0xFFFF: the gift's title
+    u16 index; // the gift's title
     u32 size;  // of the gift
     u8 data[MYSTERY_GIFT_BEACON_PACKET_DATA_SIZE];
 } MysteryGiftBeaconPacket;

@@ -293,7 +293,7 @@ static void VsRecorder_CreateSearchResultIcons(VsRecorderWork *work) {
             search->icons[i][k].resId = search->iconResId;
             search->icons[i][k].sprite = VsRecorder_NewMonIcon(work, search->monIconNarc, search->icons[i][k].resId, iconSpecies, iconForm, FALSE);
             if (search->icons[i][k].sprite != NULL) {
-                ((void (*)(ManagedSprite *, int))ManagedSprite_SetDrawPriority)(search->icons[i][k].sprite, 6 - k); // the priority is passed as int
+                ((void (*)(ManagedSprite *, int))ManagedSprite_SetDrawPriority)(search->icons[i][k].sprite, 6 - k);
             }
             search->iconResId++;
         }
@@ -304,10 +304,10 @@ static void VsRecorder_CreateSearchResultIcons(VsRecorderWork *work) {
 static void VsRecorder_SetSearchResultIconsDrawFlag(VsRecorderWork *work, BOOL draw) {
     int i;
     int j;
-    VsRecorderVideoSearch *row; // walks by one row of icons
+    VsRecorderVideoSearch *row;
 
     for (j = 0, row = work->screenWork; j < 5; row = (VsRecorderVideoSearch *)((u8 *)row + sizeof(row->icons[0])), j++) {
-        VsRecorderVideoSearch *icon = row; // walks by one icon
+        VsRecorderVideoSearch *icon = row;
 
         for (i = 0; i < 6; i++, icon = (VsRecorderVideoSearch *)((u8 *)icon + sizeof(VsRecorderVideoListIcon))) {
             if (icon->icons[0][0].sprite != NULL) {
@@ -320,11 +320,11 @@ static void VsRecorder_SetSearchResultIconsDrawFlag(VsRecorderWork *work, BOOL d
 static void VsRecorder_FreeSearchResultIcons(VsRecorderWork *work) {
     int i;
     int j;
-    VsRecorderVideoSearch *row = work->screenWork; // walks by one row of icons
+    VsRecorderVideoSearch *row = work->screenWork;
 
     VsRecorder_SetVBlankPaused(work, TRUE);
     for (j = 0; j < 5; row = (VsRecorderVideoSearch *)((u8 *)row + sizeof(row->icons[0])), j++) {
-        VsRecorderVideoSearch *icon = row; // walks by one icon
+        VsRecorderVideoSearch *icon = row;
 
         for (i = 0; i < 6; i++, icon = (VsRecorderVideoSearch *)((u8 *)icon + sizeof(VsRecorderVideoListIcon))) {
             if (icon->icons[0][0].sprite != NULL) {
@@ -417,7 +417,7 @@ static void VsRecorder_ScrollSearchResultIcons(VsRecorderWork *work) {
             search->icons[row][j].resId = search->iconResId;
             search->icons[row][j].sprite = VsRecorder_NewMonIcon(work, search->monIconNarc, search->icons[row][j].resId, iconSpecies, iconForm, FALSE);
             if (search->icons[row][j].sprite != NULL) {
-                ((void (*)(ManagedSprite *, int))ManagedSprite_SetDrawPriority)(search->icons[row][j].sprite, 6 - j); // the priority is passed as int
+                ((void (*)(ManagedSprite *, int))ManagedSprite_SetDrawPriority)(search->icons[row][j].sprite, 6 - j);
             }
             search->iconResId++;
         }
@@ -1030,7 +1030,7 @@ BOOL VsRecorder_VideoSearchSelectSpecies(VsRecorderWork *work) {
 
         VsRecorder_UpdateTouchScroll(&work->touchScroll);
         VsRecorder_ListScroll(&work->listWindow, work->touchScroll.direction);
-        species = ((u16(*)(VsRecorderListWindow *, VsRecorderWork *))VsRecorder_UpdateMessageList)(&work->listWindow, work); // read as u16
+        species = ((u16(*)(VsRecorderListWindow *, VsRecorderWork *))VsRecorder_UpdateMessageList)(&work->listWindow, work);
         if (species) {
             search->species = species;
             VsRecorder_PrintSearchSpecies(work, species);

@@ -32,50 +32,50 @@ typedef struct TrainerCardSignaturePenPos {
 } TrainerCardSignaturePenPos;
 
 typedef struct TrainerCardSignature {
-    BgConfig *bgConfig; // 0x0000
+    BgConfig *bgConfig;
     u32 unk_0004;
-    GameStats *gameStats;                               // 0x0008
-    Options *options;                                   // 0x000C
-    MessageFormat *msgFormat;                           // 0x0010
-    MsgData *msgData;                                   // 0x0014
-    String *penNames[TRAINER_CARD_SIGNATURE_PEN_COUNT]; // 0x0018
-    String *doneString;                                 // 0x002C
-    String *titleString;                                // 0x0030
-    String *messageString;                              // 0x0034
-    int textPrinterId;                                  // 0x0038
-    SpriteList *spriteList;                             // 0x003C
-    G2dRenderer renderer;                               // 0x0040
-    GF_2DGfxResMan *resourceManagers[4];                // 0x0168
-    SpriteResource *resourceObjects[2][4];              // 0x0178, [screen][char/pltt/cell/anim]
-    SpriteResourcesHeader resourceHeaders[2];           // 0x0198
+    GameStats *gameStats;
+    Options *options;
+    MessageFormat *msgFormat;
+    MsgData *msgData;
+    String *penNames[TRAINER_CARD_SIGNATURE_PEN_COUNT];
+    String *doneString;
+    String *titleString;
+    String *messageString;
+    int textPrinterId;
+    SpriteList *spriteList;
+    G2dRenderer renderer;
+    GF_2DGfxResMan *resourceManagers[4];
+    SpriteResource *resourceObjects[2][4]; // [screen][char/pltt/cell/anim]
+    SpriteResourcesHeader resourceHeaders[2];
     u8 unk_01E0[0x70];
-    Sprite *doneButtonSprite; // 0x0250
+    Sprite *doneButtonSprite;
     u8 unk_0254[0x20];
-    Window penNameWindows[TRAINER_CARD_SIGNATURE_PEN_COUNT]; // 0x0274
-    Window canvasWindow;                                     // 0x02C4
-    Window messageWindow;                                    // 0x02D4
-    Window doneButtonWindow;                                 // 0x02E4
-    Window titleWindow;                                      // 0x02F4
+    Window penNameWindows[TRAINER_CARD_SIGNATURE_PEN_COUNT];
+    Window canvasWindow;
+    Window messageWindow;
+    Window doneButtonWindow;
+    Window titleWindow;
     u8 unk_0304[8];
-    int state; // 0x030C
+    int state;
     u8 unk_0310[0x4008];
-    u16 paletteAngle; // 0x4318
-    u8 penStyle;      // 0x431A
+    u16 paletteAngle;
+    u8 penStyle;
     u8 unk_431B;
-    TrainerCardSignatureStroke newStroke;                                 // 0x431C
-    TrainerCardSignatureStroke strokes[TRAINER_CARD_SIGNATURE_PEN_COUNT]; // 0x432D
-    TrainerCardSignaturePenPos penPos[TRAINER_CARD_SIGNATURE_PEN_COUNT];  // 0x4382
+    TrainerCardSignatureStroke newStroke;
+    TrainerCardSignatureStroke strokes[TRAINER_CARD_SIGNATURE_PEN_COUNT];
+    TrainerCardSignaturePenPos penPos[TRAINER_CARD_SIGNATURE_PEN_COUNT];
     u8 unk_4396[0x1802];
-    u8 *signature;            // 0x5B98
-    u8 objTextBuffer[0x100];  // 0x5B9C
-    YesNoPrompt *yesNoPrompt; // 0x5C9C
-    s8 prevMoveX;             // 0x5CA0
+    u8 *signature;
+    u8 objTextBuffer[0x100];
+    YesNoPrompt *yesNoPrompt;
+    s8 prevMoveX;
     s8 prevMoveY;
     s8 moveX;
     s8 moveY;
     u32 unk_5CA4;
-    int lastTouchX;     // 0x5CA8
-    int lastTouchY;     // 0x5CAC
-} TrainerCardSignature; // size: 0x5CB0
+    int lastTouchX;
+    int lastTouchY;
+} TrainerCardSignature;
 
 #endif // POKEHEARTGOLD_APPLICATION_TRAINER_CARD_OVERLAY_TRAINER_CARD_SIGNATURE_INTERNAL_H

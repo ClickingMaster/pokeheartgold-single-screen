@@ -457,7 +457,6 @@ void PokedexApp_BuildListEntries(PokedexAppData *pokedexApp, int mode) {
             u32 dexNo = Pokedex_ConvertToCurrentDexNo(pokedexApp->dexMode, pokedexApp->searchResults.entries[i][0]);
             PokedexAppData *shifted;
             dexNo--;
-            // addressed through the app pointer shifted by dexNo entries (listEntries[dexNo] changes the code)
             shifted = (PokedexAppData *)((u8 *)pokedexApp + dexNo * sizeof(PokedexListEntry));
             shifted->listEntries[0].species = pokedexApp->searchResults.entries[i][0];
             shifted->listEntries[0].caughtState = pokedexApp->searchResults.entries[i][1];

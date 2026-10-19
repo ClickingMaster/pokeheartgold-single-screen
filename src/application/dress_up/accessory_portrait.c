@@ -362,7 +362,7 @@ static void AccessoryPortrait_VBlankCB(void *data) {
     AccessoryPortrait_AppVBlank(&work->gfx);
 }
 
-// photo frame on BG1 (NARC_a_0_2_6 pal 0x7E, chars 0x7D, screen 0x80)
+// photo frame on BG1
 static void AccessoryPortrait_LoadFrameBg(AccessoryPortraitAppWork *work) {
     NNSG2dScreenData *screen;
     void *data;

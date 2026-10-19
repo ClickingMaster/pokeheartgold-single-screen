@@ -28,19 +28,18 @@
 #include "sys_task_api.h"
 #include "text.h"
 
-// Scene 6 of the trade animation (trades and receiving): the ball lands with a flash and the received Pokemon
-// appears with its cry, then "<Pokemon> sent over <Pokemon>." / "Take good care of <Pokemon>!" (trade) or "<Pokemon>
-// was taken out." with a fanfare, and the screen fades out.
+// Scene 6 of the trade animation (trades and receiving): the ball lands with a flash, the received Pokemon appears
+// with its cry and its message, and the screen fades out.
 
 #define TRADE_SEQUENCE_RECEIVE_NUM_STATES 4
 
 typedef struct TradeSequenceReceiveBrightness {
-    TradeSequenceReceive *receive; // 0x00
-    fx32 value;                    // 0x04
-    fx32 target;                   // 0x08
-    fx32 step;                     // 0x0C
-    int frames;                    // 0x10
-} TradeSequenceReceiveBrightness;  // size: 0x14
+    TradeSequenceReceive *receive;
+    fx32 value;
+    fx32 target;
+    fx32 step;
+    int frames;
+} TradeSequenceReceiveBrightness;
 
 enum TradeSequenceReceiveMonStep {
     TRADE_RECEIVE_MON_START_BOUNCE,
@@ -279,7 +278,7 @@ static BOOL TradeSequenceReceive_ShowMon(TradeSequenceReceive *receive, u32 *sta
         if (receive->timer > 10) {
             Pokepic_SetAttr(receive->pokepic, POKEPIC_VANISHED, FALSE);
             TradeSequenceReceive_StartBrightness(receive, 16, 0, 12);
-            receive->subState++; // = (*state)++
+            receive->subState++;
         }
         break;
     case TRADE_RECEIVE_MON_WAIT_BRIGHTNESS:

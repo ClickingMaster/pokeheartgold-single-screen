@@ -22,7 +22,7 @@ typedef struct PokewalkerBoxMon {
     u16 level;
     u16 markings;
     u16 nickname[POKEMON_NAME_LENGTH + 2];
-} PokewalkerBoxMon; // size=0x30
+} PokewalkerBoxMon;
 
 // What the box selector shows about the Pokemon under the cursor (ov112_021F04DC).
 typedef struct PokewalkerSelectMonInfo {
@@ -36,9 +36,9 @@ typedef struct PokewalkerSelectMonInfo {
     u8 markings[6];
     u16 heldItem;
     u8 level;
-} PokewalkerSelectMonInfo; // size=0x2C
+} PokewalkerSelectMonInfo;
 
-// PokewalkerApp seen from selectMonState (0x1D764): the PC box selection (mode 7) and the chosen Pokemon's
+// PokewalkerApp seen from selectMonState: the PC box selection (mode 7) and the chosen Pokemon's
 // species, nickname, form and gender (PokewalkerApp strollMonSpecies .. strollMonGender).
 typedef struct PokewalkerSelectMonWork {
     int state;
@@ -63,18 +63,18 @@ typedef struct PokewalkerEventLogArgs {
 // Sprites of the box display: the six marking sprites and the picture of the Pokemon (sub screen).
 typedef struct PokewalkerBoxDisplaySprites {
     enum HeapID heapId;
-    SpriteList *spriteList;                          // 0x004
-    G2dRenderer renderer;                            // 0x008
-    GF_2DGfxResMan *resMan[GF_GFX_RES_TYPE_MAX];     // 0x130
-    SpriteResource *resObjs[2][GF_GFX_RES_TYPE_MAX]; // 0x148: 0 = markings, 1 = Pokemon picture
+    SpriteList *spriteList;
+    G2dRenderer renderer;
+    GF_2DGfxResMan *resMan[GF_GFX_RES_TYPE_MAX];
+    SpriteResource *resObjs[2][GF_GFX_RES_TYPE_MAX]; // 0 = markings, 1 = Pokemon picture
     u8 unk_178[0x24];
-    Sprite *markingSprites[6]; // 0x19C
-    Sprite *monSprite;         // 0x1B4
-    void *monCharData;         // 0x1B8, 80x80 4bpp
-    u16 monPalette[16];        // 0x1BC
-    u32 monCharLocation;       // 0x1DC, sub screen OBJ VRAM
-    u32 monPlttLocation;       // 0x1E0
-} PokewalkerBoxDisplaySprites; // size=0x1E4
+    Sprite *markingSprites[6];
+    Sprite *monSprite;
+    void *monCharData; // 80x80 4bpp
+    u16 monPalette[16];
+    u32 monCharLocation; // sub screen OBJ VRAM
+    u32 monPlttLocation;
+} PokewalkerBoxDisplaySprites;
 
 // Sub screen of the PC box selection (mode 7): the Pokemon under the cursor with its picture, markings, nickname,
 // species, gender, level and held item.
@@ -82,13 +82,12 @@ typedef struct PokewalkerBoxDisplay {
     enum HeapID heapId;
     BgConfig *bgConfig;
     Window windows[6];
-    MsgData *msgData; // 0x68
+    MsgData *msgData;
     MessageFormat *msgFormat;
     String *string;
-    PokewalkerBoxDisplaySprites sprites; // 0x74
-} PokewalkerBoxDisplay;                  // size=0x258
+    PokewalkerBoxDisplaySprites sprites;
+} PokewalkerBoxDisplay;
 
-// Box selector (ARM9, no header yet).
 void *BoxMonSelector_New(enum HeapID heapId, int count, int flag);
 void BoxMonSelector_Delete(void *boxSelector);
 void BoxMonSelector_Init(void *boxSelector, BgConfig *bgConfig, PCStorage *storage, Party *party, u32 unused11, u32 unused12, BOOL canCancel, u32 initialPage, void *getMon, void *getBoxName, void *selection, void *onCursorMove, void *arg);

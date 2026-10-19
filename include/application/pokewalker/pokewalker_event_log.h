@@ -60,7 +60,7 @@ typedef struct PokewalkerEventLogMonSprite {
     int species;
     ManagedSprite *sprites[2]; // small, large
     ManagedSprite *shadowSprite;
-} PokewalkerEventLogMonSprite; // size=0x14
+} PokewalkerEventLogMonSprite;
 
 // Hop-and-run-away animation of the right-hand Pokemon (Poke Radar Pokemon that fled).
 typedef struct PokewalkerEventLogFleeAnim {
@@ -83,21 +83,21 @@ typedef struct PokewalkerEventLog {
     enum HeapID heapId;
     const u16 *playerName;
     u32 playerGender;
-    NARC *narc; // 0x10
+    NARC *narc;
     BgConfig *bgConfig;
-    Window windows[4];        // 0x18: date, time, message, quit button
-    MessageFormat *msgFormat; // 0x58
+    Window windows[4]; // date, time, message, quit button
+    MessageFormat *msgFormat;
     MsgData *msgData;
     MsgData *speciesNames;
     MsgData *itemNames;
-    SpriteSystem *spriteSystem; // 0x68
+    SpriteSystem *spriteSystem;
     SpriteManager *spriteManager;
-    ManagedSprite *sprites[EVENT_LOG_SPRITE_MAX]; // 0x70
-    PokewalkerEventLogMonSprite monSprites[2];    // 0x98: left, right
-    PokewalkerIrRecord *entries[24];              // 0xC0, sorted by time
-    RTCDate date;                                 // 0x120, of the shown entry
-    RTCTime time;                                 // 0x130
-    u8 loadState;                                 // 0x13C
+    ManagedSprite *sprites[EVENT_LOG_SPRITE_MAX];
+    PokewalkerEventLogMonSprite monSprites[2]; // left, right
+    PokewalkerIrRecord *entries[24];           // sorted by time
+    RTCDate date;                              // of the shown entry
+    RTCTime time;
+    u8 loadState;
     u8 page;
     u8 count;
     u8 dowsingStreakPage; // page of the 4th Dowsing Machine item, 0 = none
@@ -105,15 +105,15 @@ typedef struct PokewalkerEventLog {
     u8 dowsingCount;
     u8 radarCount;
     u8 peerCount;
-    u32 course : 8; // 0x144, course of the shown entry (0xFF = none yet)
+    u32 course : 8; // course of the shown entry (0xFF = none yet)
     u32 hasGiftMon : 1;
     u32 hasGiftItem : 1;
     u32 pageTurnActive : 1;
     u32 pageTurnState : 4;
     u32 unused : 17;
-    PokewalkerEventLogFleeAnim fleeAnim;   // 0x148
-    PokewalkerEventLogCatchAnim catchAnim; // 0x14C
-} PokewalkerEventLog;                      // size=0x150
+    PokewalkerEventLogFleeAnim fleeAnim;
+    PokewalkerEventLogCatchAnim catchAnim;
+} PokewalkerEventLog;
 
 typedef struct PokewalkerEventLogSlot {
     PokewalkerIrRecord *record;

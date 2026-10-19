@@ -62,17 +62,15 @@ typedef struct MainMenuUtilGift {
     u16 type;
     u8 unk_02[2];
     u32 itemId;
-    u8 mon[1]; // Pokemon
+    u8 mon[1];
 } MainMenuUtilGift;
 
-// The work and the labels inside it; sMainMenuUtilCryptoHeapId + 1 is gMainMenuUtilWork (some functions take its address through the
-// preceding label)
 extern enum HeapID sMainMenuUtilCryptoHeapId; // heap of the crypto library
 extern MainMenuUtilWork gMainMenuUtilWork;
-extern MainMenuUtilSprites sMainMenuUtilSprites; // = &gMainMenuUtilWork.sprites
-extern G2dRenderer sMainMenuUtilRenderer;        // = &gMainMenuUtilWork.sprites.renderer
-extern u32 ov74_0223D654[];                      // = gMainMenuUtilWork + 0x200
-extern u32 ov74_0223E2D4[];                      // = gMainMenuUtilWork + 0xE80
+extern MainMenuUtilSprites sMainMenuUtilSprites;
+extern G2dRenderer sMainMenuUtilRenderer;
+extern u32 ov74_0223D654[];
+extern u32 ov74_0223E2D4[];
 extern const u8 sGiftCartridgePublicKey[];
 extern const ObjCharTransferTemplate sMainMenuUtilObjCharTransferTemplate;
 extern const BgTemplate sMainMenuUtilBgTemplate;
@@ -104,7 +102,6 @@ static int MainMenuUtil_CheckGiftCartridgeSignature(void) {
     u32 code = (u8)(gameCode >> 24) | ((gameCode << 24) | (((gameCode >> 8) << 24) >> 8) | (((gameCode >> 16) << 24) >> 16));
     u32 i = 0;
     if (i < sGiftCartridgeGameCodes[0]) {
-        // sGiftCartridgeGameCodes, reached through the end of the preceding table (second literal-pool entry)
         u32 *codes = (u32 *)(sAgbSpeciesMapNationalDex + 0x11F);
         do {
             if (code == *codes) {
@@ -502,7 +499,7 @@ u32 MainMenuUtil_GetVersionMaskBit(int spriteId) {
 
 static void MainMenuUtil_VBlankCB(void) {
     MainMenuUtilWork *work = &gMainMenuUtilWork;
-    if (ov74_0223E2D4[9]) { // = work->vblankCallback
+    if (ov74_0223E2D4[9]) {
         work->vblankCallback(work);
         work->vblankCallback = NULL;
     }
@@ -512,7 +509,7 @@ static void MainMenuUtil_VBlankCB(void) {
         DoScheduledBgGpuUpdates(work->bgConfig);
     }
     {
-        // OS_SetIrqCheckFlag(OS_IE_V_BLANK), with the address of the check flag spelled out
+        // OS_SetIrqCheckFlag(OS_IE_V_BLANK)
         volatile u32 *dtcm = (volatile u32 *)0x027E0000;
         dtcm[0x3FF8 / 4] |= OS_IE_V_BLANK;
     }

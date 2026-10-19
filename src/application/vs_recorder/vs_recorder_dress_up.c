@@ -34,9 +34,7 @@
 #include "touchscreen.h"
 #include "vram_transfer_manager.h"
 
-// VS Recorder dress-up photo screens: send the player's own photo (VS_RECORDER_SCREEN_DRESS_UP_SEND) and view photos
-// of a chosen species from the server (VS_RECORDER_SCREEN_DRESS_UP_VIEW). The photos are drawn by the OVY_41 portrait
-// renderer. Starts with the Frontier record screen's exit substate.
+// VS Recorder dress-up photo screens: send the player's own photo and view photos of a chosen species.
 
 FS_EXTERN_OVERLAY(OVY_41);
 
@@ -1244,7 +1242,7 @@ static void VsRecorder_CreateDressUpToggleWindow(VsRecorderWork *work) {
 }
 
 static void VsRecorder_DressUpVBlankCB(void *data) {
-    vu32 *dtcm = (vu32 *)0x027E0000; // DTCM as a constant, for OS_SetIrqCheckFlag below
+    vu32 *dtcm = (vu32 *)0x027E0000;
     VsRecorderWork *work = data;
     if (((VsRecorderDressUp *)work->screenWork)->portrait != NULL) {
         AccessoryPortrait_VBlank(((VsRecorderDressUp *)work->screenWork)->portrait);

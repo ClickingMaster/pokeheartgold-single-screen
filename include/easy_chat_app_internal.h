@@ -11,7 +11,7 @@
 #include "sys_task.h"
 #include "touchscreen.h"
 
-// Overlay 102 (easy chat): the app logic (EasyChatApp) drives a screen object (EasyChatAppView) by starting
+// Easy chat: the app logic (EasyChatApp) drives a screen object (EasyChatAppView) by starting
 // numbered view commands; the view reads the app state back through the getters below.
 typedef struct EasyChatApp EasyChatApp;
 typedef struct EasyChatAppView EasyChatAppView;

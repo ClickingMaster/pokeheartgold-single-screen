@@ -21,53 +21,52 @@
 #include "system.h"
 #include "text.h"
 
-// Scene 2 of the trade animation: the ball model spirals across the screen, the screens swap as it leaves the top
-// one, and it shrinks into the distance on the bottom one where a sprite animation plays; then the screen fades to
-// white.
+// Scene 2 of the trade animation: the ball model spirals across the top screen and shrinks into the distance on
+// the bottom one, then the screen fades to white.
 
 #define TRADE_SEQUENCE_RECEDE_NUM_STATES 2
 
 // Moves the ball model along an ellipse (radii radiusX/radiusY, turning by angleSpeed every frame) around a center
 // that itself moves every frame; radii and scale can change over a number of frames.
 typedef struct TradeSequenceRecedeFlight {
-    struct TradeSequenceRecede *recede; // 0x00
-    SysTask *task;                      // 0x04
-    TradeSequenceModels *models;        // 0x08
-    TradeSequenceModel *ball;           // 0x0C
-    VecFx32 center;                     // 0x10
-    VecFx32 offset;                     // 0x1C
-    VecFx32 position;                   // 0x28
-    TradeSequenceRotation rotation;     // 0x34
-    u8 padding_3A[2];                   // 0x3A
-    fx32 centerStepY;                   // 0x3C
-    fx32 centerStepZ;                   // 0x40
-    fx32 radiusX;                       // 0x44
-    fx32 radiusY;                       // 0x48
-    fx32 radiusXStep;                   // 0x4C
-    fx32 radiusYStep;                   // 0x50
-    fx32 scale;                         // 0x54
-    fx32 scaleStep;                     // 0x58
-    int stepFrames;                     // 0x5C
-    int state;                          // 0x60
-    int timer;                          // 0x64
-    int elapsed;                        // 0x68
-    s16 angle;                          // 0x6C
-    s16 angleSpeed;                     // 0x6E
-} TradeSequenceRecedeFlight;            // size: 0x70
+    struct TradeSequenceRecede *recede;
+    SysTask *task;
+    TradeSequenceModels *models;
+    TradeSequenceModel *ball;
+    VecFx32 center;
+    VecFx32 offset;
+    VecFx32 position;
+    TradeSequenceRotation rotation;
+    u8 padding_3A[2];
+    fx32 centerStepY;
+    fx32 centerStepZ;
+    fx32 radiusX;
+    fx32 radiusY;
+    fx32 radiusXStep;
+    fx32 radiusYStep;
+    fx32 scale;
+    fx32 scaleStep;
+    int stepFrames;
+    int state;
+    int timer;
+    int elapsed;
+    s16 angle;
+    s16 angleSpeed;
+} TradeSequenceRecedeFlight;
 
 typedef struct TradeSequenceRecede {
-    TradeSequence *ts;                // 0x00
-    u32 subState;                     // 0x04
-    int timer;                        // 0x08
-    BOOL swapScreens;                 // 0x0C
-    TradeSequenceCellAnim cellAnim;   // 0x10
-    Sprite *sprite;                   // 0x20
-    BgConfig *bgConfig;               // 0x24
-    TradeSequenceModels *models;      // 0x28
-    TradeSequenceModel *ball;         // 0x2C
-    u8 unk_30[4];                     // 0x30
-    TradeSequenceRecedeFlight flight; // 0x34
-} TradeSequenceRecede;                // size: 0xA4
+    TradeSequence *ts;
+    u32 subState;
+    int timer;
+    BOOL swapScreens;
+    TradeSequenceCellAnim cellAnim;
+    Sprite *sprite;
+    BgConfig *bgConfig;
+    TradeSequenceModels *models;
+    TradeSequenceModel *ball;
+    u8 unk_30[4];
+    TradeSequenceRecedeFlight flight;
+} TradeSequenceRecede;
 
 enum TradeSequenceRecedeStep {
     TRADE_RECEDE_INIT,

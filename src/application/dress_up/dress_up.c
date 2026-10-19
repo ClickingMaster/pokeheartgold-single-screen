@@ -56,10 +56,7 @@
 #include "touchscreen.h"
 #include "yes_no_prompt.h"
 
-// Pokemon Dress-Up: the editor (ScrCmd_OpenDressUp) and the Accessory Portrait renderer.
-//
-// Graphics core shared by both: slot objects (3D textured quads of the graphics manager), Pokepic manager, 2D
-// sprite system, BGs and the accessory/backdrop textures.
+// Pokemon Dress-Up: the editor and the Accessory Portrait renderer.
 
 typedef struct DressUpPoint {
     u16 x;
@@ -195,7 +192,6 @@ static const GraphicsBanks sDressUpGraphicsBanks = {
     .texpltt = GX_VRAM_TEXPLTT_0123_E,
 };
 
-// fashion save entry accessors
 void FashionEntry_MarkSaved(SaveFashionDataSub *entry);
 void FashionEntry_Clear(SaveFashionDataSub *entry);
 void FashionEntry_SetMon(SaveFashionDataSub *entry, Pokemon *mon, DressUpMonPic *monPic);
@@ -252,20 +248,19 @@ enum DressUpReturnTransitionStep {
     DRESS_UP_RETURN_DONE,
 };
 
-// page swap task
 typedef struct DressUpPageSwap {
-    DressUpTray *tray;       // 0x00
-    int fromGroup;           // 0x04
-    int fromPage;            // 0x08
-    int toGroup;             // 0x0C
-    int toPage;              // 0x10
-    BOOL tabSlideDone;       // 0x14
-    int counter;             // 0x18
-    int state;               // 0x1C
-    int fromLeft;            // 0x20, objects of the old page still to slide out
-    int toLeft;              // 0x24, objects of the new page still to slide in
-    DressUpSlideAnim *anims; // 0x28
-    int animCount;           // 0x2C
+    DressUpTray *tray;
+    int fromGroup;
+    int fromPage;
+    int toGroup;
+    int toPage;
+    BOOL tabSlideDone;
+    int counter;
+    int state;
+    int fromLeft; // objects of the old page still to slide out
+    int toLeft;   // objects of the new page still to slide in
+    DressUpSlideAnim *anims;
+    int animCount;
 } DressUpPageSwap;
 
 enum DressUpPageSwapState {
@@ -280,45 +275,44 @@ int FashionCase_GetWallpaperOrder(FashionCase *fashionCase, int index);
 
 // object tween back into the tray
 typedef struct DressUpTrayTween {
-    DressUpTray *tray; // 0x00
-    DressUpNode *node; // 0x04
-    int stepX;         // 0x08
-    int stepY;         // 0x0C
-    int destX;         // 0x10
-    int destY;         // 0x14
-    int mode;          // 0x18
-    int page;          // 0x1C
-    int frames;        // 0x20
-    BOOL *paused;      // 0x24, DressUpTray.pageSwapActive
-    BOOL *dragging;    // 0x28, DressUpDrag.dragging
+    DressUpTray *tray;
+    DressUpNode *node;
+    int stepX;
+    int stepY;
+    int destX;
+    int destY;
+    int mode;
+    int page;
+    int frames;
+    BOOL *paused;   // DressUpTray.pageSwapActive
+    BOOL *dragging; // DressUpDrag.dragging
 } DressUpTrayTween;
 
-// BG slide task
 typedef struct DressUpBgSlide {
-    DressUpBgScreen *screen;          // 0x00
-    DressUpBgScreenTemplate template; // 0x04, loaded at the end
-    BOOL *done;                       // 0x34
-    int frames;                       // 0x38
-    int stepX;                        // 0x3C
-    int stepY;                        // 0x40
-    int startX;                       // 0x44
-    int startY;                       // 0x48
-} DressUpBgSlide;                     // size 0x4C
+    DressUpBgScreen *screen;
+    DressUpBgScreenTemplate template; // loaded at the end
+    BOOL *done;
+    int frames;
+    int stepX;
+    int stepY;
+    int startX;
+    int startY;
+} DressUpBgSlide;
 
 typedef struct DressUpCharUpload {
-    BgConfig *bgConfig;            // 0x00
-    NNSG2dCharacterData *charData; // 0x04
-    void *buffer;                  // 0x08
-    u32 layer;                     // 0x0C
-    u32 tileStart;                 // 0x10
+    BgConfig *bgConfig;
+    NNSG2dCharacterData *charData;
+    void *buffer;
+    u32 layer;
+    u32 tileStart;
 } DressUpCharUpload;
 
 typedef struct DressUpPlttUpload {
-    NNSG2dPaletteData *plttData; // 0x00
-    void *buffer;                // 0x04
-    u32 location;                // 0x08, 0 main, 4 sub
-    u32 offset;                  // 0x0C
-    u32 size;                    // 0x10
+    NNSG2dPaletteData *plttData;
+    void *buffer;
+    u32 location; // 0 main, 4 sub
+    u32 offset;
+    u32 size;
 } DressUpPlttUpload;
 
 extern const u8 sDressUpKeyPressTouchStates[2];
@@ -1292,9 +1286,6 @@ static void DressUpGfx_FreeMonPicAttrs(DressUpGfx *gfx) {
     gfx->monPicAttrs = NULL;
 }
 
-// The editor app: Init/Main/Exit, the editor's graphics, canvas, tray, frame BG, buttons and HUD set-up, the DONE /
-// return transitions, the two yes/no prompts and saving the design.
-
 static void DressUpGfx_CreatePokepicManager(DressUpGfx *gfx, enum HeapID heapID, u32 texSize, u32 plttSize) {
     u32 key;
 
@@ -1398,7 +1389,6 @@ BOOL DressUp_Main(OverlayManager *man, int *state) {
         }
         break;
     case DRESS_UP_STATE_TUTORIAL:
-        // tutorial
         if (args->showTutorial == 1) {
             TextFlags_SetCanTouchSpeedUpPrint(TRUE);
             work->printerId = DressUpHud_PrintMsg(&work->hud, NARC_msgdata_msg, NARC_msg_msg_0215_bin, msg_0215_00047);
@@ -1421,7 +1411,6 @@ BOOL DressUp_Main(OverlayManager *man, int *state) {
         }
         break;
     case DRESS_UP_STATE_EDIT:
-        // editing
         if (work->uiState == DRESS_UP_UI_DONE) {
             DressUp_StartFinishTransition(work, &work->transitionDone);
             *state = DRESS_UP_STATE_WAIT_FINISH_TRANSITION;
@@ -1560,7 +1549,6 @@ static void DressUp_InitCanvas(DressUpWork *work, Pokemon *mon, int limit, BOOL 
     template.paletteSlots = work->gfx.monPicAttrs;
     template.pokepicManager = work->gfx.pokepicManager;
     {
-        // bgConfig is loaded before limit is stored
         BgConfig *bgConfig = work->gfx.bgConfig;
         template.limit = limit;
         template.bgConfig = bgConfig;
@@ -2024,9 +2012,6 @@ static void DressUp_UpdateCountMeter(DressUpWork *work) {
     DressUpHud_SetAccessoryCount(&work->hud, count);
 }
 
-// The editor's save prompt, then the canvas (the stage) shared by the Dress-Up editor and the Accessory Portrait:
-// backdrop, the mon and the accessories on it, kept in two lists (accessories touching the mon move with it).
-
 static void DressUp_ShowSavePrompt(DressUpWork *work) {
     YesNoPromptTemplate template;
 
@@ -2432,9 +2417,6 @@ static void DressUpCanvas_LinkByMonOverlap(DressUpCanvas *canvas, DressUpNode *n
         }
     }
 }
-
-// The tray of the Dress-Up editor: owned accessories (14 pages by category) and backdrops (2 pages of 9) as objects
-// in per-page lists, the tab BG, and the page swap (old page slides out, new page slides in).
 
 // how far the object sticks out of the canvas (0 if inside)
 static void DressUpCanvas_GetPushback(DressUpNode *node, int *outX, int *outY) {
@@ -2859,7 +2841,6 @@ static void DressUpTray_FreePageTable(DressUpTrayGroup *group) {
     Heap_Free(group->pages);
     zero = 0;
     group->pages = NULL;
-    // clears the group byte by byte
     bytes[0] = zero;
     bytes[1] = zero;
     bytes[2] = zero;
@@ -3048,7 +3029,6 @@ static void DressUp_TickSlideAnim(DressUpSlideAnim *anim) {
     y += anim->delta;
     DressUpObj_SetPos(anim->node, x, y);
     if (--anim->remaining <= 0) {
-        // clears the slot byte by byte
         u8 *bytes = (u8 *)anim;
         bytes[0] = 0;
         bytes[1] = 0;
@@ -3064,9 +3044,6 @@ static void DressUp_TickSlideAnim(DressUpSlideAnim *anim) {
         bytes[11] = 0;
     }
 }
-
-// Touch handling of the Dress-Up editor: the touch dispatcher (new touch / held / released), the fashion case
-// table, and the drag controller that picks objects up from the canvas or the tray and drops them again.
 
 // ceil(value / divisor) for positive values that are not multiples, value / divisor + 1 otherwise
 static int DressUp_DivFloorPlusOne(int value, int divisor) {
@@ -3473,10 +3450,6 @@ static void DressUp_LoadMonHitMap(DressUpGfx *gfx, const PokepicTemplate *templa
     UnscanPokepic(hitMap->pRawData, (NarcId) template->narcID);
 }
 
-// Objects of the Dress-Up canvas and tray (shared with the Accessory Portrait): the mon picture with its hit box
-// and margins, the node pool and lists, per-mode object helpers (slot or mon), and the BG screens (load, alternate
-// screen animation, sliding, V-blank char / palette uploads).
-
 static void DressUpMon_Create(DressUpMonPic *monPic, PokepicManager *pokepicManager, Pokemon *mon, PokepicTemplate *template, enum HeapID heapID) {
     DressUpMon_CreateEx(monPic, pokepicManager, mon, template, heapID, 0);
 }
@@ -3519,7 +3492,6 @@ static void DressUpMon_Delete(DressUpMonPic *monPic) {
     u32 i;
     u8 *bytes = (u8 *)monPic;
     Pokepic_Delete(monPic->pokepic);
-    // clears the record byte by byte
     i = sizeof(DressUpMonPic);
     do {
         *bytes = 0;
@@ -3746,7 +3718,7 @@ static void DressUpList_Clear(DressUpNode *head) {
 }
 
 static void DressUpObj_SetPriority(DressUpNode *node, int priority) {
-    if ((int)node->mode < 3) { // signed compare here (unsigned in the tray)
+    if ((int)node->mode < 3) {
         DressUpGfx_SetSlotPriority(node->object, priority);
     } else {
         DressUpMon_SetPriority(node->object, priority);
@@ -3777,7 +3749,7 @@ static BOOL DressUpObj_HitTest(DressUpNode *node, int *x, int *y, NNSG2dCharacte
 static void DressUpObj_SetPos(DressUpNode *node, int x, int y) {
     int width;
     int height;
-    if ((int)node->mode < 3) { // signed compare here (unsigned in the tray)
+    if ((int)node->mode < 3) {
         DressUpGfx_SetSlotPos(node->object, x, y);
         return;
     }
@@ -3793,7 +3765,7 @@ static void DressUpObj_SetPos(DressUpNode *node, int x, int y) {
 static void DressUpObj_GetPos(DressUpNode *node, int *x, int *y) {
     int width;
     int height;
-    if ((int)node->mode < 3) { // signed compare here (unsigned in the tray)
+    if ((int)node->mode < 3) {
         DressUpGfx_GetSlotPos(node->object, x, y);
         return;
     }
@@ -3809,7 +3781,7 @@ static void DressUpObj_GetPos(DressUpNode *node, int *x, int *y) {
 }
 
 static void DressUpObj_GetSize(DressUpNode *node, int *width, int *height) {
-    if ((int)node->mode < 3) { // signed compare here (unsigned in the tray)
+    if ((int)node->mode < 3) {
         DressUpGfx_GetSlotSize(node->object, width, height);
     } else {
         DressUpMon_GetSize(node->object, width, height);
@@ -3818,7 +3790,7 @@ static void DressUpObj_GetSize(DressUpNode *node, int *width, int *height) {
 
 static void DressUpObj_GetMargins(DressUpNode *node, int *left, int *right, int *top, int *bottom) {
     u8 margins[4];
-    if ((int)node->mode < 3) { // signed compare here (unsigned in the tray)
+    if ((int)node->mode < 3) {
         DressUpGfx_GetSlotMargins(node->object, left, top);
         *right = *left;
         *bottom = *top;
@@ -4078,9 +4050,6 @@ static void DressUpButton_InitWithText(DressUpTextButton *button, const DressUpT
     textTemplate.heapID = template->button.spriteTemplate->heapID;
     button->textObj = FontOAM_Create(&textTemplate);
 }
-
-// Button panel of the Dress-Up editor: next / previous page, the accessory and backdrop tabs (a radio pair) and
-// DONE (a text button), driven by touch or by the keys.
 
 static void DressUpButton_Delete(DressUpButton *button) {
     Sprite_Delete(button->sprite);
@@ -4430,9 +4399,6 @@ static void DressUpButton_SetTextByState(DressUpTextButton *button, u32 state) {
         }
     }
 }
-
-// Editor sub screen (message box, accessory count meter, an unused countdown with its pulse tween), message and
-// sprite resource helpers shared by the buttons, and the backdrop animation of the finished design.
 
 static void DressUpButton_PlaySE(DressUpButton *button, u32 se, u32 trigger, u32 state) {
     if (state == trigger) {

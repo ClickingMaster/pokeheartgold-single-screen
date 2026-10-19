@@ -81,22 +81,22 @@ enum SpinTradeGroupState {
 // The link menu (SpinTradeArgs.menu)
 typedef struct SpinTradeGroupMenu {
     u8 unk_00[0x20];
-    u32 count;             // 0x20
-    u32 state;             // 0x24
-    u32 leaderJoinPending; // 0x28
-    u32 participantCount;  // 0x2C
-    u32 leavingMask;       // 0x30
-    u32 unk_34;            // 0x34
-    u16 assignedCount;     // 0x38
+    u32 count;
+    u32 state;
+    u32 leaderJoinPending;
+    u32 participantCount;
+    u32 leavingMask;
+    u32 unk_34;
+    u16 assignedCount;
 } SpinTradeGroupMenu;
 
 // Leader marker palette animation
 typedef struct SpinTradeGroupBlink {
-    BOOL active;             // 0x00
-    int frame;               // 0x04
-    int timer;               // 0x08
-    void *plttFile;          // 0x0C
-    NNSG2dPaletteData *pltt; // 0x10
+    BOOL active;
+    int frame;
+    int timer;
+    void *plttFile;
+    NNSG2dPaletteData *pltt;
 } SpinTradeGroupBlink;
 
 typedef struct SpinTradeGroupMember {
@@ -123,72 +123,72 @@ typedef struct SpinTradeGroupPos {
 } SpinTradeGroupPos;
 
 typedef struct SpinTradeGroupApp {
-    int state;                              // 0x0000
-    u8 unk_0004[4];                         // 0x0004
-    u32 result;                             // 0x0008
-    SpinTradeArgs *args;                    // 0x000C
-    SpinTradeGroupMenu *menu;               // 0x0010
-    BgConfig *bgConfig;                     // 0x0014
-    u8 unk_0018[4];                         // 0x0018
-    SpinTradeGroupBlink blink;              // 0x001C
-    SysTask *blinkTask;                     // 0x0030
-    MessageFormat *msgFormat;               // 0x0034
-    MsgData *msgData;                       // 0x0038
-    String *names[5];                       // 0x003C
-    u8 unk_0050[4];                         // 0x0050
-    String *msgString;                      // 0x0054
-    String *titleString;                    // 0x0058
-    u32 printerId;                          // 0x005C
-    SpriteList *spriteList;                 // 0x0060
-    G2dRenderer renderer;                   // 0x0064
-    GF_2DGfxResMan *resMan[4];              // 0x018C
-    u8 unk_019C[0x20];                      // 0x019C
-    SpriteResource *charRes;                // 0x01BC
-    SpriteResource *plttRes;                // 0x01C0
-    SpriteResource *cellRes;                // 0x01C4
-    SpriteResource *animRes;                // 0x01C8
-    u8 unk_01CC[0x48];                      // 0x01CC
-    SpriteResourcesHeader resHeader;        // 0x0214
-    u8 unk_0238[4];                         // 0x0238
-    Sprite *avatars[5];                     // 0x023C
-    u8 unk_0250[0x58];                      // 0x0250
-    Window memberWindow;                    // 0x02A8
-    u8 unk_02B8[0x40];                      // 0x02B8
-    Window msgWindow;                       // 0x02F8
-    Window unk_308;                         // 0x0308
-    Window titleWindow;                     // 0x0318
-    u8 unk_0328[8];                         // 0x0328
-    struct ListMenu2D *yesNoMenu;           // 0x0330
-    void *charFiles[2];                     // 0x0334
-    NNSG2dCharacterData *chars[2];          // 0x033C
-    void *plttFiles[2];                     // 0x0344
-    NNSG2dPaletteData *pltts[2];            // 0x034C
-    u32 subState;                           // 0x0354, index into sSpinTradeGroupStateFuncs
-    u32 nextSubState;                       // 0x0358
-    u8 unk_035C[4];                         // 0x035C
-    s32 timer;                              // 0x0360
-    u8 unk_0364[0x10];                      // 0x0364
-    SpinTradeGroupMember members[5];        // 0x0374
-    u32 memberStates[5];                    // 0x039C
-    s32 saveState;                          // 0x03B0
-    u16 blinkAngle;                         // 0x03B4
-    u16 unk_3B6;                            // 0x03B6
-    void *avatarPalette;                    // 0x03B8
-    u8 unk_03BC[0xF80 - 0x3BC];             // 0x03BC
-    u8 unk_F80[0x3AC4];                     // 0x0F80
-    int lastMemberCount;                    // 0x4A44
-    u32 joinPending;                        // 0x4A48
-    u32 unk_4A4C;                           // 0x4A4C
-    u8 leaveRequested;                      // 0x4A50
-    s8 maxEntriesMode;                      // 0x4A51
-    u8 startMemberCount;                    // 0x4A52
-    u8 unk_4A53;                            // 0x4A53
-    s32 leaveTimeout;                       // 0x4A54
-    u32 leaveConnectedCount;                // 0x4A58
-    s16 leaveWaitFrames;                    // 0x4A5C
-    u8 unk_4A5E[2];                         // 0x4A5E
-    SpinTradeGroupTrainerIds trainerIds[5]; // 0x4A60
-} SpinTradeGroupApp;                        // size 0x4AB0
+    int state;
+    u8 unk_0004[4];
+    u32 result;
+    SpinTradeArgs *args;
+    SpinTradeGroupMenu *menu;
+    BgConfig *bgConfig;
+    u8 unk_0018[4];
+    SpinTradeGroupBlink blink;
+    SysTask *blinkTask;
+    MessageFormat *msgFormat;
+    MsgData *msgData;
+    String *names[5];
+    u8 unk_0050[4];
+    String *msgString;
+    String *titleString;
+    u32 printerId;
+    SpriteList *spriteList;
+    G2dRenderer renderer;
+    GF_2DGfxResMan *resMan[4];
+    u8 unk_019C[0x20];
+    SpriteResource *charRes;
+    SpriteResource *plttRes;
+    SpriteResource *cellRes;
+    SpriteResource *animRes;
+    u8 unk_01CC[0x48];
+    SpriteResourcesHeader resHeader;
+    u8 unk_0238[4];
+    Sprite *avatars[5];
+    u8 unk_0250[0x58];
+    Window memberWindow;
+    u8 unk_02B8[0x40];
+    Window msgWindow;
+    Window unk_308;
+    Window titleWindow;
+    u8 unk_0328[8];
+    struct ListMenu2D *yesNoMenu;
+    void *charFiles[2];
+    NNSG2dCharacterData *chars[2];
+    void *plttFiles[2];
+    NNSG2dPaletteData *pltts[2];
+    u32 subState; // index into sSpinTradeGroupStateFuncs
+    u32 nextSubState;
+    u8 unk_035C[4];
+    s32 timer;
+    u8 unk_0364[0x10];
+    SpinTradeGroupMember members[5];
+    u32 memberStates[5];
+    s32 saveState;
+    u16 blinkAngle;
+    u16 unk_3B6;
+    void *avatarPalette;
+    u8 unk_03BC[0xF80 - 0x3BC];
+    u8 unk_F80[0x3AC4];
+    int lastMemberCount;
+    u32 joinPending;
+    u32 unk_4A4C;
+    u8 leaveRequested;
+    s8 maxEntriesMode;
+    u8 startMemberCount;
+    u8 unk_4A53;
+    s32 leaveTimeout;
+    u32 leaveConnectedCount;
+    s16 leaveWaitFrames;
+    u8 unk_4A5E[2];
+    SpinTradeGroupTrainerIds trainerIds[5];
+} SpinTradeGroupApp;
 
 typedef struct SpinTradeGroupBlinkFrame {
     u8 duration;

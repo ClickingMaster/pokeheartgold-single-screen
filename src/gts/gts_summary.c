@@ -28,7 +28,7 @@
 #include "wireless_status_icon.h"
 #include "yes_no_prompt.h"
 
-// The sub screen panel shared by the screens (they link here), then the summary of the deposited Pokemon
+// The sub screen panel shared by the screens, then the summary of the deposited Pokemon
 // (screen 2): the Pokemon, its trainer and the wanted Pokemon, with TAKE BACK and LEAVE AS IS.
 
 typedef enum GtsSummaryState {

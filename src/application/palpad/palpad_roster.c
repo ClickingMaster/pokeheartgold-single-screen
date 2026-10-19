@@ -63,8 +63,6 @@ extern const SpriteTemplate sPalPadDeleteEffectSpriteTemplate;
 extern const TouchscreenHitbox sPalPadRosterHitboxes[];
 extern const PalPadSlotRect sPalPadRosterSlotRects[9];
 
-// second label on the table, at sPalPadRosterSlotRects[0].y: some functions read the y coordinates
-// through it
 typedef struct PalPadSlotRectFromY {
     s16 y;
     u8 unk_02[8];
@@ -73,7 +71,6 @@ typedef struct PalPadSlotRectFromY {
 extern const PalPadSlotRectFromY sPalPadRosterSlotY[9];
 extern const u32 sPalPadRosterNameColors[3];
 
-// the template follows the last entry of sPalPadRosterNameColors
 extern const struct {
     u32 nameColor;
     TouchscreenListMenuTemplate template;
@@ -187,7 +184,7 @@ int PalPadRoster_Main(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx
     case PALPAD_ROSTER_STATE_FRIEND_MENU: // returns the state of the chosen item
         shared->subState = PalPadRoster_HandleFriendMenu(roster, &shared->inputState, gfx);
         break;
-    case PALPAD_ROSTER_STATE_OPEN_DETAILS: // details
+    case PALPAD_ROSTER_STATE_OPEN_DETAILS:
         roster->timer = 4;
         shared->subState = PALPAD_ROSTER_STATE_WAIT_OPEN_DETAILS;
         break;
@@ -204,7 +201,7 @@ int PalPadRoster_Main(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx
         roster->cursor = shared->selectedFriend % PALPAD_ROSTER_PAGE_SLOT;
         shared->subState = PALPAD_ROSTER_STATE_SHOW;
         break;
-    case PALPAD_ROSTER_STATE_RENAME: // rewrite name
+    case PALPAD_ROSTER_STATE_RENAME:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, (enum FadeType)16, (enum FadeType)16, RGB_BLACK, 6, 1, heapId);
         index = PalPadRoster_GetSelectedIndex(roster);
         wifiList = Save_FriendRoster_Get(shared->saveData);
@@ -233,7 +230,7 @@ int PalPadRoster_Main(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx
             shared->subState = PALPAD_ROSTER_STATE_INPUT;
         }
         break;
-    case PALPAD_ROSTER_STATE_DELETE: // delete
+    case PALPAD_ROSTER_STATE_DELETE:
         PalPadRoster_ConfirmDelete(roster, shared, gfx, heapId);
         shared->subState = PALPAD_ROSTER_STATE_START_DELETE_YES_NO;
         break;
@@ -975,7 +972,7 @@ static void PalPadRosterPage_DrawFriend(PalPadRosterPage *page, CharSpriteManage
 static void PalPadRosterPage_DrawEmptySlot(PalPadRosterPage *page, PalPadGfx *gfx, PalPadScreens *screens, int slot) {
     int y = page->layout.y;
     int x;
-    int offset = slot; // byte offset into the slot table, scaled below
+    int offset = slot;
     NNSG2dScreenData *screen;
 
     if (y < 0) {

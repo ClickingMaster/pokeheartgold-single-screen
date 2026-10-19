@@ -48,7 +48,6 @@ typedef union MailViewIcon {
     };
 } MailViewIcon;
 
-// The args seen through a byte offset into unk18[] (iconOffset = 2 * mon).
 typedef struct MailViewShiftedArgs {
     u8 filler_00[offsetof(MailViewArgs, monIcons)];
     MailViewIcon icon;
@@ -84,40 +83,40 @@ enum MailViewConfirmQuitState {
 };
 
 typedef struct MailView {
-    enum HeapID heapID;                        // 0x00
-    u32 state;                                 // 0x04
-    u16 subState;                              // 0x08
-    u8 inputMode;                              // 0x0A
-    u8 frame;                                  // 0x0B
-    u8 screen;                                 // 0x0C
-    u8 returnScreen;                           // 0x0D
-    u8 unk_0E;                                 // 0x0E
-    u8 textPrinterId;                          // 0x0F
-    u8 textSpeed;                              // 0x10
-    u8 cursorRow;                              // 0x11
-    u8 cursorButton;                           // 0x12
-    u8 cursorBlinkPaused;                      // 0x13
-    u8 cursorBlinkLevel;                       // 0x14
-    u8 cursorBlinkFalling;                     // 0x15
-    u8 cursorPos;                              // 0x16
-    u8 prevCursorPos;                          // 0x17
-    BgConfig *bgConfig;                        // 0x18
-    MailViewArgs *args;                        // 0x1C
-    MsgData *msgData;                          // 0x20
-    u8 filler_24[0xC];                         // 0x24
-    PaletteData *palette;                      // 0x30
-    int (*onSwitchToKeys)(struct MailView *);  // 0x34
-    int (*onSwitchToTouch)(struct MailView *); // 0x38
-    void *bgScreenFile;                        // 0x3C
-    void *buttonScreenFile;                    // 0x40
-    NNSG2dScreenData *bgScreen;                // 0x44
-    NNSG2dScreenData *buttonScreen;            // 0x48
-    Window windows[6];                         // 0x4C
-    YesNoPrompt *yesNoPrompt;                  // 0xAC
-    SpriteSystem *spriteSystem;                // 0xB0
-    SpriteManager *spriteManager;              // 0xB4
-    ManagedSprite *icons[3];                   // 0xB8
-} MailView;                                    // size: 0xC4
+    enum HeapID heapID;
+    u32 state;
+    u16 subState;
+    u8 inputMode;
+    u8 frame;
+    u8 screen;
+    u8 returnScreen;
+    u8 unk_0E;
+    u8 textPrinterId;
+    u8 textSpeed;
+    u8 cursorRow;
+    u8 cursorButton;
+    u8 cursorBlinkPaused;
+    u8 cursorBlinkLevel;
+    u8 cursorBlinkFalling;
+    u8 cursorPos;
+    u8 prevCursorPos;
+    BgConfig *bgConfig;
+    MailViewArgs *args;
+    MsgData *msgData;
+    u8 filler_24[0xC];
+    PaletteData *palette;
+    int (*onSwitchToKeys)(struct MailView *);
+    int (*onSwitchToTouch)(struct MailView *);
+    void *bgScreenFile;
+    void *buttonScreenFile;
+    NNSG2dScreenData *bgScreen;
+    NNSG2dScreenData *buttonScreen;
+    Window windows[6];
+    YesNoPrompt *yesNoPrompt;
+    SpriteSystem *spriteSystem;
+    SpriteManager *spriteManager;
+    ManagedSprite *icons[3];
+} MailView;
 
 typedef struct MailViewBgTemplates {
     BgTemplate bgs[5];
@@ -832,7 +831,6 @@ static void MailView_LoadBgGraphics(MailView *mailView) {
     NNSG2dPaletteData *plttData;
 
     mailType = mailView->args->mailType;
-    // The file ids are u32 like the NARC_* parameters (an int id spills to swapped stack slots).
     u32 screenFile = mailType;
     screenFile = mailType + 24;
     narc = NARC_New(NARC_a_0_7_9, mailView->heapID);
@@ -1010,7 +1008,6 @@ static void MailView_CreateMonIcons(MailView *mailView) {
     i = 0;
     iconOffset = i;
     xOffset = i;
-    // The work pointer shifted by i slots: icons[0] through it is icons[i].
     shifted = mailView;
     for (; i < 3; i++, iconOffset += sizeof(u16), shifted = (MailView *)((u8 *)shifted + sizeof(ManagedSprite *)), xOffset += 40) {
         if (MAIL_VIEW_ICON(mailView->args, iconOffset)->raw == 0xFFFF) {

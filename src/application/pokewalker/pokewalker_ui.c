@@ -538,7 +538,7 @@ void PokewalkerApp_CreateSprites(PokewalkerApp *app) {
     u32 i = 0;
     const ManagedSpriteTemplate *template = sPokewalkerAppSpriteTemplates;
     const u8 *palette = sPokewalkerAppSpritePalettes;
-    PokewalkerApp *slot = app; // advanced by one sprite pointer per sprite: slot->sprites[0] is sprite i
+    PokewalkerApp *slot = app;
 
     for (; i < 17;) {
         slot->sprites[0] = SpriteSystem_NewSpriteWithYOffset(app->spriteSystem, app->spriteManager, template, FX32_CONST(256));

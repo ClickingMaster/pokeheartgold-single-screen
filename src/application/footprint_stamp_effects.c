@@ -21,13 +21,12 @@ int WiFiPlazaWork_IsSpecialVisitor(void *lobby, int slot);
 BOOL WiFiPlaza_HasConnectionFailed(void);
 int WiFiPlazaLobbyClient_SetChannelCommands(const void *commands, u32 count, void *data);
 void WiFiPlazaLobbyClient_SendToChannel(int command, void *data, int size);
-// Runtime 64-bit multiply, called by name in FootprintStamp_GetBounds (a plain `*` orders the operands differently).
 s64 _ll_mul(s64 a, s64 b);
 
 // Board position of the touch grid lines (x every 16 pixels, y every 16 pixels).
 extern const fx32 sFootprintStampBoardXs[17];
 extern const fx32 sFootprintStampBoardYs[11];
-// Bounds of the three footprint sizes, relative to the stamp position (one table split over four labels).
+// Bounds of the three footprint sizes, relative to the stamp position.
 extern const fx32 sFootprintStampSizeBoundsLeft[];
 extern const fx32 sFootprintStampSizeBoundsRight[];
 extern const fx32 sFootprintStampSizeBoundsBottom[];
@@ -36,7 +35,7 @@ extern const s16 sFootprintStampCameraChainLengths[]; // chain length that moves
 extern const u8 sFootprintStampNatureEffects[];       // enum FootprintStampEffect by nature
 extern const u16 sFootprintStampInkColors[][2];       // ink colors by OT id % 9, two columns
 extern const TouchscreenHitbox sFootprintStampPartyHitboxes[];
-extern const u8 sFootprintStampSpeciesFootprints[]; // per species: 4 bytes, [0] footprint type, [1] footprint size
+extern const u8 sFootprintStampSpeciesFootprints[]; // per species: [0] footprint type, [1] footprint size
 extern const u8 sFootprintStampSpeciesFootprintSizes[];
 extern const u8 sFootprintStampLinkCommands[]; // link command table: player joined, player left, stamp received
 

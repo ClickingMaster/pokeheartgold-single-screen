@@ -1,9 +1,8 @@
 #ifndef POKEHEARTGOLD_APPLICATION_FOOTPRINT_STAMP_H
 #define POKEHEARTGOLD_APPLICATION_FOOTPRINT_STAMP_H
 
-// Wi-Fi Plaza Footprint Stamp (OVY_89): the players stamp the footprints of their party Pokemon onto a shared
-// 3D board. A stamp sits still for a moment, then plays the effect of its Pokemon's nature; stamps it touches
-// take over the same effect, and a long enough chain moves the camera on every player's screen.
+// Wi-Fi Plaza Footprint Stamp: the players stamp the footprints of their party Pokemon onto a shared 3D board;
+// stamps touched by a stamp's nature effect take it over, and a long enough chain moves every player's camera.
 
 #include "bg_window.h"
 #include "camera.h"
@@ -45,13 +44,12 @@ enum FootprintStampEffect {
     FOOTPRINT_STAMP_EFFECT_STRETCH,  // stretches; camera pitches down
 };
 
-// Launch args (the lobby's overlay template for OVY_89).
 typedef struct FootprintStampArgs {
-    void *lobby;  // ov45 Wi-Fi Plaza lobby state
+    void *lobby;  // Wi-Fi Plaza lobby state
     u8 boardType; // selects the board model, palettes and ink color column
 } FootprintStampArgs;
 
-// A party Pokemon as shown in the party bar, and the 12-byte stamp record sent to the other players.
+// A party Pokemon as shown in the party bar, and the stamp record sent to the other players.
 typedef struct FootprintStampMon {
     u16 color; // ink color
     u16 species;
@@ -151,7 +149,7 @@ typedef struct FootprintStampStretch {
     FootprintStampBounds bounds;
 } FootprintStampStretch;
 
-// One stamp on the board (0x244 bytes).
+// One stamp on the board.
 typedef struct FootprintStampObj {
     FootprintStampMon mon;
     ModelResource model;
@@ -234,7 +232,7 @@ typedef struct FootprintStampChain {
     u8 padding[2];
 } FootprintStampChain;
 
-// The stamp board (0x744 bytes, FootprintStamp.board).
+// The stamp board (FootprintStamp.board).
 struct FootprintStampBoard {
     FootprintStampZoom zoomIn;
     FootprintStampRoll roll;
@@ -274,7 +272,6 @@ typedef struct FootprintStampLinkFilter {
     u32 myId;
 } FootprintStampLinkFilter;
 
-// App state (0x19E4 bytes).
 typedef struct FootprintStamp {
     FootprintStampArgs *args;
     SaveData *saveData;
@@ -329,14 +326,12 @@ typedef struct FootprintStamp {
     void *showArceusFootprint;
 } FootprintStamp;
 
-// app
 BOOL FootprintStamp_Init(OverlayManager *man, int *state);
 BOOL FootprintStamp_Main(OverlayManager *man, int *state);
 BOOL FootprintStamp_Exit(OverlayManager *man, int *state);
 
 void FootprintStamp_CreatePlayerSprites(FootprintStamp *work);
 
-// screens, party, players, ink, stamp objects
 void FootprintStamp_FreePlayerSprites(FootprintStamp *work);
 void FootprintStamp_ShowParty(FootprintStamp *work);
 void FootprintStamp_CreateCamera(FootprintStamp *work);
@@ -373,7 +368,6 @@ void FootprintStampBoard_UnqueueTexture(FootprintStampBoard *board, NNSG3dResTex
 
 void FootprintStamp_DrawFootprintTexture(NNSG3dResTex *texture, NARC *narc, NARC *footprintNarc, FootprintStampMon *mon, u32 unk19E0);
 
-// effects, camera moves, player names, tables, link commands
 void FootprintStamp_DeleteStamp(FootprintStampObj *stamp);
 void FootprintStampBoard_RemoveStamp(FootprintStampBoard *board, FootprintStampObj *stamp, int slot);
 void FootprintStamp_TouchToBoardPos(void *unused, int x, int y, fx32 *outX, fx32 *outY);

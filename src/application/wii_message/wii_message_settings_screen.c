@@ -70,61 +70,61 @@ enum WiiMessageSettingsScreenState {
 
 // Palette cycle of the background, run as a VBlank task.
 typedef struct WiiMessageSettingsPaletteAnim {
-    SysTask *task;               // 0x000
-    BOOL active;                 // 0x004
-    u16 basePltt[4 * 16];        // 0x008
-    u16 fadePltt[21 * 16];       // 0x088, 21 blend steps of palette 0
-    s16 frame;                   // 0x328
-    s8 reverse;                  // 0x32A
-    u8 skipFrame;                // 0x32B
-    u32 screens;                 // 0x32C, 0: both, 1: main, 2: sub
-} WiiMessageSettingsPaletteAnim; // size: 0x330
+    SysTask *task;
+    BOOL active;
+    u16 basePltt[4 * 16];
+    u16 fadePltt[21 * 16]; // 21 blend steps of palette 0
+    s16 frame;
+    s8 reverse;
+    u8 skipFrame;
+    u32 screens; // 0: both, 1: main, 2: sub
+} WiiMessageSettingsPaletteAnim;
 
 // The main screen of the app (OverlayManager data, HEAP_ID_116).
 typedef struct WiiMessageSettingsScreen {
-    WiiMessageSettings *app;                   // 0x000
-    BgConfig *bgConfig;                        // 0x004
-    int state;                                 // 0x008
-    int nextState;                             // 0x00C
-    int registrationError;                     // 0x010
-    int connectionResult;                      // 0x014
-    int connectionErrorCode;                   // 0x018
-    int connectionErrorType;                   // 0x01C
-    MessageFormat *msgFormat;                  // 0x020
-    MsgData *gtsMsgData;                       // 0x024
-    MsgData *speciesNamesMsgData;              // 0x028
-    MsgData *wfcMsgData;                       // 0x02C
-    MsgData *wfcErrorMsgData;                  // 0x030
-    MsgData *msgData;                          // 0x034
-    String *messageBuffer;                     // 0x038
-    String *title;                             // 0x03C
-    String *errorBuffer;                       // 0x040
-    u32 textPrinterId;                         // 0x044
-    Window messageWindow;                      // 0x048
-    Window titleWindow;                        // 0x058
-    Window errorWindow;                        // 0x068
-    Window menuWindow;                         // 0x078
-    YesNoPrompt *yesNoPrompt;                  // 0x088
-    WaitingIcon *waitingIcon;                  // 0x08C
-    int timer;                                 // 0x090
-    int subState;                              // 0x094
-    int waitTimer;                             // 0x098
-    int menuSelection;                         // 0x09C
-    ListMenuItem *menuItems;                   // 0x0A0
-    ListMenu *listMenu;                        // 0x0A4
-    int explanationState;                      // 0x0A8
-    int explanationScroll;                     // 0x0AC
-    int registerChoice;                        // 0x0B0, 0: register, 1: don't register
-    int explanationNumLines;                   // 0x0B4
-    int explanationResult;                     // 0x0B8
-    int arrowTimer;                            // 0x0BC
-    int arrowFrame;                            // 0x0C0
-    Window explanationWindow;                  // 0x0C4
-    Window choiceWindow;                       // 0x0D4
-    struct ListMenuCursor *cursor;             // 0x0E4
-    int timeoutTimer;                          // 0x0E8
-    WiiMessageSettingsPaletteAnim paletteAnim; // 0x0EC
-} WiiMessageSettingsScreen;                    // size: 0x41C
+    WiiMessageSettings *app;
+    BgConfig *bgConfig;
+    int state;
+    int nextState;
+    int registrationError;
+    int connectionResult;
+    int connectionErrorCode;
+    int connectionErrorType;
+    MessageFormat *msgFormat;
+    MsgData *gtsMsgData;
+    MsgData *speciesNamesMsgData;
+    MsgData *wfcMsgData;
+    MsgData *wfcErrorMsgData;
+    MsgData *msgData;
+    String *messageBuffer;
+    String *title;
+    String *errorBuffer;
+    u32 textPrinterId;
+    Window messageWindow;
+    Window titleWindow;
+    Window errorWindow;
+    Window menuWindow;
+    YesNoPrompt *yesNoPrompt;
+    WaitingIcon *waitingIcon;
+    int timer;
+    int subState;
+    int waitTimer;
+    int menuSelection;
+    ListMenuItem *menuItems;
+    ListMenu *listMenu;
+    int explanationState;
+    int explanationScroll;
+    int registerChoice; // 0: register, 1: don't register
+    int explanationNumLines;
+    int explanationResult;
+    int arrowTimer;
+    int arrowFrame;
+    Window explanationWindow;
+    Window choiceWindow;
+    struct ListMenuCursor *cursor;
+    int timeoutTimer;
+    WiiMessageSettingsPaletteAnim paletteAnim;
+} WiiMessageSettingsScreen;
 
 typedef struct WiiMessageSettingsMenuEntry {
     u32 msgId;
@@ -615,7 +615,7 @@ static void WiiMessageSettingsScreen_VBlankCB(void *data) {
     GF_RunVramTransferTasks();
     OamManager_ApplyAndResetBuffers();
     DoScheduledBgGpuUpdates(screen->bgConfig);
-    dtcm[(HW_INTR_CHECK_BUF - HW_DTCM) / 4] |= OS_IE_V_BLANK; // OS_SetIrqCheckFlag, through the DTCM base address
+    dtcm[(HW_INTR_CHECK_BUF - HW_DTCM) / 4] |= OS_IE_V_BLANK; // OS_SetIrqCheckFlag(OS_IE_V_BLANK)
 }
 
 static void WiiMessageSettingsScreen_InitBgs(BgConfig *bgConfig) {
@@ -2030,7 +2030,6 @@ static BOOL WiiMessageSettingsScreen_WaitMessageAndShowYesNo(WiiMessageSettingsS
     return FALSE;
 }
 
-// unused: every caller passes 0xF0F
 static void WiiMessageSettingsScreen_PrintMessage(WiiMessageSettingsScreen *screen, MsgData *msgData, int msgId, u32 textSpeed, u32 unused) {
     String *string = NewString_ReadMsgData(msgData, msgId);
     StringExpandPlaceholders(screen->msgFormat, screen->messageBuffer, string);

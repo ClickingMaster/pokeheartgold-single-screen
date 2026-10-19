@@ -39,27 +39,27 @@ typedef struct PokedexEntryPopupSprite {
 // "Registered in the Pokedex" popup after a capture (msg_0802). Starts with a copy of PokedexEntryPopupArgs; created
 // by PokedexEntryPopup_Create, run by PokedexEntryPopup_Task.
 typedef struct PokedexEntryPopup {
-    BgConfig *bgConfig;                  // 0x000
-    PaletteData *paletteData;            // 0x004
-    PokepicManager *pokepicManager;      // 0x008
-    Pokemon *mon;                        // 0x00C
-    BOOL natDexEnabled;                  // 0x010
-    enum HeapID heapId;                  // 0x014
-    SysTask *task;                       // 0x018
-    NARC *gfxNarc;                       // 0x01C
-    Pokepic *pokepic;                    // 0x020
-    Window windows[9];                   // 0x024
-    SpriteList *spriteList;              // 0x0B4
-    G2dRenderer renderer;                // 0x0B8
-    GF_2DGfxResMan *resourceManagers[4]; // 0x1E0
-    PokedexEntryPopupSprite sprites[4];  // 0x1F0
-    u16 state;                           // 0x240
-    u16 bannerFlashTimer;                // 0x242
-    u32 species;                         // 0x244
-    u32 form;                            // 0x248
-    u32 type1;                           // 0x24C
-    u32 type2;                           // 0x250
-    u32 done;                            // 0x254
+    BgConfig *bgConfig;
+    PaletteData *paletteData;
+    PokepicManager *pokepicManager;
+    Pokemon *mon;
+    BOOL natDexEnabled;
+    enum HeapID heapId;
+    SysTask *task;
+    NARC *gfxNarc;
+    Pokepic *pokepic;
+    Window windows[9];
+    SpriteList *spriteList;
+    G2dRenderer renderer;
+    GF_2DGfxResMan *resourceManagers[4];
+    PokedexEntryPopupSprite sprites[4];
+    u16 state;
+    u16 bannerFlashTimer;
+    u32 species;
+    u32 form;
+    u32 type1;
+    u32 type2;
+    u32 done;
 } PokedexEntryPopup;
 
 enum PokedexEntryPopupState {

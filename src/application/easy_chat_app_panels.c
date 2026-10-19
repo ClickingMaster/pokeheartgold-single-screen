@@ -28,28 +28,28 @@
 
 // Scrolls a BG layer by a fixed amount over a number of frames (VBlank task).
 typedef struct EasyChatBgScroll {
-    BgConfig *bgConfig;    // 0x00
-    int layer;             // 0x04
-    enum BgPosAdjustOp op; // 0x08
-    int position;          // 0x0C, fx32 while running
-    int target;            // 0x10
-    int step;              // 0x14
-    u16 frames;            // 0x18
-    u16 state;             // 0x1A
-    SysTask *task;         // 0x1C
-} EasyChatBgScroll;        // size: 0x20
+    BgConfig *bgConfig;
+    int layer;
+    enum BgPosAdjustOp op;
+    int position; // fx32 while running
+    int target;
+    int step;
+    u16 frames;
+    u16 state;
+    SysTask *task;
+} EasyChatBgScroll;
 
 // Fades the blend alpha or the brightness of BG planes over a number of frames (VBlank task).
 typedef struct EasyChatBlendFade {
-    u32 plane1;      // 0x00
-    u32 plane2;      // 0x04
-    s32 value;       // 0x08
-    s32 target;      // 0x0C
-    s32 step;        // 0x10
-    u32 frames;      // 0x14
-    u32 done;        // 0x18
-    SysTask *task;   // 0x1C
-} EasyChatBlendFade; // size: 0x20
+    u32 plane1;
+    u32 plane2;
+    s32 value;
+    s32 target;
+    s32 step;
+    u32 frames;
+    u32 done;
+    SysTask *task;
+} EasyChatBlendFade;
 
 typedef struct EasyChatWordSlotPos {
     s16 x;
@@ -58,9 +58,9 @@ typedef struct EasyChatWordSlotPos {
 
 // Splits the message string of the "message" mode into text runs, word slots and line breaks.
 typedef struct EasyChatMessageParser {
-    String *string;    // 0x00
-    const u16 *cursor; // 0x04
-    int state;         // 0x08
+    String *string;
+    const u16 *cursor;
+    int state;
 } EasyChatMessageParser;
 
 enum {
@@ -73,112 +73,112 @@ enum {
 // The sentence panel: the word slots (or the message with its slots), the cursor on them, the
 // message window and the yes/no prompt.
 struct EasyChatSentenceView {
-    EasyChatAppView *view;                // 0x000
-    EasyChatApp *app;                     // 0x004
-    ECMenu *menu;                         // 0x008
-    Window sentenceWindows[2];            // 0x00C, main and sub screen
-    Window messageWindows[2];             // 0x02C
-    Window yesNoCursorWindow;             // 0x04C
-    Window *messageWindow;                // 0x05C
-    Sprite *slotCursor;                   // 0x060
-    Sprite *subSlotCursor;                // 0x064
-    Sprite *leftArrow;                    // 0x068
-    Sprite *rightArrow;                   // 0x06C
-    Sprite *sliderBar;                    // 0x070
-    Sprite *sliderThumb;                  // 0x074
-    MsgData *msgData;                     // 0x078
-    String *string;                       // 0x07C
-    struct ListMenuCursor *listCursor;    // 0x080
-    EasyChatWordSlotPos slotPositions[2]; // 0x084
-    u32 numSlots;                         // 0x08C
-    u32 iconTile;                         // 0x090
-    EasyChatMessageParser parser;         // 0x094
-    u16 palettes[10 * 16];                // 0x0A0, BG palette 0 for each message bank
-    s16 mainScrollY;                      // 0x1E0
-    s16 subScrollY;                       // 0x1E2
-    u8 scrollFrames;                      // 0x1E4
-    u8 scrollDirection;                   // 0x1E5
-    YesNoPrompt *yesNoPrompt;             // 0x1E8
-    u16 frameTile;                        // 0x1EC
-    u16 yesNoTile;                        // 0x1EE
-    MenuInputState *menuInputState;       // 0x1F0
-}; // size: 0x1F4
+    EasyChatAppView *view;
+    EasyChatApp *app;
+    ECMenu *menu;
+    Window sentenceWindows[2]; // main and sub screen
+    Window messageWindows[2];
+    Window yesNoCursorWindow;
+    Window *messageWindow;
+    Sprite *slotCursor;
+    Sprite *subSlotCursor;
+    Sprite *leftArrow;
+    Sprite *rightArrow;
+    Sprite *sliderBar;
+    Sprite *sliderThumb;
+    MsgData *msgData;
+    String *string;
+    struct ListMenuCursor *listCursor;
+    EasyChatWordSlotPos slotPositions[2];
+    u32 numSlots;
+    u32 iconTile;
+    EasyChatMessageParser parser;
+    u16 palettes[10 * 16]; // BG palette 0 for each message bank
+    s16 mainScrollY;
+    s16 subScrollY;
+    u8 scrollFrames;
+    u8 scrollDirection;
+    YesNoPrompt *yesNoPrompt;
+    u16 frameTile;
+    u16 yesNoTile;
+    MenuInputState *menuInputState;
+};
 
 // The menu buttons on the right (mode switch, finish, quit) and the mode switch animation.
 struct EasyChatMenuView {
-    EasyChatAppView *view;           // 0x00
-    EasyChatApp *app;                // 0x04
-    ECMenu *menu;                    // 0x08
-    Sprite *cursor;                  // 0x0C
-    BgConfig *bgConfig;              // 0x10
-    MsgData *msgData;                // 0x14
-    String *labels[3];               // 0x18
-    Window windows[3];               // 0x24
-    void *buttonsFile;               // 0x54
-    void *modesFile;                 // 0x58
-    NNSG2dScreenData *buttonsScreen; // 0x5C
-    NNSG2dScreenData *modesScreen;   // 0x60
-    SysTask *modeSwitchTask;         // 0x64
-}; // size: 0x68
+    EasyChatAppView *view;
+    EasyChatApp *app;
+    ECMenu *menu;
+    Sprite *cursor;
+    BgConfig *bgConfig;
+    MsgData *msgData;
+    String *labels[3];
+    Window windows[3];
+    void *buttonsFile;
+    void *modesFile;
+    NNSG2dScreenData *buttonsScreen;
+    NNSG2dScreenData *modesScreen;
+    SysTask *modeSwitchTask;
+};
 
 typedef struct EasyChatModeSwitch {
-    EasyChatMenuView *menuView; // 0x00
-    u32 state;                  // 0x04
-    u16 timer;                  // 0x08
-    u16 mode;                   // 0x0A
-    u16 count;                  // 0x0C
+    EasyChatMenuView *menuView;
+    u32 state;
+    u16 timer;
+    u16 mode;
+    u16 count;
 } EasyChatModeSwitch;
 
 // The category grid (or the initial letter grid) on BG 1.
 struct EasyChatCategoryView {
-    EasyChatAppView *view;          // 0x00
-    EasyChatApp *app;               // 0x04
-    ECMenu *menu;                   // 0x08
-    BgConfig *bgConfig;             // 0x0C
-    u32 unk10;                      // 0x10
-    u32 state;                      // 0x14
-    u32 unk18;                      // 0x18
-    EasyChatBlendFade fade;         // 0x1C
-    EasyChatBgScroll scroll;        // 0x3C
-    Sprite *cursor;                 // 0x5C
-    MenuInputState *menuInputState; // 0x60
-}; // size: 0x64
+    EasyChatAppView *view;
+    EasyChatApp *app;
+    ECMenu *menu;
+    BgConfig *bgConfig;
+    u32 unk10;
+    u32 state;
+    u32 unk18;
+    EasyChatBlendFade fade;
+    EasyChatBgScroll scroll;
+    Sprite *cursor;
+    MenuInputState *menuInputState;
+};
 
 // The word list of a category on BG 2.
 struct EasyChatWordListView {
-    EasyChatAppView *view;          // 0x00
-    EasyChatApp *app;               // 0x04
-    ECMenu *menu;                   // 0x08
-    BgConfig *bgConfig;             // 0x0C
-    Window listWindow;              // 0x10
-    Window wordWindow;              // 0x20
-    Sprite *cursor;                 // 0x30
-    Sprite *upArrow;                // 0x34
-    Sprite *downArrow;              // 0x38
-    String *word;                   // 0x3C
-    EasyChatBlendFade fade;         // 0x40
-    EasyChatBgScroll scroll;        // 0x60
-    u32 fadeDone;                   // 0x80
-    u8 unk84[8];                    // 0x84
-    int scrollY;                    // 0x8C
-    int topRow;                     // 0x90
-    MenuInputState *menuInputState; // 0x94
-}; // size: 0x98
+    EasyChatAppView *view;
+    EasyChatApp *app;
+    ECMenu *menu;
+    BgConfig *bgConfig;
+    Window listWindow;
+    Window wordWindow;
+    Sprite *cursor;
+    Sprite *upArrow;
+    Sprite *downArrow;
+    String *word;
+    EasyChatBlendFade fade;
+    EasyChatBgScroll scroll;
+    u32 fadeDone;
+    u8 unk84[8];
+    int scrollY;
+    int topRow;
+    MenuInputState *menuInputState;
+};
 
 // The page up/down buttons of the word list on the sub screen.
 struct EasyChatPageButtonsView {
-    EasyChatAppView *view;  // 0x00
-    EasyChatApp *app;       // 0x04
-    ECMenu *menu;           // 0x08
-    BgConfig *bgConfig;     // 0x0C
-    SpriteList *spriteList; // 0x10
-    u32 unk14;              // 0x14
-    u32 unk18;              // 0x18
-    u8 unk1C[0x10];         // 0x1C
-    u32 unk2C;              // 0x2C
-}; // size: 0x30
+    EasyChatAppView *view;
+    EasyChatApp *app;
+    ECMenu *menu;
+    BgConfig *bgConfig;
+    SpriteList *spriteList;
+    u32 unk14;
+    u32 unk18;
+    u8 unk1C[0x10];
+    u32 unk2C;
+};
 
-// One cell of the initial letter grid (data in .rodata).
+// One cell of the initial letter grid.
 typedef struct EasyChatInitialGridCell {
     u16 letter;
     u8 x;
@@ -195,7 +195,6 @@ typedef struct EasyChatInitialGridCell {
 
 #define EC_BLEND_PLANEMASK_ALL (GX_BLEND_PLANEMASK_BG0 | GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_BG3 | GX_BLEND_PLANEMASK_OBJ | GX_BLEND_PLANEMASK_BD)
 
-// The sentence panel passes unnarrowed ints to these u16/u8 parameters.
 #define GetECWordIntoStringByIndexInt ((void (*)(int, String *))GetECWordIntoStringByIndex)
 #define ListMenuUpdateCursorObjInt    ((void (*)(struct ListMenuCursor *, Window *, int, int))ListMenuUpdateCursorObj)
 
@@ -246,8 +245,6 @@ static void EasyChatBlendFade_BrightnessTask(SysTask *task, void *data);
 static u32 EasyChatInitialGrid_GetCount(void);
 static void EasyChatInitialGrid_GetLetter(u32 cell, String *dest);
 static void EasyChatInitialGrid_GetPosition(u32 cell, u32 *x, u32 *y);
-
-// Sentence panel
 
 EasyChatSentenceView *EasyChatSentenceView_Create(EasyChatAppView *view, EasyChatApp *app, ECMenu *menu) {
     EasyChatSentenceView *sentence = Heap_Alloc(HEAP_ID_35, sizeof(EasyChatSentenceView));
@@ -550,7 +547,6 @@ static int EasyChatSentenceView_DrawMessage(EasyChatSentenceView *sentence, Wind
     running = TRUE;
     x = 0;
     EasyChatMessageParser_Init(&sentence->parser, sentence);
-    // `cur` advances by one slot position per word (the original walks the panel pointer itself)
     cur = sentence;
     pos = sentence->slotPositions;
     do {
@@ -860,8 +856,6 @@ void EasyChatSentenceView_DrawYesNoCursor(EasyChatSentenceView *sentence, int in
     ListMenuUpdateCursorObjInt(sentence->listCursor, &sentence->yesNoCursorWindow, 0, index * 16);
 }
 
-// Menu buttons
-
 EasyChatMenuView *EasyChatMenuView_Create(EasyChatAppView *view, EasyChatApp *app, ECMenu *menu) {
     EasyChatMenuView *menuView = Heap_Alloc(HEAP_ID_35, sizeof(EasyChatMenuView));
 
@@ -1063,8 +1057,6 @@ void EasyChatMenuView_ShowMainButtons(EasyChatMenuView *menuView) {
     EasyChatMenuView_DrawListButton(menuView, FALSE);
     EasyChatMenuView_DrawMainButtons(menuView, TRUE, FALSE);
 }
-
-// Category grid
 
 EasyChatCategoryView *EasyChatCategoryView_Create(EasyChatAppView *view, EasyChatApp *app, ECMenu *menu) {
     EasyChatCategoryView *categories = Heap_Alloc(HEAP_ID_35, sizeof(EasyChatCategoryView));
@@ -1325,8 +1317,6 @@ BOOL EasyChatCategoryView_UpdateModeScroll(EasyChatCategoryView *categories) {
     return EasyChatBgScroll_Update(&categories->scroll);
 }
 
-// Word list
-
 EasyChatWordListView *EasyChatWordListView_Create(EasyChatAppView *view, EasyChatApp *app, ECMenu *menu) {
     EasyChatWordListView *wordList = Heap_Alloc(HEAP_ID_35, sizeof(EasyChatWordListView));
 
@@ -1569,8 +1559,6 @@ static void EasyChatWordListView_DrawWord(EasyChatWordListView *wordList, int in
     BlitBitmapRectToWindow(&wordList->listWindow, wordList->wordWindow.pixelBuffer, 0, height, 96, 16, x, 0, 96, 16 - height);
 }
 
-// Page buttons
-
 EasyChatPageButtonsView *EasyChatPageButtonsView_Create(EasyChatAppView *view, EasyChatApp *app, ECMenu *menu) {
     EasyChatPageButtonsView *pageButtons = Heap_Alloc(HEAP_ID_35, sizeof(EasyChatPageButtonsView));
 
@@ -1602,8 +1590,6 @@ void EasyChatPageButtonsView_SetEnabled(EasyChatPageButtonsView *pageButtons, BO
 void EasyChatPageButtonsView_SetPressed(EasyChatPageButtonsView *pageButtons, int button, int pressed) {
 #pragma unused(pageButtons, button, pressed)
 }
-
-// BG scroll and blend fade tasks
 
 static void EasyChatBgScroll_Start(EasyChatBgScroll *scroll, BgConfig *bgConfig, int layer, int axis, int delta, int frames) {
     scroll->bgConfig = bgConfig;
@@ -1732,8 +1718,6 @@ static void EasyChatBlendFade_BrightnessTask(SysTask *task, void *data) {
     }
     G2_SetBlendBrightness(fade->plane1, value);
 }
-
-// Initial letter grid
 
 static u32 EasyChatInitialGrid_GetCount(void) {
     return EC_INITIAL_GRID_CELLS;

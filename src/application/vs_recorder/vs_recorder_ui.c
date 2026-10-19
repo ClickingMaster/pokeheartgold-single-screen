@@ -286,7 +286,7 @@ void VsRecorder_OnMenuTouch(u32 index, u32 event, void *arg) {
 void VsRecorder_InitMenuHitboxes(VsRecorderWork *work) {
     s32 i = 0;
     TouchscreenHitbox *hitbox = work->menuHitboxes;
-    u8 *row = (u8 *)work; // VsRecorderMenuRow stride over the work
+    u8 *row = (u8 *)work;
 
     do {
         i++;
@@ -302,7 +302,7 @@ void VsRecorder_UpdateMenuHitboxes(VsRecorderWork *work) {
     u32 offset;
     s32 i;
     u32 zero;
-    u8 *row; // VsRecorderMenuRow stride over the work
+    u8 *row;
 
     if (work->menu == NULL) {
         return;
@@ -334,7 +334,7 @@ static void VsRecorder_ClearMenuHitboxes(VsRecorderWork *work) {
     s16 pos[2];
     s32 i = 0;
     u32 zero = i;
-    u8 *row = (u8 *)work; // VsRecorderMenuRow stride over the work
+    u8 *row = (u8 *)work;
 
     do {
         ManagedSprite_GetPositionXY(((VsRecorderWork *)row)->choiceRows[0].sprite, &pos[1], &pos[0]);
@@ -556,7 +556,7 @@ void VsRecorder_DeleteDecorSprites(VsRecorderWork *work) {
 
 void VsRecorder_DestroyDecorTasks(VsRecorderWork *work) {
     int i;
-    u8 *row = (u8 *)work; // VsRecorderDecor stride over the work
+    u8 *row = (u8 *)work;
 
     for (i = 0; i < 6; i++, row += sizeof(VsRecorderDecor)) {
         SysTask_Destroy(((VsRecorderWork *)row)->decor[0].task);
@@ -621,7 +621,7 @@ void VsRecorder_LayoutMenuRows(VsRecorderWork *work) {
     s16 y;
     int i;
     VsRecorderMenuRow *pathRow;
-    u8 *row; // VsRecorderMenuRow stride over the work
+    u8 *row;
     u8 *pathRow2;
     int j;
 
@@ -739,7 +739,7 @@ void VsRecorder_RefreshChoiceRows(VsRecorderWork *work) {
 
 void VsRecorder_AttachMenuRowText(VsRecorderWork *work) {
     int i;
-    u8 *row = (u8 *)work; // VsRecorderMenuRow stride over the work
+    u8 *row = (u8 *)work;
 
     for (i = 0; i < 5; i++, row += sizeof(VsRecorderMenuRow)) {
         TextOBJ_SetParentSprite(((VsRecorderWork *)row)->choiceRows[0].text, ((VsRecorderWork *)row)->choiceRows[0].sprite->sprite);

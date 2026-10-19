@@ -6,12 +6,11 @@
 
 #include "battle_recording.h"
 
-// VS Recorder (overlay 40): the Global Terminal screens (video lists, video search, video number keypad, delete)
+// VS Recorder: the Global Terminal screens (video lists, video search, video number keypad, delete)
 // and the battle video helpers used outside the app.
 
 BOOL GlobalTerminalNet_IsIdle(GlobalTerminalNet *net);
 
-// main ARM9 (no public header)
 BOOL VsRecorderApp_HasVisitedBattleFrontier(void *work);
 
 extern BattleRecord *gBattleRecord;
@@ -29,7 +28,7 @@ typedef struct VsRecorderDeleteVideo {
     int fade;
     BOOL cancelled;
     Window yesNoWindows[2];
-} VsRecorderDeleteVideo; // size 0x30
+} VsRecorderDeleteVideo;
 
 // party part of a video header: the profile, then species and forms of both sides
 typedef struct VsRecorderVideoParty {
@@ -51,33 +50,33 @@ typedef struct VsRecorderVideoListIcon {
 // VsRecorderWork.screenWork of the video list screens: the list (with party icons), a video's details (video info /
 // owner's profile, play, save) and saving it to one of the three slots
 typedef struct VsRecorderVideoListScreen {
-    int eva; // 0x000, top screen blend
+    int eva; // top screen blend
     int evb;
     int fade;
-    int listType;                             // 0x00C, VS_RECORDER_VIDEO_LIST_*
-    u32 showProfile;                          // 0x010, details: 0 video info, 1 owner's profile
-    Window windows[8];                        // 0x014, list title
-    Window buttonWindows[8];                  // 0x094, exit / details toggle label; YES, NO
-    VsRecorderTextSprite buttons[4];          // 0x114, exit and back; slot menu: slots 1-3 and cancel
-    u8 *downloadedVideo;                      // 0x184
-    TouchHitboxController *detailHitboxes;    // 0x188, toggle, play, save, back
-    TouchHitboxController *slotHitboxes;      // 0x18C, slots 1-3, cancel
-    TouchHitboxController *overwriteHitboxes; // 0x190, YES, NO
-    VsRecorderProfile profile;                // 0x194
-    VsRecorderVideoInfo info;                 // 0x220
+    int listType;                    // VS_RECORDER_VIDEO_LIST_*
+    u32 showProfile;                 // details: 0 video info, 1 owner's profile
+    Window windows[8];               // list title
+    Window buttonWindows[8];         // exit / details toggle label; YES, NO
+    VsRecorderTextSprite buttons[4]; // exit and back; slot menu: slots 1-3 and cancel
+    u8 *downloadedVideo;
+    TouchHitboxController *detailHitboxes;    // toggle, play, save, back
+    TouchHitboxController *slotHitboxes;      // slots 1-3, cancel
+    TouchHitboxController *overwriteHitboxes; // YES, NO
+    VsRecorderProfile profile;
+    VsRecorderVideoInfo info;
     u8 unk_2AC[0x2028 - 0x2AC];
-    int slot;              // 0x2028, 1-3
-    int buttonWindowCount; // 0x202C
-    int windowCount;       // 0x2030
-    int nextSubState;      // 0x2034, after the video download / the list
-    BOOL downloaded;       // 0x2038
+    int slot; // 1-3
+    int buttonWindowCount;
+    int windowCount;
+    int nextSubState; // after the video download / the list
+    BOOL downloaded;
     u8 unk_203C[0x2054 - 0x203C];
-    VsRecorderListConfig listConfig;     // 0x2054
-    NARC *monIconNarc;                   // 0x2080
-    int iconScroll;                      // 0x2084, list scroll the icons were made for
-    int iconResId;                       // 0x2088, next mon icon resource
-    VsRecorderVideoListIcon icons[5][6]; // 0x208C, party icons of the visible rows
-} VsRecorderVideoListScreen;             // size 0x217C
+    VsRecorderListConfig listConfig;
+    NARC *monIconNarc;
+    int iconScroll;                      // list scroll the icons were made for
+    int iconResId;                       // next mon icon resource
+    VsRecorderVideoListIcon icons[5][6]; // party icons of the visible rows
+} VsRecorderVideoListScreen;
 
 // one digit of the video number pad; the separators and cursors use the same layout
 typedef struct VsRecorderNumberPadDigit {
@@ -91,7 +90,7 @@ typedef struct VsRecorderNumberPadDigit {
     u8 frames;                 // frames left to move
     u8 scaleStep;
     u8 unk_1A[2];
-} VsRecorderNumberPadDigit; // size 0x1C
+} VsRecorderNumberPadDigit;
 
 // set up by the screen that opens the number pad
 typedef struct VsRecorderNumberPadConfig {
@@ -100,7 +99,7 @@ typedef struct VsRecorderNumberPadConfig {
     u32 unk_14;
     String *text; // the digits entered
     void *options;
-} VsRecorderNumberPadConfig; // size 0x20
+} VsRecorderNumberPadConfig;
 
 // VsRecorderNumberPad.state
 #define VS_RECORDER_NUMBER_PAD_INIT   0
@@ -116,39 +115,39 @@ typedef struct VsRecorderNumberPadConfig {
 
 // video number entry: 12 digits in three groups (2-5-5) and a keypad with 0-9, back and OK
 typedef struct VsRecorderNumberPad {
-    VsRecorderNumberPadDigit digits[12];     // 0x000
-    VsRecorderNumberPadDigit separators[2];  // 0x150
-    VsRecorderNumberPadDigit cursors[3];     // 0x188, digit cursor (value: selected digit), key cursor, key press
-    s16 startX[4];                           // 0x1DC, x of the first digit, by group
-    u16 groupBounds[3][2];                   // 0x1E4, first and end digit of each group
-    u8 unk_1F0[4];                           // 0x1F0
-    int state;                               // 0x1F4, VS_RECORDER_NUMBER_PAD_*
-    u32 unk_1F8;                             // 0x1F8
-    int step;                                // 0x1FC
-    int timer;                               // 0x200
-    int count;                               // 0x204, digits
-    int group;                               // 0x208, current group (0: none)
-    int prevGroup;                           // 0x20C
-    int groupFirst;                          // 0x210
-    int groupEnd;                            // 0x214
-    int prevGroupFirst;                      // 0x218
-    int prevGroupEnd;                        // 0x21C
-    NARC *narc;                              // 0x220
-    SpriteSystem *spriteSystem;              // 0x224
-    SpriteManager *spriteManager;            // 0x228
-    BgConfig *bgConfig;                      // 0x22C
-    PaletteData *plttData;                   // 0x230
-    TouchHitboxController *hitboxController; // 0x234
-    TouchscreenHitbox hitboxes[24];          // 0x238, digits, keys 0-9, back, OK
-    BOOL touchInput;                         // 0x298, TRUE: hides the key cursor
-    int action;                              // 0x29C
-    int actionValue;                         // 0x2A0
-    int actionMode;                          // 0x2A4, ACTION_GROUP: 0 first digit, 1 last digit of the group
-    VsRecorderNumberPadConfig config;        // 0x2A8
-    BOOL confirmed;                          // 0x2C8, FALSE: cancelled with back on the first digit
-    s64 number;                              // 0x2CC
-    VsRecorderWork *owner;                   // 0x2D4
-} VsRecorderNumberPad;                       // size 0x2D8
+    VsRecorderNumberPadDigit digits[12];
+    VsRecorderNumberPadDigit separators[2];
+    VsRecorderNumberPadDigit cursors[3]; // digit cursor (value: selected digit), key cursor, key press
+    s16 startX[4];                       // x of the first digit, by group
+    u16 groupBounds[3][2];               // first and end digit of each group
+    u8 unk_1F0[4];
+    int state; // VS_RECORDER_NUMBER_PAD_*
+    u32 unk_1F8;
+    int step;
+    int timer;
+    int count; // digits
+    int group; // current group (0: none)
+    int prevGroup;
+    int groupFirst;
+    int groupEnd;
+    int prevGroupFirst;
+    int prevGroupEnd;
+    NARC *narc;
+    SpriteSystem *spriteSystem;
+    SpriteManager *spriteManager;
+    BgConfig *bgConfig;
+    PaletteData *plttData;
+    TouchHitboxController *hitboxController;
+    TouchscreenHitbox hitboxes[24]; // digits, keys 0-9, back, OK
+    BOOL touchInput;                // TRUE: hides the key cursor
+    int action;
+    int actionValue;
+    int actionMode; // ACTION_GROUP: 0 first digit, 1 last digit of the group
+    VsRecorderNumberPadConfig config;
+    BOOL confirmed; // FALSE: cancelled with back on the first digit
+    s64 number;
+    VsRecorderWork *owner;
+} VsRecorderNumberPad;
 
 typedef BOOL (*VsRecorderNumberPadFunc)(VsRecorderNumberPad *pad);
 
@@ -161,53 +160,52 @@ typedef BOOL (*VsRecorderNumberPadFunc)(VsRecorderNumberPad *pad);
 // the result list (with party icons like the video list), a found video's details and saving it; also used by the
 // video number search (number pad) and by sending the own video
 typedef struct VsRecorderVideoSearch {
-    int eva; // 0x000, top screen blend
+    int eva; // top screen blend
     int evb;
     int fade;
-    int nextSubState;                // 0x00C, after the result list / the video download
-    VsRecorderTextSprite buttons[4]; // 0x010, exit and back; slot menu: slots 1-3 and cancel
-    VsRecorderProfile profile;       // 0x080
-    VsRecorderVideoInfo info;        // 0x10C
+    int nextSubState;                // after the result list / the video download
+    VsRecorderTextSprite buttons[4]; // exit and back; slot menu: slots 1-3 and cancel
+    VsRecorderProfile profile;
+    VsRecorderVideoInfo info;
     u8 unk_198[0x1C8 - 0x198];
-    int slot;                                   // 0x1C8, 1-3
-    u32 showProfile;                            // 0x1CC, details: 0 video info, 1 owner's profile
-    FrontierCard *uploadCard;                   // 0x1D0, send video
-    VsRecorderNumberPad numberPad;              // 0x1D4
-    VsRecorderNumberPadConfig *numberPadConfig; // 0x4AC
-    u64 videoNumber;                            // 0x4B0, number search / the sent video's number
-    BOOL downloaded;                            // 0x4B8
-    u8 *foundVideo;                             // 0x4BC, the downloaded video (profile 0x80, header 0x64, battle)
-    u16 species;                                // 0x4C0, 0xFFFF: any
-    u8 facility;                                // 0x4C2, 0xFF: any
-    u8 country;                                 // 0x4C3, 0xFF: any location
-    u8 region;                                  // 0x4C4
-    u8 condition;                               // 0x4C5, VS_RECORDER_SEARCH_*
-    u8 unk_4C6[2];                              // 0x4C6
-    int speciesCount;                           // 0x4C8, seen species of the chosen group
-    int listSize;                               // 0x4CC, whole species list
-    u16 *speciesList;                           // 0x4D0, seen species of the group first
-    MsgData *speciesNames;                      // 0x4D4
-    BOOL categoryChosen;                        // 0x4D8
-    VsRecorderListEntry *entries;               // 0x4DC, species list window
-    VsRecorderListConfig listConfig;            // 0x4E0, species list / result list
-    NARC *monIconNarc;                          // 0x50C
-    int iconScroll;                             // 0x510, list scroll the icons were made for
-    int iconResId;                              // 0x514, next mon icon resource
-    VsRecorderVideoListIcon icons[5][6];        // 0x518, party icons of the visible result rows
-    TouchHitboxController *hitboxes;            // 0x608, conditions / video details
-    TouchHitboxController *slotHitboxes;        // 0x60C, species groups / save slots
-    TouchHitboxController *overwriteHitboxes;   // 0x610, YES, NO
-    Window windows[6];                          // 0x614, conditions: labels and the chosen values
+    int slot;                 // 1-3
+    u32 showProfile;          // details: 0 video info, 1 owner's profile
+    FrontierCard *uploadCard; // send video
+    VsRecorderNumberPad numberPad;
+    VsRecorderNumberPadConfig *numberPadConfig;
+    u64 videoNumber; // number search / the sent video's number
+    BOOL downloaded;
+    u8 *foundVideo; // the downloaded video (profile, header, battle)
+    u16 species;    // any
+    u8 facility;    // any
+    u8 country;     // any location
+    u8 region;
+    u8 condition; // VS_RECORDER_SEARCH_*
+    u8 unk_4C6[2];
+    int speciesCount; // seen species of the chosen group
+    int listSize;     // whole species list
+    u16 *speciesList; // seen species of the group first
+    MsgData *speciesNames;
+    BOOL categoryChosen;
+    VsRecorderListEntry *entries;    // species list window
+    VsRecorderListConfig listConfig; // species list / result list
+    NARC *monIconNarc;
+    int iconScroll;                           // list scroll the icons were made for
+    int iconResId;                            // next mon icon resource
+    VsRecorderVideoListIcon icons[5][6];      // party icons of the visible result rows
+    TouchHitboxController *hitboxes;          // conditions / video details
+    TouchHitboxController *slotHitboxes;      // species groups / save slots
+    TouchHitboxController *overwriteHitboxes; // YES, NO
+    Window windows[6];                        // conditions: labels and the chosen values
     u8 unk_674[0x6D4 - 0x674];
-    Window buttonWindows[9]; // 0x6D4, buttons: conditions, species groups, result list
+    Window buttonWindows[9]; // buttons: conditions, species groups, result list
     u8 unk_764[0x794 - 0x764];
-    int windowCount;       // 0x794
-    int buttonWindowCount; // 0x798
-    u8 videoFlag;          // 0x79C, VsRecorderVideoList.flags of the found video
+    int windowCount;
+    int buttonWindowCount;
+    u8 videoFlag; // VsRecorderVideoList.flags of the found video
     u8 unk_79D[3];
-} VsRecorderVideoSearch; // size 0x7A0
+} VsRecorderVideoSearch;
 
-// the Global Terminal client is embedded at VsRecorderWork.netClient
 BOOL VsRecorder_IsNetIdle(VsRecorderWork *work);
 
 void VsRecorder_PrintVideoNumber(VsRecorderVideoSearch *search, VsRecorderWork *work);

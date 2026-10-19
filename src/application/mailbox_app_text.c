@@ -182,7 +182,6 @@ static inline u32 MailboxAppData_GetMessageWindowOffset(void) {
 }
 
 static void MailboxApp_PrintMessageBox(MailboxApp *app) {
-    // The window, its string and the printer id are all reached through the message window's offset.
     MailboxAppData *data = app->data;
     u32 offset = MailboxAppData_GetMessageWindowOffset();
 

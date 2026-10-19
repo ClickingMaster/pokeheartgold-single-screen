@@ -46,52 +46,52 @@
 // Main menu > Mystery Gift > "Check card": browses the three saved Wonder Cards, flips a card between its
 // front and back, deletes it, or shares it with other players over DS wireless.
 struct WonderCardAlbum {
-    enum HeapID heapId;                        // 0x0000
-    u8 commOwner[0x8C];                        // 0x0004, start of the MysteryGiftComm owner work (MysteryGiftComm_StartParent)
-    WonderCardInfo shareHeader;                // 0x0090, sent with shareCard
-    WonderCard shareCard;                      // 0x00E0, copy of the card being shared
-    u8 unk_0438[0x25C4];                       // 0x0438
-    BgConfig *bgConfig;                        // 0x29FC
-    MessageFormat *msgFormat;                  // 0x2A00
-    MsgData *msgData;                          // 0x2A04
-    Window windows[19];                        // 0x2A08, card text boxes (sWonderCardAlbumTextBoxes)
-    u8 unk_2B38[0x10];                         // 0x2B38
-    u32 baseTiles[19];                         // 0x2B48
-    u32 unk_2B94;                              // 0x2B94
-    u32 boxBaseTile;                           // 0x2B98, of the text box WonderCardAlbum_PrintTextBox is printing
-    const WonderCardTextBox *box;              // 0x2B9C, the text box WonderCardAlbum_PrintTextBox is printing
-    MysteryGiftSave *mysteryGift;              // 0x2BA0
-    SaveData *saveData;                        // 0x2BA4
-    Options *options;                          // 0x2BA8
-    int frame;                                 // 0x2BAC
-    u32 unk_2BB0;                              // 0x2BB0
-    WonderCard *cards[NUM_SAVED_WONDER_CARDS]; // 0x2BB4
-    int cardIndex;                             // 0x2BC0
-    int page;                                  // 0x2BC4
-    struct ListMenu *listMenu;                 // 0x2BC8
-    ListMenuItem *listMenuItems;               // 0x2BCC
-    Window messageWindow;                      // 0x2BD0
-    Window menuWindow;                         // 0x2BE0
-    int menuBaseTile;                          // 0x2BF0
-    int numReceivers;                          // 0x2BF4
-    u8 unk_2BF8[0x10];                         // 0x2BF8
-    PlayerProfile *receivers[5];               // 0x2C08, by net id (0 unused)
-    u32 receiverOrder[5];                      // 0x2C1C, order the receivers connected in
-    int receiversShown;                        // 0x2C30
-    int timer;                                 // 0x2C34
-    u32 unk_2C38;                              // 0x2C38
-    u32 receiverSeq;                           // 0x2C3C
-    int nextState;                             // 0x2C40
-    SpriteList *spriteList;                    // 0x2C44
-    u8 unk_2C48[0x17C];                        // 0x2C48
-    Sprite *buttonSprites[2];                  // 0x2DC4, share / cancel
-    Sprite *monIconSprites[3];                 // 0x2DCC
-    u8 encryptedCard[sizeof(WonderCard)];      // 0x2DD8
-    WonderCardFlipEffect flipEffect;           // 0x3130
-    void (*callback)(WonderCardAlbum *album);  // 0x3D48, run every frame while set
-    int selection;                             // 0x3D4C, 0: share, 1: cancel
-    WaitingIcon *waitingIcon;                  // 0x3D50
-}; // size: 0x3D54
+    enum HeapID heapId;
+    u8 commOwner[0x8C];         // start of the MysteryGiftComm owner work (MysteryGiftComm_StartParent)
+    WonderCardInfo shareHeader; // sent with shareCard
+    WonderCard shareCard;       // copy of the card being shared
+    u8 unk_0438[0x25C4];
+    BgConfig *bgConfig;
+    MessageFormat *msgFormat;
+    MsgData *msgData;
+    Window windows[19]; // card text boxes (sWonderCardAlbumTextBoxes)
+    u8 unk_2B38[0x10];
+    u32 baseTiles[19];
+    u32 unk_2B94;
+    u32 boxBaseTile;              // of the text box WonderCardAlbum_PrintTextBox is printing
+    const WonderCardTextBox *box; // the text box WonderCardAlbum_PrintTextBox is printing
+    MysteryGiftSave *mysteryGift;
+    SaveData *saveData;
+    Options *options;
+    int frame;
+    u32 unk_2BB0;
+    WonderCard *cards[NUM_SAVED_WONDER_CARDS];
+    int cardIndex;
+    int page;
+    struct ListMenu *listMenu;
+    ListMenuItem *listMenuItems;
+    Window messageWindow;
+    Window menuWindow;
+    int menuBaseTile;
+    int numReceivers;
+    u8 unk_2BF8[0x10];
+    PlayerProfile *receivers[5]; // by net id (0 unused)
+    u32 receiverOrder[5];        // order the receivers connected in
+    int receiversShown;
+    int timer;
+    u32 unk_2C38;
+    u32 receiverSeq;
+    int nextState;
+    SpriteList *spriteList;
+    u8 unk_2C48[0x17C];
+    Sprite *buttonSprites[2]; // share / cancel
+    Sprite *monIconSprites[3];
+    u8 encryptedCard[sizeof(WonderCard)];
+    WonderCardFlipEffect flipEffect;
+    void (*callback)(WonderCardAlbum *album); // run every frame while set
+    int selection;                            // 0: share, 1: cancel
+    WaitingIcon *waitingIcon;
+};
 
 extern void ResetAllTextPrinters(void);
 extern void LoadFontPal0(enum GFPalLoadLocation location, enum GFPalSlotOffset palSlotOffset, enum HeapID heapID);

@@ -44,7 +44,7 @@ typedef struct EventLogBgTemplates {
 
 extern const u8 *const sPokewalkerUploadBlocks[16];
 extern const u8 sPokewalkerUploadBlockSizes[16];
-extern const u8 sEventLogTouchBoxes[]; // +3 previous page, +7 next page, +11 quit
+extern const u8 sEventLogTouchBoxes[]; // previous page, next page, quit
 extern const u16 sEventLogInvalidName[];
 extern const GraphicsModes sEventLogGraphicsModes;
 extern const OamCharTransferParam sEventLogOamTransferParam;

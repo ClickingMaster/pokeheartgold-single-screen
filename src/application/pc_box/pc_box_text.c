@@ -244,8 +244,8 @@ void PCBox_CreateTrayTextObjs(PCBoxView *view) {
 
 void PCBox_DestroyTrayTextObjs(PCBoxView *view) {
     u32 i;
-    u8 *charTransfer; // walks view->textObjs[i].charTransfer
-    u8 *slot;         // walks view->textObjs[i]
+    u8 *charTransfer;
+    u8 *slot;
 
     i = 0;
     charTransfer = (u8 *)&view->textObjs[0].charTransfer;

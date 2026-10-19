@@ -25,10 +25,7 @@
 #include "touchscreen.h"
 #include "wireless_status_icon.h"
 
-// VS Recorder video transfers: the end of the video search (download a found video, back from playing it), the
-// video number search (VS_RECORDER_SCREEN_SEARCH_NUMBER), sending the own video (VS_RECORDER_SCREEN_SEND_VIDEO),
-// and what these screens share: the found video's details, the save slots, the buttons and the touch callbacks,
-// and the server response handlers of the video requests. All of them use VsRecorderVideoSearch.
+// VS Recorder video transfers: downloading a found video, the video number search and sending the own video.
 
 extern const VsRecorderSlotButtonTable sVsRecorderSearchSlotMsgIds;
 extern const VsRecorderSlotButtonTable sVsRecorderSearchSlotAnims;
@@ -954,7 +951,7 @@ static void VsRecorder_PrintSearchMessage(VsRecorderWork *work, int msgId, int s
 
 // the three slots and cancel
 void VsRecorder_CreateSearchSlotButtons(VsRecorderWork *work) {
-    u8 *search = work->screenWork; // walks by one button
+    u8 *search = work->screenWork;
     VsRecorderSlotButtonTable msgIds = sVsRecorderSearchSlotMsgIds;
     VsRecorderSlotButtonTable anims = sVsRecorderSearchSlotAnims;
     VsRecorderGfx *gfx;
@@ -993,7 +990,7 @@ void VsRecorder_CreateSearchSlotButtons(VsRecorderWork *work) {
 
 void VsRecorder_FreeSearchSlotButtons(VsRecorderWork *work) {
     VsRecorderTextSprite *button;
-    VsRecorderVideoSearch *search = work->screenWork; // walks by one button
+    VsRecorderVideoSearch *search = work->screenWork;
     int i;
 
     button = search->buttons;

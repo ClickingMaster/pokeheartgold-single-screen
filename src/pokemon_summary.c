@@ -53,9 +53,6 @@
 #include "vram_transfer_manager.h"
 #include "wireless_status_icon.h"
 
-// Pokemon summary screen: the overlay manager's init, main and exit, the screen's graphics setup and the first
-// input states.
-
 extern const GraphicsBanks gPokemonSummaryGraphicsBanks;
 extern const GraphicsModes gPokemonSummaryGraphicsModes;
 extern const BgTemplate gPokemonSummaryBgTemplate1;
@@ -75,10 +72,9 @@ extern const TouchscreenHitbox gPokemonSummaryMoveHitboxes[];
 extern const u32 gPokemonSummaryPageScreens[][3];
 extern const TouchscreenHitbox gPokemonSummaryRibbonHitboxes[];
 
-// The EXP bar passes the tile as a u32.
 #define FillBgTilemapRect_U32(bgConfig, bgId, fillValue, x, y, width, height, mode) ((void (*)(BgConfig *, u8, u32, u8, u8, u8, u8, u8))FillBgTilemapRect)(bgConfig, bgId, fillValue, x, y, width, height, mode)
 
-NarcId MoveCategoryIcon_GetNarc(u32 category); // the definition takes no argument; the call passes one
+NarcId MoveCategoryIcon_GetNarc(u32 category);
 
 #define Sprite_SetFlipMode_Int(sprite, flip) ((void (*)(Sprite *, int))Sprite_SetFlipMode)(sprite, flip)
 #define GetRibbonAttr_Int(ribbon, attr)      ((u32(*)(int, RibbonAttr))GetRibbonAttr)(ribbon, attr)
@@ -793,9 +789,6 @@ static int PokemonSummary_WaitSlideOutMoveInfo(PokemonSummary *summary) {
     return POKEMON_SUMMARY_STATE_SLIDE_OUT_MOVE_INFO;
 }
 
-// The move, ribbon and condition input states, the button flash, reading the shown Pokemon into
-// PokemonSummary.mon, and switching pages.
-
 // State 5: pick a move to move (A) or leave the move list (B).
 static int PokemonSummary_HandleMoveSelectInput(PokemonSummary *summary) {
     u32 keys;
@@ -1217,13 +1210,11 @@ static int PokemonSummary_WaitConditionExit(PokemonSummary *summary) {
     return POKEMON_SUMMARY_STATE_WAIT_CONDITION_EXIT;
 }
 
-// State 21.
 static int PokemonSummary_StartFadeOut(PokemonSummary *summary) {
     BeginAppScreenFade(1, HEAP_ID_19);
     return POKEMON_SUMMARY_STATE_WAIT_FADE_OUT;
 }
 
-// State 22.
 static int PokemonSummary_WaitFadeOut(PokemonSummary *summary) {
     return (u8)(IsPaletteFadeFinished() == TRUE);
 }
@@ -1502,9 +1493,6 @@ static void PokemonSummary_ScrollPage(PokemonSummary *summary, int direction) {
         PokemonSummary_ChangePage(summary, page);
     }
 }
-
-// Touch input on the pages, the page backgrounds and HP/EXP bars, switching to another Pokemon, the move info and
-// ribbon list slide-ins, the ribbon cursor, the touch hitboxes and the touched-button flashes.
 
 static BOOL PokemonSummary_HasPage(PokemonSummary *summary, int page) {
     return (summary->args->pageFlags & (1 << page)) != 0;
@@ -1954,7 +1942,6 @@ static void PokemonSummary_ShowSelectedMoveInfo(PokemonSummary *summary) {
     }
 }
 
-// Called with the move as an int.
 #define PokemonSummary_PrintMoveInfo_Int(summary, move)         ((void (*)(PokemonSummary *, int))PokemonSummary_PrintMoveInfo)(summary, move)
 #define PokemonSummary_SetMoveCategorySprite_Int(summary, move) ((void (*)(PokemonSummary *, int))PokemonSummary_SetMoveCategorySprite)(summary, move)
 
@@ -2384,10 +2371,6 @@ static void PokemonSummary_DrawMonButtons(PokemonSummary *summary) {
         ScheduleBgTilemapBufferTransfer(summary->bgConfig, GF_BG_LYR_SUB_2);
     }
 }
-
-// Sprites: the screen's sprite system and the sprites of each page (type, move and status icons, the shown
-// Pokemon's and the party's icons, markings, sheen sparkles, condition, ribbon, Pokeathlon star and shiny leaf
-// sprites).
 
 static void PokemonSummary_InitSpriteSystem(PokemonSummary *summary) {
     OamManagerParam oamManagerParam;

@@ -19,16 +19,16 @@
 #define TRADE_SEQUENCE_EXCHANGE_NUM_STATES 2
 
 typedef struct TradeSequenceExchange {
-    TradeSequence *ts;   // 0x00
-    u32 subState;        // 0x04
-    int frames;          // 0x08
-    BgConfig *bgConfig;  // 0x0C
-    fx32 sentY;          // 0x10
-    fx32 receivedY;      // 0x14
-    fx32 sentStep;       // 0x18
-    fx32 receivedStep;   // 0x1C
-    BOOL slideDone;      // 0x20
-} TradeSequenceExchange; // size: 0x24
+    TradeSequence *ts;
+    u32 subState;
+    int frames;
+    BgConfig *bgConfig;
+    fx32 sentY;
+    fx32 receivedY;
+    fx32 sentStep;
+    fx32 receivedStep;
+    BOOL slideDone;
+} TradeSequenceExchange;
 
 enum TradeSequenceExchangeSlideStep {
     TRADE_EXCHANGE_SLIDE_WAIT_FADE_IN,

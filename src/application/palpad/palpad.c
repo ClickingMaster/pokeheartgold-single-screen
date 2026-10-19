@@ -526,7 +526,7 @@ static void PalPadGfx_CreateSprites(PalPadGfx *gfx, enum HeapID heapId) {
     int i, animSeq;
     SpriteTemplate *template;
     SpriteTemplate *create;
-    PalPadGfx *arrowSlot; // moves one Sprite pointer per arrow; written through ->arrows[0]
+    PalPadGfx *arrowSlot;
 
     i = 0;
     arrowSlot = gfx;

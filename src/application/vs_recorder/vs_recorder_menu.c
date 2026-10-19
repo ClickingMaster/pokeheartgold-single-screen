@@ -68,7 +68,7 @@ typedef struct VsRecorderRowMove {
     OrbitCursor *cursor; // follows the row, or NULL
     int *busy;           // set every frame the row moves
     int *arrived;        // set two frames before the row arrives
-} VsRecorderRowMove;     // size 0x34
+} VsRecorderRowMove;
 
 // VsRecorderWork.screenWork while menu rows move
 typedef struct VsRecorderMenuMove {

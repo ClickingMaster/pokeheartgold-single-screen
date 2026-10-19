@@ -1,4 +1,4 @@
-// Pokewalker connection app: overlay callbacks, graphics and message setup, and the start of the IR link.
+// Pokewalker connection app: init, main and exit, graphics and message setup, and the start of the IR link.
 
 #include "application/pokewalker/pokewalker_app.h"
 
@@ -153,7 +153,7 @@ void PokewalkerApp_GetSaveData(PokewalkerApp *app) {
     app->pokedex = Save_Pokedex_Get(app->saveData);
 }
 
-// OS_SetIrqCheckFlag(OS_IE_V_BLANK), with the DTCM base passed in.
+// OS_SetIrqCheckFlag(OS_IE_V_BLANK)
 static inline void SetIrqCheckFlag(u32 *dtcm) {
     dtcm[0xFFE] |= OS_IE_V_BLANK;
 }

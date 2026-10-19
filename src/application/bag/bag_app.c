@@ -49,11 +49,10 @@
 #include "wireless_status_icon.h"
 #include "yes_no_prompt.h"
 
-// Bag application: overlay entry points, input states, item actions (use, trash, register, give, sell),
+// Bag application: entry points, input states, item actions (use, trash, register, give, sell),
 // sub-screen layouts, 3D bag model and camera, windows.
 
-// The navigation tables are {up, down, left, right} per button; the *Down/*Left/*Right labels point at the later
-// columns.
+// The navigation tables are {up, down, left, right} per button.
 // Sub-screen tilemap edit: 1 copies a rect of the loaded tilemap, 2 clears one
 typedef struct BagAppTilemapCommand {
     u8 type;
@@ -1026,7 +1025,6 @@ static int BagApp_State_OpenItemMenu(BagApp *app) {
     BagApp_DrawSelectedItemEntry(app, pocket->scroll, app->cursorButton - 8);
     BagApp_ShowSelectedItemIcon(app, app->cursorButton - 8);
     BagApp_SetupItemMenu(app);
-    // the slot is re-read through the pocket array base and the byte offset
     app->bagView->itemId = ((BagViewPocket *)((u8 *)pockets + offset))->slots[pocket->scroll + app->cursorButton - 8].id;
     app->maxQuantity = ((BagViewPocket *)((u8 *)pockets + offset))->slots[pocket->scroll + app->cursorButton - 8].quantity;
     return BAG_STATE_ITEM_MENU_INPUT;
@@ -1911,7 +1909,6 @@ int BagApp_ItemAction_Trash(BagApp *app) {
     app->quantity = 1;
     BagApp_HideCursor(app);
     bagView = app->bagView;
-    // called with a heap ID the function does not take
     if (((u16(*)(ItemSlot *, u32, u16, enum HeapID))Pocket_GetQuantity)(bagView->pockets[bagView->pocketIndex].slots, bagView->pockets[bagView->pocketIndex].itemCount, bagView->itemId, HEAP_ID_6) == 1) {
         BagApp_PrintTrashConfirmMessage(app);
         BagApp_ShowCancelButton(app, FALSE);
@@ -2510,7 +2507,6 @@ static int BagApp_State_StartSell(BagApp *app) {
     BagApp_PrintMoney(app, FALSE);
     BagApp_PrintSellPrice(app);
     BagApp_PrintQuantityDigits(app, 2);
-    // called with a heap ID the function does not take
     if (((u16(*)(ItemSlot *, u32, u16, enum HeapID))Pocket_GetQuantity)(app->bagView->pockets[app->bagView->pocketIndex].slots, app->bagView->pockets[app->bagView->pocketIndex].itemCount, app->bagView->itemId, HEAP_ID_6) == 1) {
         template = NewString_ReadMsgData(app->msgData, msg_0010_00078);
         BufferIntegerAsString(app->msgFormat, 0, app->quantity * app->sellPrice, 6, PRINTING_MODE_LEFT_ALIGN, TRUE);
@@ -3014,8 +3010,7 @@ static void BagApp_UpdateCameraTween(BagAppScene *scene, int trainerGender) {
     s32 angleY;
     s32 distance;
     s32 modelY;
-    s32 fromOffset; // byte offsets of the two keys; the fields are read as base + (offset + field), as indexing the
-                    // key array allocates the stack differently
+    s32 fromOffset;
     s32 toOffset;
     s32 duration;
     s32 frame;

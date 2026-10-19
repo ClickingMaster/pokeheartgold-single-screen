@@ -21,107 +21,106 @@
 #include "sys_task_api.h"
 #include "text.h"
 
-// Scene 1 of the trade animation: the Poke Ball model fades in over a zooming background and circles up off the top
-// screen; the screens swap and it rises through the bottom screen while the background scrolls and light streaks
-// fall, then the screen fades to white.
+// Scene 1 of the trade animation: the Poke Ball model circles up off the top screen, rises through the bottom
+// screen while light streaks fall, then the screen fades to white.
 
 #define TRADE_SEQUENCE_DEPART_NUM_STATES  4
 #define TRADE_SEQUENCE_DEPART_NUM_STREAKS 20
 
 // Rotation speed around one axis, changing by step until it reaches target.
 typedef struct TradeSequenceDepartSpin {
-    s16 speed;             // 0x0
-    s16 step;              // 0x2
-    s16 target;            // 0x4
-    u16 frames;            // 0x6
-} TradeSequenceDepartSpin; // size: 0x8
+    s16 speed;
+    s16 step;
+    s16 target;
+    u16 frames;
+} TradeSequenceDepartSpin;
 
 // Moves the ball model: it circles a center (an ellipse of radii radiusX/radiusZ, turning by angleSpeed every frame)
 // while its height and its rotation speeds change over time.
 typedef struct TradeSequenceDepartFlight {
-    TradeSequenceModel *model;        // 0x00
-    TradeSequenceModels *models;      // 0x04
-    VecFx32 center;                   // 0x08
-    VecFx32 position;                 // 0x14
-    TradeSequenceRotation rotation;   // 0x20
-    u8 padding_26[2];                 // 0x26
-    fx32 height;                      // 0x28
-    fx32 speed;                       // 0x2C
-    fx32 acceleration;                // 0x30
-    u8 unk_34[4];                     // 0x34
-    fx32 radiusX;                     // 0x38
-    fx32 radiusZ;                     // 0x3C
-    fx32 radiusXStep;                 // 0x40
-    fx32 radiusZStep;                 // 0x44
-    fx32 radiusXTarget;               // 0x48
-    fx32 radiusZTarget;               // 0x4C
-    int radiusFrames;                 // 0x50
-    s16 angle;                        // 0x54
-    s16 angleSpeed;                   // 0x56
-    s16 angleSpeedTarget;             // 0x58
-    s16 angleSpeedStep;               // 0x5A
-    TradeSequenceDepartSpin spins[3]; // 0x5C, x, y, z
-    int angleSpeedFrames;             // 0x74
-    BOOL outOfView;                   // 0x78
-    BOOL flyingAway;                  // 0x7C
-    int frames;                       // 0x80
-} TradeSequenceDepartFlight;          // size: 0x84
+    TradeSequenceModel *model;
+    TradeSequenceModels *models;
+    VecFx32 center;
+    VecFx32 position;
+    TradeSequenceRotation rotation;
+    u8 padding_26[2];
+    fx32 height;
+    fx32 speed;
+    fx32 acceleration;
+    u8 unk_34[4];
+    fx32 radiusX;
+    fx32 radiusZ;
+    fx32 radiusXStep;
+    fx32 radiusZStep;
+    fx32 radiusXTarget;
+    fx32 radiusZTarget;
+    int radiusFrames;
+    s16 angle;
+    s16 angleSpeed;
+    s16 angleSpeedTarget;
+    s16 angleSpeedStep;
+    TradeSequenceDepartSpin spins[3]; // x, y, z
+    int angleSpeedFrames;
+    BOOL outOfView;
+    BOOL flyingAway;
+    int frames;
+} TradeSequenceDepartFlight;
 
 typedef struct TradeSequenceDepartStreak {
-    Sprite *head;            // 0x0
-    Sprite *tail;            // 0x4
-} TradeSequenceDepartStreak; // size: 0x8
+    Sprite *head;
+    Sprite *tail;
+} TradeSequenceDepartStreak;
 
 typedef struct TradeSequenceDepart {
-    TradeSequence *ts;                                                    // 0x000
-    u32 subState;                                                         // 0x004
-    int timer;                                                            // 0x008
-    TradeSequenceCellAnim cellAnim;                                       // 0x00C
-    TradeSequenceDepartStreak streaks[TRADE_SEQUENCE_DEPART_NUM_STREAKS]; // 0x01C
-    u32 savedRngSeed;                                                     // 0x0BC
-    BgConfig *bgConfig;                                                   // 0x0C0
-    TradeSequencePulses *pulses;                                          // 0x0C4
-    int pulsesRunning;                                                    // 0x0C8
-    TradeSequenceBgZoom *bgZoom;                                          // 0x0CC
-    int bgZoomFinished;                                                   // 0x0D0
-    TradeSequenceModels *models;                                          // 0x0D4
-    TradeSequenceModel *ball;                                             // 0x0D8
-    TradeSequenceDepartFlight flight;                                     // 0x0DC
-    SysTask *flightTask;                                                  // 0x160
-    SysTask *scrollTask;                                                  // 0x164
-    BOOL swapScreens;                                                     // 0x168
-} TradeSequenceDepart;                                                    // size: 0x16C
+    TradeSequence *ts;
+    u32 subState;
+    int timer;
+    TradeSequenceCellAnim cellAnim;
+    TradeSequenceDepartStreak streaks[TRADE_SEQUENCE_DEPART_NUM_STREAKS];
+    u32 savedRngSeed;
+    BgConfig *bgConfig;
+    TradeSequencePulses *pulses;
+    int pulsesRunning;
+    TradeSequenceBgZoom *bgZoom;
+    int bgZoomFinished;
+    TradeSequenceModels *models;
+    TradeSequenceModel *ball;
+    TradeSequenceDepartFlight flight;
+    SysTask *flightTask;
+    SysTask *scrollTask;
+    BOOL swapScreens;
+} TradeSequenceDepart;
 
 // Makes the light streaks fall down both screens, revealing one more every 12 frames.
 typedef struct TradeSequenceDepartStreakFall {
-    SysTask **task;                                       // 0x000
-    TradeSequenceDepart *depart;                          // 0x004
-    BOOL visible[TRADE_SEQUENCE_DEPART_NUM_STREAKS];      // 0x008
-    VecFx32 positions[TRADE_SEQUENCE_DEPART_NUM_STREAKS]; // 0x058
-    int delay;                                            // 0x148
-    int revealed;                                         // 0x14C
-} TradeSequenceDepartStreakFall;                          // size: 0x150
+    SysTask **task;
+    TradeSequenceDepart *depart;
+    BOOL visible[TRADE_SEQUENCE_DEPART_NUM_STREAKS];
+    VecFx32 positions[TRADE_SEQUENCE_DEPART_NUM_STREAKS];
+    int delay;
+    int revealed;
+} TradeSequenceDepartStreakFall;
 
 // Scrolls the backgrounds of both screens up faster and faster; starts the falling streaks on the way.
 typedef struct TradeSequenceDepartScroll {
-    TradeSequenceDepart *depart;        // 0x000
-    TradeSequenceDepartStreakFall fall; // 0x004
-    BgConfig *bgConfig;                 // 0x154
-    fx32 mainY;                         // 0x158
-    fx32 subY;                          // 0x15C
-    fx32 speed;                         // 0x160
-    fx32 distance;                      // 0x164
-    SysTask **task;                     // 0x168
-    SysTask *fallTask;                  // 0x16C
-} TradeSequenceDepartScroll;            // size: 0x170
+    TradeSequenceDepart *depart;
+    TradeSequenceDepartStreakFall fall;
+    BgConfig *bgConfig;
+    fx32 mainY;
+    fx32 subY;
+    fx32 speed;
+    fx32 distance;
+    SysTask **task;
+    SysTask *fallTask;
+} TradeSequenceDepartScroll;
 
 typedef struct TradeSequenceDepartAlphaFade {
-    fx32 alpha;                 // 0x00
-    fx32 step;                  // 0x04
-    fx32 target;                // 0x08
-    int frames;                 // 0x0C
-    TradeSequenceModel *model;  // 0x10
-} TradeSequenceDepartAlphaFade; // size: 0x14
+    fx32 alpha;
+    fx32 step;
+    fx32 target;
+    int frames;
+    TradeSequenceModel *model;
+} TradeSequenceDepartAlphaFade;
 
 enum TradeSequenceDepartZoomStep {
     TRADE_DEPART_ZOOM_WAIT_FADE_IN,
@@ -535,7 +534,7 @@ static void TradeSequenceDepart_CreateStreaks(TradeSequenceDepart *depart) {
         Sprite_SetAnimCtrlSeq(p->streaks[0].tail, 1);
         Sprite_SetDrawFlag(p->streaks[0].head, FALSE);
         Sprite_SetDrawFlag(p->streaks[0].tail, FALSE);
-        p = (TradeSequenceDepart *)((u8 *)p + sizeof(TradeSequenceDepartStreak)); // walks streaks[] through a shifted base pointer
+        p = (TradeSequenceDepart *)((u8 *)p + sizeof(TradeSequenceDepartStreak));
     } while (++i < TRADE_SEQUENCE_DEPART_NUM_STREAKS);
 }
 
@@ -553,7 +552,7 @@ static void TradeSequenceDepart_DeleteStreaks(TradeSequenceDepart *depart) {
             Sprite_Delete(p->streaks[0].tail);
         }
         i++;
-        p = (TradeSequenceDepart *)((u8 *)p + sizeof(TradeSequenceDepartStreak)); // walks streaks[] through a shifted base pointer
+        p = (TradeSequenceDepart *)((u8 *)p + sizeof(TradeSequenceDepartStreak));
     } while (i < TRADE_SEQUENCE_DEPART_NUM_STREAKS);
     TradeSequence_FreeCellAnim(&depart->cellAnim);
 }

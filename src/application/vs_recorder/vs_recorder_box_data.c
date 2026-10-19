@@ -31,9 +31,7 @@
 #include "text.h"
 #include "touch_hitbox_controller.h"
 
-// VS Recorder box data screens: send a box of the player's PC to the server (VS_RECORDER_SCREEN_BOX_DATA_SEND) and view
-// the latest boxes of a category from the server (VS_RECORDER_SCREEN_BOX_DATA_VIEW). Starts with the dress-up photo
-// screens' server response handlers.
+// VS Recorder box data screens: send a box of the player's PC to the server and view the latest boxes of a category.
 
 enum VsRecorderBoxDataEnterStep {
     BOX_DATA_ENTER_STEP_FADE_OUT_MENU,
@@ -114,7 +112,7 @@ typedef struct VsRecorderMsgIdPair {
     u32 msgIds[2];
 } VsRecorderMsgIdPair;
 
-extern const VsRecorderBoxWindowRect ov40_02245268[];                           // box list title; the box list buttons' message ids follow at +0x14
+extern const VsRecorderBoxWindowRect ov40_02245268[];                           // box list title; the box list buttons' message ids follow it
 extern const TouchscreenHitbox sVsRecorderBoxDataHitboxes[];                    // box: next Pokemon, back
 extern const VsRecorderBoxWindowRect sVsRecorderBoxListButtonWindows[];         // box list buttons (2)
 extern const TouchscreenHitbox sVsRecorderBoxListHitboxes[];                    // box list: profile button, list, back
@@ -123,8 +121,6 @@ extern const VsRecorderBoxWindowRect sVsRecorderBoxDataWindows[];               
 extern const TouchscreenHitbox sVsRecorderBoxDataSendHitboxes[];                // send: previous box, next box, exit, send
 extern const VsRecorderBoxWindowRect sVsRecorderBoxDataCategoryButtonWindows[]; // category buttons (6)
 extern const TouchscreenHitbox sVsRecorderBoxDataCategoryHitboxes[];            // categories (6) and cancel
-
-// ---- dress-up photo screens: server responses
 
 // substates of sending box data (sVsRecorderBoxDataSendSubStates)
 #define BOX_DATA_SEND_MAIN            3
@@ -176,8 +172,6 @@ void VsRecorder_OnDressUpListReceived(void *arg, GlobalTerminalNetError *error) 
     }
 }
 
-// ---- box data screens
-
 void VsRecorder_LoadBoxDataOwner(VsRecorderWork *work, int index) {
     VsRecorderBoxData *boxData = work->screenWork;
 
@@ -202,7 +196,6 @@ static BOOL VsRecorder_BoxFormHasMon(GlobalTerminalNetBoxForm *form) {
 
 // from the cursor on, then from the first slot: put the cursor on the next slot with a Pokemon
 static void VsRecorder_SkipToOccupiedSlot(VsRecorderBoxData *boxData) {
-    // the slots are walked through a view of the work shifted by one u16 per slot
     int i;
     VsRecorderBoxData *slot;
     int start = boxData->cursor;

@@ -31,7 +31,7 @@ typedef struct PmAgbSaveSizes {
     u8 unk_34[0x60];
 } PmAgbSaveSizes;
 
-// The part of the GBA ROM header copied from 0x08000100
+// The part of the GBA ROM header that is copied
 typedef struct PmAgbRomHeader {
     u8 unk_00[0x50];
     u32 unk_50;
@@ -39,7 +39,6 @@ typedef struct PmAgbRomHeader {
     PmAgbSaveSizes saveSizes;
 } PmAgbRomHeader;
 
-// The GBA ROM header at 0x08000000
 typedef struct AgbRomHeader {
     u32 entry;
     u8 logo[156];
@@ -55,19 +54,18 @@ typedef struct AgbRomHeader {
     u8 reserved2[2];
 } AgbRomHeader;
 
-// State of the cartridge save (bss sPmAgbSave); the save counter and the write status are also reached through
-// their own labels (sPmAgbSaveCounter), the ROM header copy through sPmAgbRomHeader (header)
+// State of the cartridge save (sPmAgbSave)
 typedef struct PmAgbSave {
     u32 slot;           // the save slot read (0/1)
     u32 sectorsWritten; // sectors written by the current save
-    u8 *buffer;         // sector buffer (0x1000) followed by the save data copies (see PmAgbCartridge_GetSectorData)
+    u8 *buffer;         // sector buffer followed by the save data copies (see PmAgbCartridge_GetSectorData)
     u32 firstSector;    // flash sector of the trainer info sector (the sectors of a slot are rotated)
     u32 counter;        // save counter
     u32 writeStatus;    // 0 idle, 1 writing, 2 last sector, 3 next sector, 4 failed
     PmAgbRomHeader header;
 } PmAgbSave;
 
-// The four encrypted substructures of an AgbBoxMon (12 bytes each)
+// The four encrypted substructures of an AgbBoxMon
 typedef union AgbBoxMonSubstruct {
     u32 words[3];
 
@@ -211,7 +209,7 @@ static int IdentifyPmAgbCartridge(PmAgbCartridgeSpec *specs, int count) {
             return PM_AGB_RESULT_BAD_HEADER;
         }
     }
-    // header checksum over 0xA0-0xBC
+    // header checksum
     sum = 0;
     for (k = 0xA0; k <= 0xBC; k++) {
         sum += bytes[k];
@@ -257,8 +255,6 @@ static u16 PmAgbCartridge_GetSectorDataSize(int id) {
 
 #pragma pop
 
-// Where the data of the save sector with this id is kept: trainer info at +0x1000, game state at +0x2000, PC boxes
-// at +0x6000
 static void *PmAgbCartridge_GetSectorData(int id) {
     if (id == 0) {
         return sPmAgbSave.buffer + 0x1000;
@@ -353,7 +349,6 @@ static int PmAgbCartridge_FindLatestSaveSlot(AgbSaveSector *sector, u32 *slot, u
 
 // Reads the latest save into the buffer
 int PmAgbCartridge_LoadSave(void) {
-    // sMigrateFromAgbIcons + 1 is sPmAgbSave: the literal pool holds the state's address twice
     int result = PmAgbCartridge_FindLatestSaveSlot((AgbSaveSector *)sPmAgbSave.buffer, (u32 *)(&sMigrateFromAgbIcons + 1), &sPmAgbSaveCounter);
     PmAgbSave *save;
 

@@ -45,36 +45,36 @@
 // wireless and stores it as a Wonder Card.
 
 struct ConnectToRangerApp {
-    enum HeapID heapID;             // 0x0000
-    BgConfig *bgConfig;             // 0x0004
-    SaveData *saveData;             // 0x0008
-    Pokedex *pokedex;               // 0x000C
-    PlayerProfile *profile;         // 0x0010
-    Options *options;               // 0x0014
-    Window messageWindow;           // 0x0018
-    Window statusWindow;            // 0x0028
-    Window playerInfoWindow;        // 0x0038
-    MainMenuTextPrinter statusText; // 0x0048
-    MainMenuTextPrinter titleText;  // 0x009C
-    MainMenuTextPrinter playerText; // 0x00F0
-    u32 nextFreeTile;               // 0x0144
-    BOOL linkStarted;               // 0x0148
-    int unk_14C;                    // 0x014C
-    int connectResult;              // 0x0150
-    int unk_154;                    // 0x0154
-    BOOL linkInitialised;           // 0x0158
-    int connectState;               // 0x015C
-    int timer;                      // 0x0160
-    int partnerIndex;               // 0x0164
-    u8 padding_168[4];              // 0x0168
-    u8 linkWork[0x3004];            // 0x016C
-    Sprite *sprite;                 // 0x3170
-    MysteryGiftSave *mysteryGift;   // 0x3174
-    u8 padding_3178[4];             // 0x3178
-    int textPrinterId;              // 0x317C
-    WonderCard wonderCard;          // 0x3180
-    WaitingIcon *waitingIcon;       // 0x34D8
-}; // size: 0x34DC
+    enum HeapID heapID;
+    BgConfig *bgConfig;
+    SaveData *saveData;
+    Pokedex *pokedex;
+    PlayerProfile *profile;
+    Options *options;
+    Window messageWindow;
+    Window statusWindow;
+    Window playerInfoWindow;
+    MainMenuTextPrinter statusText;
+    MainMenuTextPrinter titleText;
+    MainMenuTextPrinter playerText;
+    u32 nextFreeTile;
+    BOOL linkStarted;
+    int unk_14C;
+    int connectResult;
+    int unk_154;
+    BOOL linkInitialised;
+    int connectState;
+    int timer;
+    int partnerIndex;
+    u8 padding_168[4];
+    u8 linkWork[0x3004];
+    Sprite *sprite;
+    MysteryGiftSave *mysteryGift;
+    u8 padding_3178[4];
+    int textPrinterId;
+    WonderCard wonderCard;
+    WaitingIcon *waitingIcon;
+};
 
 enum ConnectToRangerState {
     CONNECT_TO_RANGER_STATE_SETUP,
@@ -124,8 +124,6 @@ u16 gConnectToRanger_TrainerId[10]; // trainer ID as five digits
 
 extern void CommWireless_Terminate(void);
 extern void WirelessStatusIcon_SetLevel(int level);
-
-// Wireless link with Pokemon Ranger (link_status part of this overlay)
 
 static const GraphicsModes sConnectToRangerGraphicsModes = {
     .dispMode = GX_DISPMODE_GRAPHICS,

@@ -47,58 +47,58 @@
 #define TRADE_SEQUENCE_MAX_PULSES       8
 
 struct TradeSequence {
-    TRADE_ANIM_WORK *args;    // 0x000
-    u32 scene;                // 0x004
-    BgConfig *bgConfig;       // 0x008
-    MessageFormat *msgFormat; // 0x00C
-    MsgData *msgData;         // 0x010
-    String *string;           // 0x014
-    SpriteList *spriteList;   // 0x018
-    G2dRenderer renderer;     // 0x01C
-    SysTask *drawSpritesTask; // 0x144
-    BOOL receivedMonCantFlip; // 0x148
-    u16 sentSpecies;          // 0x14C
-    u16 sentForm;             // 0x14E
-    u16 receivedSpecies;      // 0x150
-    u16 receivedForm;         // 0x152
-    void *sceneWork;          // 0x154
-}; // size: 0x158
+    TRADE_ANIM_WORK *args;
+    u32 scene;
+    BgConfig *bgConfig;
+    MessageFormat *msgFormat;
+    MsgData *msgData;
+    String *string;
+    SpriteList *spriteList;
+    G2dRenderer renderer;
+    SysTask *drawSpritesTask;
+    BOOL receivedMonCantFlip;
+    u16 sentSpecies;
+    u16 sentForm;
+    u16 receivedSpecies;
+    u16 receivedForm;
+    void *sceneWork;
+};
 
 // Light pulses running along the link: each pulse moves one white color through a BG extended palette.
 struct TradeSequencePulses {
-    u16 colors[TRADE_SEQUENCE_NUM_PULSE_COLORS];    // 0x000
-    SysTask *task;                                  // 0x0C0
-    SysTask *pulseTasks[TRADE_SEQUENCE_MAX_PULSES]; // 0x0C4
-    int *running;                                   // 0x0E4, 1 while the pulses are alive
-    int stop;                                       // 0x0E8
-    int dirty;                                      // 0x0EC
-    int timer;                                      // 0x0F0
-    int count;                                      // 0x0F4
-    int nextSlot;                                   // 0x0F8
-    int direction;                                  // 0x0FC
-}; // size: 0x100
+    u16 colors[TRADE_SEQUENCE_NUM_PULSE_COLORS];
+    SysTask *task;
+    SysTask *pulseTasks[TRADE_SEQUENCE_MAX_PULSES];
+    int *running; // 1 while the pulses are alive
+    int stop;
+    int dirty;
+    int timer;
+    int count;
+    int nextSlot;
+    int direction;
+};
 
 typedef struct TradeSequencePulse {
-    TradeSequencePulses *pulses; // 0x00
-    s32 colorIndex;              // 0x04
-    s32 stepFrames;              // 0x08
-    s32 frameCounter;            // 0x0C
-    s32 slot;                    // 0x10
-    s32 direction;               // 0x14
-} TradeSequencePulse;            // size: 0x18
+    TradeSequencePulses *pulses;
+    s32 colorIndex;
+    s32 stepFrames;
+    s32 frameCounter;
+    s32 slot;
+    s32 direction;
+} TradeSequencePulse;
 
 // Accelerating affine zoom of BG 2 on both screens.
 struct TradeSequenceBgZoom {
-    BgConfig *bgConfig; // 0x00
-    int *finished;      // 0x04
-    fx32 scale;         // 0x08
-    fx32 targetScale;   // 0x0C
-    fx32 speed;         // 0x10
-    fx32 acceleration;  // 0x14
-    s32 direction;      // 0x18, 0: grow, 1: shrink
-    s32 centerYIndex;   // 0x1C
-    SysTask *task;      // 0x20
-}; // size: 0x24
+    BgConfig *bgConfig;
+    int *finished;
+    fx32 scale;
+    fx32 targetScale;
+    fx32 speed;
+    fx32 acceleration;
+    s32 direction; // 0: grow, 1: shrink
+    s32 centerYIndex;
+    SysTask *task;
+};
 
 typedef void *(*TradeSequenceSceneInitFunc)(TradeSequence *ts);
 typedef BOOL (*TradeSequenceSceneMainFunc)(void *sceneWork, int *state);
@@ -255,7 +255,7 @@ BOOL TradeSequence_Main(OverlayManager *man, int *state) {
 
 static void TradeSequence_DrawSpritesTask(SysTask *task, void *data) {
     TradeSequence *ts = data;
-    vu32 *dtcm = (vu32 *)0x027E0000; // OS_SetIrqCheckFlag(OS_IE_V_BLANK) through the DTCM base address
+    vu32 *dtcm = (vu32 *)0x027E0000; // OS_SetIrqCheckFlag(OS_IE_V_BLANK)
 
     SpriteList_RenderAndAnimateSprites(ts->spriteList);
     OamManager_ApplyAndResetBuffers();

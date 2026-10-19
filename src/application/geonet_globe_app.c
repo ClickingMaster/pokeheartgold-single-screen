@@ -70,13 +70,13 @@ enum GeonetGlobeWindow {
 
 // A place marked on the globe: a city/region of a country, at globe angles (x, y).
 typedef struct GeonetLocation {
-    s16 x;            // 0x00
-    s16 y;            // 0x02
-    MtxFx33 rotation; // 0x04
-    u16 seenState;    // 0x28, also the index of the marker model
-    u16 country;      // 0x2A
-    u16 region;       // 0x2C
-} GeonetLocation;     // size: 0x30
+    s16 x;
+    s16 y;
+    MtxFx33 rotation;
+    u16 seenState; // also the index of the marker model
+    u16 country;
+    u16 region;
+} GeonetLocation;
 
 typedef struct GeonetGlobeAngle {
     s32 x;
@@ -85,62 +85,62 @@ typedef struct GeonetGlobeAngle {
 } GeonetGlobeAngle;
 
 typedef struct GeonetGlobeTouch {
-    u32 input; // 0x00: PAD_* style bits produced by touch gestures
-    u32 state; // 0x04
-    u32 x;     // 0x08
-    u32 y;     // 0x0C
-    s32 dx;    // 0x10
-    s32 dy;    // 0x14
-    u32 timer; // 0x18
+    u32 input; // PAD_* style bits produced by touch gestures
+    u32 state;
+    u32 x;
+    u32 y;
+    s32 dx;
+    s32 dy;
+    u32 timer;
 } GeonetGlobeTouch;
 
 typedef struct GeonetGlobe {
-    enum HeapID heapID;                                   // 0x0000
-    SaveWiFiHistory *wifiHistory;                         // 0x0004
-    Options *options;                                     // 0x0008
-    u32 numLocations;                                     // 0x000C
-    GeonetLocation locations[GEONET_GLOBE_MAX_LOCATIONS]; // 0x0010
-    BgConfig *bgConfig;                                   // 0xC010
-    Window windows[GEONET_GLOBE_WINDOW_COUNT];            // 0xC014
-    struct ListMenu *listMenu;                            // 0xC064
-    ListMenuItem *listMenuItems;                          // 0xC068
-    struct ListMenu2D *yesNoMenu;                         // 0xC06C
-    MsgData *msgData;                                     // 0xC070
-    int printState;                                       // 0xC074
-    int printerId;                                        // 0xC078
-    String *printString;                                  // 0xC07C
-    MessageFormat *msgFormat;                             // 0xC080
-    NNSG3dRenderObj globeObj;                             // 0xC084
-    NNSG3dResMdl *globeMdl;                               // 0xC0D8
-    void *globeFile;                                      // 0xC0DC
-    NNSG3dRenderObj markerObjs[4];                        // 0xC0E0, indexed by GeonetLocation.seenState (0 unused)
-    NNSG3dRenderObj cursorObj;                            // 0xC230
-    NNSG3dResMdl *markerMdls[4];                          // 0xC284
-    NNSG3dResMdl *cursorMdl;                              // 0xC294
-    void *markerFiles[4];                                 // 0xC298
-    void *cursorFile;                                     // 0xC2A8
-    VecFx32 translation;                                  // 0xC2AC
-    VecFx32 globeScale;                                   // 0xC2B8
-    GeonetGlobeAngle rotation;                            // 0xC2C4
-    VecFx32 markerScale;                                  // 0xC2D0
-    Camera *camera;                                       // 0xC2DC
-    u8 padding_C2E0[8];                                   // 0xC2E0
-    u16 zoomedIn;                                         // 0xC2E8
-    u8 filler_C2EA[2];                                    // 0xC2EA
-    VecFx32 lightVector;                                  // 0xC2EC
-    u32 drawState;                                        // 0xC2F8
-    u32 unk_C2FC;                                         // 0xC2FC
-    u32 isJapanese;                                       // 0xC300
-    u16 freeRotation;                                     // 0xC304
-    u8 filler_C306[2];                                    // 0xC306
-    GeonetGlobeTouch touch;                               // 0xC308
-    u32 playerCountry;                                    // 0xC324
-    u32 playerRegion;                                     // 0xC328
-    u32 selectedCountry;                                  // 0xC32C
-    u32 selectedRegion;                                   // 0xC330
-    u32 nonJapanese;                                      // 0xC334
-    u32 showLocationName;                                 // 0xC338
-} GeonetGlobe;                                            // size: 0xC33C
+    enum HeapID heapID;
+    SaveWiFiHistory *wifiHistory;
+    Options *options;
+    u32 numLocations;
+    GeonetLocation locations[GEONET_GLOBE_MAX_LOCATIONS];
+    BgConfig *bgConfig;
+    Window windows[GEONET_GLOBE_WINDOW_COUNT];
+    struct ListMenu *listMenu;
+    ListMenuItem *listMenuItems;
+    struct ListMenu2D *yesNoMenu;
+    MsgData *msgData;
+    int printState;
+    int printerId;
+    String *printString;
+    MessageFormat *msgFormat;
+    NNSG3dRenderObj globeObj;
+    NNSG3dResMdl *globeMdl;
+    void *globeFile;
+    NNSG3dRenderObj markerObjs[4]; // indexed by GeonetLocation.seenState (0 unused)
+    NNSG3dRenderObj cursorObj;
+    NNSG3dResMdl *markerMdls[4];
+    NNSG3dResMdl *cursorMdl;
+    void *markerFiles[4];
+    void *cursorFile;
+    VecFx32 translation;
+    VecFx32 globeScale;
+    GeonetGlobeAngle rotation;
+    VecFx32 markerScale;
+    Camera *camera;
+    u8 padding_C2E0[8];
+    u16 zoomedIn;
+    u8 filler_C2EA[2];
+    VecFx32 lightVector;
+    u32 drawState;
+    u32 unk_C2FC;
+    u32 isJapanese;
+    u16 freeRotation;
+    u8 filler_C306[2];
+    GeonetGlobeTouch touch;
+    u32 playerCountry;
+    u32 playerRegion;
+    u32 selectedCountry;
+    u32 selectedRegion;
+    u32 nonJapanese;
+    u32 showLocationName;
+} GeonetGlobe;
 
 typedef struct GeonetGlobeMenuEntry {
     int msgId;
@@ -815,7 +815,6 @@ static void GeonetGlobe_MarkPlayerLocation(GeonetGlobe *globe) {
     GeonetGlobe *shifted;
 
     for (i = 0; i < globe->numLocations; i++) {
-        // The work pointer shifted by i locations: locations[0] through it is locations[i].
         shifted = (GeonetGlobe *)((u8 *)globe + i * sizeof(GeonetLocation));
         if (globe->playerCountry == shifted->locations[0].country && globe->playerRegion == shifted->locations[0].region) {
             shifted->locations[0].seenState = 3;

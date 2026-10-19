@@ -758,7 +758,6 @@ static void MigrateFromAgb_CreateBoxSprites(MigrateFromAgbApp *app) {
             Sprite_SetDrawPriority(app->slots[0].item, index);
             index++;
             hitbox++;
-            // walks the slots by advancing the work pointer
             app = (MigrateFromAgbApp *)((u8 *)app + sizeof(MigrateFromAgbSlotSprites));
             if (index == AGB_BOX_MON_COUNT) {
                 goto end;
@@ -1289,7 +1288,7 @@ static void MigrateFromAgb_VBlankCB(MigrateFromAgbApp *app) {
     OamManager_ApplyAndResetBuffers();
     DoScheduledBgGpuUpdates(app->bgConfig);
     {
-        // OS_SetIrqCheckFlag(OS_IE_V_BLANK), with the address of the check flag spelled out
+        // OS_SetIrqCheckFlag(OS_IE_V_BLANK)
         volatile u32 *dtcm = (volatile u32 *)0x027E0000;
         dtcm[0x3FF8 / 4] |= OS_IE_V_BLANK;
     }

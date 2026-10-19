@@ -28,7 +28,7 @@
 #include "vram_transfer_manager.h"
 #include "wireless_status_icon.h"
 
-// Hours, minutes and seconds as kept by the lobby (overlay 45), copied as one word.
+// Hours, minutes and seconds as kept by the lobby, copied as one word.
 typedef union PlazaNewsTime {
     u32 word;
     struct {
@@ -141,7 +141,6 @@ typedef struct PlazaNewsWork {
     PlazaNewsTitles titles;
 } PlazaNewsWork;
 
-// Lobby (overlay 45) interface.
 int WiFiPlazaWork_IsClosing(void *lobby);
 void WiFiPlazaWork_SetAppQuitForClosing(void *lobby);
 void WiFiPlazaWork_SetLowVolume(void *lobby, int value);

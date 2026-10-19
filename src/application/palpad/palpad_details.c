@@ -42,7 +42,6 @@ extern const WindowTemplate sPalPadDetailsProfileWindowTemplates[8];
 extern const u8 sPalPadDetailsTabX[2][8];
 extern const u8 sPalPadDetailsTabWidths[2][8];
 extern const u8 sPalPadDetailsTabSrcY[2];
-// u16 view of the start of the rodata; [23..26] are the file ids of the details screens
 extern const u16 _0222ED5C[];
 extern const PalPadDetailsPagePrinter sPalPadDetailsPagePrinters[3];
 extern const PalPadDetailsPagePrinter sPalPadDetailsFrontierPagePrinters[8];

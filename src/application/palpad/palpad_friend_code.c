@@ -18,7 +18,7 @@
 // Screen 2 runs the naming screen (friend name) and the number entry (friend code) as nested
 // applications; screen 3 shows the player's own friend code.
 
-// number entry application (no public header); only the entered text is read back
+// number entry application; only the entered text is read back
 typedef struct PalPadCodeEntryArgs {
     u8 unk_00[0x1C];
     String *text;
@@ -33,7 +33,6 @@ typedef struct PalPadButtonPalettes {
     u8 palettes[2];
 } PalPadButtonPalettes;
 
-// the first byte belongs to the previous table
 extern const struct {
     u8 unk0;
     PalPadButtonPalettes returnButton;

@@ -24,46 +24,46 @@
 #include "wireless_status_icon.h"
 
 typedef struct EasyChatButtonText {
-    TextOBJ *textObj;                  // 0x00
-    ObjCharSpaceReservation charAlloc; // 0x04
-} EasyChatButtonText;                  // size: 0x10
+    TextOBJ *textObj;
+    ObjCharSpaceReservation charAlloc;
+} EasyChatButtonText;
 
 struct EasyChatAppView {
-    SysTask *mainTask;                         // 0x000
-    SysTask *vblankTask;                       // 0x004
-    SysTask *commandTasks[4];                  // 0x008
-    EasyChatApp *app;                          // 0x018
-    ECMenu *menu;                              // 0x01C
-    BgConfig *bgConfig;                        // 0x020
-    SpriteList *spriteList;                    // 0x024
-    G2dRenderer renderer;                      // 0x028
-    NNSG2dImageProxy imageProxies[2];          // 0x150
-    NNSG2dImagePaletteProxy paletteProxies[2]; // 0x198
-    NNSG2dCellDataBank *cellBanks[2];          // 0x1C0
-    NNSG2dAnimBankData *animBanks[2];          // 0x1C8
-    void *cellFiles[2];                        // 0x1D0
-    void *animFiles[2];                        // 0x1D8
-    EasyChatSentenceView *sentence;            // 0x1E0
-    EasyChatMenuView *menuView;                // 0x1E4
-    EasyChatCategoryView *categories;          // 0x1E8
-    EasyChatWordListView *wordList;            // 0x1EC
-    EasyChatPageButtonsView *pageButtons;      // 0x1F0
-    u8 onMenu;                                 // 0x1F4
-    MenuInputState *menuInputState;            // 0x1F8
-    FontSystem *fontSystem;                    // 0x1FC
-    TextOBJLayout *textLayout;                 // 0x200
-    Window buttonWindow;                       // 0x204
-    EasyChatButtonText buttonTexts[2];         // 0x214
-}; // size: 0x234
+    SysTask *mainTask;
+    SysTask *vblankTask;
+    SysTask *commandTasks[4];
+    EasyChatApp *app;
+    ECMenu *menu;
+    BgConfig *bgConfig;
+    SpriteList *spriteList;
+    G2dRenderer renderer;
+    NNSG2dImageProxy imageProxies[2];
+    NNSG2dImagePaletteProxy paletteProxies[2];
+    NNSG2dCellDataBank *cellBanks[2];
+    NNSG2dAnimBankData *animBanks[2];
+    void *cellFiles[2];
+    void *animFiles[2];
+    EasyChatSentenceView *sentence;
+    EasyChatMenuView *menuView;
+    EasyChatCategoryView *categories;
+    EasyChatWordListView *wordList;
+    EasyChatPageButtonsView *pageButtons;
+    u8 onMenu;
+    MenuInputState *menuInputState;
+    FontSystem *fontSystem;
+    TextOBJLayout *textLayout;
+    Window buttonWindow;
+    EasyChatButtonText buttonTexts[2];
+};
 
 typedef struct EasyChatViewCommand {
-    EasyChatAppView *view; // 0x00
-    EasyChatApp *app;      // 0x04
-    ECMenu *menu;          // 0x08
-    u32 command;           // 0x0C
-    u32 slot;              // 0x10
-    u32 state;             // 0x14
-} EasyChatViewCommand;     // size: 0x18
+    EasyChatAppView *view;
+    EasyChatApp *app;
+    ECMenu *menu;
+    u32 command;
+    u32 slot;
+    u32 state;
+} EasyChatViewCommand;
 
 typedef void (*EasyChatViewCommandFunc)(SysTask *task, EasyChatViewCommand *command);
 
@@ -253,7 +253,7 @@ static void EasyChatAppView_MainTask(SysTask *task, void *data) {
 
 static void EasyChatAppView_VBlankTask(SysTask *task, void *data) {
     EasyChatAppView *view = data;
-    volatile u32 *dtcm = (volatile u32 *)0x027E0000; // OS_SetIrqCheckFlag with the DTCM address as a constant
+    volatile u32 *dtcm = (volatile u32 *)0x027E0000; // OS_SetIrqCheckFlag(OS_IE_V_BLANK)
 
     DoScheduledBgGpuUpdates(view->bgConfig);
     SpriteList_RenderAndAnimateSprites(view->spriteList);

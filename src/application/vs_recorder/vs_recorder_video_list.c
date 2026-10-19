@@ -825,7 +825,7 @@ static void VsRecorder_SetSlotButtonName(VsRecorderTextSprite *button, VsRecorde
 
 // the three slots and cancel
 static void VsRecorder_CreateSlotButtons(VsRecorderWork *work) {
-    u8 *listWork = work->screenWork; // walks by one button
+    u8 *listWork = work->screenWork;
     VsRecorderTextSprite *button;
     VsRecorderSlotButtonTable msgIds = sVsRecorderSaveSlotMsgIds;
     VsRecorderSlotButtonTable anims = sVsRecorderSaveSlotAnims;
@@ -873,7 +873,7 @@ static void VsRecorder_CreateSlotButtons(VsRecorderWork *work) {
 static void VsRecorder_FreeSlotButtons(VsRecorderWork *work) {
     int i = 0;
     VsRecorderTextSprite *button = ((VsRecorderVideoListScreen *)work->screenWork)->buttons;
-    VsRecorderVideoListScreen *listWork = work->screenWork; // walks by one button
+    VsRecorderVideoListScreen *listWork = work->screenWork;
 
     for (; i < 4; i++, button++, listWork = (VsRecorderVideoListScreen *)((u8 *)listWork + sizeof(VsRecorderTextSprite))) {
         VsRecorder_FreeTextSprite(button);
@@ -1944,7 +1944,7 @@ static void VsRecorder_CreateVideoListIcons(VsRecorderWork *work) {
             listWork->icons[i][k].resId = listWork->iconResId;
             listWork->icons[i][k].sprite = VsRecorder_NewMonIcon(work, listWork->monIconNarc, listWork->icons[i][k].resId, iconSpecies, iconForm, FALSE);
             if (listWork->icons[i][k].sprite != NULL) {
-                ((void (*)(ManagedSprite *, int))ManagedSprite_SetDrawPriority)(listWork->icons[i][k].sprite, 6 - k); // the priority is passed as int
+                ((void (*)(ManagedSprite *, int))ManagedSprite_SetDrawPriority)(listWork->icons[i][k].sprite, 6 - k);
             }
             listWork->iconResId++;
         }
@@ -1955,10 +1955,10 @@ static void VsRecorder_CreateVideoListIcons(VsRecorderWork *work) {
 static void VsRecorder_SetVideoListIconsDrawFlag(VsRecorderWork *work, BOOL draw) {
     int i;
     int j;
-    VsRecorderVideoListScreen *row; // walks by one row of icons
+    VsRecorderVideoListScreen *row;
 
     for (j = 0, row = work->screenWork; j < 5; row = (VsRecorderVideoListScreen *)((u8 *)row + sizeof(row->icons[0])), j++) {
-        VsRecorderVideoListScreen *icon = row; // walks by one icon
+        VsRecorderVideoListScreen *icon = row;
 
         for (i = 0; i < 6; i++, icon = (VsRecorderVideoListScreen *)((u8 *)icon + sizeof(VsRecorderVideoListIcon))) {
             if (icon->icons[0][0].sprite != NULL) {
@@ -1971,10 +1971,10 @@ static void VsRecorder_SetVideoListIconsDrawFlag(VsRecorderWork *work, BOOL draw
 static void VsRecorder_FreeVideoListIcons(VsRecorderWork *work) {
     int i;
     int j;
-    VsRecorderVideoListScreen *row; // walks by one row of icons
+    VsRecorderVideoListScreen *row;
 
     for (j = 0, row = work->screenWork; j < 5; row = (VsRecorderVideoListScreen *)((u8 *)row + sizeof(row->icons[0])), j++) {
-        VsRecorderVideoListScreen *icon = row; // walks by one icon
+        VsRecorderVideoListScreen *icon = row;
 
         for (i = 0; i < 6; i++, icon = (VsRecorderVideoListScreen *)((u8 *)icon + sizeof(VsRecorderVideoListIcon))) {
             if (icon->icons[0][0].sprite != NULL) {
@@ -2068,7 +2068,7 @@ static void VsRecorder_ScrollVideoListIcons(VsRecorderWork *work) {
             listWork->icons[row][j].resId = listWork->iconResId;
             listWork->icons[row][j].sprite = VsRecorder_NewMonIcon(work, listWork->monIconNarc, listWork->icons[row][j].resId, iconSpecies, iconForm, FALSE);
             if (listWork->icons[row][j].sprite != NULL) {
-                ((void (*)(ManagedSprite *, int))ManagedSprite_SetDrawPriority)(listWork->icons[row][j].sprite, 6 - j); // the priority is passed as int
+                ((void (*)(ManagedSprite *, int))ManagedSprite_SetDrawPriority)(listWork->icons[row][j].sprite, 6 - j);
             }
             listWork->iconResId++;
         }

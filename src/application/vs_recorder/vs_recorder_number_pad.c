@@ -128,7 +128,7 @@ VsRecorderNumberPadConfig *VsRecorder_NewNumberPadConfig(enum HeapID heapID, u32
     src = groupLengths;
     dst = (int *)config;
     while (i < 3) {
-        dst[1] = *src; // groupLengths[i]
+        dst[1] = *src;
         i++;
         src++;
         dst++;
@@ -641,7 +641,7 @@ static void VsRecorder_NumberPadCreateDigitSprites(VsRecorderNumberPad *pad) {
     SpriteManager *spriteManager = pad->spriteManager;
     ManagedSpriteTemplate template;
     int i;
-    VsRecorderNumberPad *separator; // walks from the pad base: separator->separators[0] is separators[separators]
+    VsRecorderNumberPad *separator;
     VsRecorderNumberPadDigit *digit;
     int x;
 
@@ -763,7 +763,7 @@ static void VsRecorder_NumberPadPlaceCursorOnKey(VsRecorderNumberPad *pad, int k
 
 // the key press (anim 3) hides itself when it ends; the key cursor shows unless the input was a touch
 static void VsRecorder_NumberPadUpdateCursors(VsRecorderNumberPad *pad) {
-    VsRecorderNumberPad *entry; // entry->cursors[0] is cursors[i]
+    VsRecorderNumberPad *entry;
     int i;
 
     ManagedSprite_TickFrame(pad->cursors[0].sprite);
@@ -831,7 +831,7 @@ static void VsRecorder_NumberPadLayoutDigits(VsRecorderNumberPad *pad, BOOL anim
     s16 position[2];
     if (pad->count > 0) {
         VsRecorderNumberPadDigit *digit = pad->digits;
-        VsRecorderNumberPad *separator = pad; // separator->separators[0] is separators[separators]
+        VsRecorderNumberPad *separator = pad;
         do {
             if (i >= pad->groupFirst && i < pad->groupEnd) {
                 if (i == pad->groupFirst) {

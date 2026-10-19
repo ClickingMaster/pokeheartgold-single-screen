@@ -18,18 +18,18 @@
 // is driven by a small state callback run from a task every frame.
 
 typedef struct MysteryGiftCommWork {
-    void *owner;                        // 0x000
-    u8 random[0x18];                    // 0x004, initialised by CommRandom_Init
-    SysTask *task;                      // 0x01C
-    MysteryGiftCommStateFunc stateFunc; // 0x020
-    u16 stateArg;                       // 0x024
-    u8 paused;                          // 0x026
-    u8 channel;                         // 0x027
-    PlayerProfile *profiles[16];        // 0x028
-    u8 recvBuffer[sizeof(WonderCard)];  // 0x068
-    u8 received;                        // 0x3C0
-    u8 unk_3C1[16];                     // 0x3C1
-} MysteryGiftCommWork;                  // size: 0x3D4
+    void *owner;
+    u8 random[0x18]; // initialised by CommRandom_Init
+    SysTask *task;
+    MysteryGiftCommStateFunc stateFunc;
+    u16 stateArg;
+    u8 paused;
+    u8 channel;
+    PlayerProfile *profiles[16];
+    u8 recvBuffer[sizeof(WonderCard)];
+    u8 received;
+    u8 unk_3C1[16];
+} MysteryGiftCommWork;
 
 static MysteryGiftCommWork *sMysteryGiftCommWork;
 
@@ -45,7 +45,6 @@ extern void CommState_StartMysteryGiftParent(void *saveData, void *a1);
 extern void CommState_StartMysteryGiftChild(void *saveData, int a1);
 extern void *CommWireless_GetParentMail(int slot);
 
-// The pieces of this module that poll the work pointer read it as volatile.
 #define VOLATILE_WORK (*(MysteryGiftCommWork *volatile *)&sMysteryGiftCommWork)
 
 static const CommCommand sMysteryGiftCommCommands[2] = {
@@ -162,7 +161,7 @@ void MysteryGiftComm_ConnectToChannel(int channel) {
     MysteryGiftComm_SetState(MysteryGiftComm_ChildConnect, 0);
 }
 
-// Copies the first partner's 0x50-byte info block (non-zero at +0x4C) to dst + 0x8C; returns its index.
+// Copies the info block of the first partner that has one; returns its index.
 int MysteryGiftComm_GetFirstParentInfo(void *dst) {
     int i;
     for (i = 0; i < 16; i++) {

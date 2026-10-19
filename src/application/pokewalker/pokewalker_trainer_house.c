@@ -1,6 +1,5 @@
-// Pokewalker connection app: event log check, and the Trainer House sets exchanged by the app. A set received from
-// the other side replaces the same trainer's set or, when all ten are in use, the oldest one; the per-set daily flags
-// (FLAG_DAILY_TRAINER_HOUSE_0..) move with the sets.
+// Pokewalker connection app: event log check and the Trainer House sets exchanged by the app. A received set
+// replaces the same trainer's set or, when all ten are in use, the oldest one; the daily flags move with the sets.
 
 #include "application/pokewalker/pokewalker_trainer_house.h"
 
@@ -145,7 +144,6 @@ void PokewalkerApp_FillTrainerHouseParty(TrainerHouseMon *mons, Party *party) {
         mons->level = GetMonData(mon, MON_DATA_LEVEL, NULL);
         GetMonData(mon, MON_DATA_NICKNAME, nickname);
         CopyU16StringArrayN(mons->nickname, nickname, POKEMON_NAME_LENGTH);
-        // The moves are written through a byte pointer to the entry, 2 bytes per move
         j = 0;
         bits = 0;
         move = (u8 *)mons;

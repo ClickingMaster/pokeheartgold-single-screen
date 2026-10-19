@@ -265,31 +265,31 @@ typedef BOOL (*PCBoxUpdateFunc)(PCBoxWork *work);
 
 // Info about the mon in a slot, shown on the top screen (PCBox_CreateMonInfo).
 typedef struct PCBoxMonInfo {
-    BoxPokemon *boxMon; // 0x00
-    u16 species;        // 0x04
-    u16 heldItem;       // 0x06
-    u32 personality;    // 0x08
-    u8 type1;           // 0x0C
-    u8 type2;           // 0x0D
-    u8 ability;         // 0x0E
-    u8 nature;          // 0x0F
-    u16 markings;       // 0x10
-    u8 level : 7;       // 0x12
+    BoxPokemon *boxMon;
+    u16 species;
+    u16 heldItem;
+    u32 personality;
+    u8 type1;
+    u8 type2;
+    u8 ability;
+    u8 nature;
+    u16 markings;
+    u8 level : 7;
     u8 isEgg : 1;
-    u8 gender : 7; // 0x13
+    u8 gender : 7;
     u8 showGender : 1;
-    u16 moves[4]; // 0x14
-} PCBoxMonInfo;   // size: 0x1C
+    u16 moves[4];
+} PCBoxMonInfo;
 
 // Releasing a mon: the scan of all boxes and the party for another mon that knows the mon's HM moves
 // (PCBox_StartReleaseMoveCheck / PCBox_RunReleaseMoveCheck), then the shrink animation of its icon.
 typedef struct PCBoxReleaseWork {
-    ManagedSprite *sprite; // 0x00
-    u16 scanIndex;         // 0x04 box * 30 + slot, 540 + party slot
-    u8 moveFlags;          // 0x06 HM moves not found on another mon yet
-    u8 scaleCounter;       // 0x07
-    f32 scale;             // 0x08
-} PCBoxReleaseWork;        // size: 0x0C
+    ManagedSprite *sprite;
+    u16 scanIndex; // box * 30 + slot, 540 + party slot
+    u8 moveFlags;  // HM moves not found on another mon yet
+    u8 scaleCounter;
+    f32 scale;
+} PCBoxReleaseWork;
 
 // One mon icon moving between two slots (PCBox_AnimateMonMove).
 typedef struct PCBoxMoveEntry {
@@ -366,89 +366,89 @@ typedef struct PCBoxTextObj {
 
 // Graphics, text and input state of the app (heap 10, PCBoxWork.view).
 typedef struct PCBoxView {
-    SysTask *vblankTask;               // 0x0000
-    PCBoxUpdateFunc updateFunc;        // 0x0004
-    PCBoxUpdateFunc pendingUpdateFunc; // 0x0008
-    void *temp;                        // 0x000C
-    u16 subState;                      // 0x0010
-    u16 counter;                       // 0x0012
-    BgConfig *bgConfig;                // 0x0014
-    PaletteData *paletteData;          // 0x0018
-    MessagePrinter *msgPrinter;        // 0x001C
-    MsgData *msgData;                  // 0x0020
-    MessageFormat *msgFormat;          // 0x0024
-    String *string;                    // 0x0028
-    GridInputHandler *gridInput;       // 0x002C
-    Window windows[0x2C];              // 0x0030
-    BgCellManager *panels;             // 0x02F0
-    SpriteSystem *spriteSystem;        // 0x02F4
-    SpriteManager *spriteManager;      // 0x02F8
-    ManagedSprite *sprites[69];        // 0x02FC
-    FontSystem *fontSystem;            // 0x0410
-    PCBoxTextObj textObjs[2];          // 0x0414
-    YesNoPrompt *yesNoPrompt;          // 0x0434
-    u16 yesNoHandler;                  // 0x0438 index into sPCBoxYesNoHandlers
-    u16 unk_043A;                      // 0x043A
-    u32 rowCursorPos;                  // 0x043C
-    u32 fadeNextState;                 // 0x0440
-    u32 delay;                         // 0x0444
-    s8 wallpaperScroll;                // 0x0448
-    u8 wallpaperBuffer;                // 0x0449
-    u8 partyPanelLowered;              // 0x044A
-    u8 cursorHolding;                  // 0x044B
-    u8 dropTarget;                     // 0x044C
-    u8 wallpaperSelection;             // 0x044D
-    u8 infoWindowToggle : 4;           // 0x044E which of the two info window sets is drawn next
+    SysTask *vblankTask;
+    PCBoxUpdateFunc updateFunc;
+    PCBoxUpdateFunc pendingUpdateFunc;
+    void *temp;
+    u16 subState;
+    u16 counter;
+    BgConfig *bgConfig;
+    PaletteData *paletteData;
+    MessagePrinter *msgPrinter;
+    MsgData *msgData;
+    MessageFormat *msgFormat;
+    String *string;
+    GridInputHandler *gridInput;
+    Window windows[0x2C];
+    BgCellManager *panels;
+    SpriteSystem *spriteSystem;
+    SpriteManager *spriteManager;
+    ManagedSprite *sprites[69];
+    FontSystem *fontSystem;
+    PCBoxTextObj textObjs[2];
+    YesNoPrompt *yesNoPrompt;
+    u16 yesNoHandler; // index into sPCBoxYesNoHandlers
+    u16 unk_043A;
+    u32 rowCursorPos;
+    u32 fadeNextState;
+    u32 delay;
+    s8 wallpaperScroll;
+    u8 wallpaperBuffer;
+    u8 partyPanelLowered;
+    u8 cursorHolding;
+    u8 dropTarget;
+    u8 wallpaperSelection;
+    u8 infoWindowToggle : 4; // which of the two info window sets is drawn next
     u8 movesDrawn : 3;
     u8 restoreIconsOnMenu : 1;
-    u8 unk_044F;                     // 0x044F
-    NARC *personalNarc;              // 0x0450
-    NARC *iconNarc;                  // 0x0454
-    u8 iconChars[30][0x200];         // 0x0458
-    u8 iconDraw[30];                 // 0x4058
-    u8 iconPalettes[30];             // 0x4076
-    u8 slotIcons[PC_BOX_SLOT_COUNT]; // 0x4094
-    int touchX;                      // 0x40B8
-    int touchY;                      // 0x40BC
-    u32 markings;                    // 0x40C0
-    u32 showOutlineAfterMove;        // 0x40C4
-    u8 boxThumbnails[18][0x400];     // 0x40C8
-    u16 heldItem;                    // 0x88C8
-    u16 itemFromSlot;                // 0x88CA
-    u32 dropCancelled;               // 0x88CC
-    u16 monPicBuffer;                // 0x88D0
-    u16 spriteDrawLock;              // 0x88D2
-    PCBoxPaletteFlash paletteFlash;  // 0x88D4
-    PCBoxReleaseWork *releaseWork;   // 0x88DC
-} PCBoxView;                         // size: 0x88E0
+    u8 unk_044F;
+    NARC *personalNarc;
+    NARC *iconNarc;
+    u8 iconChars[30][0x200];
+    u8 iconDraw[30];
+    u8 iconPalettes[30];
+    u8 slotIcons[PC_BOX_SLOT_COUNT];
+    int touchX;
+    int touchY;
+    u32 markings;
+    u32 showOutlineAfterMove;
+    u8 boxThumbnails[18][0x400];
+    u16 heldItem;
+    u16 itemFromSlot;
+    u32 dropCancelled;
+    u16 monPicBuffer;
+    u16 spriteDrawLock;
+    PCBoxPaletteFlash paletteFlash;
+    PCBoxReleaseWork *releaseWork;
+} PCBoxView;
 
 struct PCBoxWork {
-    PCBoxArgs *args;        // 0x00
-    PCStorage *storage;     // 0x04
-    Party *party;           // 0x08
-    Bag *bag;               // 0x0C
-    Options *options;       // 0x10
-    OverlayManager *subApp; // 0x14
-    void *subAppArgs;       // 0x18
-    u16 itemId;             // 0x1C
-    u8 subAppIndex;         // 0x1E
-    u8 activeBox;           // 0x1F
-    u8 unk_20;              // 0x20
-    u8 selectedSlot;        // 0x21
-    u8 partyLayout;         // 0x22
-    u8 partyPanelOpen;      // 0x23
-    u8 trayOpen;            // 0x24
-    u8 trayBox;             // 0x25
-    u8 summaryFromTray;     // 0x26
-    u8 summaryFromHolding;  // 0x27
-    u8 summaryCursorPos;    // 0x28
-    u8 trayFromPartyPanel;  // 0x29
-    u8 moveWithButtons;     // 0x2A
-    u8 moveFromSlot;        // 0x2B
-    u32 returnCursorPos;    // 0x2C
-    u32 nextState;          // 0x30
-    PCBoxView *view;        // 0x34
-}; // size: 0x38
+    PCBoxArgs *args;
+    PCStorage *storage;
+    Party *party;
+    Bag *bag;
+    Options *options;
+    OverlayManager *subApp;
+    void *subAppArgs;
+    u16 itemId;
+    u8 subAppIndex;
+    u8 activeBox;
+    u8 unk_20;
+    u8 selectedSlot;
+    u8 partyLayout;
+    u8 partyPanelOpen;
+    u8 trayOpen;
+    u8 trayBox;
+    u8 summaryFromTray;
+    u8 summaryFromHolding;
+    u8 summaryCursorPos;
+    u8 trayFromPartyPanel;
+    u8 moveWithButtons;
+    u8 moveFromSlot;
+    u32 returnCursorPos;
+    u32 nextState;
+    PCBoxView *view;
+};
 
 void PCBox_VBlankCallback(SysTask *task, void *data);
 void PCBox_SetUpdateFunc(PCBoxView *view, void *v);

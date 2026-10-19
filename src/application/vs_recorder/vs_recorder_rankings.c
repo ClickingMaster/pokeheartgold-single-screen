@@ -26,8 +26,7 @@
 #include "text.h"
 #include "touch_hitbox_controller.h"
 
-// VS Recorder rankings screens: this week's rankings (VS_RECORDER_SCREEN_RANKINGS) and last week's results
-// (VS_RECORDER_SCREEN_RANKINGS_LAST) of the Global Terminal. Starts with the box data screens' server response handlers.
+// VS Recorder rankings screens: this week's rankings and last week's results of the Global Terminal.
 
 enum VsRecorderRankingsEnterStep {
     RANKINGS_ENTER_STEP_FADE_OUT_MENU,
@@ -104,8 +103,6 @@ extern const VsRecorderListConfig sVsRecorderRankingsLastWeekListConfig;        
 
 #define RANKING_SCORE_MAX 9999999999999999999ULL
 
-// ---- box data screens: server responses
-
 // substates of the rankings screens (sVsRecorderRankingsSubStates)
 #define RANKINGS_ENTER      1
 #define RANKINGS_DOWNLOAD   2
@@ -148,8 +145,6 @@ void VsRecorder_OnBoxListReceived(void *arg, GlobalTerminalNetError *error) {
     boxData->downloadCount = GlobalTerminalNet_GetBoxList(VsRecorder_GetNet(work), (void **)boxData->downloads, 20);
     MI_CpuCopy8(boxData->downloads, boxData->unk_3DC, sizeof(boxData->unk_3DC));
 }
-
-// ---- rankings screens
 
 static void VsRecorder_InitRankingsList(VsRecorderWork *work) {
     VsRecorderRankings *rankings = work->screenWork;

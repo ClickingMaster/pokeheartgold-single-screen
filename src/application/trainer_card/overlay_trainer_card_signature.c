@@ -400,7 +400,7 @@ static void TrainerCardSignature_InitBgLayers(BgConfig *bgConfig) {
 }
 
 static void TrainerCardSignature_InitStrings(TrainerCardSignature *signature) {
-    u8 *pen;           // steps 4 bytes per pen: penNames[] and penPos[] have 4-byte elements
+    u8 *pen;
     u8 *styleAndCount; // the bit-field byte of each stroke
     int i;
     u32 countMask = 0xf0;

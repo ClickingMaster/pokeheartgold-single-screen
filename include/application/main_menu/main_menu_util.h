@@ -11,9 +11,8 @@
 #include "sprite_resource.h"
 #include "sprite_resource_header.h"
 
-// Shared services of the main menu overlay: heap of the crypto library,
-// the Mystery Gift GBA cartridge, screen setup, fades, the message box printer (MainMenuTextPrinter), sprites on both
-// screens and the gift graphics of the card screens.
+// Shared services of the main menu: the Mystery Gift GBA cartridge, screen setup, fades, the message box printer
+// (MainMenuTextPrinter), sprites on both screens and the gift graphics of the card screens.
 
 // Sprite resources of one screen (main 0, sub 1)
 typedef struct MainMenuUtilSpriteRes {
@@ -26,33 +25,32 @@ typedef struct MainMenuUtilSpriteRes {
 
 // Sprites of both screens (sMainMenuUtilSprites)
 typedef struct MainMenuUtilSprites {
-    SpriteList *spriteList;              // 0x000
-    G2dRenderer renderer;                // 0x004
-    GF_2DGfxResMan *resMan[6];           // 0x12C
-    MainMenuUtilSpriteRes spriteRes[2];  // 0x144
-    SpriteResourcesHeader resHeaders[2]; // 0x174
-} MainMenuUtilSprites;                   // size: 0x1BC
+    SpriteList *spriteList;
+    G2dRenderer renderer;
+    GF_2DGfxResMan *resMan[6];
+    MainMenuUtilSpriteRes spriteRes[2];
+    SpriteResourcesHeader resHeaders[2];
+} MainMenuUtilSprites;
 
-// The overlay's shared work (bss gMainMenuUtilWork, 0xEA8 bytes). The code reaches parts of it through the labels
-// sMainMenuUtilSprites (sprites, +0x34), sMainMenuUtilRenderer (+0x38), ov74_0223D654 (+0x200) and ov74_0223E2D4 (+0xE80).
+// The shared work of the main menu (gMainMenuUtilWork).
 typedef struct MainMenuUtilWork {
-    BgConfig *bgConfig;                                    // 0x000
-    u32 unk_004;                                           // 0x004
-    enum HeapID heapId;                                    // 0x008
-    int nextState;                                         // 0x00C, after the running fade
-    BOOL fadeWhite;                                        // 0x010
-    int saveState;                                         // 0x014
-    SaveData *saveData;                                    // 0x018
-    u8 unk_01C[0x18];                                      // 0x01C
-    MainMenuUtilSprites sprites;                           // 0x034
-    u8 unk_1F0[0x18];                                      // 0x1F0
-    Sprite *giftSprite;                                    // 0x208, sub screen
-    int giftSpriteDelay;                                   // 0x20C
-    fx32 subScreenY;                                       // 0x210
-    u8 monCharData[0xC80];                                 // 0x214
-    u16 narcIds[8];                                        // 0xE94, PokepicTemplate of the gift Pokemon
-    void (*vblankCallback)(struct MainMenuUtilWork *work); // 0xEA4, run once by the VBlank callback
-} MainMenuUtilWork;                                        // size: 0xEA8
+    BgConfig *bgConfig;
+    u32 unk_004;
+    enum HeapID heapId;
+    int nextState; // after the running fade
+    BOOL fadeWhite;
+    int saveState;
+    SaveData *saveData;
+    u8 unk_01C[0x18];
+    MainMenuUtilSprites sprites;
+    u8 unk_1F0[0x18];
+    Sprite *giftSprite; // sub screen
+    int giftSpriteDelay;
+    fx32 subScreenY;
+    u8 monCharData[0xC80];
+    u16 narcIds[8];                                        // PokepicTemplate of the gift Pokemon
+    void (*vblankCallback)(struct MainMenuUtilWork *work); // run once by the VBlank callback
+} MainMenuUtilWork;
 
 void MainMenuUtil_SetCryptoHeap(enum HeapID heapID);
 u32 MainMenuUtil_GetCartridgeGiftSize(void);

@@ -15,60 +15,59 @@
 #include "sys_task_api.h"
 #include "text.h"
 
-// Scene 5 of the trade animation (trades and receiving): the ball model, spinning, comes down onto the top screen
-// while the backgrounds scroll into place, fades out over reversed pulses, then the background zooms out and the
-// screen fades to black.
+// Scene 5 of the trade animation (trades and receiving): the spinning ball model comes down onto the top screen,
+// fades out, then the background zooms out and the screen fades to black.
 
 #define TRADE_SEQUENCE_ARRIVE_NUM_STATES 3
 
 typedef struct TradeSequenceArrive {
-    TradeSequence *ts;              // 0x00
-    u32 subState;                   // 0x04
-    int timer;                      // 0x08
-    BgConfig *bgConfig;             // 0x0C
-    TradeSequencePulses *pulses;    // 0x10
-    int pulsesRunning;              // 0x14
-    TradeSequenceBgZoom *bgZoom;    // 0x18
-    int bgZoomFinished;             // 0x1C
-    TradeSequenceModels *models;    // 0x20
-    TradeSequenceModel *ball;       // 0x24
-    TradeSequenceRotation rotation; // 0x28
-    u8 padding_2E[2];               // 0x2E
-    SysTask *lowerTask;             // 0x30
-    SysTask *scrollTask;            // 0x34
-    SysTask *alphaFadeTask;         // 0x38
-} TradeSequenceArrive;              // size: 0x3C
+    TradeSequence *ts;
+    u32 subState;
+    int timer;
+    BgConfig *bgConfig;
+    TradeSequencePulses *pulses;
+    int pulsesRunning;
+    TradeSequenceBgZoom *bgZoom;
+    int bgZoomFinished;
+    TradeSequenceModels *models;
+    TradeSequenceModel *ball;
+    TradeSequenceRotation rotation;
+    u8 padding_2E[2];
+    SysTask *lowerTask;
+    SysTask *scrollTask;
+    SysTask *alphaFadeTask;
+} TradeSequenceArrive;
 
 // Scrolls layer 2 of both screens down into place.
 typedef struct TradeSequenceArriveScroll {
-    TradeSequenceArrive *arrive; // 0x00
-    BgConfig *bgConfig;          // 0x04
-    int frames;                  // 0x08
-    fx32 mainY;                  // 0x0C
-    fx32 subY;                   // 0x10
-    fx32 speed;                  // 0x14
-    u8 unk_18[4];                // 0x18
-    SysTask **task;              // 0x1C
-    u8 unk_20[4];                // 0x20
-} TradeSequenceArriveScroll;     // size: 0x24
+    TradeSequenceArrive *arrive;
+    BgConfig *bgConfig;
+    int frames;
+    fx32 mainY;
+    fx32 subY;
+    fx32 speed;
+    u8 unk_18[4];
+    SysTask **task;
+    u8 unk_20[4];
+} TradeSequenceArriveScroll;
 
 // Moves the ball down to its final height.
 typedef struct TradeSequenceArriveLower {
-    SysTask **task;           // 0x00
-    int frames;               // 0x04
-    TradeSequenceModel *ball; // 0x08
-    VecFx32 position;         // 0x0C
-    fx32 step;                // 0x18
-} TradeSequenceArriveLower;   // size: 0x1C
+    SysTask **task;
+    int frames;
+    TradeSequenceModel *ball;
+    VecFx32 position;
+    fx32 step;
+} TradeSequenceArriveLower;
 
 typedef struct TradeSequenceArriveAlphaFade {
-    SysTask **task;             // 0x00
-    fx32 alpha;                 // 0x04
-    fx32 step;                  // 0x08
-    fx32 target;                // 0x0C
-    int frames;                 // 0x10
-    TradeSequenceModel *model;  // 0x14
-} TradeSequenceArriveAlphaFade; // size: 0x18
+    SysTask **task;
+    fx32 alpha;
+    fx32 step;
+    fx32 target;
+    int frames;
+    TradeSequenceModel *model;
+} TradeSequenceArriveAlphaFade;
 
 enum TradeSequenceArriveLowerStep {
     TRADE_ARRIVE_LOWER_WAIT_FADE_IN,

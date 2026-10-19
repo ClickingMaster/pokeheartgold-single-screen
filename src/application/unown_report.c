@@ -479,7 +479,6 @@ BOOL UnownReport_Exit(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-// Called with the overlay manager from UnownReport_Init and without arguments from UnownReport_Exit
 static void UnownReport_ResetDisplay(void) {
     Main_SetVBlankIntrCB(NULL, NULL);
     HBlankInterruptDisable();
@@ -797,7 +796,7 @@ static void UnownReport_DrawFormSpread(UnownReportApp *app, u8 spread) {
     Window *rightWindow;
     Window *leftWindow;
     int first;
-    UnownReportApp *slot; // moves by one icon pointer per iteration, so slot->icons[0] is app->icons[i]
+    UnownReportApp *slot;
     int i;
     int y;
 

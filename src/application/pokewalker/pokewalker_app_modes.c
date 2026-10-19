@@ -215,7 +215,6 @@ int PokewalkerApp_LinkSave_End(PokewalkerApp *app) {
     return 11;
 }
 
-// The mode's work, reached as byte offsets from the app's selectMonState.
 #define SELECT_MON_WORK(app, member) ((u8 *)(app) + 0x1D764 + offsetof(PokewalkerSelectMonWork, member))
 
 int PokewalkerApp_SelectMon_Enter(PokewalkerApp *app) {

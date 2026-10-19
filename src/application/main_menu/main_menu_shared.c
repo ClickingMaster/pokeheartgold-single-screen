@@ -25,7 +25,6 @@ void CTRDG_TerminateForPulledOut(void);
 extern enum HeapID sMainMenuUtilCryptoHeapId;
 extern u32 ov74_0223E2D4[];
 
-// The start of the MainMenuUtilWork, up to its sprites; the rest is defined with the overlay's other data.
 u32 gMainMenuUtilWork[13];
 
 #define sMainMenuUtilWork ((MainMenuUtilWork *)gMainMenuUtilWork)
@@ -48,7 +47,7 @@ void MainMenuUtil_ShowCardSubScreen(BgConfig *bgConfig, WonderCard *card) {
     Heap_Free(file);
     BgTilemapRectChangePalette(bgConfig, GF_BG_LYR_SUB_1, 0, 0, 32, 24, palette + 8);
     ScheduleBgTilemapBufferTransfer(bgConfig, GF_BG_LYR_SUB_1);
-    ov74_0223E2D4[9] = (u32)MainMenuUtil_LoadCardSubScreenPalette; // = work->vblankCallback
+    ov74_0223E2D4[9] = (u32)MainMenuUtil_LoadCardSubScreenPalette;
     sMainMenuUtilWork->bgConfig = bgConfig;
     switch (tag) {
     case MG_TAG_BATTLE_RULES:
@@ -143,7 +142,7 @@ void MainMenuUtil_DecryptWonderCard(WonderCardInfo *header, WonderCard *dest, en
     Heap_Free(rc4);
 }
 
-// Cursor callback of the overlay's list menus
+// Cursor callback of the main menu's list menus
 void MainMenuUtil_ListMenuCursorCallback(ListMenu *list, s32 index, u8 onInit) {
     switch (onInit) {
     case FALSE:
@@ -190,7 +189,6 @@ void MainMenuUtil_StartSave(SaveData *saveData) {
 }
 
 int MainMenuUtil_RunSave(void) {
-    // the work through the preceding label (second literal-pool entry of the same address)
     MainMenuUtilWork *work = (MainMenuUtilWork *)(&sMainMenuUtilCryptoHeapId + 1);
     int result;
 

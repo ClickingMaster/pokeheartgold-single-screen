@@ -22,7 +22,7 @@
 #include "touchscreen.h"
 
 // VS Recorder saved video screen (VS_RECORDER_SCREEN_SAVED_VIDEO): the battle video in the chosen save slot with its
-// owner's profile, play (after saving the game if needed) and exit. Also the menu's next-colour-scheme substate.
+// owner's profile, play (after saving the game if needed) and exit.
 
 enum VsRecorderSavedVideoEnterStep {
     SAVED_VIDEO_ENTER_STEP_FADE_OUT_MENU,

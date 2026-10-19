@@ -9,32 +9,32 @@
 #include "save.h"
 #include "sprite.h"
 
-// Text box printed by the overlay's shared message helpers (MainMenuTextPrinter_Init ... MainMenuTextPrinter_AddWindowAndPrint).
+// Text box printed by the shared message helpers (MainMenuTextPrinter_Init ... MainMenuTextPrinter_AddWindowAndPrint).
 typedef struct MainMenuTextPrinter {
-    u32 frameType;            // 0x00, 0 frame 1, 1 frame 2, 2 no frame
-    u32 drawFrame;            // 0x04, draw the frame after printing
-    BOOL clearWindow;         // 0x08, clear the window before printing the next message
-    BOOL rightAlign;          // 0x0C, applies to the next message only
-    Window *window;           // 0x10
-    MessageFormat *msgFormat; // 0x14, NULL: a temporary one is used
-    u32 width;                // 0x18
-    u32 height;               // 0x1C
-    u32 textX;                // 0x20
-    u32 textY;                // 0x24
-    u32 baseTile;             // 0x28
-    u32 bgId;                 // 0x2C
-    u32 palette;              // 0x30, of the window
-    u32 msgFileId;            // 0x34
-    u32 frameBaseTile;        // 0x38
-    u32 framePalette;         // 0x3C
-    u32 fontId;               // 0x40
-    u32 color;                // 0x44
-    u8 fillColor;             // 0x48
-    int msgId;                // 0x4C
-    int speed;                // 0x50
-} MainMenuTextPrinter;        // size: 0x54
+    u32 frameType;    // 0 frame 1, 1 frame 2, 2 no frame
+    u32 drawFrame;    // draw the frame after printing
+    BOOL clearWindow; // clear the window before printing the next message
+    BOOL rightAlign;  // applies to the next message only
+    Window *window;
+    MessageFormat *msgFormat; // NULL: a temporary one is used
+    u32 width;
+    u32 height;
+    u32 textX;
+    u32 textY;
+    u32 baseTile;
+    u32 bgId;
+    u32 palette; // of the window
+    u32 msgFileId;
+    u32 frameBaseTile;
+    u32 framePalette;
+    u32 fontId;
+    u32 color;
+    u8 fillColor;
+    int msgId;
+    int speed;
+} MainMenuTextPrinter;
 
-// Shared helpers of the overlay (screen setup, fades, text, sprites).
+// Shared helpers of the main menu (screen setup, fades, text, sprites).
 void MainMenuUtil_InitWork(enum HeapID heapID);
 void *MainMenuUtil_CreateAppData(OverlayManager *manager, enum HeapID heapID, u32 size, u32 heapSize);
 void MainMenuUtil_InitBg(BgConfig *bgConfig, int bgId, u32 screenSize, u32 screenBase, u32 charBase);

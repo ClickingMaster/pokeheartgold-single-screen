@@ -2,13 +2,9 @@
 
 #include "global.h"
 
-// Wireless link to Pokemon Ranger (Manaphy Egg transfer), built directly on the WM library.
-// HeartGold is either the parent (it measures the channels, starts a parent and sends the egg data to
-// every child that connected) or a child (it scans for parents, the player picks one, and it connects
-// and receives). Every packet starts with a RangerLinkPacket header and is checked with a CRC; the
-// payload may be scrambled with a seed from the header.
+// Wireless link to Pokemon Ranger (Manaphy Egg transfer), built directly on the WM library. HeartGold is either
+// the parent (it sends the egg data to every child that connected) or a child (it scans, connects and receives).
 
-// WM callbacks
 typedef void (*RangerLinkWmCallback)(void *arg);
 
 int WM_Init(void *workBuffer, u16 dmaNo);
@@ -41,19 +37,19 @@ int WM_GetLinkLevel(void);
 
 // RangerLinkWork.state
 enum {
-    RANGER_LINK_STATE_STOPPED,    // 0
-    RANGER_LINK_STATE_ENABLED,    // 1
-    RANGER_LINK_STATE_POWERED_ON, // 2
-    RANGER_LINK_STATE_BUSY,       // 3
-    RANGER_LINK_STATE_ERROR,      // 4
-    RANGER_LINK_STATE_5,          // 5
-    RANGER_LINK_STATE_SCANNING,   // 6
-    RANGER_LINK_STATE_SCAN_ENDED, // 7
-    RANGER_LINK_STATE_PARENT,     // 8
-    RANGER_LINK_STATE_CONNECTED,  // 9
-    RANGER_LINK_STATE_PARENT_MP,  // 10
-    RANGER_LINK_STATE_CHILD_MP,   // 11
-    RANGER_LINK_STATE_ENDING,     // 12
+    RANGER_LINK_STATE_STOPPED,
+    RANGER_LINK_STATE_ENABLED,
+    RANGER_LINK_STATE_POWERED_ON,
+    RANGER_LINK_STATE_BUSY,
+    RANGER_LINK_STATE_ERROR,
+    RANGER_LINK_STATE_5,
+    RANGER_LINK_STATE_SCANNING,
+    RANGER_LINK_STATE_SCAN_ENDED,
+    RANGER_LINK_STATE_PARENT,
+    RANGER_LINK_STATE_CONNECTED,
+    RANGER_LINK_STATE_PARENT_MP,
+    RANGER_LINK_STATE_CHILD_MP,
+    RANGER_LINK_STATE_ENDING,
 };
 
 // RangerLinkWork.mode
@@ -65,7 +61,7 @@ enum {
 #define RANGER_LINK_COMMAND_LIST  0xFD // parent: announce to the connected children
 #define RANGER_LINK_COMMAND_REPLY 0xFE
 
-// every packet starts with this (0x10 bytes); headerSize is the payload offset
+// every packet starts with this; headerSize is the payload offset
 typedef struct RangerLinkPacket {
     RangerLinkHeaderWord sender;
     RangerLinkHeaderWord receiver;
@@ -76,7 +72,7 @@ typedef struct RangerLinkPacket {
     u32 length : 24;
 } RangerLinkPacket;
 
-// user game info of the beacon (0x38 bytes)
+// user game info of the beacon
 typedef struct RangerLinkHeaderPair {
     RangerLinkHeaderWord sender;
     RangerLinkHeaderWord receiver;
@@ -243,7 +239,7 @@ typedef struct RangerLinkName {
     u16 chars[12];
 } RangerLinkName;
 
-// child mode, a parent found while scanning (field view of RangerLinkFoundParent)
+// child mode, a parent found while scanning
 typedef struct RangerLinkFoundParentEntry {
     RangerLinkMacTail macAddressTail;
     RangerLinkName name1;
@@ -1964,7 +1960,7 @@ static BOOL RangerLink_CheckCrc(u32 *packet) {
     return (packet[2] >> 16) == SVC_GetCRC16(0, (u8 *)packet + (packet[3] & 0xFF), packet[3] >> 8);
 }
 
-// debug hooks, empty in this build
+// debug hooks, empty
 static void RangerLink_DebugError() {
 }
 

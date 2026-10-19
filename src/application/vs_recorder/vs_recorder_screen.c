@@ -36,10 +36,8 @@
 #include "text.h"
 #include "touchscreen.h"
 
-// VS Recorder screen helpers: menu row labels and text sprites, blend / fade steps and the colour-scheme palettes,
-// message windows and the trainer profile panel, list windows, list scroll arrows and the touch scroll bar, game stats
-// and battle record import, the screen flip and V-blank tasks, the battle video info panel, the touch indicator and the
-// message screens.
+// VS Recorder screen helpers: menu row labels, fades, message and list windows, the trainer profile and battle video
+// info panels, the touch indicator and the message screens.
 
 typedef struct VsRecorderSchemeTable {
     u32 values[7];
@@ -563,7 +561,7 @@ u32 VsRecorder_GetMenuBlendColor(VsRecorderWork *work) {
     return table.values[work->colorScheme];
 }
 
-// NARC_a_1_9_1 palette file of the colour scheme: 0 BG frame, 1 ?, 2 OBJ, 3 BG
+// NARC_a_1_9_1 palette file of the colour scheme: 0 BG frame, 2 OBJ, 3 BG
 u32 VsRecorder_GetSchemeFileId(VsRecorderWork *work, u32 kind) {
     VsRecorderSchemeTable bgFrame = *(const VsRecorderSchemeTable *)sVsRecorderSchemeBgFramePaletteFiles;
     VsRecorderSchemeTable b = *(const VsRecorderSchemeTable *)sVsRecorderSchemeFileIds1;
@@ -1517,7 +1515,7 @@ int VsRecorder_RedrawNameList(VsRecorderListWindow *list, VsRecorderWork *work) 
     }
     i = 0;
     if (list->rows > 0) {
-        VsRecorderWork *item = (VsRecorderWork *)((GlobalTerminalNetVideoHeader **)work + start); // headers stride over the work
+        VsRecorderWork *item = (VsRecorderWork *)((GlobalTerminalNetVideoHeader **)work + start);
         int y = 4;
         do {
             String *nameStr = String_New(0xFF, HEAP_ID_109);
@@ -1927,7 +1925,7 @@ void VsRecorder_OnVideoListReceived(VsRecorderWork *work, int *state) {
         int i = 0;
         net->videoList.count = result;
         if (net->videoList.count > 0) {
-            VsRecorderWork *source = work; // headers stride over the work
+            VsRecorderWork *source = work;
             GlobalTerminalNetVideoHeader *dest = work->net.videoList.videos;
             do {
                 GF_ASSERT(source->net.videoList.headers[0]);
@@ -1946,7 +1944,7 @@ void VsRecorder_LoadSavedVideos(VsRecorderWork *work) {
     int i;
     int result;
     u8 *slot;
-    slot = (u8 *)work; // savedVideos / videoOwners stride over the work
+    slot = (u8 *)work;
     for (i = 0; i < 4; i++, slot += sizeof(void *)) {
         BattleRecord_Load(work->saveData, HEAP_ID_109, &result, NULL, i);
         switch (result) {
@@ -1992,7 +1990,7 @@ void VsRecorder_LoadSavedVideos(VsRecorderWork *work) {
 
 void VsRecorder_FreeSavedVideos(VsRecorderWork *work) {
     int i;
-    u8 *slot = (u8 *)work; // savedVideos / videoOwners stride over the work
+    u8 *slot = (u8 *)work;
     void *zero1 = NULL;
     void *zero2 = NULL;
     for (i = 0; i < 4; i++, slot += sizeof(void *)) {
@@ -2345,7 +2343,7 @@ void VsRecorder_FreeVideoInfo(VsRecorderVideoInfo *info, VsRecorderWork *work) {
     SpriteManager_UnloadCellObjById(work->spriteManager, 100000);
     SpriteManager_UnloadAnimObjById(work->spriteManager, 100000);
     i = 0;
-    icon = info; // monIcons stride over the info
+    icon = info;
     do {
         if (icon->monIcons[0]) {
             SpriteManager_UnloadCharObjById(work->spriteManager, i + 100000);
@@ -2853,7 +2851,7 @@ void VsRecorder_MessageScreen(VsRecorderWork *work) {
 BOOL VsRecorder_IsVideoSaved(VsRecorderWork *work, u64 number) {
     int i = 1;
     u8 *slot;
-    slot = (u8 *)work + sizeof(void *); // savedVideos stride over the work
+    slot = (u8 *)work + sizeof(void *);
     do {
         void *header = ((VsRecorderWork *)slot)->savedVideos[0];
         if (header != NULL && BattleRecordHeader_GetField(header, 4, 0) == number) {

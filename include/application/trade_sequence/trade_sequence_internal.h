@@ -7,8 +7,8 @@
 #include "pokemon_types_def.h"
 #include "sprite.h"
 
-// Shared by the TUs of the trade animation app (OVY_71, trade_sequence.h): the app work and the helpers the scenes
-// use. The app's args are a TRADE_ANIM_WORK (trade_anim.h).
+// Shared by the scenes of the trade animation app: the app work and the helpers the scenes use.
+// The app's args are a TRADE_ANIM_WORK (trade_anim.h).
 
 enum TradeSequenceMode {
     TRADE_SEQUENCE_MODE_FULL = 1,
@@ -29,11 +29,11 @@ typedef struct TradeSequenceBgZoom TradeSequenceBgZoom;
 
 // A cell bank and an animation bank loaded from a NARC (TradeSequence_LoadCellAnim).
 typedef struct TradeSequenceCellAnim {
-    void *cellBankFile;           // 0x0
-    void *animBankFile;           // 0x4
-    NNSG2dCellDataBank *cellBank; // 0x8
-    NNSG2dAnimBankData *animBank; // 0xC
-} TradeSequenceCellAnim;          // size: 0x10
+    void *cellBankFile;
+    void *animBankFile;
+    NNSG2dCellDataBank *cellBank;
+    NNSG2dAnimBankData *animBank;
+} TradeSequenceCellAnim;
 
 TradeSequencePulses *TradeSequence_CreatePulses(int *running, int direction);
 void TradeSequence_StopPulses(TradeSequencePulses *pulses);

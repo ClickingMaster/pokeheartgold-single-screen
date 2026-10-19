@@ -39,46 +39,45 @@
 #include "sys_task_api.h"
 #include "system.h"
 
-// Main menu > Mystery Gift > the Lock Capsule card (the special Wonder Card, RECEIVED_WONDER_CARD_IDX): shows the card and flips it
-// between its front and back. Same layout as the Wonder Card album without the sharing part. Also holds the
-// screen setup shared by both card screens and the Mystery Gift app, and the check whether a gift can be received.
+// Main menu > Mystery Gift > the Lock Capsule card (the special Wonder Card, RECEIVED_WONDER_CARD_IDX): shows the
+// card and flips it between its front and back.
 struct LockCapsuleCardView {
-    enum HeapID heapId;                          // 0x0000
-    u8 unk_0004[0x29F8];                         // 0x0004
-    BgConfig *bgConfig;                          // 0x29FC
-    MessageFormat *msgFormat;                    // 0x2A00
-    MsgData *msgData;                            // 0x2A04
-    Window windows[11];                          // 0x2A08, card text boxes (sLockCapsuleCardTextBoxes)
-    u8 unk_2AB8[0x90];                           // 0x2AB8
-    u32 baseTiles[11];                           // 0x2B48
-    u8 unk_2B74[0x24];                           // 0x2B74
-    u32 boxBaseTile;                             // 0x2B98, of the text box LockCapsuleCard_PrintTextBox is printing
-    const WonderCardTextBox *box;                // 0x2B9C, the text box LockCapsuleCard_PrintTextBox is printing
-    MysteryGiftSave *mysteryGift;                // 0x2BA0
-    SaveData *saveData;                          // 0x2BA4
-    Options *options;                            // 0x2BA8
-    int frame;                                   // 0x2BAC
-    u32 unk_2BB0;                                // 0x2BB0
-    WonderCard *card;                            // 0x2BB4
-    int page;                                    // 0x2BB8
-    struct ListMenu *listMenu;                   // 0x2BBC
-    ListMenuItem *listMenuItems;                 // 0x2BC0
-    Window messageWindow;                        // 0x2BC4
-    Window menuWindow;                           // 0x2BD4
-    int menuBaseTile;                            // 0x2BE4
-    u8 unk_2BE8[0xC];                            // 0x2BE8
-    u32 unk_2BF4;                                // 0x2BF4
-    int nextState;                               // 0x2BF8
-    SpriteList *spriteList;                      // 0x2BFC
-    u8 unk_2C00[0x17C];                          // 0x2C00
-    Sprite *buttonSprites[2];                    // 0x2D7C
-    Sprite *monIconSprites[3];                   // 0x2D84
-    u8 unk_2D90[sizeof(WonderCard)];             // 0x2D90
-    WonderCardFlipEffect flipEffect;             // 0x30E8
-    void (*callback)(LockCapsuleCardView *view); // 0x3D00, run every frame while set
-    int selection;                               // 0x3D04
-    WaitingIcon *waitingIcon;                    // 0x3D08
-}; // size: 0x3D0C
+    enum HeapID heapId;
+    u8 unk_0004[0x29F8];
+    BgConfig *bgConfig;
+    MessageFormat *msgFormat;
+    MsgData *msgData;
+    Window windows[11]; // card text boxes (sLockCapsuleCardTextBoxes)
+    u8 unk_2AB8[0x90];
+    u32 baseTiles[11];
+    u8 unk_2B74[0x24];
+    u32 boxBaseTile;              // of the text box LockCapsuleCard_PrintTextBox is printing
+    const WonderCardTextBox *box; // the text box LockCapsuleCard_PrintTextBox is printing
+    MysteryGiftSave *mysteryGift;
+    SaveData *saveData;
+    Options *options;
+    int frame;
+    u32 unk_2BB0;
+    WonderCard *card;
+    int page;
+    struct ListMenu *listMenu;
+    ListMenuItem *listMenuItems;
+    Window messageWindow;
+    Window menuWindow;
+    int menuBaseTile;
+    u8 unk_2BE8[0xC];
+    u32 unk_2BF4;
+    int nextState;
+    SpriteList *spriteList;
+    u8 unk_2C00[0x17C];
+    Sprite *buttonSprites[2];
+    Sprite *monIconSprites[3];
+    u8 unk_2D90[sizeof(WonderCard)];
+    WonderCardFlipEffect flipEffect;
+    void (*callback)(LockCapsuleCardView *view); // run every frame while set
+    int selection;
+    WaitingIcon *waitingIcon;
+};
 
 extern void ResetAllTextPrinters(void);
 extern u8 AddTextPrinterParameterizedWithColor(Window *window, u32 fontId, String *string, u32 x, u32 y, u32 textSpeed, u32 color, void *callback);

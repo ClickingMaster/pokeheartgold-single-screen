@@ -3,22 +3,22 @@
 
 #include "application/pokewalker/pokewalker_ir.h"
 
-// IR link layer state (0x38 bytes).
+// IR link layer state.
 typedef struct PokewalkerIrLink {
     u8 unk_00;
     u8 unk_01[3];
-    u32 sessionId;                                              // 0x04
-    u32 connected;                                              // 0x08
-    void (*onConnect)(int result, int arg);                     // 0x0C
-    u32 numDisconnects;                                         // 0x10
-    void (*onClose)(int result);                                // 0x14
-    u32 closing;                                                // 0x18
-    void (*onReceive)(void *data, u8 size, u8 command, u8 arg); // 0x1C
-    u32 ownId;                                                  // 0x20
-    u32 handshakeStarted;                                       // 0x24
-    u32 handshakeState;                                         // 0x28
-    u32 active;                                                 // 0x2C
-    u64 lastReceiveTick;                                        // 0x30
+    u32 sessionId;
+    u32 connected;
+    void (*onConnect)(int result, int arg);
+    u32 numDisconnects;
+    void (*onClose)(int result);
+    u32 closing;
+    void (*onReceive)(void *data, u8 size, u8 command, u8 arg);
+    u32 ownId;
+    u32 handshakeStarted;
+    u32 handshakeState;
+    u32 active;
+    u64 lastReceiveTick;
 } PokewalkerIrLink;
 
 // Header of an IR packet; the payload follows (gPokewalkerIrPayload).
@@ -30,49 +30,49 @@ typedef struct PokewalkerIrPacket {
     u32 sessionId;
 } PokewalkerIrPacket;
 
-// IR transfer work (0x021FFAA4..). The transfer state below is addressed from 0x021FFB24.
+// IR transfer work.
 typedef struct PokewalkerIrWork {
     u16 unk_00;
     u16 unk_02;
-    u32 blockIndex; // 0x04
+    u32 blockIndex;
     void *unk_08;
     void *unk_0C;
     void *uploadImage;
-    int error; // 0x14
+    int error;
     u32 unk_18;
     u32 unk_1C;
-    PokewalkerIrIdentity *identity;     // 0x20
-    PokewalkerIrIdentity *peerIdentity; // 0x24
+    PokewalkerIrIdentity *identity;
+    PokewalkerIrIdentity *peerIdentity;
     void *unk_28;
     void *strollData;
     u8 *records;
-    PokewalkerIrBlocks *blocks; // 0x34
-    PokewalkerIrStatus *status; // 0x38
-    u64 transferStartTick;      // 0x3C
-    u8 *compressedSizes;        // 0x44
-    u8 *compressBuffer;         // 0x48
-    u8 *sizes0;                 // 0x4C, compressed block sizes of the first upload (0x021FFAF0)
-    void *upload0;              // 0x50, its compressed data
-    u8 *sizes1;                 // 0x54 (0x021FFAF8)
-    void *upload1;              // 0x58
+    PokewalkerIrBlocks *blocks;
+    PokewalkerIrStatus *status;
+    u64 transferStartTick;
+    u8 *compressedSizes;
+    u8 *compressBuffer;
+    u8 *sizes0;    // compressed block sizes of the first upload
+    void *upload0; // its compressed data
+    u8 *sizes1;
+    void *upload1;
 } PokewalkerIrWork;
 
 typedef struct PokewalkerIrTransfer {
     u8 unk_00[0x1C];
-    u8 command; // 0x1C
-    u8 step;    // 0x1D
+    u8 command;
+    u8 step;
     u8 unk_1E[2];
-    u8 *data;               // 0x20, source data (send) or Pokewalker address (receive)
-    u8 *dataStart;          // 0x24
-    u32 address;            // 0x28, Pokewalker address (send) or destination (receive)
-    u32 addressStart;       // 0x2C
-    u16 remaining;          // 0x30
-    u16 size;               // 0x32
-    u16 numChunks;          // 0x34
-    u16 chunk;              // 0x36
-    u16 totalChunks;        // 0x38
-    u16 totalChunk;         // 0x3A
-    volatile u16 totalSize; // 0x3C
+    u8 *data; // source data (send) or Pokewalker address (receive)
+    u8 *dataStart;
+    u32 address; // Pokewalker address (send) or destination (receive)
+    u32 addressStart;
+    u16 remaining;
+    u16 size;
+    u16 numChunks;
+    u16 chunk;
+    u16 totalChunks;
+    u16 totalChunk;
+    volatile u16 totalSize;
 } PokewalkerIrTransfer;
 
 extern u8 _021FF500[];

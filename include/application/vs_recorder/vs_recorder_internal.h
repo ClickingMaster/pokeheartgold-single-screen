@@ -25,8 +25,7 @@
 #include "touch_hitbox_controller.h"
 #include "touchscreen.h"
 
-// VS Recorder app (overlay 40): the VS Recorder item (mode 0) and the Global Terminal data browser (modes 1-6).
-// The work is allocated by the main-ARM9 launcher, so only the fields known so far are named.
+// VS Recorder app: the VS Recorder item (mode 0) and the Global Terminal data browser (modes 1-6).
 
 typedef struct VsRecorderWork VsRecorderWork;
 
@@ -96,7 +95,6 @@ extern const VsRecorderScreenFunc gVsRecorderDressUpViewSubStates[];
 #define VS_RECORDER_MENU_PREV_SCHEME 7
 #define VS_RECORDER_MENU_NEXT_SCHEME 8
 
-// one menu entry (main-ARM9 menu trees, 36 bytes)
 typedef struct VsRecorderMenuEntry {
     int enabled;
     int unk_04;
@@ -170,7 +168,7 @@ typedef struct VsRecorderMenuRow {
     TextOBJ *text;
     TextOBJLayout *textLayout;
     ObjCharSpaceReservation charAlloc;
-} VsRecorderMenuRow; // size 0x28
+} VsRecorderMenuRow;
 
 // a sprite with a one-line text label, used by several screens
 typedef struct VsRecorderTextSprite {
@@ -179,9 +177,9 @@ typedef struct VsRecorderTextSprite {
     TextOBJ *text;
     TextOBJLayout *textLayout;
     ObjCharSpaceReservation charAlloc;
-} VsRecorderTextSprite; // size 0x1C
+} VsRecorderTextSprite;
 
-// the resource block of VsRecorderWork from narc to fontSystem (0x14-0x54); the text sprite helpers get &work->narc
+// the resource block of VsRecorderWork from narc to fontSystem; the text sprite helpers get &work->narc
 typedef struct VsRecorderGfx {
     NARC *narc;
     SpriteSystem *spriteSystem;
@@ -213,7 +211,7 @@ typedef struct VsRecorderDecor {
     int duration;
     int counter;
     int state;
-} VsRecorderDecor; // size 0x30
+} VsRecorderDecor;
 
 // trainer profile panel (frontier card) on the top screen
 typedef struct VsRecorderProfile {
@@ -221,7 +219,7 @@ typedef struct VsRecorderProfile {
     ManagedSprite *monIcon;
     ManagedSprite *avatar;
     Window windows[8];
-} VsRecorderProfile; // size 0x8C
+} VsRecorderProfile;
 
 typedef struct VsRecorderIconPos {
     s16 x;
@@ -281,7 +279,7 @@ typedef struct VsRecorderListWindow {
     int bottomMargin;
     int isPairList;
     u32 unk_4C;
-} VsRecorderListWindow; // size 0x50
+} VsRecorderListWindow;
 
 // drag scrolling on the touch screen (two side markers)
 typedef struct VsRecorderTouchScroll {
@@ -293,7 +291,7 @@ typedef struct VsRecorderTouchScroll {
     u8 unk_12[2];
     BOOL enabled;
     ManagedSprite *sprites[2];
-} VsRecorderTouchScroll; // size 0x20
+} VsRecorderTouchScroll;
 
 typedef struct VsRecorderFlipArgs {
     int flipped;
@@ -305,16 +303,16 @@ typedef struct VsRecorderVideoList {
     GlobalTerminalNetVideoHeader *headers[30];
     GlobalTerminalNetVideoHeader videos[30]; // copies of the headers
     volatile s32 count;
-    u8 flags[30]; // data[0x27] of each video
+    u8 flags[30]; // flag byte of each video
     u8 unk_1B52[2];
-} VsRecorderVideoList; // size 0x1B54
+} VsRecorderVideoList;
 
-// server data of the work (0x8B4)
+// server data of the work
 typedef struct VsRecorderNetData {
-    u8 *downloadedVideo; // profile 0x80 + header 0x64 + battle
+    u8 *downloadedVideo; // profile + header + battle
     u8 videoBuffer[0x1D54 - 4];
     VsRecorderVideoList videoList;
-} VsRecorderNetData; // size 0x38A8
+} VsRecorderNetData;
 
 // battle video info panel on the top screen: owner, battle mode, video number, party icons
 typedef struct VsRecorderVideoInfo {
@@ -323,7 +321,7 @@ typedef struct VsRecorderVideoInfo {
     u8 unk_08[4];
     ManagedSprite *monIcons[12];
     Window windows[5];
-} VsRecorderVideoInfo; // size 0x8C
+} VsRecorderVideoInfo;
 
 // message screen (VS_RECORDER_SCREEN_MESSAGE)
 typedef struct VsRecorderMessageScreen {
@@ -357,7 +355,7 @@ typedef struct VsRecorderSavedVideo {
     TouchHitboxController *hitboxes; // profile, play, exit
     Window windows[2];               // profile button / YES, NO
     u32 exitMode;                    // save prompt: 1 YES, 2 NO; resume: 1 the video still needs saving
-} VsRecorderSavedVideo;              // size 0x19C
+} VsRecorderSavedVideo;
 
 // VsRecorderWork.screenWork of the Frontier record screen
 typedef struct VsRecorderFrontierRecord {
@@ -376,7 +374,7 @@ typedef struct VsRecorderFrontierRecord {
     VsRecorderTextSprite exitButton;
     int eva; // top screen blend
     int evb;
-} VsRecorderFrontierRecord; // size 0xDC
+} VsRecorderFrontierRecord;
 
 // a dress-up photo from the server: the sender's profile and the photo
 typedef struct VsRecorderDressUpDownload {
@@ -415,13 +413,13 @@ typedef struct VsRecorderDressUp {
     FrontierCard *uploadCard;
     int species; // chosen species
     int downloadCount;
-} VsRecorderDressUp; // size 0x2E8
+} VsRecorderDressUp;
 
 // a box from the server: the sender's profile and the box
 typedef struct VsRecorderBoxDataDownload {
     u8 header[0x80]; // GlobalTerminalNet_CopyRequestHeader source, starts with the sender's name
     GlobalTerminalNetBoxForm form;
-} VsRecorderBoxDataDownload; // size 0x21C
+} VsRecorderBoxDataDownload;
 
 // VsRecorderWork.screenWork of the box data screens (send a box of the PC / view boxes by category)
 typedef struct VsRecorderBoxData {
@@ -453,7 +451,7 @@ typedef struct VsRecorderBoxData {
     BOOL showProfile;          // box list: 1 the sender's profile is shown
     int cursorX;               // cursor column / row in the box
     int cursorY;
-} VsRecorderBoxData; // size 0x2F70
+} VsRecorderBoxData;
 
 // one ranking of this week: the record and the current order of its teams (no scores yet)
 typedef struct VsRecorderRankingStandings {
@@ -462,7 +460,7 @@ typedef struct VsRecorderRankingStandings {
     u8 trainerTypes[16];
     u8 birthMonths[12];
     u16 species[20];
-} VsRecorderRankingStandings; // size 0x48
+} VsRecorderRankingStandings;
 
 // last week's result of a ranking: the teams in rank order with their scores
 typedef struct VsRecorderRankingResults {
@@ -474,7 +472,7 @@ typedef struct VsRecorderRankingResults {
     u64 birthMonthScores[12];
     u16 species[20];
     u64 speciesScores[20];
-} VsRecorderRankingResults; // size 0x1C8
+} VsRecorderRankingResults;
 
 // the player's value of a ranked record, sent with the rankings request (GlobalTerminalNetPair layout)
 typedef struct VsRecorderRankingScore {
@@ -504,89 +502,89 @@ typedef struct VsRecorderRankings {
     VsRecorderTextSprite sendButton; // hidden
     VsRecorderTextSprite exitButton;
     TouchHitboxController *hitboxController;
-    VsRecorderRankingResults resultsBuf[3];     // 0x0E0, copy of the response (onResponse[5])
-    VsRecorderRankingStandings standingsBuf[3]; // 0x638
-    u8 recordIdsBuf[4];                         // 0x710, copy of the response (onResponse[4])
-    VsRecorderRankingResults *results;          // 0x714, the response or resultsBuf
-    VsRecorderRankingStandings *standings;      // 0x718, the response or standingsBuf
-    u8 *recordIds;                              // 0x71C, records of this week's rankings
+    VsRecorderRankingResults resultsBuf[3]; // copy of the response (onResponse[5])
+    VsRecorderRankingStandings standingsBuf[3];
+    u8 recordIdsBuf[4];                    // copy of the response (onResponse[4])
+    VsRecorderRankingResults *results;     // the response or resultsBuf
+    VsRecorderRankingStandings *standings; // the response or standingsBuf
+    u8 *recordIds;                         // records of this week's rankings
     u8 unk_720[8];
-    u16 playHours; // 0x728
+    u16 playHours;
     u8 playMinutes;
     u8 playSeconds;
-    VsRecorderRankingScore scores[3]; // 0x72C, request
-    MsgData *msgData;                 // 0x744, VsRecorderWork.msgData
-    String *valueTemplate;            // 0x748, last week: score format of the ranking's record
+    VsRecorderRankingScore scores[3]; // request
+    MsgData *msgData;                 // VsRecorderWork.msgData
+    String *valueTemplate;            // last week: score format of the ranking's record
     VsRecorderListEntry entries[3][20];
-    VsRecorderListConfig listConfig; // 0xB0C
-} VsRecorderRankings;                // size 0xB38
+    VsRecorderListConfig listConfig;
+} VsRecorderRankings;
 
 struct VsRecorderWork {
-    u32 mode;                                // 0x0000, 0 VS Recorder item, 1-6 Global Terminal
-    u32 subState;                            // 0x0004, index into the screen's function table
-    int step;                                // 0x0008, step of the current substate
-    int counter;                             // 0x000C, frame / fade counter of the current step
-    int *screenPtr;                          // 0x0010, OverlayManager state = current screen
-    NARC *narc;                              // 0x0014, NARC_a_1_9_1
-    SpriteSystem *spriteSystem;              // 0x0018
-    SpriteManager *spriteManager;            // 0x001C
-    u32 unk_0020;                            // 0x0020
-    BgConfig *bgConfig;                      // 0x0024
-    PaletteData *plttData;                   // 0x0028
-    TouchHitboxController *hitboxController; // 0x002C, menu choices
-    TouchscreenHitbox menuHitboxes[5];       // 0x0030
-    u32 cursorHidden;                        // 0x0044, 1: the title goes on to the menu's substate 0
-    MsgData *msgData;                        // 0x0048, msg_0013
-    MsgData *recordMsgData;                  // 0x004C, msg_0026 (frontier record)
-    FontSystem *fontSystem;                  // 0x0050
-    int fade;                                // 0x0054, colour scheme change / exit fade
-    u32 blendColor;                          // 0x0058
-    u8 colorScheme;                          // 0x005C, Save_Misc
-    GF3DVramMan *vramMan;                    // 0x0060
-    PokepicManager *pokepicManager;          // 0x0064
-    GlobalTerminalNet netClient;             // 0x0068, Global Terminal server client (OVY_39)
-    VsRecorderTouchScroll touchScroll;       // 0x047C
-    VsRecorderListWindow listWindow;         // 0x049C
-    u8 unk_04EC[0x504 - 0x4EC];              // 0x04EC
-    VsRecorderMessageScreen messageScreen;   // 0x0504
-    u32 unk_0520;                            // 0x0520
-    u32 vblankBusy;                          // 0x0524
-    u32 vblankPaused;                        // 0x0528
-    VsRecorderFlipArgs flipArgs;             // 0x052C
-    VsRecorderMenuRow pathRows[5];           // 0x0534
-    VsRecorderMenuRow choiceRows[5];         // 0x05FC
-    const VsRecorderMenuEntry *menuPath[5];  // 0x06C4, entry chosen at each depth
-    int menuDepth;                           // 0x06D8
-    u32 unk_06DC;                            // 0x06DC
-    int choiceCount;                         // 0x06E0, rows of the current choices
-    u32 menuCursor;                          // 0x06E4
-    u8 unk_06E8[8];                          // 0x06E8
-    struct OrbitCursor *orbitCursors[2];     // 0x06F0, touch cursors
-    VsRecorderDecor decor[6];                // 0x06F8
-    const VsRecorderMenuEntry *menu;         // 0x0818, current choices
-    const VsRecorderMenuEntry *menuStack[5]; // 0x081C
-    SaveData *saveData;                      // 0x0830
-    u16 recordSaveState;                     // 0x0834
-    u16 recordWriteState;                    // 0x0836
-    u32 hasResumeScreen;                     // 0x0838
-    u32 resumeScreen;                        // 0x083C
-    u32 unk_0840[8];                         // 0x0840
-    void *screenWork;                        // 0x0860
-    void *unk_0864;                          // 0x0864
-    void *result;                            // 0x0868, VsRecorderAppResult of the launcher
-    u32 selection;                           // 0x086C
-    u32 boxUploaded;                         // 0x0870, a box was sent (only one per visit)
-    u32 battleResult;                        // 0x0874
-    u32 videoFlagPtr;                        // 0x0878
-    void *savedVideos[4];                    // 0x087C
-    FrontierCard *videoOwners[4];            // 0x088C
-    u32 menuNoticeShown;                     // 0x089C, notice raised by the menu touch
-    u32 messageShown;                        // 0x08A0
-    Window messageWindow;                    // 0x08A4
-    VsRecorderNetData net;                   // 0x08B4
-    VsRecorderTouchIndicator touchIndicator; // 0x415C
-    SysTask *task;                           // 0x416C
-}; // size 0x4170
+    u32 mode;       // 0 VS Recorder item, 1-6 Global Terminal
+    u32 subState;   // index into the screen's function table
+    int step;       // step of the current substate
+    int counter;    // frame / fade counter of the current step
+    int *screenPtr; // OverlayManager state = current screen
+    NARC *narc;     // NARC_a_1_9_1
+    SpriteSystem *spriteSystem;
+    SpriteManager *spriteManager;
+    u32 unk_0020;
+    BgConfig *bgConfig;
+    PaletteData *plttData;
+    TouchHitboxController *hitboxController; // menu choices
+    TouchscreenHitbox menuHitboxes[5];
+    u32 cursorHidden;       // 1: the title goes on to the menu's substate 0
+    MsgData *msgData;       // msg_0013
+    MsgData *recordMsgData; // msg_0026 (frontier record)
+    FontSystem *fontSystem;
+    int fade; // colour scheme change / exit fade
+    u32 blendColor;
+    u8 colorScheme; // Save_Misc
+    GF3DVramMan *vramMan;
+    PokepicManager *pokepicManager;
+    GlobalTerminalNet netClient;
+    VsRecorderTouchScroll touchScroll;
+    VsRecorderListWindow listWindow;
+    u8 unk_04EC[0x504 - 0x4EC];
+    VsRecorderMessageScreen messageScreen;
+    u32 unk_0520;
+    u32 vblankBusy;
+    u32 vblankPaused;
+    VsRecorderFlipArgs flipArgs;
+    VsRecorderMenuRow pathRows[5];
+    VsRecorderMenuRow choiceRows[5];
+    const VsRecorderMenuEntry *menuPath[5]; // entry chosen at each depth
+    int menuDepth;
+    u32 unk_06DC;
+    int choiceCount; // rows of the current choices
+    u32 menuCursor;
+    u8 unk_06E8[8];
+    struct OrbitCursor *orbitCursors[2]; // touch cursors
+    VsRecorderDecor decor[6];
+    const VsRecorderMenuEntry *menu; // current choices
+    const VsRecorderMenuEntry *menuStack[5];
+    SaveData *saveData;
+    u16 recordSaveState;
+    u16 recordWriteState;
+    u32 hasResumeScreen;
+    u32 resumeScreen;
+    u32 unk_0840[8];
+    void *screenWork;
+    void *unk_0864;
+    void *result; // VsRecorderAppResult of the launcher
+    u32 selection;
+    u32 boxUploaded; // a box was sent (only one per visit)
+    u32 battleResult;
+    u32 videoFlagPtr;
+    void *savedVideos[4];
+    FrontierCard *videoOwners[4];
+    u32 menuNoticeShown; // notice raised by the menu touch
+    u32 messageShown;
+    Window messageWindow;
+    VsRecorderNetData net;
+    VsRecorderTouchIndicator touchIndicator;
+    SysTask *task;
+};
 
 void VsRecorder_InitResources(VsRecorderWork *work);
 void VsRecorder_FreeResources(VsRecorderWork *work);
@@ -862,7 +860,6 @@ BOOL VsRecorder_RankingsExit(VsRecorderWork *work);
 BOOL VsRecorder_RankingsInvalid(VsRecorderWork *work);
 BOOL VsRecorder_RankingsSwitch(VsRecorderWork *work);
 
-// other OVY_40 modules (still address-named)
 BOOL VsRecorder_IsNetIdle(VsRecorderWork *work);
 GlobalTerminalNet *VsRecorder_GetNet(VsRecorderWork *work);
 u32 VsRecorder_WriteRecordAsync(SaveData *save, u32 index, u32 sealed, u16 *state, void *writeState);
@@ -871,7 +868,6 @@ void VsRecorder_InitNet(VsRecorderWork *work);
 void VsRecorder_UpdateNet(VsRecorderWork *work);
 void VsRecorder_FreeNet(VsRecorderWork *work);
 
-// main ARM9
 void VsRecorderApp_SetResult(void *result, u32 first, u32 second);
 void VsRecorderApp_CountMenuChoices(VsRecorderWork *work);
 

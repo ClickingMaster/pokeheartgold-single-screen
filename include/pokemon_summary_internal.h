@@ -47,44 +47,44 @@ enum PokemonSummaryState {
 
 // The shown Pokemon, read once from the Pokemon or box Pokemon (PokemonSummary_ReadMon).
 typedef struct PokemonSummaryMon {
-    String *speciesName; // 0x00
-    String *nickname;    // 0x04
-    String *otName;      // 0x08
-    u16 species;         // 0x0C
-    u16 heldItem;        // 0x0E
-    u8 type1;            // 0x10
-    u8 type2;            // 0x11
-    u8 level : 7;        // 0x12
+    String *speciesName;
+    String *nickname;
+    String *otName;
+    u16 species;
+    u16 heldItem;
+    u8 type1;
+    u8 type2;
+    u8 level : 7;
     u8 noPrintGender : 1;
-    u8 gender : 2; // 0x13
+    u8 gender : 2;
     u8 pokeball : 6;
-    u32 otId;           // 0x14
-    u32 exp;            // 0x18
-    u32 curLevelExp;    // 0x1C
-    u32 nextLevelExp;   // 0x20
-    u16 hp;             // 0x24
-    u16 maxHp;          // 0x26
-    u16 attack;         // 0x28
-    u16 defense;        // 0x2A
-    u16 spAttack;       // 0x2C
-    u16 spDefense;      // 0x2E
-    u16 speed;          // 0x30
-    u8 ability;         // 0x32
-    u8 nature;          // 0x33
-    u16 moves[4];       // 0x34
-    u8 pp[4];           // 0x3C
-    u8 maxPP[4];        // 0x40
-    u8 otGender;        // 0x44
-    u8 contestStats[6]; // 0x45: cool, beauty, cute, smart, tough, sheen
-    u8 favoriteFlavor;  // 0x4B: 5 = none
-    u16 markings;       // 0x4C
-    u16 form;           // 0x4E
-    u32 status : 28;    // 0x50
+    u32 otId;
+    u32 exp;
+    u32 curLevelExp;
+    u32 nextLevelExp;
+    u16 hp;
+    u16 maxHp;
+    u16 attack;
+    u16 defense;
+    u16 spAttack;
+    u16 spDefense;
+    u16 speed;
+    u8 ability;
+    u8 nature;
+    u16 moves[4];
+    u8 pp[4];
+    u8 maxPP[4];
+    u8 otGender;
+    u8 contestStats[6]; // cool, beauty, cute, smart, tough, sheen
+    u8 favoriteFlavor;  // 5 = none
+    u16 markings;
+    u16 form;
+    u32 status : 28;
     u32 isEgg : 1;
     u32 shiny : 1;
     u32 pokerus : 2;
-    u32 ribbons[4];    // 0x54: one bit per ribbon
-    u8 shinyLeaves[6]; // 0x64
+    u32 ribbons[4]; // one bit per ribbon
+    u8 shinyLeaves[6];
 } PokemonSummaryMon;
 
 typedef struct ConditionChartVertex {
@@ -150,7 +150,7 @@ typedef struct PokemonSummary {
     u8 flashNextState;
     BgCellManager *cellManager;
     u32 boxIconSprite; // which of sprites 73/74 shows the box Pokemon's icon next
-} PokemonSummary;      // size: 0x7D8
+} PokemonSummary;
 
 void PokemonSummary_AddWindows(PokemonSummary *summary);
 void PokemonSummary_AddPageWindows(PokemonSummary *summary);

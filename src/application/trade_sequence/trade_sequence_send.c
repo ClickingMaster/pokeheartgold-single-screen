@@ -35,45 +35,45 @@
 #define TRADE_SEQUENCE_SEND_NUM_STATES 4
 
 typedef struct TradeSequenceSend {
-    TradeSequence *ts;                // 0x00
-    u32 subState;                     // 0x04
-    int timer;                        // 0x08
-    PokepicManager *pokepicManager;   // 0x0C
-    Pokepic *pokepic;                 // 0x10
-    PokepicAnimScript animScript[10]; // 0x14
-    Sprite *sprites[2];               // 0x3C
-    TradeSequenceCellAnim cellAnim;   // 0x44
-    BgConfig *bgConfig;               // 0x54
-    Window window;                    // 0x58
-    String *msgTemplate;              // 0x68
-    String *msgString;                // 0x6C
-    TradeSequenceModels *models;      // 0x70
-    TradeSequenceModel *model;        // 0x74
-    SysTask *brightnessTask;          // 0x78
-    SysTask *bounceTask;              // 0x7C
-    NARC *pokeAnimNarc;               // 0x80
-} TradeSequenceSend;                  // size: 0x84
+    TradeSequence *ts;
+    u32 subState;
+    int timer;
+    PokepicManager *pokepicManager;
+    Pokepic *pokepic;
+    PokepicAnimScript animScript[10];
+    Sprite *sprites[2];
+    TradeSequenceCellAnim cellAnim;
+    BgConfig *bgConfig;
+    Window window;
+    String *msgTemplate;
+    String *msgString;
+    TradeSequenceModels *models;
+    TradeSequenceModel *model;
+    SysTask *brightnessTask;
+    SysTask *bounceTask;
+    NARC *pokeAnimNarc;
+} TradeSequenceSend;
 
 typedef struct TradeSequenceSendBrightness {
-    TradeSequenceSend *send;   // 0x00
-    fx32 value;                // 0x04
-    fx32 target;               // 0x08
-    fx32 step;                 // 0x0C
-    int frames;                // 0x10
-} TradeSequenceSendBrightness; // size: 0x14
+    TradeSequenceSend *send;
+    fx32 value;
+    fx32 target;
+    fx32 step;
+    int frames;
+} TradeSequenceSendBrightness;
 
 typedef struct TradeSequenceSendBounce {
-    TradeSequenceSend *send;        // 0x00
-    TradeSequenceModel *model;      // 0x04
-    VecFx32 position;               // 0x08
-    TradeSequenceRotation rotation; // 0x14
-    u16 padding_1A;                 // 0x1A
-    fx32 speed;                     // 0x1C
-    int bounces;                    // 0x20
-    BOOL landed;                    // 0x24
-    int frames;                     // 0x28
-    s16 spin;                       // 0x2C
-} TradeSequenceSendBounce;          // size: 0x30
+    TradeSequenceSend *send;
+    TradeSequenceModel *model;
+    VecFx32 position;
+    TradeSequenceRotation rotation;
+    u16 padding_1A;
+    fx32 speed;
+    int bounces;
+    BOOL landed;
+    int frames;
+    s16 spin;
+} TradeSequenceSendBounce;
 
 enum TradeSequenceSendMessageStep {
     TRADE_SEND_MSG_INIT,
@@ -459,7 +459,7 @@ static void TradeSequenceSend_DeleteSprites(TradeSequenceSend *send) {
             Sprite_Delete(p->sprites[0]);
         }
         i++;
-        p = (TradeSequenceSend *)((u8 *)p + sizeof(Sprite *)); // walks sprites[] through a shifted base pointer
+        p = (TradeSequenceSend *)((u8 *)p + sizeof(Sprite *));
     } while (i < 2);
     TradeSequence_FreeCellAnim(&send->cellAnim);
 }

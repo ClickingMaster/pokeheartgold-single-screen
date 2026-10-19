@@ -30,32 +30,32 @@ enum WiiNumberEntryState {
 
 // Data of the Wii message settings app (OverlayManager data, HEAP_ID_115).
 typedef struct WiiMessageSettings {
-    OverlayManager *child;      // 0x000
-    SaveData *saveData;         // 0x004
-    Options *options;           // 0x008
-    void *expHeapMemory;        // 0x00C
-    NNSFndHeapHandle expHeap;   // 0x010
-    u8 netConnection[0x64];     // 0x014, passed to DWC_InitInetEx when connecting
-    u16 registrationCodePrefix; // 0x078
-    u8 screenStartState;        // 0x07A
-    u8 unk_7B;                  // 0x07B
-    u32 networkLoaded;          // 0x07C
-    u32 currentApp;             // 0x080
-    u32 unk_84;                 // 0x084
-    u32 nextApp;                // 0x088
-    u32 unk_8C;                 // 0x08C, set together with nextApp, never read
-    u32 unk_90;                 // 0x090
-    void *childArgs;            // 0x094
-    WifiServerProfile request;  // 0x098
-    int responseStatus;         // 0x0FC, written by GtsServer_RequestSetProfile
-    int responseResult;         // 0x100
-    u32 password;               // 0x104
-    u32 registrationCode;       // 0x108, last 4 digits; -1: entry cancelled
-    u8 wiiNumberEntryState;     // 0x10C
-    String *wiiNumber;          // 0x110, the first of the two Wii number entries
-    String *unk_114;            // 0x114
-    u32 serverSessionStarted;   // 0x118
-} WiiMessageSettings;           // size: 0x11C
+    OverlayManager *child;
+    SaveData *saveData;
+    Options *options;
+    void *expHeapMemory;
+    NNSFndHeapHandle expHeap;
+    u8 netConnection[0x64]; // passed to DWC_InitInetEx when connecting
+    u16 registrationCodePrefix;
+    u8 screenStartState;
+    u8 unk_7B;
+    u32 networkLoaded;
+    u32 currentApp;
+    u32 unk_84;
+    u32 nextApp;
+    u32 unk_8C;
+    u32 unk_90;
+    void *childArgs;
+    WifiServerProfile request;
+    int responseStatus; // written by GtsServer_RequestSetProfile
+    int responseResult;
+    u32 password;
+    u32 registrationCode; // last 4 digits; -1: entry cancelled
+    u8 wiiNumberEntryState;
+    String *wiiNumber; // the first of the two Wii number entries
+    String *unk_114;
+    u32 serverSessionStarted;
+} WiiMessageSettings;
 
 void WiiMessageSettings_SetNextApp(WiiMessageSettings *app, int nextApp, int unused);
 void WiiMessageSettings_Quit(WiiMessageSettings *app);

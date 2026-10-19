@@ -671,10 +671,6 @@ int PokewalkerApp_Link_StartReceive(PokewalkerApp *app) {
     return 27;
 }
 
-// Following the receive / gift / Stroll requests, storing what was read (step counts, other games' Trainer House
-// sets, event log), the error messages, the results ("went to the Pokewalker", "has arrived", "received gifts"),
-// sending the Pokemon back, and the shared message / cursor wait states.
-
 // Adds the Trainer House sets of other HeartGold / SoulSilver games met by the Pokewalker (not while the player is in
 // the Trainer House).
 void PokewalkerApp_AddPeerTrainerHouseSets(PokewalkerApp *app) {

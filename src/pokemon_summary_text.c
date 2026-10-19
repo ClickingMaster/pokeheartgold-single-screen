@@ -28,7 +28,6 @@
 
 extern const s8 gNatureStatMods[][5];
 
-// PokemonSummary_PrintTrainerMemo calls it with three arguments.
 #define sub_0208E600_3(mon, isMine, heapID) ((TrainerMemo * (*)(void *, int, enum HeapID)) TrainerMemo_New)(mon, isMine, heapID)
 
 static int PokemonSummary_IsPlayersMon(PokemonSummary *summary);

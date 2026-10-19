@@ -123,13 +123,13 @@
 // The link menu (SpinTradeArgs.menu)
 typedef struct SpinTradeLinkMenu {
     u8 unk_00[0x3C];
-    u32 unk_3C;            // 0x3C
-    u16 receivedStatus;    // 0x40, SPIN_TRADE_CMD_STATUS bits received from the host
-    u16 memberMask;        // 0x42, netIds of the joined members
-    u16 unk_44;            // 0x44
-    s16 partyReceivedMask; // 0x46
-    u16 cancelled;         // 0x48
-    u16 confirmMask;       // 0x4A
+    u32 unk_3C;
+    u16 receivedStatus; // SPIN_TRADE_CMD_STATUS bits received from the host
+    u16 memberMask;     // netIds of the joined members
+    u16 unk_44;
+    s16 partyReceivedMask;
+    u16 cancelled;
+    u16 confirmMask;
 } SpinTradeLinkMenu;
 
 // Animation object of RenderAnimation_LoadFromNarc
@@ -139,135 +139,135 @@ typedef struct SpinTradeRenderAnim {
 
 // Egg sitting on the turntable
 typedef struct SpinTradeEgg {
-    BOOL active;               // 0x00
-    BOOL visible;              // 0x04
-    BOOL dropped;              // 0x08
-    int netId;                 // 0x0C, owner
-    u32 slot;                  // 0x10
-    u32 order;                 // 0x14
-    u32 unk_18;                // 0x18
-    fx32 angle;                // 0x1C
-    fx32 angleOffset;          // 0x20
-    u16 rotation[3];           // 0x24
-    u16 unk_2A;                // 0x2A
-    fx32 rotationFx[3];        // 0x2C
-    VecFx32 scale;             // 0x38
-    VecFx32 position;          // 0x44
-    VecFx32 offset;            // 0x50, height above the table
-    NNSG3dRenderObj renderObj; // 0x5C
-} SpinTradeEgg;                // size 0xB0
+    BOOL active;
+    BOOL visible;
+    BOOL dropped;
+    int netId; // owner
+    u32 slot;
+    u32 order;
+    u32 unk_18;
+    fx32 angle;
+    fx32 angleOffset;
+    u16 rotation[3];
+    u16 unk_2A;
+    fx32 rotationFx[3];
+    VecFx32 scale;
+    VecFx32 position;
+    VecFx32 offset; // height above the table
+    NNSG3dRenderObj renderObj;
+} SpinTradeEgg;
 
 // Shadow under an egg, shrinks while the egg is in the air
 typedef struct SpinTradeShadow {
-    BOOL active;               // 0x00
-    u16 rotation[3];           // 0x04
-    u16 unk_0A;                // 0x0A
-    VecFx32 scale;             // 0x0C
-    VecFx32 position;          // 0x18
-    NNSG3dRenderObj renderObj; // 0x24
-    SpinTradeEgg *egg;         // 0x78
-} SpinTradeShadow;             // size 0x7C
+    BOOL active;
+    u16 rotation[3];
+    u16 unk_0A;
+    VecFx32 scale;
+    VecFx32 position;
+    NNSG3dRenderObj renderObj;
+    SpinTradeEgg *egg;
+} SpinTradeShadow;
 
 // Animated marker shown above an egg
 typedef struct SpinTradeMarker {
-    BOOL active;               // 0x00
-    VecFx32 position;          // 0x04
-    NNSG3dRenderObj renderObj; // 0x10
-    SpinTradeEgg *egg;         // 0x64
-} SpinTradeMarker;             // size 0x68
+    BOOL active;
+    VecFx32 position;
+    NNSG3dRenderObj renderObj;
+    SpinTradeEgg *egg;
+} SpinTradeMarker;
 
 typedef struct SpinTradeObjects {
-    RenderModelStorage eggModel;               // 0x000
-    RenderModelStorage shadowModel;            // 0x014
-    RenderModelStorage markerModels[5];        // 0x028
-    SpinTradeRenderAnim markerAnims[5];        // 0x08C
-    SpinTradeEgg eggs[SPIN_TRADE_MAX_PLAYERS]; // 0x140
-    SpinTradeShadow shadows[5];                // 0x4B0
-    SpinTradeMarker markers[5];                // 0x71C
-} SpinTradeObjects;                            // size 0x924
+    RenderModelStorage eggModel;
+    RenderModelStorage shadowModel;
+    RenderModelStorage markerModels[5];
+    SpinTradeRenderAnim markerAnims[5];
+    SpinTradeEgg eggs[SPIN_TRADE_MAX_PLAYERS];
+    SpinTradeShadow shadows[5];
+    SpinTradeMarker markers[5];
+} SpinTradeObjects;
 
 // The turntable machine model
 typedef struct SpinTradeMachine {
-    VecFx32 position;          // 0x00
-    VecFx32 drawPosition;      // 0x0C
-    VecFx32 scale;             // 0x18
-    VecFx32 shakeOffset;       // 0x24
-    VecFx32 jumpOffset;        // 0x30
-    fx32 angle;                // 0x3C
-    fx32 baseAngle;            // 0x40
-    fx32 angleOffset;          // 0x44
-    fx32 speed;                // 0x48
-    u16 rotation[3];           // 0x4C
-    u16 unk_52;                // 0x52
-    RenderModelStorage model;  // 0x54
-    NNSG3dRenderObj renderObj; // 0x68
-} SpinTradeMachine;            // size 0xBC
+    VecFx32 position;
+    VecFx32 drawPosition;
+    VecFx32 scale;
+    VecFx32 shakeOffset;
+    VecFx32 jumpOffset;
+    fx32 angle;
+    fx32 baseAngle;
+    fx32 angleOffset;
+    fx32 speed;
+    u16 rotation[3];
+    u16 unk_52;
+    RenderModelStorage model;
+    NNSG3dRenderObj renderObj;
+} SpinTradeMachine;
 
 typedef struct SpinTradeBounce {
-    BOOL active;       // 0x00
-    int state;         // 0x04
-    int frame;         // 0x08
-    BOOL bounced;      // 0x0C
-    fx32 velocity;     // 0x10
-    fx32 accel;        // 0x14
-    u32 unk_18;        // 0x18
-    SpinTradeEgg *egg; // 0x1C
+    BOOL active;
+    int state;
+    int frame;
+    BOOL bounced;
+    fx32 velocity;
+    fx32 accel;
+    u32 unk_18;
+    SpinTradeEgg *egg;
 } SpinTradeBounce;
 
 typedef struct SpinTradeSpin {
-    BOOL active;       // 0x00
-    int state;         // 0x04
-    u32 unk_08;        // 0x08
-    fx32 step;         // 0x0C
-    SpinTradeEgg *egg; // 0x10
+    BOOL active;
+    int state;
+    u32 unk_08;
+    fx32 step;
+    SpinTradeEgg *egg;
 } SpinTradeSpin;
 
 typedef struct SpinTradeWobble {
-    BOOL active;       // 0x00
-    int state;         // 0x04
-    fx32 amplitude;    // 0x08
-    fx32 speed;        // 0x0C
-    fx32 phase;        // 0x10
-    SpinTradeEgg *egg; // 0x14
+    BOOL active;
+    int state;
+    fx32 amplitude;
+    fx32 speed;
+    fx32 phase;
+    SpinTradeEgg *egg;
 } SpinTradeWobble;
 
 // The machine jumps when the button is touched; landing makes all eggs bounce
 typedef struct SpinTradeJump {
-    int state;   // 0x00
-    BOOL landed; // 0x04
-    BOOL active; // 0x08
-    int counter; // 0x0C
-    fx32 shake;  // 0x10
+    int state;
+    BOOL landed;
+    BOOL active;
+    int counter;
+    fx32 shake;
 } SpinTradeJump;
 
 typedef struct SpinTradeButtonFlash {
-    u16 state;  // 0x00
-    u16 active; // 0x02
-    s32 timer;  // 0x04
+    u16 state;
+    u16 active;
+    s32 timer;
 } SpinTradeButtonFlash;
 
 typedef struct SpinTradeHover {
-    int state;         // 0x00
-    int index;         // 0x04
-    int timer;         // 0x08
-    SpinTradeEgg *egg; // 0x0C
+    int state;
+    int index;
+    int timer;
+    SpinTradeEgg *egg;
 } SpinTradeHover;
 
 typedef struct SpinTradeText {
-    int nameWindowCount;      // 0x00
-    MsgData *msgData;         // 0x04
-    MessageFormat *msgFormat; // 0x08
-    Window msgWindow;         // 0x0C
-    Window nameWindows[5];    // 0x1C
-    String *string;           // 0x6C
+    int nameWindowCount;
+    MsgData *msgData;
+    MessageFormat *msgFormat;
+    Window msgWindow;
+    Window nameWindows[5];
+    String *string;
 } SpinTradeText;
 
 typedef struct SpinTradeCamera {
-    fx32 distance;     // 0x00
-    int perspective;   // 0x04
-    VecFx32 target;    // 0x08
-    CameraAngle angle; // 0x14
-    Camera *camera;    // 0x1C
+    fx32 distance;
+    int perspective;
+    VecFx32 target;
+    CameraAngle angle;
+    Camera *camera;
 } SpinTradeCamera;
 
 typedef struct SpinTradeTouchSamples {
@@ -276,20 +276,20 @@ typedef struct SpinTradeTouchSamples {
 } SpinTradeTouchSamples;
 
 typedef struct SpinTradeTouch {
-    s32 x;                         // 0x00
-    s32 y;                         // 0x04
-    BOOL pressed;                  // 0x08
-    u32 held;                      // 0x0C
-    SpinTradeTouchSamples samples; // 0x10
+    s32 x;
+    s32 y;
+    BOOL pressed;
+    u32 held;
+    SpinTradeTouchSamples samples;
 } SpinTradeTouch;
 
 // Order in which the eggs are dropped onto the table (kept in the scratch buffer)
 typedef struct SpinTradeDrop {
-    int count;     // 0x00
-    u32 slotAngle; // 0x04
-    u8 unk_08[8];  // 0x08
-    int index;     // 0x10
-    int total;     // 0x14
+    int count;
+    u32 slotAngle;
+    u8 unk_08[8];
+    int index;
+    int total;
 } SpinTradeDrop;
 
 typedef struct SpinTradeMember {
@@ -305,77 +305,77 @@ typedef struct SpinTradeSpinData {
 } SpinTradeSpinData;
 
 typedef struct SpinTradeApp {
-    int state;                                       // 0x000
-    s32 saveState;                                   // 0x004
-    int frame;                                       // 0x008, spin duration
-    int timer;                                       // 0x00C
-    u32 unk_010;                                     // 0x010
-    int sendCount;                                   // 0x014
-    BOOL unk_018;                                    // 0x018
-    int bgm;                                         // 0x01C
-    u32 bonusMask;                                   // 0x020, owners of the eggs in a bonus area
-    Party *party;                                    // 0x024
-    SpinTradeEgg *landedEgg;                         // 0x028
-    int mySlot;                                      // 0x02C
-    int playerCount;                                 // 0x030
-    BOOL remoteJump;                                 // 0x034
-    BOOL sendJump;                                   // 0x038
-    BOOL spinReceived;                               // 0x03C
-    BOOL resultReceived;                             // 0x040
-    u32 tradeSlots[SPIN_TRADE_MAX_PLAYERS];          // 0x044, party slot offered by each netId
-    SpinTradeSpinData spinData;                      // 0x058
-    u16 result[8];                                   // 0x060
-    SpinTradeMember members[SPIN_TRADE_MAX_PLAYERS]; // 0x070
-    PlayerProfile *profiles[SPIN_TRADE_MAX_PLAYERS]; // 0x084
-    String *names[SPIN_TRADE_MAX_PLAYERS];           // 0x098
-    u8 scratch[0x20];                                // 0x0AC
-    SpinTradeArgs *args;                             // 0x0CC
-    SpinTradeLinkMenu *menu;                         // 0x0D0
-    SpinTradeMachine machine;                        // 0x0D4
-    SpinTradeObjects objects;                        // 0x190
-    SpinTradeBounce bounces[5];                      // 0xAB4
-    SpinTradeSpin spins[5];                          // 0xB54
-    SpinTradeWobble wobbles[5];                      // 0xBB8
-    SpinTradeJump jump;                              // 0xC30
-    SpinTradeButtonFlash buttonFlash;                // 0xC44
-    SpinTradeHover hovers[5];                        // 0xC4C
-    SpinTradeText text;                              // 0xC9C
-    SpinTradeCamera camera;                          // 0xD0C
-    SpinTradeTouch touch;                            // 0xD2C
-    NARC *narc;                                      // 0xD80
-    BgConfig *bgConfig;                              // 0xD84
-    NNSG2dScreenData *screenData;                    // 0xD88
-    NNSG2dCharacterData *charData;                   // 0xD8C
-    NNSG2dPaletteData *plttData;                     // 0xD90
-    SpriteSystem *spriteSystem;                      // 0xD94
-    SpriteManager *spriteManager;                    // 0xD98
-    PaletteData *paletteData;                        // 0xD9C
-    GXRgb edgeColors[8];                             // 0xDA0
-    SysTask *bounceTask;                             // 0xDB0
-    SysTask *spinTask;                               // 0xDB4
-    SysTask *wobbleTask;                             // 0xDB8
-    SysTask *jumpTask;                               // 0xDBC
-    SysTask *buttonFlashTask;                        // 0xDC0
-    SysTask *hoverTask;                              // 0xDC4
-    WaitingIcon *waitingIcon;                        // 0xDC8
-} SpinTradeApp;                                      // size 0xDCC
+    int state;
+    s32 saveState;
+    int frame; // spin duration
+    int timer;
+    u32 unk_010;
+    int sendCount;
+    BOOL unk_018;
+    int bgm;
+    u32 bonusMask; // owners of the eggs in a bonus area
+    Party *party;
+    SpinTradeEgg *landedEgg;
+    int mySlot;
+    int playerCount;
+    BOOL remoteJump;
+    BOOL sendJump;
+    BOOL spinReceived;
+    BOOL resultReceived;
+    u32 tradeSlots[SPIN_TRADE_MAX_PLAYERS]; // party slot offered by each netId
+    SpinTradeSpinData spinData;
+    u16 result[8];
+    SpinTradeMember members[SPIN_TRADE_MAX_PLAYERS];
+    PlayerProfile *profiles[SPIN_TRADE_MAX_PLAYERS];
+    String *names[SPIN_TRADE_MAX_PLAYERS];
+    u8 scratch[0x20];
+    SpinTradeArgs *args;
+    SpinTradeLinkMenu *menu;
+    SpinTradeMachine machine;
+    SpinTradeObjects objects;
+    SpinTradeBounce bounces[5];
+    SpinTradeSpin spins[5];
+    SpinTradeWobble wobbles[5];
+    SpinTradeJump jump;
+    SpinTradeButtonFlash buttonFlash;
+    SpinTradeHover hovers[5];
+    SpinTradeText text;
+    SpinTradeCamera camera;
+    SpinTradeTouch touch;
+    NARC *narc;
+    BgConfig *bgConfig;
+    NNSG2dScreenData *screenData;
+    NNSG2dCharacterData *charData;
+    NNSG2dPaletteData *plttData;
+    SpriteSystem *spriteSystem;
+    SpriteManager *spriteManager;
+    PaletteData *paletteData;
+    GXRgb edgeColors[8];
+    SysTask *bounceTask;
+    SysTask *spinTask;
+    SysTask *wobbleTask;
+    SysTask *jumpTask;
+    SysTask *buttonFlashTask;
+    SysTask *hoverTask;
+    WaitingIcon *waitingIcon;
+} SpinTradeApp;
 
 typedef struct SpinTradeEggDropTask {
-    int state;            // 0x00
-    u32 unk_04;           // 0x04
-    BOOL landingSePlayed; // 0x08
-    fx32 speed;           // 0x0C
-    SpinTradeEgg *egg;    // 0x10
-    SpinTradeApp *app;    // 0x14
+    int state;
+    u32 unk_04;
+    BOOL landingSePlayed;
+    fx32 speed;
+    SpinTradeEgg *egg;
+    SpinTradeApp *app;
 } SpinTradeEggDropTask;
 
 typedef struct SpinTradeCountdownTask {
-    int state;             // 0x00
-    int timer;             // 0x04
-    u32 unk_08;            // 0x08
-    int soundIndex;        // 0x0C
-    SpinTradeApp *app;     // 0x10
-    ManagedSprite *sprite; // 0x14
+    int state;
+    int timer;
+    u32 unk_08;
+    int soundIndex;
+    SpinTradeApp *app;
+    ManagedSprite *sprite;
 } SpinTradeCountdownTask;
 
 typedef struct SpinTradeCountdownSounds {
@@ -383,9 +383,9 @@ typedef struct SpinTradeCountdownSounds {
 } SpinTradeCountdownSounds;
 
 typedef struct SpinTradeFadeTask {
-    SpinTradeApp *app; // 0x00
-    int fadeOut;       // 0x04
-    int level;         // 0x08
+    SpinTradeApp *app;
+    int fadeOut;
+    int level;
 } SpinTradeFadeTask;
 
 typedef struct SpinTradeAngleRange {
@@ -2930,7 +2930,7 @@ static int SpinTrade_CountMembers(SpinTradeApp *app) {
 }
 
 void SpinTrade_ReceiveMemberSlot(SpinTradeApp *app, SpinTradeMember *member) {
-    volatile SpinTradeMember *received = member; // volatile: every field read is a separate load
+    volatile SpinTradeMember *received = member;
     int index = received->slot;
     app->members[index].slot = received->slot;
     app->members[index].netId = received->netId;

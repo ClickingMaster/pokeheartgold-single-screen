@@ -62,7 +62,6 @@
 // Main menu option "Mystery Gift": receives a gift (from a friend or a distribution over DS wireless, or
 // over Nintendo Wi-Fi Connection), stores it in the save, and opens the Wonder Card viewers.
 
-// The menu tables of the module
 enum MysteryGiftState {
     MYSTERY_GIFT_STATE_INIT,
     MYSTERY_GIFT_STATE_SETUP_SCREEN,
@@ -138,13 +137,13 @@ enum MysteryGiftReceiveMode {
     MYSTERY_GIFT_RECEIVE_WFC,
 };
 
-// Link state shared with the overlay's link helpers.
+// Link state shared with the Mystery Gift link helpers.
 typedef struct MysteryGiftLinkState {
-    OverlayManager *manager;          // 0x00, the Mystery Gift app (MysteryGiftApp_GetOverlayManager)
-    void *linkWork;                   // 0x04
-    MysteryGiftMenuFunc selectedFunc; // 0x08, last list menu entry chosen
-    u32 count;                        // 0x0C
-    u32 state;                        // 0x10
+    OverlayManager *manager; // the Mystery Gift app (MysteryGiftApp_GetOverlayManager)
+    void *linkWork;
+    MysteryGiftMenuFunc selectedFunc; // last list menu entry chosen
+    u32 count;
+    u32 state;
 } MysteryGiftLinkState;
 
 extern BOOL CTRDG_IsExisting();
@@ -165,44 +164,44 @@ extern const OverlayManagerTemplate sLockCapsuleCardOverlayTemplate;
 
 // A sprite of the gift animation flying to (destX, destY), then circling it (MysteryGiftAnim_UpdateParticle).
 struct MysteryGiftParticle {
-    u32 unk_00;       // 0x00
-    int frames;       // 0x04
-    BOOL done;        // 0x08
-    Sprite *sprite;   // 0x0C
-    fx32 destX;       // 0x10
-    fx32 destY;       // 0x14
-    u32 unk_18;       // 0x18
-    fx32 speed;       // 0x1C
-    fx32 minDistance; // 0x20
-    int state;        // 0x24, 0: flying, 1: circling
-    int angle;        // 0x28
-    int kind;         // 0x2C, path shape while circling
-    int delay;        // 0x30, frames before it appears
-    int phase;        // 0x34
-    int amplitude;    // 0x38
-    int grow;         // 0x3C
-    int radiusX;      // 0x40
-    int radiusY;      // 0x44
-    SysTask *task;    // 0x48
-}; // size: 0x4C
+    u32 unk_00;
+    int frames;
+    BOOL done;
+    Sprite *sprite;
+    fx32 destX;
+    fx32 destY;
+    u32 unk_18;
+    fx32 speed;
+    fx32 minDistance;
+    int state; // 0: flying, 1: circling
+    int angle;
+    int kind;  // path shape while circling
+    int delay; // frames before it appears
+    int phase;
+    int amplitude;
+    int grow;
+    int radiusX;
+    int radiusY;
+    SysTask *task;
+};
 
 // Work of the task that plays the gift animation (MysteryGiftAnim_Task).
 struct MysteryGiftAnimData {
-    int state;                                                 // 0x0000
-    u32 unk_0004;                                              // 0x0004
-    s8 brightness;                                             // 0x0008
-    MainMenuUtilSprites *spriteSystem;                         // 0x000C
-    SpriteResourcesHeader resHeaders[2];                       // 0x0010, main and sub screen
-    SpriteResource *mainResources[4];                          // 0x0058
-    u8 unk_0068[0x8];                                          // 0x0068
-    SpriteResource *subResources[4];                           // 0x0070
-    u8 unk_0080[0x8];                                          // 0x0080
-    MysteryGiftParticle sparkles[MYSTERY_GIFT_PARTICLE_COUNT]; // 0x0088, main screen
-    MysteryGiftParticle ribbons[MYSTERY_GIFT_PARTICLE_COUNT];  // 0x1848, sub screen
-    MysteryGiftParticle giftMain;                              // 0x3008
-    MysteryGiftParticle giftSub;                               // 0x3054
-    int *status;                                               // 0x30A0, MysteryGiftAppData.animStatus
-}; // size: 0x30A4
+    int state;
+    u32 unk_0004;
+    s8 brightness;
+    MainMenuUtilSprites *spriteSystem;
+    SpriteResourcesHeader resHeaders[2]; // main and sub screen
+    SpriteResource *mainResources[4];
+    u8 unk_0068[0x8];
+    SpriteResource *subResources[4];
+    u8 unk_0080[0x8];
+    MysteryGiftParticle sparkles[MYSTERY_GIFT_PARTICLE_COUNT]; // main screen
+    MysteryGiftParticle ribbons[MYSTERY_GIFT_PARTICLE_COUNT];  // sub screen
+    MysteryGiftParticle giftMain;
+    MysteryGiftParticle giftSub;
+    int *status; // MysteryGiftAppData.animStatus
+};
 
 // The next particle of an animation cursor
 #define NEXT_PARTICLE(cursor) ((MysteryGiftAnimData *)((u8 *)(cursor) + sizeof(MysteryGiftParticle)))

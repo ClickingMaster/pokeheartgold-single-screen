@@ -413,7 +413,7 @@ static void VsRecorder_InitSpriteSystem(VsRecorderWork *work) {
 }
 
 void VsRecorder_VBlankCB(void *data) {
-    vu32 *dtcm = (vu32 *)0x027E0000; // DTCM as a constant, for OS_SetIrqCheckFlag below
+    vu32 *dtcm = (vu32 *)0x027E0000;
     VsRecorderWork *work = data;
     GF_RunVramTransferTasks();
     PaletteData_PushTransparentBuffers(work->plttData);

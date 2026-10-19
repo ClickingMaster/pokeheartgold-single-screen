@@ -13,7 +13,7 @@ typedef struct PokewalkerIrWorkHeader {
     u8 *uploadImage;
     u32 error;
     u32 unk_18;
-} PokewalkerIrWorkHeader; // size: 0x1C
+} PokewalkerIrWorkHeader;
 
 typedef struct PokewalkerIrWorkBuffers {
     OSMessage messages[1];
@@ -33,7 +33,7 @@ typedef struct PokewalkerIrWorkBuffers {
     u8 *upload1;
     u8 *sizes2;
     u8 *upload2;
-} PokewalkerIrWorkBuffers; // size: 0x48
+} PokewalkerIrWorkBuffers;
 
 typedef struct PokewalkerIrWorkSync {
     OSMutex mutex;
@@ -44,7 +44,7 @@ typedef struct PokewalkerIrWorkSync {
     u8 *data;
     u8 unk_24[0x12];
     u16 chunk;
-} PokewalkerIrWorkSync; // size: 0x54
+} PokewalkerIrWorkSync;
 
 typedef struct PokewalkerIrWorkProgress {
     u16 totalChunks;
@@ -52,7 +52,7 @@ typedef struct PokewalkerIrWorkProgress {
     u16 totalSize;
     u16 unk_3E;
     u8 buffer[0x74];
-} PokewalkerIrWorkProgress; // size: 0x7C
+} PokewalkerIrWorkProgress;
 
 PokewalkerIrWorkHeader ov112_021FFAA4;
 PokewalkerIrWorkBuffers ov112_021FFAC0;

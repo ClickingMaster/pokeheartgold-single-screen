@@ -5,8 +5,7 @@
 #include "library/nitrocrypto_rc4.h"
 
 // Mystery Gift > Get via Wireless Communication: downloads a gift that a distribution station broadcasts in its
-// beacons (no connection). Every beacon of the station (GGID 0x400318) carries one MysteryGiftBeaconPacket; the gift
-// is RC4-encrypted, its id is the checksum of the decrypted data.
+// beacons (no connection); the gift is RC4-encrypted, its id is the checksum of the decrypted data.
 
 #define MYSTERY_GIFT_BEACON_GGID 0x400318
 
@@ -49,33 +48,33 @@ typedef struct MysteryGiftBeaconWmResult {
 } MysteryGiftBeaconWmResult;
 
 typedef struct MysteryGiftBeaconWork {
-    u8 wmBuffer[0xF00];                                  // 0x0000, WM_Initialize
-    u8 scanBuffer[0xC0];                                 // 0x0F00
-    MysteryGiftBeaconScanParam scanParam;                // 0x0FC0
-    u8 unk_FD0[0x10];                                    // 0x0FD0
-    u16 title[MYSTERY_GIFT_BEACON_PACKET_DATA_SIZE / 2]; // 0x0FE0, packet 0xFFFF
-    BOOL titleReceived;                                  // 0x1048
-    CRYPTORC4Context rc4;                                // 0x104C
-    int state;                                           // 0x1150, MYSTERY_GIFT_BEACON_STATE_*
-    int error;                                           // 0x1154, the first WM error
-    u16 mode;                                            // 0x1158, MYSTERY_GIFT_BEACON_MODE_*
-    u16 dataId;                                          // 0x115A, checksum of the gift
-    u16 packetCount;                                     // 0x115C
-    u16 packetsReceived;                                 // 0x115E
-    u32 dataSize;                                        // 0x1160
-    u32 mismatches;                                      // 0x1164, packets of another gift
-    u32 lastPacket;                                      // 0x1168
-    u32 linkLevel;                                       // 0x116C
-    u8 parentMac[6];                                     // 0x1170, the station
-    u16 channelIndex;                                    // 0x1176, 16 + channel while searching
-    void *dest;                                          // 0x1178
-    void (*callback)(int event);                         // 0x117C, MYSTERY_GIFT_BEACON_EVENT_*
-    u8 packetReceived[];                                 // 0x1180
+    u8 wmBuffer[0xF00]; // WM_Initialize
+    u8 scanBuffer[0xC0];
+    MysteryGiftBeaconScanParam scanParam;
+    u8 unk_FD0[0x10];
+    u16 title[MYSTERY_GIFT_BEACON_PACKET_DATA_SIZE / 2]; // packet 0xFFFF
+    BOOL titleReceived;
+    CRYPTORC4Context rc4;
+    int state;  // MYSTERY_GIFT_BEACON_STATE_*
+    int error;  // the first WM error
+    u16 mode;   // MYSTERY_GIFT_BEACON_MODE_*
+    u16 dataId; // checksum of the gift
+    u16 packetCount;
+    u16 packetsReceived;
+    u32 dataSize;
+    u32 mismatches; // packets of another gift
+    u32 lastPacket;
+    u32 linkLevel;
+    u8 parentMac[6];  // the station
+    u16 channelIndex; // 16 + channel while searching
+    void *dest;
+    void (*callback)(int event); // MYSTERY_GIFT_BEACON_EVENT_*
+    u8 packetReceived[];
 } MysteryGiftBeaconWork;
 
 typedef struct MysteryGiftBeacon {
     MysteryGiftBeaconWork *work;
-    void (*print)(const char *format, ...); // debug output, never set
+    void (*print)(const char *format, ...); // debug output
 } MysteryGiftBeacon;
 
 #define MYSTERY_GIFT_BEACON_MODE_INIT     1

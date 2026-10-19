@@ -11,11 +11,11 @@
 
 typedef struct MartReturnEnv {
     u8 unk_00[4];
-    BagView *bagView; // 0x004
+    BagView *bagView;
     u8 unk_08[0x26A];
-    u8 state; // 0x272
+    u8 state;
     u8 unk_273[0x2D];
-    u16 *result; // 0x2A0
+    u16 *result;
 } MartReturnEnv;
 
 static BOOL MartBag_WaitBagViewExit(FieldSystem *fieldSystem, MartReturnEnv *env);

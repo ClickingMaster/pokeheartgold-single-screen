@@ -17,65 +17,64 @@
 #include "touch_hitbox_controller.h"
 #include "touchscreen.h"
 
-// The message cursor passes its signed bank/number without narrowing them to the u16 parameters.
 #define SetMsgBankAndNum ((void (*)(MailMessage *, s32, s32))MailMsg_SetMsgBankAndNum)
 
 typedef struct EasyChatMessageCursor {
-    s16 bank;            // 0x00
-    s8 number;           // 0x02
-    s8 count;            // 0x03, messages per bank
-    s8 total;            // 0x04
-} EasyChatMessageCursor; // size: 0x6
+    s16 bank;
+    s8 number;
+    s8 count; // messages per bank
+    s8 total;
+} EasyChatMessageCursor;
 
 typedef struct EasyChatWordPage {
-    u16 topRow;      // 0x00
-    u16 maxTopRow;   // 0x02
-    u16 numWords;    // 0x04
-    u8 column;       // 0x06
-    u8 row;          // 0x07
-    s32 scroll;      // 0x08, rows scrolled by the last move
-    u16 onCancel;    // 0x0C, cursor on the cancel button below the list
-    u16 touchedWord; // 0x0E
-} EasyChatWordPage;  // size: 0x10
+    u16 topRow;
+    u16 maxTopRow;
+    u16 numWords;
+    u8 column;
+    u8 row;
+    s32 scroll;   // rows scrolled by the last move
+    u16 onCancel; // cursor on the cancel button below the list
+    u16 touchedWord;
+} EasyChatWordPage;
 
 typedef int (*EasyChatAppHandler)(EasyChatApp *app, u32 *state);
 typedef void (*EasyChatAppSubHandler)(EasyChatApp *app, u32 *state);
 
 struct EasyChatApp {
-    EasyChatArgs *args;                   // 0x00
-    u32 type;                             // 0x04, EASY_CHAT_TYPE_*
-    MailMessage message;                  // 0x08
-    u16 words[2];                         // 0x10
-    EasyChatAppView *view;                // 0x14
-    ECMenu *menu;                         // 0x18
-    u32 state;                            // 0x1C
-    EasyChatAppHandler handler;           // 0x20
-    EasyChatAppHandler nextHandler;       // 0x24
-    u32 subState;                         // 0x28
-    EasyChatAppSubHandler subHandler;     // 0x2C
-    u16 newKeys;                          // 0x30
-    u16 heldKeys;                         // 0x32
-    u16 repeatedKeys;                     // 0x34
-    u8 filler_36[2];                      // 0x36
-    u32 touchButton;                      // 0x38
-    u8 padding_3C[4];                     // 0x3C
-    TouchHitboxController *touchHitboxes; // 0x40
-    int unk_44;                           // 0x44
-    int unk_48;                           // 0x48
-    u16 menuCursor;                       // 0x4C
-    u16 wordSlot;                         // 0x4E
-    u16 category;                         // 0x50
-    u16 prevCategory;                     // 0x52
-    EasyChatWordPage wordPage;            // 0x54
-    EasyChatMessageCursor messageCursor;  // 0x64
-    u8 numSlots;                          // 0x6A
-    u8 listMode;                          // 0x6B, EASY_CHAT_LIST_MODE_*
-    u8 dragging;                          // 0x6C
-    s16 dragX;                            // 0x6E
-    u8 yesNo[2];                          // 0x70
-    MenuInputState menuInputState;        // 0x74
-    int unk_78;                           // 0x78
-}; // size: 0x7C
+    EasyChatArgs *args;
+    u32 type; // EASY_CHAT_TYPE_*
+    MailMessage message;
+    u16 words[2];
+    EasyChatAppView *view;
+    ECMenu *menu;
+    u32 state;
+    EasyChatAppHandler handler;
+    EasyChatAppHandler nextHandler;
+    u32 subState;
+    EasyChatAppSubHandler subHandler;
+    u16 newKeys;
+    u16 heldKeys;
+    u16 repeatedKeys;
+    u8 filler_36[2];
+    u32 touchButton;
+    u8 padding_3C[4];
+    TouchHitboxController *touchHitboxes;
+    int unk_44;
+    int unk_48;
+    u16 menuCursor;
+    u16 wordSlot;
+    u16 category;
+    u16 prevCategory;
+    EasyChatWordPage wordPage;
+    EasyChatMessageCursor messageCursor;
+    u8 numSlots;
+    u8 listMode; // EASY_CHAT_LIST_MODE_*
+    u8 dragging;
+    s16 dragX;
+    u8 yesNo[2];
+    MenuInputState menuInputState;
+    int unk_78;
+};
 
 // entries of the word and message menus (menuCursor) and the actions their input handlers take
 enum {

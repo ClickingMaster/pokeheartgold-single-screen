@@ -20,17 +20,17 @@ typedef struct ECMenuSpec {
 } ECMenuSpec;
 
 // The words the player can pick: per category (12, e.g. Pokemon, moves, trendy sayings) and per initial (27
-// groups, A-Z + others), each list in one array with an offset and a count per list. Total 0x195C.
+// groups, A-Z + others), each list in one array with an offset and a count per list.
 struct ECMenu {
-    EasyChatArgs *args;       // 0x0000
-    EasyChatManager *manager; // 0x0004
-    u32 categoryCounts[12];   // 0x0008
-    u32 categoryOffsets[12];  // 0x0038
-    u16 categoryWords[1496];  // 0x0068
-    u32 initialCounts[27];    // 0x0C18
-    u32 initialOffsets[27];   // 0x0C84
-    u16 initialWords[1495];   // 0x0CF0
-    u8 knownWords[0xBB];      // 0x189E .. 0x1958, padded to 0x195C
+    EasyChatArgs *args;
+    EasyChatManager *manager;
+    u32 categoryCounts[12];
+    u32 categoryOffsets[12];
+    u16 categoryWords[1496];
+    u32 initialCounts[27];
+    u32 initialOffsets[27];
+    u16 initialWords[1495];
+    u8 knownWords[0xBB];
 };
 
 ECMenu *ECMenu_New(enum HeapID heapID, EasyChatArgs *args);

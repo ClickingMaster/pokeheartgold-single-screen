@@ -24,9 +24,6 @@
 #include "sprite_system.h"
 #include "type_icon_resources.h"
 
-// Some calls pass full-width values to u16 / s16 parameters: those go through a cast of
-// the function.
-//
 // Sprites of the view (PCBoxView.sprites): 0-1 box arrows, 2-3 mon pics (two buffers), 4-8 tray / wallpaper menu
 // frame and cursors, 9 cursor, 10 unused, 11 held item, 12 info item, 13-14 type icons, 15-20 tray boxes,
 // 21-24 wallpaper list, 25-60 mon icons (slotIcons maps a slot to its icon), 61-68 icon outline pieces.
@@ -238,7 +235,7 @@ static void PCBox_CreateMonIconSprites(PCBoxView *view) {
     ManagedSpriteTemplate base;
     int priority;
     u32 i;
-    u8 *slot; // walks view->sprites[25 + i]
+    u8 *slot;
 
     i = 0;
     priority = 0;
@@ -915,7 +912,7 @@ static void PCBox_CreateTrayBoxSprites(PCBoxView *view) {
     ManagedSpriteTemplate template[2];
     u32 i = 0;
     s32 dx = 0;
-    u8 *slot = (u8 *)view; // walks view->sprites[15 + i]
+    u8 *slot = (u8 *)view;
 
     template[0] = sPCBoxTrayBoxSpriteTemplate;
     for (; i < 6; dx += 34, slot += sizeof(ManagedSprite *), i++) {
@@ -941,7 +938,7 @@ static void PCBox_CreateWallpaperListSprites(PCBoxView *view) {
     ManagedSpriteTemplate template[2];
     u32 i = 0;
     s32 dx = 0;
-    u8 *slot = (u8 *)view; // walks view->sprites[21 + i]
+    u8 *slot = (u8 *)view;
 
     template[0] = sPCBoxWallpaperListSpriteTemplate;
     for (; i < 4; dx += 46, slot += sizeof(ManagedSprite *), i++) {

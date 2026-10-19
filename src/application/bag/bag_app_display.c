@@ -32,8 +32,7 @@
 // Bag application: item list, message boxes, quantity and money windows, sprites (cursor, item icons,
 // pocket tabs, buttons).
 
-// The cursor position tables are {x, y, anim, palette} per position; the *Y/*Anim/*Palette labels point at the
-// later columns.
+// The cursor position tables are {x, y, anim, palette} per position.
 extern const u8 sListPocketCapacities[];
 extern const u8 sCursorPositions[];
 extern const u8 sCursorPositionsY[];

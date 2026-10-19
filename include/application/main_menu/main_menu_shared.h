@@ -8,7 +8,7 @@
 #include "mystery_gift.h"
 #include "save.h"
 
-// Shared services of the main menu overlay, sharing the MainMenuUtilWork: the sub screen of the card screens, the
+// Shared services of the main menu, sharing the MainMenuUtilWork: the sub screen of the card screens, the
 // encryption of a shared Wonder Card, the list menu cursor sound, the GBA cartridge interrupt and an asynchronous save.
 
 // States of the asynchronous save (MainMenuUtil_GetSaveState)

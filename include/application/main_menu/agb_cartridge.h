@@ -5,9 +5,8 @@
 
 #include "pokemon_types_def.h"
 
-// Access to a Pokemon Ruby/Sapphire/Emerald/FireRed/LeafGreen cartridge in the GBA slot for Migrate from
-// Ruby/Sapphire/... (Pal Park): identification, the cartridge's save (2 save slots of 14 flash sectors) and its
-// boxed Pokemon.
+// Access to a Pokemon Ruby/Sapphire/Emerald/FireRed/LeafGreen cartridge in the GBA slot for the Pal Park migration:
+// identification, the cartridge's save (2 save slots of 14 flash sectors) and its boxed Pokemon.
 
 // Results of PmAgbCartridgeGetOffsets / PmAgbCartridge_LoadSave / the save functions
 #define PM_AGB_RESULT_OK                 0
@@ -45,7 +44,7 @@ typedef struct PmAgbCartridge {
     int saveSlot;             // slot the next save goes to (-1: none)
 } PmAgbCartridge;
 
-// Footer of each 4 KB save sector
+// Footer of each save sector
 typedef struct AgbSaveSector {
     u8 data[0xFF4];
     u16 id; // 0 trainer info, 1-4 game state, 5-13 PC boxes
@@ -54,7 +53,7 @@ typedef struct AgbSaveSector {
     u32 counter;   // save counter, the higher of the two slots is the latest save
 } AgbSaveSector;
 
-// A boxed Pokemon of the GBA games (0x50 bytes); the four 12-byte substructures are encrypted and their order
+// A boxed Pokemon of the GBA games; the four substructures are encrypted and their order
 // depends on the personality value (AGB_GetBoxMonSubstruct)
 typedef struct AgbBoxMon {
     u32 personality;
@@ -93,7 +92,7 @@ enum AgbMonData {
     AGB_MON_DATA_MARKINGS,
     AGB_MON_DATA_CHECKSUM,
     AGB_MON_DATA_UNKNOWN_10,
-    AGB_MON_DATA_SPECIES, // 11, the first field of the encrypted part
+    AGB_MON_DATA_SPECIES, // the first field of the encrypted part
     AGB_MON_DATA_HELD_ITEM,
     AGB_MON_DATA_MOVE1,
     AGB_MON_DATA_MOVE2,
@@ -132,7 +131,7 @@ enum AgbMonData {
     AGB_MON_DATA_TOUGH,
     AGB_MON_DATA_SHEEN,
     AGB_MON_DATA_OT_GENDER,
-    AGB_MON_DATA_COOL_RIBBONS, // 50, contest ribbon counts (0-4)
+    AGB_MON_DATA_COOL_RIBBONS, // contest ribbon counts (0-4)
     AGB_MON_DATA_BEAUTY_RIBBONS,
     AGB_MON_DATA_CUTE_RIBBONS,
     AGB_MON_DATA_SMART_RIBBONS,
@@ -161,7 +160,7 @@ int TranslateAgbSpecies(int species);
 u32 AGB_GetBoxMonLevel(AgbBoxMon *mon);
 void MigrateBoxMon(AgbBoxMon *agbMon, BoxPokemon *boxMon);
 
-// GBA (Ruby/Sapphire charset) string -> DP string, defined with the overlay helpers
+// GBA (Ruby/Sapphire charset) string -> DP string
 BOOL ConvertRSStringToDPStringInternational(const u8 *src, u16 *dst, u32 length, u32 language);
 
 #endif // POKEHEARTGOLD_APPLICATION_MAIN_MENU_AGB_CARTRIDGE_H

@@ -20,9 +20,7 @@
 #include "touchscreen_list_menu.h"
 #include "yes_no_prompt.h"
 
-// Pal Pad (OVY_43): friend roster, friend code registration and friend records.
-// PalPad_Main runs one screen at a time (PalPadWork.screen); a finished screen names the next one
-// through PalPadShared_SetNextScreen.
+// Pal Pad: friend roster, friend code registration and friend records.
 
 enum PalPadScreen {
     PALPAD_SCREEN_MENU,
@@ -115,67 +113,67 @@ typedef struct PalPadScreens {
 } PalPadScreens;
 
 typedef struct PalPadGfx {
-    BgConfig *bgConfig;                          // 0x000
-    SpriteList *spriteList;                      // 0x004
-    NNSG2dRenderSurface renderSurface;           // 0x008
-    MessageFormat *msgFormat;                    // 0x050
-    MsgData *msgData;                            // 0x054, msg_0779
-    NARC *narc;                                  // 0x058, a/0/8/5
-    TouchscreenListMenuSpawner *listMenuSpawner; // 0x05C
-    YesNoPrompt *yesNoPrompt;                    // 0x060
-    Window titleWindow;                          // 0x064
-    String *titleText;                           // 0x074
-    String *titleBuffer;                         // 0x078
-    String *pageText;                            // 0x07C
-    String *pageBuffer;                          // 0x080
-    u32 titlePrinterId;                          // 0x084
-    SpriteResourcesHeader spriteHeader;          // 0x088
-    SpriteResource *spriteResources[4];          // 0x0AC
-    G2dRenderer renderer;                        // 0x0BC
-    GF_2DGfxResMan *resourceManagers[4];         // 0x1E4
-    Sprite *arrows[2];                           // 0x1F4, left/up and right/down
-    Sprite *cursor;                              // 0x1FC
-    PalPadScreens screens;                       // 0x200
+    BgConfig *bgConfig;
+    SpriteList *spriteList;
+    NNSG2dRenderSurface renderSurface;
+    MessageFormat *msgFormat;
+    MsgData *msgData; // msg_0779
+    NARC *narc;       // a/0/8/5
+    TouchscreenListMenuSpawner *listMenuSpawner;
+    YesNoPrompt *yesNoPrompt;
+    Window titleWindow;
+    String *titleText;
+    String *titleBuffer;
+    String *pageText;
+    String *pageBuffer;
+    u32 titlePrinterId;
+    SpriteResourcesHeader spriteHeader;
+    SpriteResource *spriteResources[4];
+    G2dRenderer renderer;
+    GF_2DGfxResMan *resourceManagers[4];
+    Sprite *arrows[2]; // left/up and right/down
+    Sprite *cursor;
+    PalPadScreens screens;
 } PalPadGfx;
 
 // Snapshot of the registered friends, taken whenever the roster is (re)drawn.
 typedef struct PalPadFriendList {
-    u32 count;                     // 0x00
-    int numberedCount;             // 0x04
-    u8 slots[PALPAD_FRIEND_MAX];   // 0x08, friend list slot of each listed friend
-    u8 numbers[PALPAD_FRIEND_MAX]; // 0x28, 0xFF = friend code not confirmed yet
+    u32 count;
+    int numberedCount;
+    u8 slots[PALPAD_FRIEND_MAX];   // friend list slot of each listed friend
+    u8 numbers[PALPAD_FRIEND_MAX]; // 0xFF = friend code not confirmed yet
 } PalPadFriendList;
 
 // State shared by the screens (friend list snapshot, strings handed between screens).
 typedef struct PalPadShared {
-    u32 inputState;           // 0x00, MenuInputState: 1 = last input was a touch
-    SaveData *saveData;       // 0x04
-    u8 subState;              // 0x08, state of the running screen
-    u8 nextScreen;            // 0x09
-    u8 nextSubState;          // 0x0A
-    s8 selectedFriend;        // 0x0B, index into friends.slots
-    u8 textSpeed;             // 0x0C
-    u8 frame;                 // 0x0D
-    u8 lrPaging;              // 0x0E, L/R turn pages (button mode is not L=A)
-    PalPadFriendList friends; // 0x10
-    String *name;             // 0x58
-    String *code;             // 0x5C
-    const u16 *initialName;   // 0x60
-    BOOL useInitialName;      // 0x64
+    u32 inputState; // MenuInputState: 1 = last input was a touch
+    SaveData *saveData;
+    u8 subState; // state of the running screen
+    u8 nextScreen;
+    u8 nextSubState;
+    s8 selectedFriend; // index into friends.slots
+    u8 textSpeed;
+    u8 frame;
+    u8 lrPaging; // L/R turn pages (button mode is not L=A)
+    PalPadFriendList friends;
+    String *name;
+    String *code;
+    const u16 *initialName;
+    BOOL useInitialName;
 } PalPadShared;
 
 // Screen 0: top menu
 typedef struct PalPadMenu {
-    u32 selection;            // 0x00
-    u32 timer;                // 0x04
-    Window menuWindow;        // 0x08
-    void *screenFile;         // 0x18
-    NNSG2dScreenData *screen; // 0x1C
-    Window msgWindow;         // 0x20
-    u32 unused30;             // 0x30
-    u32 printerId;            // 0x34
-    u32 textSpeed;            // 0x38
-    String *msgText;          // 0x3C
+    u32 selection;
+    u32 timer;
+    Window menuWindow;
+    void *screenFile;
+    NNSG2dScreenData *screen;
+    Window msgWindow;
+    u32 unused30;
+    u32 printerId;
+    u32 textSpeed;
+    String *msgText;
 } PalPadMenu;
 
 // Screen 1: friend roster, 4 pages of 8 slots; three page panels (current page and the two scrolling in)
@@ -188,31 +186,31 @@ typedef struct PalPadPanelLayout {
 } PalPadPanelLayout;
 
 typedef struct PalPadRosterPage {
-    PalPadPanelLayout layout;                   // 0x00
-    Window window;                              // 0x08
-    CharSprite *icons[PALPAD_ROSTER_PAGE_SLOT]; // 0x18
+    PalPadPanelLayout layout;
+    Window window;
+    CharSprite *icons[PALPAD_ROSTER_PAGE_SLOT];
 } PalPadRosterPage;
 
 typedef struct PalPadRoster {
-    s16 page;                        // 0x00
-    s16 prevPage;                    // 0x02
-    s16 cursor;                      // 0x04, 0-7 = slot, 8 = return
-    s16 prevCursor;                  // 0x06
-    PalPadRosterPage pages[3];       // 0x08
-    s16 scrollStep;                  // 0xB0
-    u16 scrollDir;                   // 0xB2
-    CharSpriteManager *trainerIcons; // 0xB4
-    Window returnWindow;             // 0xB8
-    Window msgWindow;                // 0xC8
-    String *msgText;                 // 0xD8
-    u32 printerId;                   // 0xDC
-    u32 textSpeed;                   // 0xE0
-    ListMenuItem *menuItems[2];      // 0xE4
-    TouchscreenListMenu *menu;       // 0xEC
+    s16 page;
+    s16 prevPage;
+    s16 cursor; // 0-7 = slot, 8 = return
+    s16 prevCursor;
+    PalPadRosterPage pages[3];
+    s16 scrollStep;
+    u16 scrollDir;
+    CharSpriteManager *trainerIcons;
+    Window returnWindow;
+    Window msgWindow;
+    String *msgText;
+    u32 printerId;
+    u32 textSpeed;
+    ListMenuItem *menuItems[2];
+    TouchscreenListMenu *menu;
     u8 unk_F0[4];
-    int timer;            // 0xF4
-    Sprite *deleteEffect; // 0xF8
-    u32 lastFrame;        // 0xFC
+    int timer;
+    Sprite *deleteEffect;
+    u32 lastFrame;
 } PalPadRoster;
 
 // Screen 2: naming screen + code entry run as nested applications
@@ -224,18 +222,18 @@ typedef struct PalPadNaming {
 
 // Screen 3: own friend code
 typedef struct PalPadFriendCode {
-    Window windows[3];        // 0x00
-    void *screenFile;         // 0x30
-    NNSG2dScreenData *screen; // 0x34
-    int timer;                // 0x38
+    Window windows[3];
+    void *screenFile;
+    NNSG2dScreenData *screen;
+    int timer;
 } PalPadFriendCode;
 
 // Screen 4: friend details, 3 record pages (8 with the Battle Frontier pages)
 typedef struct PalPadDetailsSlot {
-    PalPadPanelLayout layout; // 0x00
-    u32 baseTile;             // 0x08
-    Window *windows[8];       // 0x0C, one window array per page
-    u32 windowCounts[8];      // 0x2C
+    PalPadPanelLayout layout;
+    u32 baseTile;
+    Window *windows[8]; // one window array per page
+    u32 windowCounts[8];
 } PalPadDetailsSlot;
 
 typedef struct PalPadDetailsScreen {
@@ -244,16 +242,16 @@ typedef struct PalPadDetailsScreen {
 } PalPadDetailsScreen;
 
 typedef struct PalPadDetails {
-    s16 page;                       // 0x000
-    s16 prevPage;                   // 0x002
-    int scrollStep;                 // 0x004
-    int direction;                  // 0x008, page scroll 2: left, 3: right; friend change 0: previous, 1: next
-    u16 friendChangeDelay;          // 0x00C
-    u16 friendChangeHeld;           // 0x00E
-    BOOL hasFrontierPages;          // 0x010
-    PalPadDetailsSlot slots[3];     // 0x014
-    PalPadDetailsScreen screens[4]; // 0x0F8
-    Window profileWindows[8];       // 0x118
+    s16 page;
+    s16 prevPage;
+    int scrollStep;
+    int direction; // page scroll 2: left, 3: right; friend change 0: previous, 1: next
+    u16 friendChangeDelay;
+    u16 friendChangeHeld;
+    BOOL hasFrontierPages;
+    PalPadDetailsSlot slots[3];
+    PalPadDetailsScreen screens[4];
+    Window profileWindows[8];
 } PalPadDetails;
 
 typedef struct PalPadWindowSpec {
@@ -264,19 +262,18 @@ typedef struct PalPadWindowSpec {
 } PalPadWindowSpec;
 
 typedef struct PalPadWork {
-    u32 screen;                  // 0x000, enum PalPadScreen
-    PalPadGfx gfx;               // 0x004
-    PalPadShared shared;         // 0x214
-    PalPadArgs *args;            // 0x27C
-    PalPadMenu menu;             // 0x280
-    PalPadRoster roster;         // 0x2C0
-    PalPadNaming naming;         // 0x3C0
-    PalPadFriendCode friendCode; // 0x3CC
-    PalPadDetails details;       // 0x408
-    s32 screenChangeDelay;       // 0x5A0
+    u32 screen; // enum PalPadScreen
+    PalPadGfx gfx;
+    PalPadShared shared;
+    PalPadArgs *args;
+    PalPadMenu menu;
+    PalPadRoster roster;
+    PalPadNaming naming;
+    PalPadFriendCode friendCode;
+    PalPadDetails details;
+    s32 screenChangeDelay;
 } PalPadWork;
 
-// No public header declares these (friend list save, DWC friend keys).
 int FriendRoster_IsFriendValid(FriendRoster *wifiList, int slot);
 void *FriendRoster_GetDwcFriendData(FriendRoster *wifiList, int slot);
 void FriendRoster_SetPlayerName(FriendRoster *wifiList, int slot, String *name);

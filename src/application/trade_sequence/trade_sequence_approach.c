@@ -22,56 +22,55 @@
 #include "text.h"
 #include "wireless_status_icon.h"
 
-// Scene 4 of the trade animation (trades and receiving): after a sprite animation the ball model comes out of the
-// distance on the bottom screen, spirals toward the viewer, and the screens swap as it leaves the bottom one; then the
-// screen fades to white.
+// Scene 4 of the trade animation (trades and receiving): the ball model comes out of the distance on the bottom
+// screen and spirals toward the viewer, then the screen fades to white.
 
 #define TRADE_SEQUENCE_APPROACH_NUM_STATES 2
 
 // Moves the ball model along an ellipse (radii radiusX/radiusY, turning by angleSpeed every frame) around a center
 // that itself moves every frame; radii and scale can change over a number of frames.
 typedef struct TradeSequenceApproachFlight {
-    struct TradeSequenceApproach *approach; // 0x00
-    SysTask *task;                          // 0x04
-    TradeSequenceModels *models;            // 0x08
-    TradeSequenceModel *ball;               // 0x0C
-    VecFx32 center;                         // 0x10
-    VecFx32 offset;                         // 0x1C
-    VecFx32 position;                       // 0x28
-    TradeSequenceRotation rotation;         // 0x34
-    u8 padding_3A[2];                       // 0x3A
-    fx32 centerStepY;                       // 0x3C
-    fx32 centerStepZ;                       // 0x40
-    fx32 radiusX;                           // 0x44
-    fx32 radiusY;                           // 0x48
-    fx32 radiusXStep;                       // 0x4C
-    fx32 radiusYStep;                       // 0x50
-    fx32 radiusXTarget;                     // 0x54
-    fx32 radiusYTarget;                     // 0x58
-    fx32 scale;                             // 0x5C
-    fx32 scaleStep;                         // 0x60
-    fx32 scaleTarget;                       // 0x64
-    int stepFrames;                         // 0x68
-    int state;                              // 0x6C
-    int timer;                              // 0x70
-    int frames;                             // 0x74
-    s16 angle;                              // 0x78
-    s16 angleSpeed;                         // 0x7A
-} TradeSequenceApproachFlight;              // size: 0x7C
+    struct TradeSequenceApproach *approach;
+    SysTask *task;
+    TradeSequenceModels *models;
+    TradeSequenceModel *ball;
+    VecFx32 center;
+    VecFx32 offset;
+    VecFx32 position;
+    TradeSequenceRotation rotation;
+    u8 padding_3A[2];
+    fx32 centerStepY;
+    fx32 centerStepZ;
+    fx32 radiusX;
+    fx32 radiusY;
+    fx32 radiusXStep;
+    fx32 radiusYStep;
+    fx32 radiusXTarget;
+    fx32 radiusYTarget;
+    fx32 scale;
+    fx32 scaleStep;
+    fx32 scaleTarget;
+    int stepFrames;
+    int state;
+    int timer;
+    int frames;
+    s16 angle;
+    s16 angleSpeed;
+} TradeSequenceApproachFlight;
 
 typedef struct TradeSequenceApproach {
-    TradeSequence *ts;                  // 0x00
-    u32 subState;                       // 0x04
-    u8 unk_08[4];                       // 0x08
-    BOOL swapScreens;                   // 0x0C
-    TradeSequenceCellAnim cellAnim;     // 0x10
-    Sprite *sprite;                     // 0x20
-    BgConfig *bgConfig;                 // 0x24
-    TradeSequenceModels *models;        // 0x28
-    TradeSequenceModel *ball;           // 0x2C
-    u8 unk_30[4];                       // 0x30
-    TradeSequenceApproachFlight flight; // 0x34
-} TradeSequenceApproach;                // size: 0xB0
+    TradeSequence *ts;
+    u32 subState;
+    u8 unk_08[4];
+    BOOL swapScreens;
+    TradeSequenceCellAnim cellAnim;
+    Sprite *sprite;
+    BgConfig *bgConfig;
+    TradeSequenceModels *models;
+    TradeSequenceModel *ball;
+    u8 unk_30[4];
+    TradeSequenceApproachFlight flight;
+} TradeSequenceApproach;
 
 enum TradeSequenceApproachStep {
     TRADE_APPROACH_WAIT_FADE_IN,

@@ -7,7 +7,7 @@
 #include "sprite_system.h"
 
 extern const u16 sPokedexAreaScrollbarSizeSteps[];
-extern u8 sPokedexAreaMarkerSizes[]; // width and height of each area marker shape (not const: const lets loads move out of loops)
+extern u8 sPokedexAreaMarkerSizes[]; // width and height of each area marker shape
 extern const ManagedSpriteTemplate sAreaMarkerSpriteTemplate;
 
 void PokedexApp_LoadAreaSpriteResources(PokedexAppData *pokedexApp) {

@@ -29,7 +29,7 @@ typedef struct PokewalkerRouteMon {
     u16 moves[MAX_MON_MOVES];
     u16 steps;        // steps needed before it can appear
     u16 chance;       // percent
-} PokewalkerRouteMon; // size=0x14
+} PokewalkerRouteMon;
 
 // An item that can be found on a Pokewalker course.
 typedef struct PokewalkerRouteItem {
@@ -46,7 +46,7 @@ typedef struct PokewalkerCourse {
     PokewalkerRouteItem items[10];
     u8 advantageTypes[3]; // a Pokemon of these types finds the course's Pokemon sooner
     u8 padding_BF;
-} PokewalkerCourse; // size=0xC0
+} PokewalkerCourse;
 
 // Stroll data sent to the Pokewalker with the Pokemon: the Pokemon, its course, the course's Pokemon and items,
 // and their pictures and names rendered to the Pokewalker's 2bpp format.
@@ -72,17 +72,16 @@ typedef struct PokewalkerStrollData {
     u8 routeMonPicture[0x600];
     u8 routeMonNameImages[3 * 0x140];
     u8 routeItemNameImages[10 * 0x180];
-} PokewalkerStrollData; // size=0x28BE
+} PokewalkerStrollData;
 
-// Record of another game at Pokewalker address 0xDE24 (10 of them, after one more of the same size); the same layout as
-// the game's own record (0xF1D0, sent to address 0xD480).
+// Record of another game read from the Pokewalker (10 of them); the same layout as the game's own record.
 typedef struct PokewalkerPeerRecord {
     u32 unk_00;
     u16 version; // GAME_VERSION of that game
     u16 unk_06;
-    PokewalkerIrClock clock;                     // 0x08
-    PokewalkerTrainerHouseData trainerHouseData; // 0x30
-} PokewalkerPeerRecord;                          // size=0x224
+    PokewalkerIrClock clock;
+    PokewalkerTrainerHouseData trainerHouseData;
+} PokewalkerPeerRecord;
 
 // Pokemon data added to the event log (PokewalkerEventLog_InitStrollEndRecord / PokewalkerEventLog_SetGiftMon).
 typedef struct PokewalkerEventLogMon {
@@ -133,124 +132,124 @@ typedef struct PokewalkerApp {
     int state;     // state of the current mode
     int nextState; // state to go to after a message or the cursor animation
     int linkAction;
-    u16 linkError;                                  // 0x14, error of the IR link (message id once shown), 0 = none
-    u16 linkConnected;                              // 0x16, the Pokewalker answered (message 6 shown)
-    BgConfig *bgConfig;                             // 0x18
-    OverlayManager *childApp;                       // 0x1C, Pokewalker event log app (mode 8)
-    SaveData *saveData;                             // 0x20
-    u8 irThreadStack[0x1000];                       // 0x24
-    PokewalkerIrIdentity identity;                  // 0x1024
-    PokewalkerIrIdentity peerIdentity;              // 0x108C
-    u8 uploadImage[0x8C50];                         // 0x10F4, built by PokewalkerApp_BuildUploadImage
-    PokewalkerMon walkerMon;                        // 0x9D44, the Pokemon on the Pokewalker
-    u16 walkerMonNickname[POKEMON_NAME_LENGTH + 1]; // 0x9D54
+    u16 linkError;     // error of the IR link (message id once shown), 0 = none
+    u16 linkConnected; // the Pokewalker answered (message 6 shown)
+    BgConfig *bgConfig;
+    OverlayManager *childApp; // Pokewalker event log app (mode 8)
+    SaveData *saveData;
+    u8 irThreadStack[0x1000];
+    PokewalkerIrIdentity identity;
+    PokewalkerIrIdentity peerIdentity;
+    u8 uploadImage[0x8C50];  // built by PokewalkerApp_BuildUploadImage
+    PokewalkerMon walkerMon; // the Pokemon on the Pokewalker
+    u16 walkerMonNickname[POKEMON_NAME_LENGTH + 1];
     u8 unk_9D6A[6];
-    PokewalkerIrStatus irStatus;          // 0x9D70, read from the Pokewalker
-    PokewalkerIrBlocks irBlocks;          // 0xAABC, read from the Pokewalker
-    PokewalkerPeerRecord peerRecords[11]; // 0xB184, IR buffer; 1-10 read from Pokewalker address 0xDE24
-    PokewalkerStrollData strollData;      // 0xC910
+    PokewalkerIrStatus irStatus;          // read from the Pokewalker
+    PokewalkerIrBlocks irBlocks;          // read from the Pokewalker
+    PokewalkerPeerRecord peerRecords[11]; // IR buffer; 1-10 read from the Pokewalker
+    PokewalkerStrollData strollData;
     u32 unk_F1D0;
     u16 ownRecordVersion;
     u8 unk_F1D6[2];
     PokewalkerIrClock ownRecordClock;    // copied from the Pokewalker save data
-    u8 ownTrainerHouseData[0x1634];      // 0xF200, filled by PokewalkerApp_BuildTrainerHouseData
-    u8 irCompressBuffer[0xCF1C];         // 0x10834
-    SaveData *eventLogSaveData;          // 0x1D750, arguments of the Pokewalker event log app (mode 8)
-    PokewalkerIrRecord *eventLogRecords; // 0x1D754
-    u32 walkerSteps;                     // 0x1D758, Pokewalker step count at the last link (save data)
+    u8 ownTrainerHouseData[0x1634];      // filled by PokewalkerApp_BuildTrainerHouseData
+    u8 irCompressBuffer[0xCF1C];
+    SaveData *eventLogSaveData; // arguments of the Pokewalker event log app (mode 8)
+    PokewalkerIrRecord *eventLogRecords;
+    u32 walkerSteps; // Pokewalker step count at the last link (save data)
     u32 walkerWatts;
-    u16 linkProgress; // 0x1D760, highest transfer progress while connected
+    u16 linkProgress; // highest transfer progress while connected
     u8 unk_1D762[2];
-    int selectMonState;     // 0x1D764, PC box selection (mode 7)
-    void *boxSelector;      // 0x1D768
-    void *boxDisplay;       // 0x1D76C
-    u32 selectedBox;        // 0x1D770, 18 = party
-    u32 selectedSlot;       // 0x1D774
-    u32 selectMonCancelled; // 0x1D778
-    u16 strollMonSpecies;   // 0x1D77C
+    int selectMonState; // PC box selection (mode 7)
+    void *boxSelector;
+    void *boxDisplay;
+    u32 selectedBox; // 18 = party
+    u32 selectedSlot;
+    u32 selectMonCancelled;
+    u16 strollMonSpecies;
     u8 unk_1D77E[0x16];
-    u8 strollMonForm; // 0x1D794
+    u8 strollMonForm;
     u8 unk_1D795;
-    u8 strollMonGender; // 0x1D796
+    u8 strollMonGender;
     u8 unk_1D797;
-    int courseId;                   // 0x1D798
-    PokepicTemplate monPicTemplate; // 0x1D79C
-    u8 monSpriteBuffer[0xC80];      // 0x1D7AC, 80x80 4bpp
+    int courseId;
+    PokepicTemplate monPicTemplate;
+    u8 monSpriteBuffer[0xC80]; // 80x80 4bpp
     void *strollPartyMon;
-    BoxPokemon *strollMon;        // 0x1E430
-    Bag *bag;                     // 0x1E434
-    PlayerProfile *profile;       // 0x1E438
-    Options *options;             // 0x1E43C
-    POKEWALKER *pokewalker;       // 0x1E440
-    Pokedex *pokedex;             // 0x1E444
-    MessageFormat *msgFormat;     // 0x1E448
-    MsgData *msgData;             // 0x1E44C
-    MsgData *msgDataItemNames;    // 0x1E450
-    String *string;               // 0x1E454
-    String *eraseRecordsText;     // 0x1E458
-    String *goForStrollText;      // 0x1E45C
-    String *receiveGiftText;      // 0x1E460
-    String *returnFromStrollText; // 0x1E464
-    String *sendHomeText;         // 0x1E468
-    String *saveAndStrollText;    // 0x1E46C
-    String *blankText;            // 0x1E470
-    String *exitText;             // 0x1E474
+    BoxPokemon *strollMon;
+    Bag *bag;
+    PlayerProfile *profile;
+    Options *options;
+    POKEWALKER *pokewalker;
+    Pokedex *pokedex;
+    MessageFormat *msgFormat;
+    MsgData *msgData;
+    MsgData *msgDataItemNames;
+    String *string;
+    String *eraseRecordsText;
+    String *goForStrollText;
+    String *receiveGiftText;
+    String *returnFromStrollText;
+    String *sendHomeText;
+    String *saveAndStrollText;
+    String *blankText;
+    String *exitText;
     String *unk_1E478[7];
-    String *strollResultsText;  // 0x1E494
-    String *giftsReceivedText;  // 0x1E498
-    String *walkerRecordsText;  // 0x1E49C
-    String *yourPokemonText;    // 0x1E4A0
-    String *itemsObtainedText;  // 0x1E4A4
-    String *strollResultsText2; // 0x1E4A8
-    String *itemsObtainedText2; // 0x1E4AC
-    String *exitText2;          // 0x1E4B0
-    String *stepsToDateText;    // 0x1E4B4
+    String *strollResultsText;
+    String *giftsReceivedText;
+    String *walkerRecordsText;
+    String *yourPokemonText;
+    String *itemsObtainedText;
+    String *strollResultsText2;
+    String *itemsObtainedText2;
+    String *exitText2;
+    String *stepsToDateText;
     String *unk_1E4B8;
-    String *wattsToDateText; // 0x1E4BC
+    String *wattsToDateText;
     String *unk_1E4C0[19];
-    String *totalWattsText; // 0x1E50C
-    String *totalStepsText; // 0x1E510
-    String *yesText;        // 0x1E514
-    String *noText;         // 0x1E518
+    String *totalWattsText;
+    String *totalStepsText;
+    String *yesText;
+    String *noText;
     u8 unk_1E51C[8];
-    u32 textPrinterId;            // 0x1E524
-    SpriteSystem *spriteSystem;   // 0x1E528
-    SpriteManager *spriteManager; // 0x1E52C
-    ManagedSprite *sprites[217];  // 0x1E530: 0 cursor, 9.. Pokemon icons, 17-116 / 117-216 particles (main / sub)
+    u32 textPrinterId;
+    SpriteSystem *spriteSystem;
+    SpriteManager *spriteManager;
+    ManagedSprite *sprites[217]; // 0 cursor, 9.. Pokemon icons, 17-116 / 117-216 particles (main / sub)
     u8 unk_1E894[0x1CC];
-    void *monIconFile;                    // 0x1EA60
-    NNSG2dCharacterData *monIconCharData; // 0x1EA64
-    Window windows[20];                   // 0x1EA68, main screen
-    Window subWindows[10];                // 0x1EBA8, sub screen
-    u8 windowCounts[2];                   // 0x1EC48, main / sub screen
-    u8 windowBank;                        // 0x1EC4A, 0xFF = none
-    u8 subWindowBank;                     // 0x1EC4B
-    WaitingIcon *waitingIcon;             // 0x1EC4C
-    int menuSelection;                    // 0x1EC50
-    int coursePage;                       // 0x1EC54, page of the course menu
-    s8 courseList[30];                    // 0x1EC58, unlocked courses, 5 per page, -1 = none
-    u16 numCourses;                       // 0x1EC76
-    int unlockedCourse;                   // 0x1EC78, set by PokewalkerApp_UnlockNextCourse
-    u32 strollSteps;                      // 0x1EC7C, steps walked on the Stroll (experience for the Pokemon)
-    PokewalkerAppParticle particles[100]; // 0x1EC80
+    void *monIconFile;
+    NNSG2dCharacterData *monIconCharData;
+    Window windows[20];    // main screen
+    Window subWindows[10]; // sub screen
+    u8 windowCounts[2];    // main / sub screen
+    u8 windowBank;         // 0xFF = none
+    u8 subWindowBank;
+    WaitingIcon *waitingIcon;
+    int menuSelection;
+    int coursePage;    // page of the course menu
+    s8 courseList[30]; // unlocked courses, 5 per page, -1 = none
+    u16 numCourses;
+    int unlockedCourse; // set by PokewalkerApp_UnlockNextCourse
+    u32 strollSteps;    // steps walked on the Stroll (experience for the Pokemon)
+    PokewalkerAppParticle particles[100];
     u8 unk_1F2C0[2];
     u8 unk_1F2C2; // mode 6: cleared before the fanfare
     u8 unk_1F2C3[0xD];
-    volatile int timer;       // 0x1F2D0
-    u16 motionStarted;        // 0x1F2D4, the motion object at 0x1F2C0 was started (transfer progress > 200)
+    volatile int timer;
+    u16 motionStarted;        // the motion object was started (transfer progress > 200)
     u16 monPicAlpha;          // alpha of the Pokemon picture fading in, 31 = done
-    SysTask *monFadeTask;     // 0x1F2D8
-    SysTask *subBgScrollTask; // 0x1F2DC
-    u16 subBgScrollX;         // 0x1F2E0, BG 5 (sub screen) x offset, slides in to 256
-    u16 menuState;            // 0x1F2E2
-    u16 eraseSteps;           // 0x1F2E4, answer to "Carry over the step count?"
+    SysTask *monFadeTask;
+    SysTask *subBgScrollTask;
+    u16 subBgScrollX; // BG 5 (sub screen) x offset, slides in to 256
+    u16 menuState;
+    u16 eraseSteps; // answer to "Carry over the step count?"
     u8 unk_1F2E6[2];
-    BoxPokemon returnedMon; // 0x1F2E8, the Pokemon taken back from the Pokewalker
-    s16 returnedMonBox;     // 0x1F370, its PC box, -1 if none
+    BoxPokemon returnedMon; // the Pokemon taken back from the Pokewalker
+    s16 returnedMonBox;     // its PC box, -1 if none
     u8 unk_1F372[2];
-    u16 strollMonLeveledUp; // 0x1F374
-    u16 receivedStarfBerry; // 0x1F376
-} PokewalkerApp;            // size=0x1F378
+    u16 strollMonLeveledUp;
+    u16 receivedStarfBerry;
+} PokewalkerApp;
 
 extern const PokewalkerCourse sPokewalkerCourses[];
 

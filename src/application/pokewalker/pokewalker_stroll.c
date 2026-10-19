@@ -44,7 +44,6 @@ int PokewalkerApp_StartStroll_Enter(PokewalkerApp *app) {
     PCStorage *pcStorage = SaveArray_PCStorage_Get(app->saveData);
     int box = app->selectedBox;
     int slot = app->selectedSlot;
-    // called with int arguments, not narrowed to the setters' u16 parameters
     ((void (*)(POKEWALKER *, int, int))Pokewalker_SetStrollState)(app->pokewalker, 2, box);
     ((void (*)(POKEWALKER *, int))Pokewalker_SetCourse)(app->pokewalker, app->courseId);
     Pokewalker_SetBoxMon(app->pokewalker, PCStorage_GetMonByIndexPair(pcStorage, box, slot));
