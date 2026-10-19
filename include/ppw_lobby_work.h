@@ -2,6 +2,7 @@
 #define POKEHEARTGOLD_PPW_LOBBY_WORK_H
 
 #include "lobby_event_deque.h"
+#include "lobby_timer.h"
 #include "overlay45_format_buffer_private.h"
 
 // The callbacks the game passes to PPW_LobbyInitializeAsync, in table order.
@@ -32,10 +33,15 @@ typedef struct PPWLobbyChannel {
     int modeReady;
 } PPWLobbyChannel;
 
+// Channel time in seconds (RTC_ConvertDateTimeToSecond).
+typedef struct PPWLobbyTime {
+    s64 seconds;
+} PPWLobbyTime;
+
 // Uploaded as the "b_lib_u_system" channel key.
 typedef struct PPWLobbySystemProfile {
     int channel;
-    s64 time;
+    PPWLobbyTime time;
     u32 unk_0C;
 } PPWLobbySystemProfile;
 
@@ -57,11 +63,6 @@ typedef struct PPWLobbyPlayers {
     u32 playerSet[3];
     PPWLobbyPlayer self;
 } PPWLobbyPlayers;
-
-// Channel time in seconds (RTC_ConvertDateTimeToSecond).
-typedef struct PPWLobbyTime {
-    s64 seconds;
-} PPWLobbyTime;
 
 // A special visitor of the lobby: player id and visitor value, as the game receives them.
 typedef struct PPWLobbyVipRecord {
@@ -121,7 +122,7 @@ typedef struct PPWLobbyWork {
     PPWLobbyChannel mainChannel;
     PPWLobbyChannel subChannel;
     PPWLobbyPlayers players;
-    u32 timers[4];
+    LobbyTimerMap timers;
     PPWLobbySchedule schedule;
 } PPWLobbyWork;
 
@@ -141,6 +142,13 @@ PPWLobbySchedule *PPWLobbySchedule_Init(PPWLobbySchedule *);
 BOOL PPWLobbySchedule_Copy(PPWLobbySchedule *, PPWLobbyScheduleRecord *, u32 *);
 void PPWLobbySchedule_CopyToVector(LobbyCharVector *, PPWLobbySchedule *);
 LobbyEvent *LobbyEventVector_Data(LobbyEventVector *);
+LobbyEventVector *LobbyEventVector_Destroy(LobbyEventVector *);
+PPWLobbyVipVector *LobbyVipVector_Destroy(PPWLobbyVipVector *);
+void PPWLobbyPlayers_Clear(PPWLobbyPlayers *);
+void PPWLobbyPlayers_UpdateStates(PPWLobbyPlayers *);
+void PPWLobby_MakeChannelName(Str *, u32, Str *);
+int PPWLobby_EnterMainChannel(void);
+int PPWLobby_IsMainChannelReady(void);
 
 #ifdef __cplusplus
 }

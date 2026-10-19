@@ -106,9 +106,9 @@ extern "C" void LobbyEventDeque_EraseAtEnd(LobbyEventDeque *d, u32 n) {
         return;
     }
     d->size -= n;
-    u32 cap = d->map.size == 0 ? 0 : (d->map.size - 1) * 0x80;
+    u32 cap = d->map.size == 0 ? 0 : (d->map.size - 1) * LOBBY_EVENT_BLOCK_SIZE;
     u32 extra = cap - (d->start + d->size);
-    if (extra < 0x100) {
+    if (extra < 2 * LOBBY_EVENT_BLOCK_SIZE) {
         return;
     }
     do {
@@ -116,9 +116,9 @@ extern "C" void LobbyEventDeque_EraseAtEnd(LobbyEventDeque *d, u32 n) {
         --d->map.size;
         LobbyEvent *&slot = d->map.blocks[(d->map.start + d->map.size - 1) % d->map.capacity];
         a.deallocate(slot);
-        extra -= 0x80;
+        extra -= LOBBY_EVENT_BLOCK_SIZE;
         slot = 0;
-    } while (extra >= 0x100);
+    } while (extra >= 2 * LOBBY_EVENT_BLOCK_SIZE);
 }
 
 extern "C" void LobbyEventDeque_EraseAtBegin(LobbyEventDeque *d, u32 n) {
@@ -128,7 +128,7 @@ extern "C" void LobbyEventDeque_EraseAtBegin(LobbyEventDeque *d, u32 n) {
     }
     d->size -= n;
     d->start += n;
-    while (d->start >= 256) {
+    while (d->start >= 2 * LOBBY_EVENT_BLOCK_SIZE) {
         LobbyEvent *block = d->map.blocks[d->map.start];
         if (block) {
             DWC_Free(0, block, 0);
@@ -142,10 +142,10 @@ extern "C" void LobbyEventDeque_EraseAtBegin(LobbyEventDeque *d, u32 n) {
             }
         }
         d->map.size--;
-        d->start -= 128;
+        d->start -= LOBBY_EVENT_BLOCK_SIZE;
     }
     if (!d->size) {
-        d->start = 64;
+        d->start = LOBBY_EVENT_BLOCK_SIZE / 2;
     }
 }
 

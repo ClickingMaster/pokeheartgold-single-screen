@@ -67,12 +67,10 @@ Str *LobbyString_Replace(Str *, u32, u32, const Str *);
 Str *LobbyString_ReplaceSubstring(Str *, u32, u32, Str *, u32, u32);
 void LobbyString_Reserve(Str *, u32);
 void LobbyTreeIterator_Advance(Iterator *);
-int PPWLobby_EnterMainChannel(void);
 void PPWLobby_GenerateChannelBaseName(Str *);
 int PPWLobby_GetWebResultError(u32);
 int PPWLobby_HandleLibraryData(BOOL, BOOL, int, int, const char *, const u8 *, u32, u32);
 void PPWLobby_HandleReceivedData(BOOL, BOOL, const char *, int, const char *, const char *, u32);
-int PPWLobby_IsMainChannelReady(void);
 void PPWLobby_OnCheckProfile(BOOL, u8 *, u32);
 void PPWLobby_OnEnterSubChannel(int, int, int, int);
 void PPWLobby_OnEnumChannels(int, int, char **, int, int *);
@@ -710,7 +708,6 @@ extern "C" void PPWLobby_StartCheckProfile(void) {
 extern "C" {
 extern char *gPPWLobbyChannelNamePrefixes[];
 extern char sStr_Bang[];
-void PPWLobby_MakeChannelName(Str *out, u32 id, Str *s);
 
 void PPWLobby_MakeChannelName(Str *out, u32 id, Str *s) {
     Str b, a;
@@ -3250,7 +3247,7 @@ void PPWLobby_OnGetChannelMode(int a, int b, u32 *c) {
     if (c[7] == 20) {
         gPPWLobbyWork->mainChannel.modeReady = 1;
         v = 4;
-        LobbyTimerMap_EraseKey(gPPWLobbyWork->timers, &v);
+        LobbyTimerMap_EraseKey(&gPPWLobbyWork->timers, &v);
         return;
     }
     LobbyChat_SetChannelMode(b, (char *)gPPWLobbyMainChannelMode);
@@ -3311,7 +3308,7 @@ extern "C" void PPWLobby_OnGetChannelTime(BOOL result, const char *channel, int 
         w->schedule.hasTime = 1;
         w->schedule.time.seconds = s.v;
         int state = 5;
-        LobbyTimerMap_EraseKey(gPPWLobbyWork->timers, &state);
+        LobbyTimerMap_EraseKey(&gPPWLobbyWork->timers, &state);
     }
     data.Destroy();
 }
@@ -3343,7 +3340,7 @@ void PPWLobby_OnGetLobbyData(BOOL success, const char *channel, int userId, cons
     }
     gPPWLobbyWork->schedule.state = 4;
     state = 6;
-    LobbyTimerMap_EraseKey(gPPWLobbyWork->timers, &state);
+    LobbyTimerMap_EraseKey(&gPPWLobbyWork->timers, &state);
     LobbyCharVector_Destroy(&blob);
 }
 }
@@ -3501,27 +3498,21 @@ void *PPWLobbyPlayerSet_Destroy(struct Tree *a) {
 }
 
 extern "C" {
-typedef struct Node {
-    char pad[12];
-    u32 value;
-} Node;
-
 typedef struct Result {
-    Node *node;
+    LobbyTimerMapNode *node;
     u8 flag;
     char pad[3];
 } Result;
 
-extern int LobbyTimerMap_FindInsertPos(void *, u32 *, Node **, u8 *, u8 *);
-extern Node *LobbyTimerMap_InsertNode(void *, int, u8, u8, u32 *);
-void LobbyTimerMap_Insert(Result *, void *, u32 *);
+extern LobbyTimerMapNode *LobbyTimerMap_InsertNode(LobbyTimerMap *, LobbyTimerMapNode *, u8, u8, u32 *);
+void LobbyTimerMap_Insert(Result *, LobbyTimerMap *, u32 *);
 
-void LobbyTimerMap_Insert(Result *r, void *p, u32 *v) {
+void LobbyTimerMap_Insert(Result *r, LobbyTimerMap *map, u32 *v) {
     u8 second, first;
-    Node *node;
-    int result = LobbyTimerMap_FindInsertPos(p, v, &node, &second, &first);
-    if (!node || node->value < *v) {
-        r->node = LobbyTimerMap_InsertNode(p, result, second, first, v);
+    LobbyTimerMapNode *node;
+    LobbyTimerMapNode *parent = LobbyTimerMap_FindInsertPos(map, v, &node, &second, &first);
+    if (!node || node->id < *v) {
+        r->node = LobbyTimerMap_InsertNode(map, parent, second, first, v);
         r->flag = gLobbyTimerMapInserted;
     } else {
         r->node = node;

@@ -10,81 +10,84 @@ struct Guard {
     }
 };
 
-typedef u32 *P;
+struct LobbyEvent;
+
+typedef LobbyEvent *Block;
 struct Ring;
 
-struct CIt {
-    P *cur, *first, *mid, *last;
+struct ConstMapIterator {
+    Block *cur, *first, *mid, *last;
 
-    CIt(P *c, P *f, P *m, P *l)
+    ConstMapIterator(Block *c, Block *f, Block *m, Block *l)
         : cur(c)
         , first(f)
         , mid(m)
         , last(l) {
     }
 
-    inline CIt(const Ring *r, u32 i);
+    inline ConstMapIterator(const Ring *r, u32 i);
 };
-struct It;
-extern "C" void LobbyEventDequeMapIterator_Advance(It *it, int n);
+struct MapIterator;
+extern "C" void LobbyEventDequeMapIterator_Advance(MapIterator *it, int n);
 
-struct It {
-    P *cur, *first, *mid, *last;
+struct MapIterator {
+    Block *cur, *first, *mid, *last;
 
-    It(P *c, P *f, P *m, P *l)
+    MapIterator(Block *c, Block *f, Block *m, Block *l)
         : cur(c)
         , first(f)
         , mid(m)
         , last(l) {
     }
 
-    It(const It &o)
+    MapIterator(const MapIterator &o)
         : cur(o.cur)
         , first(o.first)
         , mid(o.mid)
         , last(o.last) {
     }
 
-    It &operator+=(int n);
+    MapIterator &operator+=(int n);
 
-    It &operator--() {
+    MapIterator &operator--() {
         return *this += -1;
     }
 };
 
-inline It &It::operator+=(int n) {
+inline MapIterator &MapIterator::operator+=(int n) {
     LobbyEventDequeMapIterator_Advance(this, n);
     return *this;
 }
 
-extern "C" void LobbyEventDequeMap_PushBack(Ring *r, const P &v);
+extern "C" void LobbyEventDequeMap_PushBack(Ring *r, const Block &v);
 extern "C" void LobbyEventDequeMap_Reserve(Ring *r, u32 n);
-extern "C" void LobbyEventDequeMap_InitCopy(Ring *r, CIt first, const CIt &last, Tag);
+extern "C" void LobbyEventDequeMap_InitCopy(Ring *r, ConstMapIterator first, const ConstMapIterator &last, Tag);
 extern "C" void LobbyEventDequeMap_Destroy(Ring *r);
 
 struct Empty {};
 
-struct SB {
-    P *base;
-    Ring *r;
+// The start of a map's ring: the iterator over its blocks is made from it.
+struct MapStart {
+    Block *blocks;
+    Ring *map;
 };
 
-struct WIt {
-    It it;
+struct SourceIterator {
+    MapIterator it;
     Empty e;
 
-    WIt(const It &i)
+    SourceIterator(const MapIterator &i)
         : it(i) {
     }
 
-    inline WIt(const SB &s);
+    inline SourceIterator(const MapStart &start);
 
-    WIt(const WIt &o)
+    SourceIterator(const SourceIterator &o)
         : it(o.it) {
     }
 };
 
-extern "C" void LobbyEventDequeMap_InsertRange(Ring *r, It pos, WIt first, WIt last, Tag);
+extern "C" void LobbyEventDequeMap_InsertRange(Ring *r, MapIterator pos, SourceIterator first, SourceIterator last, Tag);
 extern "C" void *LobbyMem_Alloc(u32 n);
 extern "C" void LobbyEventDeque_LengthError(char *msg);
 extern char sStr_DequeLengthError[];
@@ -92,7 +95,7 @@ extern u32 gLobbyDequeMaxSizeInit;
 extern u32 gLobbyDequeMaxSize;
 
 struct Alloc {
-    void destroy(P *) {
+    void destroy(Block *) {
     }
 };
 
@@ -101,7 +104,7 @@ struct RingAlloc {
 };
 
 struct Ring : RingAlloc {
-    P *ptr;
+    Block *ptr;
     u32 start, size, cap;
 
     Ring()
@@ -123,7 +126,7 @@ struct Ring : RingAlloc {
         Guard g1;
         Guard g2;
         Tag tg;
-        CIt e = o.end();
+        ConstMapIterator e = o.end();
         LobbyEventDequeMap_InitCopy(this, o.begin(), e, tg);
     }
 
@@ -147,33 +150,33 @@ struct Ring : RingAlloc {
         return (start + size) % cap;
     }
 
-    CIt begin() const {
-        return CIt(ptr + start, ptr, ptr + start, ptr + cap);
+    ConstMapIterator begin() const {
+        return ConstMapIterator(ptr + start, ptr, ptr + start, ptr + cap);
     }
 
-    CIt end() const {
-        return CIt(this, endIndex());
+    ConstMapIterator end() const {
+        return ConstMapIterator(this, endIndex());
     }
 
-    It begin() {
-        It t(0, 0, 0, 0);
+    MapIterator begin() {
+        MapIterator t(0, 0, 0, 0);
         t.first = ptr;
         t.cur = t.mid = t.first + start;
         t.last = t.first + cap;
         return t;
     }
 
-    It end() {
+    MapIterator end() {
         u32 i = endIndex();
-        P *m = ptr + start;
-        return It(ptr + i, ptr, m, ptr + cap);
+        Block *m = ptr + start;
+        return MapIterator(ptr + i, ptr, m, ptr + cap);
     }
 
-    P &front() {
+    Block &front() {
         return ptr[start];
     }
 
-    P &back() {
+    Block &back() {
         return ptr[(start + size - 1) % cap];
     }
 
@@ -196,24 +199,24 @@ struct Ring : RingAlloc {
         erase_end(size);
     }
 
-    void insert(const It &pos, const WIt &first, const WIt &last) {
-        ix1(pos, first, last);
+    void insert(const MapIterator &pos, const SourceIterator &first, const SourceIterator &last) {
+        insert_range(pos, first, last);
     }
 
-    void ix1(const It &pos, const WIt &first, const WIt &last) {
-        ix2(pos, first, last, Tag(), Tag());
+    void insert_range(const MapIterator &pos, const SourceIterator &first, const SourceIterator &last) {
+        insert_range(pos, first, last, Tag(), Tag());
     }
 
-    void ix2(const It &pos, const WIt &first, const WIt &last, Tag, Tag) {
+    void insert_range(const MapIterator &pos, const SourceIterator &first, const SourceIterator &last, Tag, Tag) {
         LobbyEventDequeMap_InsertRange(this, pos, first, last, Tag());
     }
 
-    void push_back(const P &v) {
+    void push_back(const Block &v) {
         LobbyEventDequeMap_PushBack(this, v);
     }
 };
 
-inline CIt::CIt(const Ring *r, u32 i)
+inline ConstMapIterator::ConstMapIterator(const Ring *r, u32 i)
     : cur(r->ptr + i)
     , first(r->ptr)
     , mid(first + r->start)
@@ -245,52 +248,52 @@ inline u32 max_size() {
     return gLobbyDequeMaxSize;
 }
 
-inline void CopyBlocks(Ring *m, Ring *src) {
+inline void InsertBlocks(Ring *m, Ring *src) {
     if (src->size != 0) {
-        It e = src->end();
+        MapIterator e = src->end();
         --e;
-        SB b;
-        b.base = src->ptr;
-        b.r = src;
-        It p = m->begin();
-        m->insert(p, WIt(b), e);
+        MapStart start;
+        start.blocks = src->ptr;
+        start.map = src;
+        MapIterator p = m->begin();
+        m->insert(p, SourceIterator(start), e);
     }
 }
 
-inline void CopyBlocks2(Ring *m, Ring *src) {
-    CopyBlocks(m, src);
+inline void CopyBlocks(Ring *m, Ring *src) {
+    InsertBlocks(m, src);
 }
 
 extern "C" void LobbyEventDeque_Destroy2(Deque *d);
 extern "C" void LobbyEventDeque_AddBackCapacity(Deque *d, u32 n);
 
-inline WIt::WIt(const SB &s)
+inline SourceIterator::SourceIterator(const MapStart &start)
     : it(0, 0, 0, 0) {
-    P *c = s.base + s.r->start;
+    Block *c = start.blocks + start.map->start;
     it.cur = c;
-    it.first = s.base;
+    it.first = start.blocks;
     it.mid = c;
-    it.last = s.base + s.r->cap;
+    it.last = start.blocks + start.map->cap;
 }
 
 extern "C" void LobbyEventDeque_AddBackCapacity(Deque *d, u32 n) {
-    u32 nb = n / 0x80 + (n % 0x80 != 0);
-    for (; nb != 0 && d->start >= 0x80; --nb) {
-        P p = d->map.front();
+    u32 blockCount = n / 0x80 + (n % 0x80 != 0);
+    for (; blockCount != 0 && d->start >= 0x80; --blockCount) {
+        Block p = d->map.front();
         d->map.pop_front();
         d->map.back() = p;
         d->map.push_back(0);
         d->start -= 0x80;
     }
-    if (nb == 0) {
+    if (blockCount == 0) {
         return;
     }
-    if (nb * 0x80 > max_size() || (d->map.size == 0 ? 0 : (d->map.size - 1) * 0x80) > max_size() - nb * 0x80) {
+    if (blockCount * 0x80 > max_size() || (d->map.size == 0 ? 0 : (d->map.size - 1) * 0x80) > max_size() - blockCount * 0x80) {
         LobbyEventDeque_LengthError(sStr_DequeLengthError);
     }
-    if (nb + d->map.size <= d->map.capacity()) {
-        for (; nb != 0; --nb) {
-            P p = (P)LobbyMem_Alloc(0x400);
+    if (blockCount + d->map.size <= d->map.capacity()) {
+        for (; blockCount != 0; --blockCount) {
+            Block p = (Block)LobbyMem_Alloc(0x400);
             d->map.back() = p;
             d->map.push_back(0);
         }
@@ -298,15 +301,15 @@ extern "C" void LobbyEventDeque_AddBackCapacity(Deque *d, u32 n) {
     }
     Deque tmp;
     Ring *m = &tmp.map;
-    LobbyEventDequeMap_Reserve(m, Max(d->map.capacity() * 2, nb + d->map.size + 1));
+    LobbyEventDequeMap_Reserve(m, Max(d->map.capacity() * 2, blockCount + d->map.size + 1));
     m->push_back(0);
-    for (; nb != 0; --nb) {
-        P p = (P)LobbyMem_Alloc(0x400);
+    for (; blockCount != 0; --blockCount) {
+        Block p = (Block)LobbyMem_Alloc(0x400);
         m->back() = p;
         m->push_back(0);
     }
-    CopyBlocks2(m, &d->map);
-    P *t0 = d->map.ptr;
+    CopyBlocks(m, &d->map);
+    Block *t0 = d->map.ptr;
     d->map.ptr = m->ptr;
     m->ptr = t0;
     u32 t1 = d->map.start;

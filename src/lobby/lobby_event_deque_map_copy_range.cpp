@@ -5,39 +5,40 @@
 
 struct Tag {};
 
-struct Elem {
-    u32 *x;
+struct LobbyEvent;
+
+// A block pointer in the map's ring.
+struct Block {
+    LobbyEvent *events;
 };
 
-typedef Elem P;
+struct MapIterator {
+    Block *cur, *first, *mid, *last;
 
-struct It {
-    P *cur, *first, *mid, *last;
-
-    It() {
+    MapIterator() {
     }
 
-    It(P *c, P *f, P *m, P *l)
+    MapIterator(Block *c, Block *f, Block *m, Block *l)
         : cur(c)
         , first(f)
         , mid(m)
         , last(l) {
     }
 
-    It(const It &o)
+    MapIterator(const MapIterator &o)
         : cur(o.cur)
         , first(o.first)
         , mid(o.mid)
         , last(o.last) {
     }
 
-    It &operator+=(int n);
+    MapIterator &operator+=(int n);
 
-    const P &operator*() const {
+    const Block &operator*() const {
         return *cur;
     }
 
-    It &operator++() {
+    MapIterator &operator++() {
         if (++cur == last) {
             cur = first;
         }
@@ -45,52 +46,52 @@ struct It {
     }
 };
 
-extern "C" It &LobbyEventDequeMapIterator_Advance(It *it, int n);
+extern "C" MapIterator &LobbyEventDequeMapIterator_Advance(MapIterator *it, int n);
 
-inline It &It::operator+=(int n) {
+inline MapIterator &MapIterator::operator+=(int n) {
     return LobbyEventDequeMapIterator_Advance(this, n);
 }
 
 struct Empty {};
 
-struct WIt {
-    It it;
+struct SourceIterator {
+    MapIterator it;
     Empty e;
 
-    WIt() {
+    SourceIterator() {
     }
 
-    WIt(const It &i)
+    SourceIterator(const MapIterator &i)
         : it(i) {
     }
 };
 
-inline WIt operator+(WIt w, int n) {
+inline SourceIterator operator+(SourceIterator w, int n) {
     w.it += n;
     return w;
 }
 
-inline WIt Advance(const WIt &w, int n) {
+inline SourceIterator Advance(const SourceIterator &w, int n) {
     return w + n;
 }
 
-extern "C" int LobbyEventDequeMapIterator_Distance(const WIt &a, const WIt &b);
+extern "C" int LobbyEventDequeMapIterator_Distance(const SourceIterator &a, const SourceIterator &b);
 
 struct Alloc {
-    void construct(P *p, P v) {
+    void construct(Block *p, Block v) {
         if (p) {
             *p = v;
         }
     }
 
-    void destroy(P *) {
+    void destroy(Block *) {
     }
 
-    void assign(P *p, P v) {
+    void assign(Block *p, Block v) {
         *p = v;
     }
 
-    void assignr(P *p, const P &v) {
+    void assignr(Block *p, const Block &v) {
         *p = v;
     }
 };
@@ -100,9 +101,9 @@ inline const T &Min(const T &a, const T &b) {
     return b < a ? b : a;
 }
 
-inline P *CopyRange(WIt first, WIt last, P *d) {
+inline Block *CopyRange(SourceIterator first, SourceIterator last, Block *d) {
     while (first.it.cur != last.it.cur) {
-        const P &v = *first.it;
+        const Block &v = *first.it;
         Alloc a = Alloc();
         a.assign(d, v);
         ++first.it;
@@ -111,15 +112,15 @@ inline P *CopyRange(WIt first, WIt last, P *d) {
     return d;
 }
 
-extern "C" It LobbyEventDequeMap_CopyRange(WIt first, WIt last, It dest);
+extern "C" MapIterator LobbyEventDequeMap_CopyRange(SourceIterator first, SourceIterator last, MapIterator dest);
 
-extern "C" It LobbyEventDequeMap_CopyRange(WIt first, WIt last, It dest) {
+extern "C" MapIterator LobbyEventDequeMap_CopyRange(SourceIterator first, SourceIterator last, MapIterator dest) {
     if (first.it.cur != last.it.cur) {
         int n = LobbyEventDequeMapIterator_Distance(last, first);
         for (;;) {
             int room = dest.last - dest.cur;
             int chunk = Min(n, room);
-            WIt mid(Advance(first, chunk));
+            SourceIterator mid(Advance(first, chunk));
             CopyRange(first, mid, dest.cur);
             n -= chunk;
             dest.cur += chunk - 1;

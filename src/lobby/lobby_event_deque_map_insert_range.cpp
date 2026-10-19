@@ -4,49 +4,50 @@
 #include <nitro/code32.h>
 
 struct Tag {};
-struct Ring;
+struct Map;
 
-struct Elem {
-    u32 *x;
+struct LobbyEvent;
+
+// A block pointer in the map's ring.
+struct Block {
+    LobbyEvent *events;
 };
 
-typedef Elem P;
+struct MapIterator {
+    Block *cur, *first, *mid, *last;
 
-struct It {
-    P *cur, *first, *mid, *last;
-
-    It(P *c, P *f, P *m, P *l)
+    MapIterator(Block *c, Block *f, Block *m, Block *l)
         : cur(c)
         , first(f)
         , mid(m)
         , last(l) {
     }
 
-    It(const It &o)
+    MapIterator(const MapIterator &o)
         : cur(o.cur)
         , first(o.first)
         , mid(o.mid)
         , last(o.last) {
     }
 
-    It(P *c, const Ring &r);
-    It &operator+=(int n);
+    MapIterator(Block *c, const Map &map);
+    MapIterator &operator+=(int n);
 
-    It operator+(int n) const {
-        It t(*this);
+    MapIterator operator+(int n) const {
+        MapIterator t(*this);
         return t += n;
     }
 
-    It operator-(int n) const {
-        It t(*this);
+    MapIterator operator-(int n) const {
+        MapIterator t(*this);
         return t += -n;
     }
 
-    const P &operator*() const {
+    const Block &operator*() const {
         return *cur;
     }
 
-    It &operator++() {
+    MapIterator &operator++() {
         if (++cur == last) {
             cur = first;
         }
@@ -54,45 +55,45 @@ struct It {
     }
 };
 
-extern "C" It &LobbyEventDequeMapIterator_Advance(It *it, int n);
+extern "C" MapIterator &LobbyEventDequeMapIterator_Advance(MapIterator *it, int n);
 
-inline It &It::operator+=(int n) {
+inline MapIterator &MapIterator::operator+=(int n) {
     return LobbyEventDequeMapIterator_Advance(this, n);
 }
 
 struct Empty {};
 
-struct WIt {
-    It it;
+struct SourceIterator {
+    MapIterator it;
     Empty e;
 
-    WIt(const It &i)
+    SourceIterator(const MapIterator &i)
         : it(i) {
     }
 };
 
-extern "C" int LobbyEventDequeMapIterator_Distance(const WIt &a, const WIt &b);
+extern "C" int LobbyEventDequeMapIterator_Distance(const SourceIterator &a, const SourceIterator &b);
 
-inline int MapDistance(WIt first, WIt last) {
+inline int MapDistance(SourceIterator first, SourceIterator last) {
     return LobbyEventDequeMapIterator_Distance(last, first);
 }
 
-inline int distance(WIt first, WIt last) {
+inline int distance(SourceIterator first, SourceIterator last) {
     return MapDistance(first, last);
 }
 
-extern "C" It LobbyEventDequeMap_Copy(It first, It last, It dest);
-extern "C" It LobbyEventDequeMap_CopyBackward(It first, It last, It dest);
-extern "C" It LobbyEventDequeMap_CopyRange(WIt first, WIt last, It dest);
+extern "C" MapIterator LobbyEventDequeMap_Copy(MapIterator first, MapIterator last, MapIterator dest);
+extern "C" MapIterator LobbyEventDequeMap_CopyBackward(MapIterator first, MapIterator last, MapIterator dest);
+extern "C" MapIterator LobbyEventDequeMap_CopyRange(SourceIterator first, SourceIterator last, MapIterator dest);
 
 struct Alloc {
-    void construct(P *p, P v) {
+    void construct(Block *p, Block v) {
         if (p) {
             *p = v;
         }
     }
 
-    void destroy(P *) {
+    void destroy(Block *) {
     }
 };
 
@@ -103,20 +104,20 @@ inline void swap(T &a, T &b) {
     b = t;
 }
 
-struct Tmp {
-    P *ptr;
+struct MapBuffer {
+    Block *ptr;
     u32 start, size, cap;
     u32 *owner;
 };
 
-extern "C" u32 LobbyEventDequeMap_RecommendSize(Ring *r, u32 n);
-extern "C" void LobbyEventDequeMapBuffer_Allocate(Tmp *t, u32 n, Alloc);
-extern "C" void LobbyEventDequeMapBuffer_AppendRange(Tmp *t, const It &first, const It &last, Alloc);
-extern "C" void LobbyEventDequeMapBuffer_PrependRange(Tmp *t, const It &first, const It &last, Alloc);
-extern "C" void LobbyEventDequeMapBuffer_Destroy(Tmp *t);
+extern "C" u32 LobbyEventDequeMap_RecommendSize(Map *map, u32 n);
+extern "C" void LobbyEventDequeMapBuffer_Allocate(MapBuffer *buffer, u32 n, Alloc);
+extern "C" void LobbyEventDequeMapBuffer_AppendRange(MapBuffer *buffer, const MapIterator &first, const MapIterator &last, Alloc);
+extern "C" void LobbyEventDequeMapBuffer_PrependRange(MapBuffer *buffer, const MapIterator &first, const MapIterator &last, Alloc);
+extern "C" void LobbyEventDequeMapBuffer_Destroy(MapBuffer *buffer);
 
-struct Ring {
-    P *ptr;
+struct Map {
+    Block *ptr;
     u32 start, size, cap;
 
     void clear() {
@@ -130,58 +131,58 @@ struct Ring {
     }
 
     u32 endIndex() const {
-        const Ring *self = this;
+        const Map *self = this;
         if (self->cap == 0) {
             return 0;
         }
         return (self->start + self->size) % self->cap;
     }
 
-    It begin();
-    It end();
+    MapIterator begin();
+    MapIterator end();
 };
 
-inline It::It(P *c, const Ring &r)
+inline MapIterator::MapIterator(Block *c, const Map &map)
     : cur(c)
-    , first(r.ptr)
-    , mid(first + r.start)
-    , last(first + r.cap) {
+    , first(map.ptr)
+    , mid(first + map.start)
+    , last(first + map.cap) {
 }
 
-inline It Ring::begin() {
-    return It(ptr + start, *this);
+inline MapIterator Map::begin() {
+    return MapIterator(ptr + start, *this);
 }
 
-inline It Ring::end() {
-    return It(ptr + endIndex(), *this);
+inline MapIterator Map::end() {
+    return MapIterator(ptr + endIndex(), *this);
 }
 
-extern "C" void LobbyEventDequeMap_InsertRange(Ring *r, It pos, WIt first, WIt last, Tag);
+extern "C" void LobbyEventDequeMap_InsertRange(Map *map, MapIterator pos, SourceIterator first, SourceIterator last, Tag);
 
-extern "C" void LobbyEventDequeMap_InsertRange(Ring *r, It pos, WIt first, WIt last, Tag) {
+extern "C" void LobbyEventDequeMap_InsertRange(Map *map, MapIterator pos, SourceIterator first, SourceIterator last, Tag) {
     u32 n = distance(first, last);
     if (n == 0) {
         return;
     }
-    u32 k = pos.cur - (r->ptr + r->start);
-    if (pos.cur < r->ptr + r->start) {
-        k += r->cap;
+    u32 k = pos.cur - (map->ptr + map->start);
+    if (pos.cur < map->ptr + map->start) {
+        k += map->cap;
     }
-    u32 c = r->capacity();
-    if (n <= c && r->size <= c - n) {
-        It b = r->begin();
-        It old = b;
-        u32 after = r->size - k;
+    u32 c = map->capacity();
+    if (n <= c && map->size <= c - n) {
+        MapIterator b = map->begin();
+        MapIterator old = b;
+        u32 after = map->size - k;
         if (k < after) {
             b += -n;
-            r->start = b.cur - r->ptr;
-            r->size += n;
+            map->start = b.cur - map->ptr;
+            map->size += n;
             if (k != 0) {
                 b = LobbyEventDequeMap_Copy(old, old + k, b);
             }
         } else {
-            r->size += n;
-            b = r->end();
+            map->size += n;
+            b = map->end();
             if (after != 0) {
                 b = LobbyEventDequeMap_CopyBackward(b - (n + after), b - n, b);
             }
@@ -190,34 +191,34 @@ extern "C" void LobbyEventDequeMap_InsertRange(Ring *r, It pos, WIt first, WIt l
         LobbyEventDequeMap_CopyRange(first, last, b);
         return;
     }
-    Tmp t;
-    t.ptr = 0;
-    t.start = 0;
-    t.size = 0;
-    t.cap = 0;
-    t.owner = &r->cap;
-    u32 nc = LobbyEventDequeMap_RecommendSize(r, n);
-    LobbyEventDequeMapBuffer_Allocate(&t, nc, Alloc(Alloc()));
-    t.start = k;
-    P *p = t.ptr + k;
+    MapBuffer buffer;
+    buffer.ptr = 0;
+    buffer.start = 0;
+    buffer.size = 0;
+    buffer.cap = 0;
+    buffer.owner = &map->cap;
+    u32 newCapacity = LobbyEventDequeMap_RecommendSize(map, n);
+    LobbyEventDequeMapBuffer_Allocate(&buffer, newCapacity, Alloc(Alloc()));
+    buffer.start = k;
+    Block *p = buffer.ptr + k;
     if (n != 0) {
         do {
-            const P &v = *first.it;
+            const Block &v = *first.it;
             Alloc a = Alloc();
             --n;
             a.construct(p, v);
             ++p;
-            t.size++;
+            buffer.size++;
             ++first.it;
         } while (n != 0);
     }
-    LobbyEventDequeMapBuffer_AppendRange(&t, pos, r->end(), Alloc());
-    LobbyEventDequeMapBuffer_PrependRange(&t, r->begin(), pos, Alloc());
-    r->clear();
-    swap(r->ptr, t.ptr);
-    swap(r->start, t.start);
-    swap(r->size, t.size);
-    u32 &tc = t.cap;
-    swap(r->cap, tc);
-    LobbyEventDequeMapBuffer_Destroy(&t);
+    LobbyEventDequeMapBuffer_AppendRange(&buffer, pos, map->end(), Alloc());
+    LobbyEventDequeMapBuffer_PrependRange(&buffer, map->begin(), pos, Alloc());
+    map->clear();
+    swap(map->ptr, buffer.ptr);
+    swap(map->start, buffer.start);
+    swap(map->size, buffer.size);
+    u32 &bufferCapacity = buffer.cap;
+    swap(map->cap, bufferCapacity);
+    LobbyEventDequeMapBuffer_Destroy(&buffer);
 }

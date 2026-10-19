@@ -1,7 +1,12 @@
 #include <nitro/types.h>
 
 extern "C" {
+#include <nitro/os/mutex.h>
+#include <nitro/os/thread.h>
 #include <nitro/rtc.h>
+
+#include "dwc/net_common_internal.h"
+#include "dwc/stats_upload_internal.h"
 }
 
 #include "ppw_lobby_state.h"
@@ -10,232 +15,144 @@ extern "C" {
 #include <nitro/code32.h>
 
 #include "lobby_timer.h"
+#include "ppw_lobby_work.h"
+
+#include "../../lib/NitroDWC/src/tree-iterator4.h"
 
 #include <string.h>
 using std::memcmp;
 
-extern "C" void MI_CpuCopy8(const void *src, void *dst, u32 size);
+// A system profile value with the flag that it must be uploaded.
+struct ProfileValue {
+    u32 channel;
+    PPWLobbyTime time;
+    u32 unk_0C;
 
-typedef union Str {
-    struct {
-        u32 large : 1;
-        u32 cap : 31;
-    } bits;
-
-    struct {
-        u8 tag;
-        char data[11];
-    } s;
-
-    struct {
-        u32 cap;
-        u32 size;
-        char *ptr;
-    } l;
-} Str;
-
-typedef struct Vec {
-    void *ptr;
-    u32 size, cap;
-} Vec;
-
-typedef struct Iterator {
-    void *current;
-} Iterator;
-
-typedef struct Tree {
-    u32 count;
-    void *root;
-    u32 unk;
-    void *first;
-} Tree;
-
-typedef struct Pair {
-    s64 v;
-} Pair;
-
-struct Stamp {
-    u32 code;
-    Pair pair;
-    u32 extra;
-
-    Stamp(u32 c, const Pair &p, u32 e)
-        : code(c) {
-        Pair *d = &pair;
-        *d = p;
-        extra = e;
+    ProfileValue(u32 c, const PPWLobbyTime &t, u32 e)
+        : channel(c) {
+        PPWLobbyTime *d = &time;
+        *d = t;
+        unk_0C = e;
     }
 
-    Stamp(const Stamp &o)
-        : code(o.code) {
-        Pair *d = &pair;
-        *d = o.pair;
-        extra = o.extra;
-    }
-
-    Stamp &operator=(const Stamp &o) {
-        code = o.code;
-        pair = o.pair;
-        extra = o.extra;
-        return *this;
-    }
-
-    bool operator==(const Stamp &o) const {
-        return memcmp(this, &o, sizeof(Stamp)) == 0;
+    ProfileValue(const ProfileValue &other)
+        : channel(other.channel) {
+        PPWLobbyTime *d = &time;
+        *d = other.time;
+        unk_0C = other.unk_0C;
     }
 };
 
-struct Tracked {
-    Stamp stamp;
-    int active;
+struct TrackedProfile {
+    ProfileValue value;
+    BOOL changed;
 
-    Tracked(u32 c, const Pair &p, u32 e, int a)
-        : stamp(Stamp(c, p, e))
-        , active(a) {
-    }
-
-    void Set(const Tracked &t) {
-        const Stamp *s = &t.stamp;
-        if (!(stamp == *s)) {
-            stamp = *s;
-            active = 1;
-        }
+    TrackedProfile(u32 c, const PPWLobbyTime &t, u32 e, BOOL ch)
+        : value(ProfileValue(c, t, e))
+        , changed(ch) {
     }
 };
 
-typedef struct Request {
-    u32 unk0;
+static inline bool IsSameProfile(const PPWLobbySystemProfile *profile, const ProfileValue *value) {
+    return memcmp(profile, value, sizeof(ProfileValue)) == 0;
+}
+
+// Stores the profile as the player's system profile and marks it for upload, unless it is the same.
+static inline void SetSystemProfile(PPWLobbyPlayer *player, const TrackedProfile &profile) {
+    const ProfileValue *value = &profile.value;
+    if (!IsSameProfile(&player->systemProfile, value)) {
+        player->systemProfile.channel = value->channel;
+        player->systemProfile.time = value->time;
+        player->systemProfile.unk_0C = value->unk_0C;
+        player->systemProfileChanged = TRUE;
+    }
+}
+
+static inline int GetState(const PPWLobbyWork &work) {
+    return work.state;
+}
+
+// A web request of the lobby (schedule, VIP list, profile check, questionnaire), sent through the stats upload
+// client (key and server for StatsUpload_Start; page, pid and body for the upload). It is retried up to retries
+// times and reports its answer to callback.
+typedef struct Request Request;
+
+typedef struct RequestVtable {
+    void *unk_00;
+    void (*destroy)(Request *request);
+} RequestVtable;
+
+struct Request {
+    const RequestVtable *vtable;
     int retries;
-    int mode;
-    Str url;
-    Str post;
-    int len24;
-    Vec body;
-    void (*fn)(int, void *, u32, void *);
-    void *arg;
-    int alt;
-} Request;
-
-typedef struct Deletable Deletable;
-
-typedef struct DeletableVtbl {
-    void *unk0;
-    void (*destroy)(Deletable *);
-} DeletableVtbl;
-
-struct Deletable {
-    DeletableVtbl *vt;
+    int server;
+    Str key;
+    Str page;
+    int pid;
+    LobbyCharVector body;
+    void (*callback)(BOOL success, void *data, u32 size, void *param);
+    void *param;
+    BOOL useLastHash;
 };
-
-struct Sub {
-    void *vt;
-    Tree tree;
-    Tracked tracked;
-    Vec vec;
-    u8 pad34[0x40 - 0x34];
-    int flag;
-};
-
-typedef struct Lobby {
-    int state;
-    int err;
-    void (*cb)(int, int);
-    u8 pad0c[0x58 - 0xc];
-    Str s58;
-    u8 pad64[0xbc - 0x64];
-    Str sbc;
-    u8 padc8[0xd4 - 0xc8];
-    Str sd4;
-    u8 pade0[0xe8 - 0xe0];
-    Sub sub;
-    u8 pad12c[0x134 - 0x12c];
-    LobbyTimerMap timers;
-    int x144;
-    u8 pad148[0x170 - 0x148];
-    Vec vec170;
-    u8 pad17c[0x194 - 0x17c];
-    Vec vec194;
-
-    int GetState() const {
-        return state;
-    }
-} Lobby;
 
 extern "C" Request *gPPWLobbyCurrentRequest;
-extern "C" Deletable *gPPWLobbyFinishedRequest;
-extern "C" Lobby *gPPWLobbyWork;
+extern "C" Request *gPPWLobbyFinishedRequest;
 extern "C" u8 gPPWLobbyPlayersVtable[];
 extern "C" char sStr_Star[];
 
-extern "C" int StatsUpload_Process(void);
-extern "C" void *StatsUpload_GetResponseBody(u32 *len);
-extern "C" void *DWC_Alloc(int heap, u32 size);
-extern "C" void DWC_Free(int heap, void *p, int unk);
-extern "C" void DWC_ClearError(void);
-extern "C" void StatsUpload_Stop(void);
-extern "C" void StatsUpload_Start(int mode, char *s);
-extern "C" void *LobbyByteVector_Data(Vec *v);
-extern "C" int StatsUpload_UploadWithLastHash(char *a, int b, void *c, u32 d, int e);
-extern "C" int StatsUpload_Upload(char *a, int b, void *c, u32 d, int e);
-extern "C" int LobbyChat_Process(void);
-extern "C" int PPW_LobbyShutdownAsync(void);
-extern "C" Vec *LobbyVipVector_Destroy(Vec *);
-extern "C" void *LobbyEventDeque_Destroy(void *);
-extern "C" Vec *LobbyEventVector_Destroy(Vec *);
-extern "C" void PPWLobbyPlayers_Clear(void *);
-extern "C" Vec *LobbyCharVector_Destroy(Vec *);
-extern "C" void *PPWLobbyPlayerSet_Destroy(Tree *);
-extern "C" Str *LobbyString_Destroy(Str *);
-extern "C" int LobbyChat_GetLastError(void);
-extern "C" int DWC_GetDateTime(RTCDate *date, RTCTime *time);
-extern "C" void LobbyTreeIterator_Advance(Iterator *it);
-extern "C" void LobbyTimerMap_Erase(Iterator *result, LobbyTimerMap *map, Iterator node);
-extern "C" void PPWLobbyPlayers_UpdateStates(void *);
-extern "C" void PPWLobbySchedule_Process(void *);
-extern "C" Str *LobbyString_InitFromCStr(Str *s, char *text);
-extern "C" void PPWLobby_MakeChannelName(Str *out, u32 id, Str *s);
-extern "C" void PPWLobby_OnEnumChannels(void);
-extern "C" void LobbyChat_EnumChannelsAsync(char *s, void (*cb)(void), int x);
-extern "C" int PPWLobby_EnterMainChannel(void);
-extern "C" int PPWLobby_IsMainChannelReady(void);
+// nitro/mi/memory.h does not compile as C++.
+extern "C" void MI_CpuCopy8(const void *src, void *dst, u32 size);
+
+extern "C" {
+void *LobbyByteVector_Data(LobbyCharVector *);
+int LobbyChat_Process(void);
+int PPW_LobbyShutdownAsync(void);
+LobbyEventDeque *LobbyEventDeque_Destroy(LobbyEventDeque *);
+void *PPWLobbyPlayerSet_Destroy(u32 *);
+int LobbyChat_GetLastError(void);
+void LobbyTreeIterator_Advance(Iterator *);
+void LobbyTimerMap_Erase(Iterator *, LobbyTimerMap *, Iterator);
+void PPWLobby_OnEnumChannels(void);
+void LobbyChat_EnumChannelsAsync(const char *, void (*)(void), int);
+}
 
 extern "C" int PPW_LobbyProcess(void);
 
-static inline char *Str_CStr(Str *s) {
-    return !s->bits.large ? s->s.data : s->l.ptr;
+static inline char *StrCStr(Str *s) {
+    return !s->l.isLong ? s->s.buf : s->l.ptr;
 }
 
 static inline void Request_Finish(Request *r, int ok, void *buf, u32 len) {
-    void *arg = r->arg;
+    void *param = r->param;
     Request *tmp;
     StatsUpload_Stop();
-    tmp = (Request *)gPPWLobbyFinishedRequest;
-    gPPWLobbyFinishedRequest = (Deletable *)gPPWLobbyCurrentRequest;
+    tmp = gPPWLobbyFinishedRequest;
+    gPPWLobbyFinishedRequest = gPPWLobbyCurrentRequest;
     gPPWLobbyCurrentRequest = tmp;
-    r->fn(ok, buf, len, arg);
+    r->callback(ok, buf, len, param);
 }
 
 static inline void Request_Succeed(Request *r, void *buf, const u32 &size) {
-    void *arg = r->arg;
+    void *param = r->param;
     u32 len = size;
     Request *tmp;
     StatsUpload_Stop();
-    tmp = (Request *)gPPWLobbyFinishedRequest;
-    gPPWLobbyFinishedRequest = (Deletable *)gPPWLobbyCurrentRequest;
+    tmp = gPPWLobbyFinishedRequest;
+    gPPWLobbyFinishedRequest = gPPWLobbyCurrentRequest;
     gPPWLobbyCurrentRequest = tmp;
-    r->fn(1, buf, len, arg);
+    r->callback(1, buf, len, param);
 }
 
 static inline int Request_Send(Request *r) {
     int ret;
     StatsUpload_Stop();
-    StatsUpload_Start(r->mode, Str_CStr(&r->url));
-    if (r->alt) {
+    StatsUpload_Start(r->server, StrCStr(&r->key));
+    if (r->useLastHash) {
         u32 n = r->body.size;
-        ret = StatsUpload_UploadWithLastHash(Str_CStr(&r->post), r->len24, LobbyByteVector_Data(&r->body), n, 0);
+        ret = StatsUpload_UploadWithLastHash(StrCStr(&r->page), r->pid, LobbyByteVector_Data(&r->body), n, 0);
     } else {
         u32 n = r->body.size;
-        ret = StatsUpload_Upload(Str_CStr(&r->post), r->len24, LobbyByteVector_Data(&r->body), n, 0);
+        ret = StatsUpload_Upload(StrCStr(&r->page), r->pid, LobbyByteVector_Data(&r->body), n, 0);
     }
     if (ret == 0) {
         return 1;
@@ -245,10 +162,10 @@ static inline int Request_Send(Request *r) {
 }
 
 static inline int Request_Poll(Request *r) {
-    u32 len = 0;
+    int len = 0;
     switch (StatsUpload_Process()) {
-    case 8: {
-        void *data = StatsUpload_GetResponseBody(&len);
+    case STATS_UPLOAD_DONE: {
+        const char *data = StatsUpload_GetResponseBody(&len);
         void *buf = DWC_Alloc(0, len);
         if (buf != NULL) {
             MI_CpuCopy8(data, buf, len);
@@ -263,7 +180,7 @@ static inline int Request_Poll(Request *r) {
         }
         return 1;
     }
-    case 1:
+    case STATS_UPLOAD_FAILED:
         DWC_ClearError();
         if (--r->retries != 0) {
             if (Request_Send(r)) {
@@ -272,7 +189,7 @@ static inline int Request_Poll(Request *r) {
         }
         Request_Finish(r, 0, NULL, 0);
         return 1;
-    case 0:
+    case STATS_UPLOAD_NONE:
         DWC_ClearError();
         Request_Finish(r, 0, NULL, 0);
         return 1;
@@ -280,9 +197,9 @@ static inline int Request_Poll(Request *r) {
     return 0;
 }
 
-static inline void Deletable_Delete(Deletable *d) {
-    if (d != NULL) {
-        d->vt->destroy(d);
+static inline void Request_Delete(Request *request) {
+    if (request != NULL) {
+        request->vtable->destroy(request);
     }
 }
 
@@ -292,28 +209,28 @@ static inline int Request_Update(void) {
         return 0;
     }
     if (Request_Poll(r) && gPPWLobbyFinishedRequest != NULL) {
-        Deletable_Delete(gPPWLobbyFinishedRequest);
+        Request_Delete(gPPWLobbyFinishedRequest);
         gPPWLobbyFinishedRequest = NULL;
     }
     return 1;
 }
 
-static inline void Lobby_Destroy(Lobby *w) {
-    LobbyVipVector_Destroy(&w->vec194);
-    LobbyEventDeque_Destroy((u8 *)w + 0x17c);
-    LobbyEventVector_Destroy(&w->vec170);
+static inline void Lobby_Destroy(PPWLobbyWork *w) {
+    LobbyVipVector_Destroy(&w->schedule.vips);
+    LobbyEventDeque_Destroy(&w->schedule.pendingEvents);
+    LobbyEventVector_Destroy(&w->schedule.events);
     LobbyTimerMap_Clear(&w->timers);
     LobbyTimerMap_Destroy(&w->timers);
-    w->sub.vt = gPPWLobbyPlayersVtable;
-    PPWLobbyPlayers_Clear(&w->sub.vt);
-    LobbyCharVector_Destroy(&w->sub.vec);
-    PPWLobbyPlayerSet_Destroy(&w->sub.tree);
-    LobbyString_Destroy(&w->sd4);
-    LobbyString_Destroy(&w->sbc);
-    LobbyString_Destroy(&w->s58);
+    w->players.vtable = gPPWLobbyPlayersVtable;
+    PPWLobbyPlayers_Clear(&w->players);
+    LobbyCharVector_Destroy(&w->players.self.userProfile);
+    PPWLobbyPlayerSet_Destroy(w->players.playerSet);
+    LobbyString_Destroy(&w->subChannel.name);
+    LobbyString_Destroy(&w->mainChannel.name);
+    LobbyString_Destroy(&w->channelBaseName);
 }
 
-static inline void Lobby_Delete(Lobby *w) {
+static inline void Lobby_Delete(PPWLobbyWork *w) {
     if (w != NULL) {
         Lobby_Destroy(w);
         if (w != NULL) {
@@ -323,15 +240,15 @@ static inline void Lobby_Delete(Lobby *w) {
 }
 
 static inline void Lobby_SetError(int code) {
-    Lobby *w = gPPWLobbyWork;
+    PPWLobbyWork *w = gPPWLobbyWork;
     if (code != 0) {
-        w->err = code;
+        w->error = code;
         w->state = PPW_LOBBY_STATE_ERROR;
     }
 }
 
 static inline bool Lobby_IsError(void) {
-    return gPPWLobbyWork != NULL && gPPWLobbyWork->GetState() == 10;
+    return gPPWLobbyWork != NULL && GetState(*gPPWLobbyWork) == PPW_LOBBY_STATE_ERROR;
 }
 
 static inline int Timer_Update(LobbyTimerMapNode *t, s64 now) {
@@ -351,7 +268,7 @@ static inline Iterator Iterator_Make(void *p) {
 }
 
 static inline void Lobby_UpdateTimers(void) {
-    Lobby *w = gPPWLobbyWork;
+    PPWLobbyWork *w = gPPWLobbyWork;
     RTCTime time;
     RTCDate date;
     s64 now;
@@ -371,29 +288,29 @@ static inline void Lobby_UpdateTimers(void) {
             LobbyTreeIterator_Advance(&it);
         }
     }
-    PPWLobbyPlayers_UpdateStates(&w->sub.vt);
-    PPWLobbySchedule_Process(&w->x144);
+    PPWLobbyPlayers_UpdateStates(&w->players);
+    PPWLobbySchedule_Process(&w->schedule);
 }
 
-static inline int Lobby_IsReady(Lobby *w) {
-    if (w->x144 >= 2) {
+static inline int Lobby_IsReady(PPWLobbyWork *w) {
+    if (w->schedule.state >= 2) {
         return 1;
     }
     return 0;
 }
 
-static inline void Lobby_Login(void) {
+static inline void Lobby_EnumChannels(void) {
     Str name;
     Str query;
     LobbyString_InitFromCStr(&name, sStr_Star);
     PPWLobby_MakeChannelName(&query, 0, &name);
-    LobbyChat_EnumChannelsAsync(Str_CStr(&query), PPWLobby_OnEnumChannels, 0);
+    LobbyChat_EnumChannelsAsync(StrCStr(&query), PPWLobby_OnEnumChannels, 0);
     LobbyString_Destroy(&query);
     LobbyString_Destroy(&name);
 }
 
-static inline void Lobby_Fail(int r) {
-    Lobby *w = gPPWLobbyWork;
+static inline void Lobby_SetEnterChannelError(int r) {
+    PPWLobbyWork *w = gPPWLobbyWork;
     int code;
     switch (r) {
     case 1:
@@ -407,7 +324,7 @@ static inline void Lobby_Fail(int r) {
         break;
     }
     if (code != 0) {
-        w->err = code;
+        w->error = code;
         w->state = PPW_LOBBY_STATE_ERROR;
     }
 }
@@ -447,14 +364,14 @@ static inline int Lobby_Process(void) {
         }
         break;
     case PPW_LOBBY_STATE_ENUM_CHANNELS: {
-        Lobby_Login();
+        Lobby_EnumChannels();
         gPPWLobbyWork->state = PPW_LOBBY_STATE_SEARCHING_CHANNEL;
         break;
     }
     case PPW_LOBBY_STATE_ENTER_MAIN_CHANNEL: {
         int r = PPWLobby_EnterMainChannel();
         if (r != 0) {
-            Lobby_Fail(r);
+            Lobby_SetEnterChannelError(r);
         } else {
             gPPWLobbyWork->state = PPW_LOBBY_STATE_WAIT_MAIN_CHANNEL;
         }
@@ -462,13 +379,13 @@ static inline int Lobby_Process(void) {
     }
     case PPW_LOBBY_STATE_WAIT_MAIN_CHANNEL:
         if (PPWLobby_IsMainChannelReady()) {
-            Sub *sub = &gPPWLobbyWork->sub;
-            sub->tracked.active = 0;
-            Tracked t(sub->tracked.stamp.code, sub->tracked.stamp.pair, 1, 1);
-            sub->tracked.Set(t);
-            sub->flag = 1;
+            PPWLobbyPlayer *self = &gPPWLobbyWork->players.self;
+            self->systemProfileChanged = 0;
+            TrackedProfile profile(self->systemProfile.channel, self->systemProfile.time, 1, TRUE);
+            SetSystemProfile(self, profile);
+            self->systemProfileReceived = TRUE;
             gPPWLobbyWork->state = PPW_LOBBY_STATE_READY;
-            gPPWLobbyWork->cb(1, 0);
+            gPPWLobbyWork->callbacks.onEnterChannel(1, 0);
         }
         break;
     case PPW_LOBBY_STATE_CONNECTING:

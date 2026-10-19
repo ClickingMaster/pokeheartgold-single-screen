@@ -6,6 +6,8 @@
 
 #include <nitro/types.h>
 
+#define LOBBY_EVENT_BLOCK_SIZE 128
+
 typedef struct LobbyEvent {
     s32 key;
     u32 payload;
@@ -109,12 +111,12 @@ typedef struct LobbyEventDequeIterator {
     }
 
     LobbyEvent *SegmentEnd() const {
-        return cur ? *block.cur + 128 : cur;
+        return cur ? *block.cur + LOBBY_EVENT_BLOCK_SIZE : cur;
     }
 
     LobbyEventDequeIterator &operator++() {
         LobbyEvent **m = block.cur;
-        if (++cur == *m + 128) {
+        if (++cur == *m + LOBBY_EVENT_BLOCK_SIZE) {
             if (++block.cur == block.last) {
                 block.cur = block.first;
             }
