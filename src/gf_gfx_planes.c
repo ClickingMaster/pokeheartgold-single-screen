@@ -4,6 +4,10 @@
 
 #include "system.h"
 
+#ifdef SINGLE_SCREEN
+const volatile u16 gSingleScreenDispSelectMask = 0;
+#endif
+
 static u32 sEngineBPlanes = 0;
 static u32 sEngineAPlanes = 0;
 
