@@ -45,6 +45,16 @@ BOOL Pokedex_Init(OverlayManager *man, int *state) {
 BOOL Pokedex_Main(OverlayManager *man, int *state) {
     PokedexAppData *appData = OverlayManager_GetData(man);
 
+#ifdef SINGLE_SCREEN
+    // the area page's map is on the top screen; the list shows the top screen's info card on request
+    if (appData->entryTab == 1) {
+        SingleScreen_ShowSubEngine(TRUE);
+    } else if (appData->entryTab == 0) {
+        SingleScreen_ShowSubEngine(appData->ssShowListInfo);
+    } else {
+        SingleScreen_ShowSubEngine(FALSE);
+    }
+#endif
     if (!PokedexApp_RunMainSeq(appData, state)) {
         return TRUE;
     } else {
@@ -63,6 +73,9 @@ BOOL Pokedex_Exit(OverlayManager *man, int *state) {
     if (DSProt_DetectFlashcart(Pokedex_OnFlashcartDetected)) {
         Heap_AllocAtEnd(HEAP_ID_3, 1000);
     }
+#ifdef SINGLE_SCREEN
+    SingleScreen_ShowSubEngine(FALSE);
+#endif
     OverlayManager_FreeData(man);
     Heap_Destroy(HEAP_ID_POKEDEX_APP);
     GF_SndHandleSetPlayerVolume(1, 127);

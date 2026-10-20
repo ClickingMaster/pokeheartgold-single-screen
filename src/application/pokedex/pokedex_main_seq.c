@@ -594,7 +594,13 @@ static int PokedexApp_MainSeq_11(PokedexAppData *pokedexApp) {
         PokedexApp_CycleListEntryLanguage(pokedexApp, PokedexApp_GetCursorSpecies(pokedexApp), -1);
         break;
     case 8:
+#ifdef SINGLE_SCREEN
+        // the info card is on the hidden screen, so SELECT shows it; touch still cycles the language
+        PlaySE(SEQ_SE_GS_ZKN03);
+        pokedexApp->ssShowListInfo ^= 1;
+#else
         PokedexApp_CycleListEntryLanguage(pokedexApp, PokedexApp_GetCursorSpecies(pokedexApp), 1);
+#endif
         break;
     case 9:
         if (pokedexApp->listPage != 0) {

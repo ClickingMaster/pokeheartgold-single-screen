@@ -335,6 +335,9 @@ struct PokedexAppData {
     PokedexAreaList areaList;                       // 0x18DC
     PokedexDungeonArea *dungeonAreaTable;           // 0x1908
     PokedexOverworldArea *overworldAreaTable;       // 0x190C
+#ifdef SINGLE_SCREEN
+    u8 ssShowListInfo; // SELECT on the list shows the top screen's info card
+#endif
 }; // size: 0x1910
 
 void PokedexApp_VBlankCallback(void *cb_arg);
