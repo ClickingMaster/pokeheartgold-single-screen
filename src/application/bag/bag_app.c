@@ -1577,6 +1577,9 @@ static void BagApp_DrawItemMenu(BagApp *app, const u8 *actions) {
     BagApp_PrintItemMenuLabel(&app->dynWindows[14], app->menuStrings, actions[1]);
     BagApp_PrintItemMenuLabel(&app->dynWindows[15], app->menuStrings, actions[2]);
     BagApp_PrintItemMenuLabel(&app->dynWindows[16], app->menuStrings, actions[3]);
+#ifdef SINGLE_SCREEN
+    BagApp_SingleScreen_ShowDescription(app, !(app->bagView->mode == 6 && BagApp_IsBerryOrMulch(app->bagView->pockets[app->bagView->pocketIndex].pocketId, app->bagView->itemId) == FALSE));
+#endif
 }
 
 static int BagApp_HandleItemMenuInput(BagApp *app) {
@@ -1679,6 +1682,9 @@ static int BagApp_State_RunItemAction(BagApp *app) {
 
     BagApp_HideItemMenuSprites(app);
     BagApp_ClearItemMenuLabels(&app->dynWindows[13]);
+#ifdef SINGLE_SCREEN
+    BagApp_SingleScreen_ShowDescription(app, FALSE);
+#endif
     action = app->itemActions[app->chosenAction];
     return action(app);
 }
@@ -3259,7 +3265,33 @@ void BagApp_AddItemActionWindows(BagApp *app) {
     FillWindowPixelBuffer(&app->dynWindows[22], 0);
     AddWindowParameterized(app->bgConfig, &app->dynWindows[23], GF_BG_LYR_SUB_0, 24, 14, 8, 3, 11, 0x387);
     FillWindowPixelBuffer(&app->dynWindows[23], 0);
+#ifdef SINGLE_SCREEN
+    // the item list windows are gone while the item menu is up, so their tiles are free
+    AddWindowParameterized(app->bgConfig, &app->ssDescWindow, GF_BG_LYR_SUB_0, 0, 0, 32, 6, 11, 0xBF);
+    FillWindowPixelBuffer(&app->ssDescWindow, 0);
+#endif
 }
+
+#ifdef SINGLE_SCREEN
+void BagApp_SingleScreen_ShowDescription(BagApp *app, BOOL show) {
+    String *string;
+
+    if (app->ssDescWindow.bgConfig == NULL) {
+        return;
+    }
+    if (show) {
+        // opaque, so it covers the pocket tabs like the prompt window it replaces
+        FillWindowPixelBuffer(&app->ssDescWindow, 15);
+        string = String_New(0x82, HEAP_ID_6);
+        GetItemDescIntoString(string, app->bagView->itemId, HEAP_ID_6);
+        AddTextPrinterParameterizedWithColor(&app->ssDescWindow, 0, string, 12, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 15), NULL);
+        String_Delete(string);
+        ScheduleWindowCopyToVram(&app->ssDescWindow);
+    } else {
+        ClearWindowTilemapAndScheduleTransfer(&app->ssDescWindow);
+    }
+}
+#endif
 
 void BagApp_RemoveItemActionWindows(BagApp *app) {
     int i;
@@ -3267,6 +3299,11 @@ void BagApp_RemoveItemActionWindows(BagApp *app) {
     if (app->dynWindows[12].bgConfig == NULL) {
         return;
     }
+#ifdef SINGLE_SCREEN
+    ClearWindowTilemapAndScheduleTransfer(&app->ssDescWindow);
+    RemoveWindow(&app->ssDescWindow);
+    app->ssDescWindow.bgConfig = NULL;
+#endif
     for (i = 0; i < 3; i++) {
         ClearWindowTilemapAndScheduleTransfer(&app->dynWindows[i + 17]);
         RemoveWindow(&app->dynWindows[i + 17]);

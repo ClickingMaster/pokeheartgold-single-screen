@@ -117,9 +117,15 @@ void BagApp_PrintItemSelectedMessage(BagApp *app, const u8 *actions, int count) 
         BagApp_ShowTMHMTypeIcons(app, app->bagView->itemId, TRUE);
         BagApp_LoadInfoPanelTilemap(app, 0);
     }
+    pocket = &app->bagView->pockets[app->bagView->pocketIndex];
+#ifdef SINGLE_SCREEN
+    // the item description takes this spot; BagApp_DrawItemMenu prints it
+    if (!(app->bagView->mode == 6 && BagApp_IsBerryOrMulch(pocket->pocketId, app->bagView->itemId) == FALSE)) {
+        return;
+    }
+#endif
     DrawFrameAndWindow2(&app->windows[2], TRUE, 0x3E2, 12);
     FillWindowPixelBuffer(&app->windows[2], 15);
-    pocket = &app->bagView->pockets[app->bagView->pocketIndex];
     if (app->bagView->mode == 6 && BagApp_IsBerryOrMulch(pocket->pocketId, app->bagView->itemId) == FALSE) {
         template = NewString_ReadMsgData(app->msgData, msg_0010_00106);
     } else {

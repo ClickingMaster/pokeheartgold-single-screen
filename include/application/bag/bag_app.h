@@ -141,6 +141,9 @@ typedef struct BagApp {
     BagAppScene scene;
     BagAppButtonFeedback buttonFeedback;
     int chosenAction;
+#ifdef SINGLE_SCREEN
+    Window ssDescWindow; // item description on the visible screen, under the item menu's item box
+#endif
 } BagApp;
 
 void BagApp_LoadInfoPanelTilemap(BagApp *app, int mode);
@@ -152,6 +155,9 @@ void BagApp_RemoveItemActionWindows(BagApp *app);
 void BagApp_BufferSlotItemName(BagApp *app, u32 slot, u32 fieldIdx);
 void BagApp_BufferSlotItemNamePlural(BagApp *app, u32 slot, u32 fieldIdx);
 void BagApp_PrintItemDescription(BagApp *app, u16 itemId);
+#ifdef SINGLE_SCREEN
+void BagApp_SingleScreen_ShowDescription(BagApp *app, BOOL show);
+#endif
 void BagApp_PrintTMHMMoveInfo(BagApp *app, u16 itemId);
 void BagApp_PrintTMHMNumber(BagApp *app, Window *window, ItemSlot *slot, int y);
 void *BagApp_LoadListIconChars(BagApp *app, NNSG2dCharacterData **charData);
