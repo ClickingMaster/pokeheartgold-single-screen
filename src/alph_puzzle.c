@@ -602,6 +602,10 @@ BOOL AlphPuzzle_Init(OverlayManager *man, int *state) {
 
 BOOL AlphPuzzle_Main(OverlayManager *man, int *state) {
     AlphPuzzleData *data = OverlayManager_GetData(man);
+#ifdef SINGLE_SCREEN
+    // the puzzle is played on the main engine; the picture to copy is on the sub engine
+    SingleScreen_HandleSwapKey();
+#endif
     switch (*state) {
     case ALPH_PUZZLE_STATE_FADE_IN:
         *state = AlphPuzzleMainSeq_FadeIn(data);
