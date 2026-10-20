@@ -220,6 +220,9 @@ void DowsingMchn_Exit(void *unused, SysTask *task) {
     DowsingMchn_RemoveWindows(dowsing);
     DowsingMchn_FreeStrings(dowsing);
     DowsingMchn_FreeBgs(dowsing->bgConfig);
+#ifdef SINGLE_SCREEN
+    SingleScreen_ShowSubEngine(FALSE);
+#endif
     DestroySysTaskAndEnvironment(task);
     Heap_Destroy(HEAP_ID_8);
 }
@@ -429,6 +432,17 @@ static void DowsingMchn_Task(SysTask *task, void *taskData) {
     if (dowsing->fieldSystem->suppressBottomScreenDim && FieldSystem_IsPlayerMovementAllowed(dowsing->fieldSystem)) {
         dowsing->fieldSystem->suppressBottomScreenDim = FALSE;
     }
+#ifdef SINGLE_SCREEN
+    // the radar is on the hidden screen; SELECT brings it up and walking or any field button puts the map back
+    if (gSystem.newKeys & PAD_BUTTON_SELECT) {
+        if (FieldSystem_IsPlayerMovementAllowed(dowsing->fieldSystem) || SingleScreen_IsSubEngineShown()) {
+            PlaySE(SEQ_SE_DP_SELECT);
+            SingleScreen_ShowSubEngine(!SingleScreen_IsSubEngineShown());
+        }
+    } else if (SingleScreen_IsSubEngineShown() && ((gSystem.newKeys | gSystem.heldKeys) & (PAD_PLUS_KEY_MASK | PAD_BUTTON_A | PAD_BUTTON_X | PAD_BUTTON_Y | PAD_BUTTON_START))) {
+        SingleScreen_ShowSubEngine(FALSE);
+    }
+#endif
     if (dowsing->touchActive == FALSE && TouchscreenHitbox_FindHitboxAtTouchNew(gDowsingMchnSearchAreaHitbox) != -1) {
         dowsing->touchActive = TRUE;
     }
