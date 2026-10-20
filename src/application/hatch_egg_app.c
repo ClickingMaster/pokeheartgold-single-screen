@@ -895,12 +895,19 @@ static void HatchEggYesNoMenu_Show(HatchEggYesNoMenu *menu, u32 yesMsgId, u32 no
     ToggleBgLayer(GF_BG_LYR_SUB_2, GF_PLANE_TOGGLE_ON);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
     ManagedSprite_SetDrawFlag(menu->cursor, TRUE);
+#ifdef SINGLE_SCREEN
+    // the buttons are on the sub engine, SELECT goes back to the question
+    SingleScreen_ShowSubEngine(TRUE);
+#endif
 }
 
 // Returns the selection (1 = yes, 2 = no) once a button was pressed and its animation has ended, else 0.
 static int HatchEggYesNoMenu_Run(HatchEggYesNoMenu *menu) {
     switch (menu->state) {
     case HATCH_EGG_YES_NO_MENU_INPUT:
+#ifdef SINGLE_SCREEN
+        SingleScreen_HandleSwapKey();
+#endif
         if (HatchEggYesNoMenu_HandleInput(menu)) {
             menu->state++;
         }
@@ -912,6 +919,9 @@ static int HatchEggYesNoMenu_Run(HatchEggYesNoMenu *menu) {
             ToggleBgLayer(GF_BG_LYR_SUB_2, GF_PLANE_TOGGLE_OFF);
             ManagedSprite_SetDrawFlag(menu->cursor, FALSE);
             GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_OFF);
+#ifdef SINGLE_SCREEN
+            SingleScreen_ShowSubEngine(FALSE);
+#endif
             return menu->selection;
         }
         break;
