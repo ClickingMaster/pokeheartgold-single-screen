@@ -439,6 +439,15 @@ BOOL GeonetGlobe_Main(OverlayManager *man, int *state) {
     int nearestLocation;
     NARC *narc;
 
+#ifdef SINGLE_SCREEN
+    // the messages and the registration menus are on the sub engine, the globe is on the main one
+    if (*state < GEONET_GLOBE_STATE_START_GLOBE) {
+        SingleScreen_ShowSubEngine(TRUE);
+    } else if (*state == GEONET_GLOBE_STATE_START_GLOBE) {
+        SingleScreen_ShowSubEngine(FALSE);
+    }
+#endif
+
     switch (*state) {
     case GEONET_GLOBE_STATE_START_GLOBE:
     case GEONET_GLOBE_STATE_GLOBE:
@@ -645,6 +654,10 @@ case13_no:
     case GEONET_GLOBE_STATE_GLOBE: {
         u16 wasZoomedIn = globe->zoomedIn;
 
+#ifdef SINGLE_SCREEN
+        // the messages and the location names are on the hidden screen
+        SingleScreen_HandleSwapKey();
+#endif
         GeonetGlobe_HandleTouch(globe);
         if (GeonetGlobe_FindNearestLocation(globe, &nearestLocation)) {
             DrawFrameAndWindow1(&globe->windows[GEONET_GLOBE_WINDOW_INFO_BUTTON], FALSE, 473, 7);
@@ -719,6 +732,10 @@ case13_no:
 BOOL GeonetGlobe_Exit(OverlayManager *man, int *state) {
     GeonetGlobe *globe = OverlayManager_GetData(man);
     enum HeapID heapID = globe->heapID;
+
+#ifdef SINGLE_SCREEN
+    SingleScreen_ShowSubEngine(FALSE);
+#endif
 
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
