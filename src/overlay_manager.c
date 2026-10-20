@@ -48,6 +48,10 @@ BOOL OverlayManager_Run(OverlayManager *man) {
         if (man->template.ovy_id != FS_OVERLAY_ID_NONE) {
             HandleLoadOverlay(man->template.ovy_id, OVY_LOAD_ASYNC);
         }
+#ifdef SINGLE_SCREEN
+        // every app starts with the main engine shown, whatever the one before it left
+        SingleScreen_ShowSubEngine(FALSE);
+#endif
         man->exec_state = 1;
         // fallthrough
     case 1:
