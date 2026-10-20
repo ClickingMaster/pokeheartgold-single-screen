@@ -19,6 +19,9 @@
 #include "script.h"
 #include "script_manager.h"
 #include "script_pokemon_util.h"
+#ifdef SINGLE_SCREEN
+#include "field/script_menu.h"
+#endif
 
 // Note: move tutors for Blast Burn, Hydro Cannon, Frenzy Plant
 // and Draco Meteor are handled separately in scr_seq_0948_T30R0601.s
@@ -289,6 +292,10 @@ BOOL ScrCmd_MoveTutorChooseMove(ScriptContext *ctx) {
     messageData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0750_bin, HEAP_ID_FIELD3);
     String *string = String_New(0x10, HEAP_ID_FIELD3);
     showAsTwoColumns = (numLearnableMoves + showNextButton >= 4) ? 1 : 0;
+#ifdef SINGLE_SCREEN
+    // the list window has one row per move, with the cost on the same line
+    showAsTwoColumns = 0;
+#endif
     for (i = 0; i < numLearnableMoves; i++) {
         ReadMsgDataIntoString(messageData, sTutorMoves[learnableMoves[i + numMovesToSkip]].move, string);
         BufferString(*messageFormat, 0, string, 2, 1, 2);
@@ -301,7 +308,15 @@ BOOL ScrCmd_MoveTutorChooseMove(ScriptContext *ctx) {
         ScriptMenu_AddListItem(*unk, 2, 0xff, 0xfffd);
     }
     ScriptMenu_AddListItem(*unk, 3, 0xff, 0xfffe);
+#ifdef SINGLE_SCREEN
+    // The touch list is on the hidden screen: show an ordinary field list window instead.
+    // B gives 0xfffe, the same as the cancel row. The width is fixed because
+    // the cost is placed with a cursor move the auto width doesn't count.
+    ScriptMenu_SetMenuPosition(*unk, 10, 1);
+    ScriptMenu_ShowListWithWidth(*unk, 21);
+#else
     FieldSystem_SetTouchscreenChoiceMenuState(fieldSystem, 3, 7, GetVarPointer(fieldSystem, ctx->data[0]));
+#endif
     SetupNativeScript(ctx, NativeScript_WaitMoveTutorMenu);
     u16 *unused = GetVarPointer(fieldSystem, ctx->data[0]); // yes, this is needed here to match
     return TRUE;
@@ -314,7 +329,10 @@ static BOOL NativeScript_WaitMoveTutorMenu(ScriptContext *ctx) {
     if (*result == 0xeeee) {
         return FALSE;
     }
+#ifndef SINGLE_SCREEN
+    // the list window frees itself when it closes
     ScriptMenu_Free(*unk);
+#endif
     return TRUE;
 }
 
