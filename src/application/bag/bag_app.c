@@ -3269,10 +3269,14 @@ void BagApp_AddItemActionWindows(BagApp *app) {
     // the item list windows are gone while the item menu is up, so their tiles are free
     AddWindowParameterized(app->bgConfig, &app->ssDescWindow, GF_BG_LYR_SUB_0, 0, 0, 32, 6, 11, 0xBF);
     FillWindowPixelBuffer(&app->ssDescWindow, 0);
+    AddWindowParameterized(app->bgConfig, &app->ssMoveWindow, GF_BG_LYR_SUB_0, 0, 13, 32, 4, 11, 0x17F);
+    FillWindowPixelBuffer(&app->ssMoveWindow, 0);
 #endif
 }
 
 #ifdef SINGLE_SCREEN
+static void BagApp_SingleScreen_PrintMoveStats(BagApp *app, u16 itemId);
+
 void BagApp_SingleScreen_ShowDescription(BagApp *app, BOOL show) {
     String *string;
 
@@ -3287,9 +3291,50 @@ void BagApp_SingleScreen_ShowDescription(BagApp *app, BOOL show) {
         AddTextPrinterParameterizedWithColor(&app->ssDescWindow, 0, string, 12, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 15), NULL);
         String_Delete(string);
         ScheduleWindowCopyToVram(&app->ssDescWindow);
+        if (app->bagView->pockets[app->bagView->pocketIndex].pocketId == POCKET_TMHMS) {
+            BagApp_SingleScreen_PrintMoveStats(app, app->bagView->itemId);
+        }
     } else {
         ClearWindowTilemapAndScheduleTransfer(&app->ssDescWindow);
+        ClearWindowTilemapAndScheduleTransfer(&app->ssMoveWindow);
     }
+}
+
+// a text version of the top screen's move info (the type and category icons are sprites up there)
+static void BagApp_SingleScreen_PrintStat(BagApp *app, int msgId, int value, BOOL known, int x, int y) {
+    Window *window = &app->ssMoveWindow;
+    String *string = NewString_ReadMsgData(app->msgData, msgId);
+    AddTextPrinterParameterizedWithColor(window, 0, string, x, y, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
+    String_Delete(string);
+    string = NewString_ReadMsgData(app->msgData, known ? msg_0010_00094 : msg_0010_00025);
+    BufferIntegerAsString(app->msgFormat, 0, value, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
+    StringExpandPlaceholders(app->msgFormat, app->msgBuf, string);
+    String_Delete(string);
+    AddTextPrinterParameterizedWithColor(window, 0, app->msgBuf, x + 72, y, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
+}
+
+static void BagApp_SingleScreen_PrintMoveStats(BagApp *app, u16 itemId) {
+    Window *window = &app->ssMoveWindow;
+    u16 move = TMHMGetMove(itemId);
+    u16 value;
+    String *string;
+    MsgData *typeNames;
+
+    FillWindowPixelBuffer(window, 0);
+    string = NewString_ReadMsgData(app->msgData, msg_0010_00101);
+    AddTextPrinterParameterizedWithColor(window, 0, string, 16, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
+    String_Delete(string);
+    typeNames = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0735_bin, HEAP_ID_6);
+    string = NewString_ReadMsgData(typeNames, GetMoveAttr(move, MOVEATTR_TYPE));
+    AddTextPrinterParameterizedWithColor(window, 0, string, 48, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
+    String_Delete(string);
+    DestroyMsgData(typeNames);
+    BagApp_SingleScreen_PrintStat(app, msg_0010_00089, GetMoveMaxPP(move, 0), TRUE, 16, 16);
+    value = GetMoveAttr(move, MOVEATTR_POWER);
+    BagApp_SingleScreen_PrintStat(app, msg_0010_00090, value, value > 1, 136, 0);
+    value = GetMoveAttr(move, MOVEATTR_ACCURACY);
+    BagApp_SingleScreen_PrintStat(app, msg_0010_00091, value, value != 0, 136, 16);
+    ScheduleWindowCopyToVram(window);
 }
 #endif
 
@@ -3303,6 +3348,9 @@ void BagApp_RemoveItemActionWindows(BagApp *app) {
     ClearWindowTilemapAndScheduleTransfer(&app->ssDescWindow);
     RemoveWindow(&app->ssDescWindow);
     app->ssDescWindow.bgConfig = NULL;
+    ClearWindowTilemapAndScheduleTransfer(&app->ssMoveWindow);
+    RemoveWindow(&app->ssMoveWindow);
+    app->ssMoveWindow.bgConfig = NULL;
 #endif
     for (i = 0; i < 3; i++) {
         ClearWindowTilemapAndScheduleTransfer(&app->dynWindows[i + 17]);

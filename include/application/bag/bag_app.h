@@ -143,6 +143,7 @@ typedef struct BagApp {
     int chosenAction;
 #ifdef SINGLE_SCREEN
     Window ssDescWindow; // item description on the visible screen, under the item menu's item box
+    Window ssMoveWindow; // a TM or HM's move stats, between the item box and the actions
 #endif
 } BagApp;
 
