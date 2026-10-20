@@ -229,6 +229,10 @@ BOOL Credits_Init(OverlayManager *man, int *state) {
             work->skipCredits = FALSE;
             gSystem.screensFlipped = TRUE;
             GfGfx_SwapDisplay();
+#ifdef SINGLE_SCREEN
+            // the names are on the sub engine, the walking trainers on the main one
+            SingleScreen_ShowSubEngine(TRUE);
+#endif
             CreateOamAndObjResMgrs(work);
             LoadCreditsSpriteResources(work);
             LoadCutsceneSpriteResources(work);
@@ -314,6 +318,9 @@ BOOL Credits_Main(OverlayManager *man, int *state) {
         }
         break;
     case CREDITS_STATE_MAIN:
+#ifdef SINGLE_SCREEN
+        SingleScreen_HandleSwapKey();
+#endif
         // No skipping on first playthrough
         if (work->args->gameCleared && ((gSystem.newKeys & PAD_BUTTON_START) || gSystem.touchNew != 0)) {
             work->skipCredits = TRUE;
@@ -827,7 +834,14 @@ static void FlipScreensCB(SysTask *task, void *taskData) {
         } else {
             gSystem.screensFlipped = TRUE;
         }
+#ifdef SINGLE_SCREEN
+        // keep whichever engine the player is looking at
+        BOOL subShown = SingleScreen_IsSubEngineShown();
         GfGfx_SwapDisplay();
+        SingleScreen_ShowSubEngine(subShown);
+#else
+        GfGfx_SwapDisplay();
+#endif
     }
 }
 
