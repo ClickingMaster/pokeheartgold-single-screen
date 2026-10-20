@@ -448,6 +448,10 @@ struct PCBoxWork {
     u32 returnCursorPos;
     u32 nextState;
     PCBoxView *view;
+#ifdef SINGLE_SCREEN
+    u8 ssViewActive; // between PCBox_State_Init and PCBox_State_Exit
+    u8 ssShowInfo;   // SELECT shows the top screen's info card in place of the box
+#endif
 };
 
 void PCBox_VBlankCallback(SysTask *task, void *data);

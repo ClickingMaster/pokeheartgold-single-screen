@@ -162,10 +162,20 @@ u32 PCBox_State_Init(PCBoxWork *work) {
     PCBox_CreateModeGridInput(work);
     work->view->vblankTask = SysTask_CreateOnVBlankQueue(PCBox_VBlankCallback, work, 0);
     PCBox_SetBlendEnabled(1);
+#ifdef SINGLE_SCREEN
+    work->ssViewActive = TRUE;
+    work->ssShowInfo = FALSE;
+    SingleScreen_ShowSubEngine(FALSE);
+#endif
     return work->nextState;
 }
 
 u32 PCBox_State_Exit(PCBoxWork *work) {
+#ifdef SINGLE_SCREEN
+    work->ssViewActive = FALSE;
+    work->ssShowInfo = FALSE;
+    SingleScreen_ShowSubEngine(FALSE);
+#endif
     PCBox_SaveMenuInputState(work);
     SysTask_Destroy(work->view->vblankTask);
     PCBox_FreeGridInput(work);

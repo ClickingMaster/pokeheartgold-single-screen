@@ -31,6 +31,7 @@
 #include "render_window.h"
 #include "save_arrays.h"
 #include "sprite_system.h"
+#include "system.h"
 #include "touchscreen.h"
 #include "yes_no_prompt.h"
 
@@ -95,6 +96,12 @@ BOOL PCBox_Init(OverlayManager *manager, int *state) {
 BOOL PCBox_Main(OverlayManager *manager, int *state) {
     PCBoxWork *work = OverlayManager_GetData(manager);
 
+#ifdef SINGLE_SCREEN
+    if (work->ssViewActive && (gSystem.newKeys & PAD_BUTTON_SELECT)) {
+        work->ssShowInfo ^= 1;
+        SingleScreen_ShowSubEngine(work->ssShowInfo);
+    }
+#endif
     if (PCBox_RunStateMachine(work, state) == FALSE) {
         return TRUE;
     }
