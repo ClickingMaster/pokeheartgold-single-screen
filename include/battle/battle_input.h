@@ -217,6 +217,12 @@ struct BattleInput {
     ManagedSprite *spriteCaughtBugIcon;
     ManagedSprite *spriteBugNet;
     ManagedSprite *spriteSportBall;
+#ifdef SINGLE_SCREEN
+    Window *ssWindow; // the current menu, drawn on the main screen
+    struct ListMenuCursor *ssCursor;
+    s8 ssMenuId; // menu shown in ssWindow, or BATTLE_MENU_NONE
+    s8 ssSelection;
+#endif
 };
 
 BattleInput *BattleInput_New(void);

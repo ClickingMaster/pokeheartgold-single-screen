@@ -21,6 +21,13 @@
 #include "font_sprite.h"
 #include "type_icon_resources.h"
 #include "ui_util.h"
+#ifdef SINGLE_SCREEN
+#include "msgdata/msg.naix"
+
+#include "list_menu_cursor.h"
+#include "msgdata.h"
+#include "text.h"
+#endif
 
 static void BattleInput_FreeDefaultResources(BattleInput *battleInput);
 static void BattleInput_FreeBallGaugeResources(BattleInput *battleInput);
@@ -105,6 +112,14 @@ static int BattleInput_CatchingTutorialCB_Bag(BattleInput *battleInput);
 static void BattleInput_CreateBugContestGraphics(BattleInput *battleInput);
 static void BattleInput_DeleteBugContestGraphics(BattleInput *battleInput);
 static BOOL BattleSystem_IsInFrontier(BattleSystem *battleSystem);
+#ifdef SINGLE_SCREEN
+static void BattleInput_SingleScreen_Init(BattleInput *battleInput);
+static void BattleInput_SingleScreen_Free(BattleInput *battleInput);
+static void BattleInput_SingleScreen_Update(BattleInput *battleInput);
+static void BattleInput_SingleScreen_Hide(BattleInput *battleInput);
+static BOOL BattleInput_IsMultiTarget(int monTargetType);
+static u32 BattleCursor_CheckKeyInput_SingleScreenMainMenu(BattleMenuCursor *cursor);
+#endif
 
 // Data
 
@@ -1263,6 +1278,9 @@ BattleInput *BattleInput_New(void) {
     MI_CpuFill8(input, 0, sizeof(BattleInput));
 
     input->curMenuId = BATTLE_MENU_NONE;
+#ifdef SINGLE_SCREEN
+    input->ssMenuId = BATTLE_MENU_NONE;
+#endif
 
     return input;
 }
@@ -1376,6 +1394,9 @@ void *BattleInput_NewInit(NARC *unused, NARC *unused2, BattleSystem *battleSyste
     TextFlags_ResetHasContinuedInput();
 
     battleInput->bgTask = SysTask_CreateOnMainQueue(Task_BattleMenuMessageWaitForTouchResponse, battleInput, 55000);
+#ifdef SINGLE_SCREEN
+    BattleInput_SingleScreen_Init(battleInput);
+#endif
 
     return battleInput;
 }
@@ -1401,6 +1422,9 @@ void BattleInput_Free(BattleInput *battleInput) {
     Heap_Free(battleInput->bgPalNormal);
     Heap_Free(battleInput->bgPalTouch);
     SysTask_Destroy(battleInput->bgTask);
+#ifdef SINGLE_SCREEN
+    BattleInput_SingleScreen_Free(battleInput);
+#endif
     Heap_Free(battleInput);
 }
 
@@ -1460,6 +1484,9 @@ void BattleInput_ChangeMenu(NARC *narc0, NARC *narc1, BattleInput *battleInput, 
     }
 
     battleInput->isTouchDisabled = FALSE;
+#ifdef SINGLE_SCREEN
+    BattleInput_SingleScreen_Hide(battleInput);
+#endif
 
     BgConfig *bgConfig = BattleSystem_GetBgConfig(battleInput->battleSystem);
     SpriteSystem *spriteSystem = BattleSystem_GetSpriteSystem(battleInput->battleSystem);
@@ -1745,6 +1772,14 @@ int BattleInput_CheckTouch(BattleInput *battleInput) {
             }
         }
     }
+
+#ifdef SINGLE_SCREEN
+    if (ret != -1) {
+        BattleInput_SingleScreen_Hide(battleInput);
+    } else {
+        BattleInput_SingleScreen_Update(battleInput);
+    }
+#endif
 
     return ret;
 }
@@ -3726,6 +3761,13 @@ static int BattleInput_CheckCursorInput(BattleInput *battleInput) {
     }
 
     if (cursor->enabled == FALSE) {
+#ifdef SINGLE_SCREEN
+        // The cursor is the only way to see the selection, so show it straight away.
+        cursor->enabled = TRUE;
+        battleInput->keyPressed = FALSE;
+        menu->funcCursor(battleInput, TRUE);
+        return TOUCH_MENU_NO_INPUT;
+#endif
         if ((battleInput->keyPressed == TRUE) || (gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B | PAD_BUTTON_X | PAD_BUTTON_Y | PAD_KEY_RIGHT | PAD_KEY_LEFT | PAD_KEY_UP | PAD_KEY_DOWN))) {
             if (battleInput->keyPressed == FALSE) {
                 PlaySE(SEQ_SE_DP_SELECT);
@@ -3768,6 +3810,10 @@ static int BattleInput_CursorMove_MainMenu(BattleInput *battleInput, int shouldI
         key = BattleCursor_CheckKeyInput(cursor, 1, 1, sCursorArrayMainMenu[0]);
         break;
     default:
+#ifdef SINGLE_SCREEN
+        key = BattleCursor_CheckKeyInput_SingleScreenMainMenu(cursor);
+        break;
+#endif
         input = sCursorArrayMainMenu[cursor->menuY][cursor->menuX];
 
         if ((input == CURSOR_INPUT_RUN) && (gSystem.newKeys & PAD_KEY_UP)) {
@@ -3900,6 +3946,14 @@ static int BattleInput_CursorMove_FightMenu(BattleInput *battleInput, int justEn
         cursor->menuY = cursorPos->moveY;
         input = sCursorArrayFightMenu[cursor->menuY][cursor->menuX];
 
+#ifdef SINGLE_SCREEN
+        // There is no CANCEL button on the main screen; B cancels.
+        if (input == CURSOR_INPUT_FIGHT_CANCEL) {
+            cursor->menuX = 0;
+            cursor->menuY = 0;
+            input = sCursorArrayFightMenu[cursor->menuY][cursor->menuX];
+        }
+#endif
         if ((input != CURSOR_INPUT_FIGHT_CANCEL) && (menu->moveNo[input - 1] == MOVE_NONE)) {
             cursorPos->moveX = 0;
             cursorPos->moveY = 0;
@@ -3913,7 +3967,16 @@ static int BattleInput_CursorMove_FightMenu(BattleInput *battleInput, int justEn
     }
 
     MI_CpuCopy8(sCursorArrayFightMenu, cursorArray, 6);
+#ifdef SINGLE_SCREEN
+    for (i = 0; i < MAX_MON_MOVES; i++) {
+        if (menu->moveNo[i] == MOVE_NONE) {
+            cursorArray[i >> 1][i & 1] = 0xff;
+        }
+    }
+    keyPressed = BattleCursor_CheckKeyInput(cursor, 2, 2, cursorArray[0]);
+#else
     keyPressed = BattleCursor_CheckKeyInput(cursor, 2, 3, cursorArray[0]);
+#endif
 
     switch (keyPressed) {
     case PAD_KEY_UP:
@@ -4011,7 +4074,11 @@ static int BattleInput_CursorMove_TargetMenu(BattleInput *battleInput, int justE
     case TARGET_ANY_ALLY:
     case TARGET_ANY_OPPONENT:
         menuMaxX = 2;
+#ifdef SINGLE_SCREEN
+        menuMaxY = 2; // B cancels
+#else
         menuMaxY = 3;
+#endif
         break;
         // Targets all selected
     case TARGET_ALL_OPPONENTS:
@@ -4021,7 +4088,11 @@ static int BattleInput_CursorMove_TargetMenu(BattleInput *battleInput, int justE
     case TARGET_ALL_NOT_PLAYER_RIGHT:
         multiTarget = TRUE;
         menuMaxX = 1;
+#ifdef SINGLE_SCREEN
+        menuMaxY = 1; // B cancels
+#else
         menuMaxY = 2;
+#endif
 
         if ((connectRange[BATTLER_ENEMY2] == 1) && (connectRange[BATTLER_ENEMY] == 1)) {
             leftOpponent = menuTemplate->touchscreenRect[3].rect.left + 8;
@@ -4609,3 +4680,461 @@ static BOOL BattleSystem_IsInFrontier(BattleSystem *battleSystem) {
     int battleType = BattleSystem_GetBattleType(battleSystem);
     return (battleType & BATTLE_TYPE_FRONTIER) && !(battleType & BATTLE_TYPE_13);
 }
+
+#ifdef SINGLE_SCREEN
+// The battle menus live on the touch screen, which single-screen builds do not show, so the
+// menus are also drawn as text windows over the message box on the main screen. They follow
+// the button cursor, which is always on.
+
+enum SingleScreenMenuKind {
+    SS_MENU_NONE,
+    SS_MENU_MAIN,
+    SS_MENU_FIGHT_ONLY,
+    SS_MENU_PAL_PARK,
+    SS_MENU_FIGHT,
+    SS_MENU_TARGET,
+    SS_MENU_TWO_OPTIONS,
+};
+
+#define SS_WINDOW_BASE_TILE  0x100
+#define SS_WINDOW_PALETTE    11
+#define SS_FRAME_BASE_TILE   1
+#define SS_FRAME_PALETTE     10
+#define SS_TEXT_COLOR        MAKE_TEXT_COLOR(1, 2, 15)
+#define SS_TEXT_COLOR_GREY   MAKE_TEXT_COLOR(3, 4, 15)
+#define SS_SELECTION_ALL     0x10
+
+typedef struct SingleScreenMenuItem {
+    String *str;
+    u8 x;
+    u8 y;
+    u8 selected;
+    u8 grey;
+} SingleScreenMenuItem;
+
+static int BattleInput_SingleScreen_GetMenuKind(int menuId) {
+    switch (menuId) {
+    case BATTLE_MENU_MAIN_INITIAL:
+    case BATTLE_MENU_MAIN:
+    case BATTLE_MENU_3:
+    case BATTLE_MENU_4:
+    case BATTLE_MENU_7:
+    case BATTLE_MENU_8:
+    case BATTLE_MENU_19:
+    case BATTLE_MENU_20:
+        return SS_MENU_MAIN;
+    case BATTLE_MENU_5:
+    case BATTLE_MENU_6:
+        return SS_MENU_FIGHT_ONLY;
+    case BATTLE_MENU_PAL_PARK_INITIAL:
+    case BATTLE_MENU_PAL_PARK:
+        return SS_MENU_PAL_PARK;
+    case BATTLE_MENU_FIGHT:
+        return SS_MENU_FIGHT;
+    case BATTLE_MENU_TARGET:
+        return SS_MENU_TARGET;
+    case BATTLE_MENU_YES_NO:
+    case BATTLE_MENU_KEEP_FORGET_MOVE:
+    case BATTLE_MENU_GIVE_UP_ON_MOVE:
+    case BATTLE_MENU_SWITCH_OR_FLEE:
+    case BATTLE_MENU_SWITCH_OR_KEEP:
+        return SS_MENU_TWO_OPTIONS;
+    default:
+        return SS_MENU_NONE;
+    }
+}
+
+static BOOL BattleInput_IsMultiTarget(int monTargetType) {
+    switch (monTargetType) {
+    case TARGET_ALL_OPPONENTS:
+    case TARGET_ALL_NOT_PLAYER_LEFT:
+    case TARGET_ALL:
+    case TARGET_ALL_ALLIES:
+    case TARGET_ALL_NOT_PLAYER_RIGHT:
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+
+static int BattleInput_SingleScreen_GetSelection(BattleInput *battleInput, int kind) {
+    BattleMenuCursor *cursor = &battleInput->menuCursor;
+
+    if (cursor->enabled == FALSE) {
+        return -1;
+    }
+
+    switch (kind) {
+    case SS_MENU_MAIN:
+    case SS_MENU_FIGHT_ONLY:
+        return sCursorArrayMainMenu[cursor->menuY][cursor->menuX];
+    case SS_MENU_PAL_PARK:
+        return sCursorArrayPalParkMenu[cursor->menuY][0];
+    case SS_MENU_FIGHT:
+        return sCursorArrayFightMenu[cursor->menuY][cursor->menuX];
+    case SS_MENU_TARGET:
+        if (BattleInput_IsMultiTarget(battleInput->monTargetType)) {
+            return cursor->menuY == 0 ? SS_SELECTION_ALL : CURSOR_INPUT_TARGET_CANCEL;
+        }
+        return sTargetMenuButtonInputArray[cursor->menuY][cursor->menuX];
+    case SS_MENU_TWO_OPTIONS:
+        return sTwoOptionsMenuCursorInput[cursor->menuY][0];
+    default:
+        return -1;
+    }
+}
+
+static String *BattleInput_SingleScreen_ReadTwoOption(BattleInput *battleInput, int msgId) {
+    MsgData *msgLoader = BattleSystem_GetMessageLoader(battleInput->battleSystem);
+    MessageFormat *format = BattleSystem_GetMessageFormat(battleInput->battleSystem);
+    String *str = String_New(100, HEAP_ID_BATTLE);
+    String *template = NewString_ReadMsgData(msgLoader, msgId);
+
+    BufferMoveName(format, 0, battleInput->menu.twoOption.moveNo);
+    StringExpandPlaceholders(format, str, template);
+    String_Delete(template);
+
+    return str;
+}
+
+// Fills items[] for the current menu and sets the window rectangle. Returns the number of items.
+static int BattleInput_SingleScreen_BuildItems(BattleInput *battleInput, int kind, int selection, SingleScreenMenuItem *items, u8 *rect) {
+    MsgData *msgLoader = BattleSystem_GetMessageLoader(battleInput->battleSystem);
+    MessageFormat *format = BattleSystem_GetMessageFormat(battleInput->battleSystem);
+    u32 battleType = BattleSystem_GetBattleType(battleInput->battleSystem);
+    int count = 0;
+    int i;
+
+    switch (kind) {
+    case SS_MENU_MAIN:
+    case SS_MENU_FIGHT_ONLY: {
+        static const u8 sPositions[4][2] = {
+            [CURSOR_INPUT_FIGHT] = { 8, 0 },
+            [CURSOR_INPUT_BAG] = { 62, 0 },
+            [CURSOR_INPUT_POKEMON] = { 8, 16 },
+            [CURSOR_INPUT_RUN] = { 62, 16 },
+        };
+        int msgIds[4];
+
+        if (battleType & BATTLE_TYPE_SAFARI) {
+            msgIds[0] = msg_0197_00931; // BALL
+            msgIds[1] = msg_0197_00932; // BAIT
+            msgIds[2] = msg_0197_00933; // MUD
+        } else if (battleType & BATTLE_TYPE_BUG_CONTEST) {
+            msgIds[0] = msg_0197_00924; // FIGHT
+            msgIds[1] = msg_0197_01270; // BALL
+            msgIds[2] = msg_0197_00926; // POKéMON
+        } else {
+            msgIds[0] = msg_0197_00924; // FIGHT
+            msgIds[1] = msg_0197_00925; // BAG
+            msgIds[2] = msg_0197_00926; // POKéMON
+        }
+        msgIds[3] = battleInput->cancelRunDisplay == 1 ? msg_0197_00928 : msg_0197_00927; // CANCEL or RUN
+
+        for (i = 0; i < 4; i++) {
+            if (kind == SS_MENU_FIGHT_ONLY && i != CURSOR_INPUT_FIGHT) {
+                continue;
+            }
+            items[count].str = NewString_ReadMsgData(msgLoader, msgIds[i]);
+            items[count].x = sPositions[i][0];
+            items[count].y = sPositions[i][1];
+            items[count].selected = selection == i;
+            items[count].grey = FALSE;
+            count++;
+        }
+
+        rect[0] = 16;
+        rect[1] = 19;
+        rect[2] = 13;
+        rect[3] = 4;
+        break;
+    }
+    case SS_MENU_PAL_PARK:
+        items[0].str = NewString_ReadMsgData(msgLoader, msg_0197_01223); // BALL
+        items[1].str = NewString_ReadMsgData(msgLoader, msg_0197_00927); // RUN
+        for (i = 0; i < 2; i++) {
+            items[i].x = 8;
+            items[i].y = i * 16;
+            items[i].selected = selection == i;
+            items[i].grey = FALSE;
+        }
+        count = 2;
+
+        rect[0] = 16;
+        rect[1] = 19;
+        rect[2] = 13;
+        rect[3] = 4;
+        break;
+    case SS_MENU_FIGHT: {
+        BattleInputFightMenu *menu = &battleInput->menu.fight;
+        int selectedMove = selection - CURSOR_INPUT_MOVE_1;
+
+        for (i = 0; i < MAX_MON_MOVES; i++) {
+            if (menu->moveNo[i] == MOVE_NONE) {
+                items[count].str = String_New(1, HEAP_ID_BATTLE);
+            } else {
+                items[count].str = GetMoveName(menu->moveNo[i], HEAP_ID_BATTLE);
+            }
+            items[count].x = 8 + (i & 1) * 80;
+            items[count].y = (i >> 1) * 16;
+            items[count].selected = selectedMove == i;
+            items[count].grey = FALSE;
+            count++;
+        }
+
+        if (selectedMove >= 0 && selectedMove < MAX_MON_MOVES && menu->moveNo[selectedMove] != MOVE_NONE) {
+            String *strPP = NewString_ReadMsgData(msgLoader, msg_0197_00938);    // PP
+            String *strSlash = NewString_ReadMsgData(msgLoader, msg_0197_00937); // {pp}/{max}
+            String *strNumbers = String_New(16, HEAP_ID_BATTLE);
+
+            BufferIntegerAsString(format, 0, menu->pp[selectedMove], 2, PRINTING_MODE_RIGHT_ALIGN, 0);
+            BufferIntegerAsString(format, 1, menu->ppMax[selectedMove], 2, PRINTING_MODE_RIGHT_ALIGN, 0);
+            StringExpandPlaceholders(format, strNumbers, strSlash);
+            String_Delete(strSlash);
+
+            items[count].str = strPP;
+            items[count].x = 164;
+            items[count].y = 0;
+            items[count].selected = FALSE;
+            items[count].grey = menu->pp[selectedMove] == 0;
+            count++;
+
+            items[count].str = strNumbers;
+            items[count].x = 180;
+            items[count].y = 0;
+            items[count].selected = FALSE;
+            items[count].grey = menu->pp[selectedMove] == 0;
+            count++;
+
+            MsgData *typeNames = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0735_bin, HEAP_ID_BATTLE);
+            items[count].str = NewString_ReadMsgData(typeNames, GetMoveAttr(menu->moveNo[selectedMove], MOVEATTR_TYPE));
+            DestroyMsgData(typeNames);
+            items[count].x = 164;
+            items[count].y = 16;
+            items[count].selected = FALSE;
+            items[count].grey = FALSE;
+            count++;
+        }
+
+        rect[0] = 2;
+        rect[1] = 19;
+        rect[2] = 27;
+        rect[3] = 4;
+        break;
+    }
+    case SS_MENU_TARGET: {
+        // Same arrangement as the touch screen: opponents on the top row, the player's side below.
+        static const u8 sPositions[4][2] = {
+            [CURSOR_INPUT_TARGET_PLAYER_LEFT] = { 8, 16 },
+            [CURSOR_INPUT_TARGET_OPPONENT_RIGHT] = { 112, 0 },
+            [CURSOR_INPUT_TARGET_PLAYER_RIGHT] = { 112, 16 },
+            [CURSOR_INPUT_TARGET_OPPONENT_LEFT] = { 8, 0 },
+        };
+        BattleInputTargetMenu *menu = &battleInput->menu.target;
+        u8 monsHit[4], monsSelected[4];
+        u8 battlerIds[6];
+
+        BattleInput_GetMonsHitArray(battleInput, monsHit, FALSE);
+        if (selection == SS_SELECTION_ALL) {
+            BattleInput_GetMonsHitArray(battleInput, monsSelected, TRUE);
+        } else {
+            for (i = 0; i < 4; i++) {
+                monsSelected[i] = selection == i;
+            }
+        }
+        BattleSystem_GetBattlerIdsByType(battleInput->battleSystem, battlerIds);
+
+        for (i = 0; i < 4; i++) {
+            int battlerId = battlerIds[2 + i];
+
+            if (menu->targetMons[battlerId].exists != TRUE) {
+                continue;
+            }
+
+            Pokemon *mon = BattleSystem_GetPartyMon(battleInput->battleSystem, battlerId, menu->targetMons[battlerId].selectedMon);
+            String *template = NewString_ReadMsgData(msgLoader, msg_0197_00964); // name without a gender sign
+
+            items[count].str = String_New(24, HEAP_ID_BATTLE);
+            BufferBoxMonNickname(format, 0, Mon_GetBoxMon(mon));
+            StringExpandPlaceholders(format, items[count].str, template);
+            String_Delete(template);
+
+            items[count].x = sPositions[i][0];
+            items[count].y = sPositions[i][1];
+            items[count].selected = monsSelected[i];
+            items[count].grey = monsHit[i] == 0;
+            count++;
+        }
+
+        rect[0] = 2;
+        rect[1] = 19;
+        rect[2] = 27;
+        rect[3] = 4;
+        break;
+    }
+    case SS_MENU_TWO_OPTIONS: {
+        static const u16 sMsgIds[][2] = {
+            { msg_0197_00940, msg_0197_00941 }, // Yes, No
+            { msg_0197_01181, msg_0197_01182 }, // Forget a move!, Keep old moves!
+            { msg_0197_01186, msg_0197_01187 }, // Give up on {move}?, Don't give up on {move}!
+            { msg_0197_01217, msg_0197_01218 }, // Use next Pokémon, Flee
+            { msg_0197_01215, msg_0197_01216 }, // Switch Pokémon, Keep battling
+        };
+        int set;
+        u32 width = 0;
+
+        switch (battleInput->curMenuId) {
+        case BATTLE_MENU_KEEP_FORGET_MOVE:
+            set = 1;
+            break;
+        case BATTLE_MENU_GIVE_UP_ON_MOVE:
+            set = 2;
+            break;
+        case BATTLE_MENU_SWITCH_OR_FLEE:
+            set = 3;
+            break;
+        case BATTLE_MENU_SWITCH_OR_KEEP:
+            set = 4;
+            break;
+        default:
+            set = 0;
+            break;
+        }
+
+        for (i = 0; i < 2; i++) {
+            items[i].str = BattleInput_SingleScreen_ReadTwoOption(battleInput, sMsgIds[set][i]);
+            items[i].x = 8;
+            items[i].y = i * 16;
+            items[i].selected = selection == i;
+            items[i].grey = FALSE;
+
+            u32 itemWidth = FontID_String_GetWidth(0, items[i].str, 0);
+            if (itemWidth > width) {
+                width = itemWidth;
+            }
+        }
+        count = 2;
+
+        // Above the message box, on the right, like the field's YES/NO window.
+        rect[2] = (width + 8 + 7) / 8 + 1;
+        rect[3] = 4;
+        rect[0] = 29 - rect[2];
+        rect[1] = 13;
+        break;
+    }
+    }
+
+    return count;
+}
+
+static void BattleInput_SingleScreen_Hide(BattleInput *battleInput) {
+    if (battleInput->ssMenuId == BATTLE_MENU_NONE) {
+        return;
+    }
+
+    ClearFrameAndWindow2(battleInput->ssWindow, FALSE);
+    RemoveWindow(battleInput->ssWindow);
+    battleInput->ssMenuId = BATTLE_MENU_NONE;
+
+    // The menu covered the message box, so draw it again.
+    DrawFrameAndWindow2(BattleSystem_GetWindow(battleInput->battleSystem, 0), FALSE, SS_FRAME_BASE_TILE, SS_FRAME_PALETTE);
+}
+
+static void BattleInput_SingleScreen_Update(BattleInput *battleInput) {
+    SingleScreenMenuItem items[8];
+    u8 rect[4];
+    int kind, selection, count, i;
+
+    kind = BattleInput_SingleScreen_GetMenuKind(battleInput->curMenuId);
+    if (kind == SS_MENU_NONE) {
+        BattleInput_SingleScreen_Hide(battleInput);
+        return;
+    }
+
+    selection = BattleInput_SingleScreen_GetSelection(battleInput, kind);
+    if (battleInput->ssMenuId == battleInput->curMenuId && battleInput->ssSelection == selection) {
+        return;
+    }
+
+    count = BattleInput_SingleScreen_BuildItems(battleInput, kind, selection, items, rect);
+
+    if (battleInput->ssMenuId != battleInput->curMenuId) {
+        BattleInput_SingleScreen_Hide(battleInput);
+        AddWindowParameterized(BattleSystem_GetBgConfig(battleInput->battleSystem), battleInput->ssWindow, GF_BG_LYR_MAIN_1, rect[0], rect[1], rect[2], rect[3], SS_WINDOW_PALETTE, SS_WINDOW_BASE_TILE);
+        DrawFrameAndWindow2(battleInput->ssWindow, TRUE, SS_FRAME_BASE_TILE, SS_FRAME_PALETTE);
+        battleInput->ssMenuId = battleInput->curMenuId;
+    }
+    battleInput->ssSelection = selection;
+
+    FillWindowPixelBuffer(battleInput->ssWindow, 15);
+    for (i = 0; i < count; i++) {
+        AddTextPrinterParameterizedWithColor(battleInput->ssWindow, 0, items[i].str, items[i].x, items[i].y, TEXT_SPEED_NOTRANSFER, items[i].grey ? SS_TEXT_COLOR_GREY : SS_TEXT_COLOR, NULL);
+        if (items[i].selected) {
+            ListMenuUpdateCursorObj(battleInput->ssCursor, battleInput->ssWindow, items[i].x - 8, items[i].y);
+        }
+        String_Delete(items[i].str);
+    }
+    CopyWindowToVram(battleInput->ssWindow);
+}
+
+// Gen 3 style 2x2 grid for the main menu: FIGHT BAG / POKéMON RUN. The cursor keeps its
+// touch-screen coordinates so the remembered position and the selection still work.
+static u32 BattleCursor_CheckKeyInput_SingleScreenMainMenu(BattleMenuCursor *cursor) {
+    static const s8 sTouchCoords[4][2] = {
+        [CURSOR_INPUT_FIGHT] = { 1, 0 },
+        [CURSOR_INPUT_BAG] = { 0, 1 },
+        [CURSOR_INPUT_POKEMON] = { 2, 1 },
+        [CURSOR_INPUT_RUN] = { 1, 1 },
+    };
+    int input = sCursorArrayMainMenu[cursor->menuY][cursor->menuX];
+    int x = input & 1;
+    int y = input >> 1;
+    u32 key;
+
+    if (gSystem.newKeys & PAD_KEY_UP) {
+        y = 0;
+        key = PAD_KEY_UP;
+    } else if (gSystem.newKeys & PAD_KEY_DOWN) {
+        y = 1;
+        key = PAD_KEY_DOWN;
+    } else if (gSystem.newKeys & PAD_KEY_LEFT) {
+        x = 0;
+        key = PAD_KEY_LEFT;
+    } else if (gSystem.newKeys & PAD_KEY_RIGHT) {
+        x = 1;
+        key = PAD_KEY_RIGHT;
+    } else if (gSystem.newKeys & PAD_BUTTON_A) {
+        return PAD_BUTTON_A;
+    } else if (gSystem.newKeys & PAD_BUTTON_B) {
+        return PAD_BUTTON_B;
+    } else {
+        return 0;
+    }
+
+    if (y * 2 + x == input) {
+        return 0;
+    }
+
+    input = y * 2 + x;
+    cursor->menuX = sTouchCoords[input][0];
+    cursor->menuY = sTouchCoords[input][1];
+    PlaySE(SEQ_SE_DP_SELECT);
+
+    return key;
+}
+
+static void BattleInput_SingleScreen_Init(BattleInput *battleInput) {
+    battleInput->ssWindow = AllocWindows(HEAP_ID_BATTLE, 1);
+    battleInput->ssCursor = ListMenuCursorNew(HEAP_ID_BATTLE);
+    battleInput->ssMenuId = BATTLE_MENU_NONE;
+}
+
+static void BattleInput_SingleScreen_Free(BattleInput *battleInput) {
+    // The battle backgrounds may be gone by now, so only free the window's memory.
+    if (battleInput->ssMenuId != BATTLE_MENU_NONE) {
+        RemoveWindow(battleInput->ssWindow);
+    }
+    Heap_Free(battleInput->ssWindow);
+    DestroyListMenuCursorObj(battleInput->ssCursor);
+}
+#endif
