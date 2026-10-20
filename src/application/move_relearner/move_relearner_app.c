@@ -128,6 +128,9 @@ typedef struct MoveRelearner {
     u16 lastGridInput;
     u16 learnButtonActive;
     MoveRelearnerButtonFlash buttonFlash;
+#ifdef SINGLE_SCREEN
+    u8 ssShowLearnedMoves; // SELECT swaps the main screen's learned moves in for the move list
+#endif
 } MoveRelearner;
 
 // What answering the yes/no question does, per MoveRelearnerQuestion.
@@ -599,6 +602,16 @@ BOOL MoveRelearner_Init(OverlayManager *man, int *state) {
 BOOL MoveRelearner_Main(OverlayManager *man, int *state) {
     MoveRelearner *relearner = OverlayManager_GetData(man);
 
+#ifdef SINGLE_SCREEN
+    // the move list is on the sub screen; the summary screen sets up its own
+    if (*state != MOVE_RELEARNER_STATE_OPEN_SUMMARY && *state != MOVE_RELEARNER_STATE_RUN_SUMMARY && *state != MOVE_RELEARNER_STATE_EXIT) {
+        if (*state == MOVE_RELEARNER_STATE_INPUT && (gSystem.newKeys & PAD_BUTTON_SELECT)) {
+            PlaySE(SEQ_SE_DP_SELECT);
+            relearner->ssShowLearnedMoves ^= 1;
+        }
+        SingleScreen_ShowSubEngine(!relearner->ssShowLearnedMoves);
+    }
+#endif
     switch (*state) {
     case MOVE_RELEARNER_STATE_WAIT_FADE:
         *state = MoveRelearner_WaitFade(relearner);
@@ -659,6 +672,9 @@ BOOL MoveRelearner_Exit(OverlayManager *man, int *state) {
     MoveRelearner_Teardown(relearner);
     OverlayManager_FreeData(man);
     Heap_Destroy(HEAP_ID_66);
+#ifdef SINGLE_SCREEN
+    SingleScreen_ShowSubEngine(FALSE);
+#endif
     return TRUE;
 }
 
