@@ -757,6 +757,13 @@ static int UnownReport_HandleKeys(UnownReportApp *app) {
     if (gSystem.newKeys & PAD_KEY_DOWN) {
         return UnownReport_HandleButton(app, 2);
     }
+#ifdef SINGLE_SCREEN
+    // the left page is on the hidden screen; SELECT swaps it in
+    if (gSystem.newKeys & PAD_BUTTON_SELECT) {
+        PlaySE(SEQ_SE_DP_SELECT);
+        SingleScreen_ShowSubEngine(!SingleScreen_IsSubEngineShown());
+    }
+#endif
     return UNOWN_REPORT_MAIN_INPUT;
 }
 
