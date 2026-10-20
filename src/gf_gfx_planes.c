@@ -12,6 +12,10 @@ void SingleScreen_ShowSubEngine(BOOL show) {
 
     reg_GX_POWCNT = (u16)((reg_GX_POWCNT & ~(1 << REG_GX_POWCNT_DSEL_SHIFT)) | dsel);
 }
+
+BOOL SingleScreen_IsSubEngineShown(void) {
+    return (reg_GX_POWCNT >> REG_GX_POWCNT_DSEL_SHIFT) & 1;
+}
 #endif
 
 static u32 sEngineBPlanes = 0;

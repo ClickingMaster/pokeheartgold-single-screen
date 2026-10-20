@@ -6,6 +6,7 @@
 #include "easy_chat_app.h"
 #include "pokegear_apps.h"
 #include "sound_system.h"
+#include "system.h"
 #include "sound_playback.h"
 #include "gear_phone_ring_manager.h"
 #include "vram_transfer_manager.h"
@@ -96,6 +97,16 @@ BOOL Pokegear_Init(OverlayManager *man, int *state) {
 
 BOOL Pokegear_Main(OverlayManager *man, int *state) {
     PokegearAppData *pokegearApp = OverlayManager_GetData(man);
+#ifdef SINGLE_SCREEN
+    // SELECT swaps in the top screen (clock, map location details, radio show) while an app runs
+    if (*state == POKEGEAR_APP_MAIN_STATE_RUN_RADIO || *state == POKEGEAR_APP_MAIN_STATE_RUN_MAP || *state == POKEGEAR_APP_MAIN_STATE_RUN_PHONE) {
+        if (gSystem.newKeys & PAD_BUTTON_SELECT) {
+            SingleScreen_ShowSubEngine(!SingleScreen_IsSubEngineShown());
+        }
+    } else {
+        SingleScreen_ShowSubEngine(FALSE);
+    }
+#endif
     switch (*state) {
     case POKEGEAR_APP_MAIN_STATE_SETUP:
         *state = Pokegear_MainStep_Setup(pokegearApp);

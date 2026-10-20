@@ -31,6 +31,7 @@ extern const volatile u16 gSingleScreenDispSelectMask;
 // Puts the sub engine on the visible screen, for scenes that are drawn wholly with it, or
 // puts the main engine back.
 void SingleScreen_ShowSubEngine(BOOL show);
+BOOL SingleScreen_IsSubEngineShown(void);
 #endif
 
 #define NELEMS(a) (sizeof(a) / sizeof(*(a)))
