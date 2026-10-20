@@ -125,6 +125,9 @@ static void PokemonSummary_SetPage(PokemonSummary *summary, int page);
 static void PokemonSummary_ChangePage(PokemonSummary *summary, int page);
 static void PokemonSummary_ScrollPage(PokemonSummary *summary, int direction);
 static BOOL PokemonSummary_HasPage(PokemonSummary *summary, int page);
+#ifdef SINGLE_SCREEN
+static void PokemonSummary_SingleScreen_ShowHalf(PokemonSummary *summary, BOOL lower);
+#endif
 static int PokemonSummary_HandleTouchInput(PokemonSummary *arg);
 static void PokemonSummary_LoadBgScreen(PokemonSummary *summary, BgConfig *bgConfig, int member, int bgId);
 static void PokemonSummary_LoadPageBgs(PokemonSummary *summary);
@@ -424,7 +427,12 @@ BOOL PokemonSummary_Init(OverlayManager *manager, int *state) {
     PokemonSummary_ShowFirstPage(summary);
     PokemonSummary_CreateCamera(summary);
     Main_SetVBlankIntrCB(PokemonSummary_VBlank, summary);
+#ifdef SINGLE_SCREEN
+    // Learning a move starts on the move list, which is on the lower half.
+    PokemonSummary_SingleScreen_ShowHalf(summary, summary->args->mode == 2);
+#else
     reg_GX_POWCNT |= 0x8000;
+#endif
     GfGfx_BothDispOn();
     Sound_SetSceneAndPlayBGM(61, 0, 0);
     WirelessStatusIcon_CreateIfConnected();
@@ -535,6 +543,9 @@ BOOL PokemonSummary_Exit(OverlayManager *manager, int *state) {
     NARC_Delete(summary->pokepicAnimNarc);
     FontID_SetAccessLazy(0);
     reg_G2_BLDCNT = 0;
+#ifdef SINGLE_SCREEN
+    SingleScreen_ShowSubEngine(FALSE);
+#endif
     OverlayManager_FreeData(manager);
     Heap_Destroy(HEAP_ID_19);
     return TRUE;
@@ -724,6 +735,9 @@ static int PokemonSummary_HandleInput(PokemonSummary *summary) {
         case 1:
             PlaySE(SEQ_SE_DP_SYU01);
             summary->moveSlot = 0;
+#ifdef SINGLE_SCREEN
+            PokemonSummary_SingleScreen_ShowHalf(summary, TRUE);
+#endif
             return POKEMON_SUMMARY_STATE_SLIDE_IN_MOVE_INFO;
         case 2:
             if (summary->ribbonCount != 0) {
@@ -1471,6 +1485,15 @@ static void PokemonSummary_ChangePage(PokemonSummary *summary, int page) {
 // Left/right: the next shown page in that direction (eggs have only the first page).
 static void PokemonSummary_ScrollPage(PokemonSummary *summary, int direction) {
     s8 page = summary->page;
+#ifdef SINGLE_SCREEN
+    // Each page is split over the two screens, and only one is shown, so left and right
+    // first step to the page's other half.
+    if (summary->ssShowLower != (direction > 0)) {
+        PlaySE(SEQ_SE_DP_SELECT5);
+        PokemonSummary_SingleScreen_ShowHalf(summary, direction > 0);
+        return;
+    }
+#endif
     if (summary->mon.isEgg) {
         return;
     }
@@ -1485,8 +1508,20 @@ static void PokemonSummary_ScrollPage(PokemonSummary *summary, int direction) {
     } while ((pages & (1 << page)) == 0);
     if (page != summary->page) {
         PokemonSummary_ChangePage(summary, page);
+#ifdef SINGLE_SCREEN
+        PokemonSummary_SingleScreen_ShowHalf(summary, direction < 0);
+#endif
     }
 }
+
+#ifdef SINGLE_SCREEN
+// The upper half (the page's name, the Pokemon and the top of its card) is drawn by the main
+// engine, the lower half (the rest of the card and the touch buttons) by the sub engine.
+static void PokemonSummary_SingleScreen_ShowHalf(PokemonSummary *summary, BOOL lower) {
+    summary->ssShowLower = lower;
+    SingleScreen_ShowSubEngine(lower);
+}
+#endif
 
 static BOOL PokemonSummary_HasPage(PokemonSummary *summary, int page) {
     return (summary->args->pageFlags & (1 << page)) != 0;

@@ -150,6 +150,9 @@ typedef struct PokemonSummary {
     u8 flashNextState;
     BgCellManager *cellManager;
     u32 boxIconSprite; // which of sprites 73/74 shows the box Pokemon's icon next
+#ifdef SINGLE_SCREEN
+    u8 ssShowLower; // showing the lower half of the page (the touch screen's)
+#endif
 } PokemonSummary;
 
 void PokemonSummary_Init3D(PokemonSummary *summary);
