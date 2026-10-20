@@ -373,6 +373,10 @@ BOOL ScratchOffCards_Init(OverlayManager *man, int *state) {
 
 BOOL ScratchOffCards_Main(OverlayManager *man, int *state) {
     ScratchOffCardsWork *work = OverlayManager_GetData(man);
+#ifdef SINGLE_SCREEN
+    // the messages and the prize list are on the hidden screen
+    SingleScreen_HandleSwapKey();
+#endif
     switch (*state) {
     case SCRATCH_OFF_CARDS_STATE_FADE_IN:
         if (ScratchOffCards_FadeIn(work) == TRUE) {
