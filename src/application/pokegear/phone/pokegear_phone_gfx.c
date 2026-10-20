@@ -393,6 +393,10 @@ void PokegearPhone_SetTouchscreenDimState(PokegearPhoneAppData *phoneApp, BOOL s
     PaletteData_SetAutoTransparent(phoneApp->pokegear->plttData, TRUE);
     PaletteData_PushTransparentBuffers(phoneApp->pokegear->plttData);
     PaletteData_SetAutoTransparent(phoneApp->pokegear->plttData, FALSE);
+#ifdef SINGLE_SCREEN
+    // the call is printed on the sub screen, and the touch screen is only dimmed meanwhile
+    SingleScreen_ShowSubEngine(shouldDim);
+#endif
 }
 
 void PokegearPhone_AddWindows(PokegearPhoneAppData *phoneApp) {

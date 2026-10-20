@@ -287,6 +287,9 @@ void PhoneCall_ApplyGenericNPCcallSideEffect(PokegearPhoneCallContext *ctx, cons
 void PhoneCall_TouchscreenListMenu_Create(PokegearPhoneCallContext *ctx, u8 menuID) {
     PokegearPhone_PrintContextMenuTooltip(ctx->phoneApp, 2, TRUE);
     ctx->touchscreenListMenu = PokegearPhoneApp_TouchscreenListMenu_Create(ctx->phoneApp, 0, menuID);
+#ifdef SINGLE_SCREEN
+    SingleScreen_ShowSubEngine(FALSE);
+#endif
     Sprite_SetDrawFlag(ctx->sprite, FALSE);
     PhoneCall_SetBgPalettesUndimmed(ctx, 1);
 }
@@ -299,6 +302,9 @@ void PhoneCall_TouchscreenListMenu_Destroy(PokegearPhoneCallContext *ctx) {
     *ctx->menuInputStatePtr = (MenuInputState)TouchscreenListMenu_WasLastInputTouch(ctx->touchscreenListMenu);
     TouchscreenListMenu_Destroy(ctx->touchscreenListMenu);
     PokegearPhone_PrintContextMenuTooltip(ctx->phoneApp, 0, FALSE);
+#ifdef SINGLE_SCREEN
+    SingleScreen_ShowSubEngine(TRUE);
+#endif
     Sprite_SetDrawFlag(ctx->sprite, TRUE);
     PhoneCall_SetBgPalettesUndimmed(ctx, 0);
 }

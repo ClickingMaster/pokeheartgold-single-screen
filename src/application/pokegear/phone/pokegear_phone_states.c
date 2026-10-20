@@ -33,6 +33,9 @@ BOOL PokegearPhone_SetUp(PokegearPhoneAppData *phoneApp) {
 }
 
 BOOL PokegearPhone_TearDown(PokegearPhoneAppData *phoneApp) {
+#ifdef SINGLE_SCREEN
+    SingleScreen_ShowSubEngine(FALSE);
+#endif
     PokegearPhone_DeleteContextMenus(phoneApp);
     PokegearPhone_DestroyCallContext(phoneApp);
     PokegearPhone_DeleteSprites(phoneApp);
