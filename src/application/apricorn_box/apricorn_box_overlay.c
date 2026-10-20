@@ -78,6 +78,10 @@ BOOL ApricornBox_Main(OverlayManager *man, int *state) {
         *state = ApricornBox_State_OpenBoxScreen(app);
         break;
     case APRICORN_BOX_STATE_RUN_BOX_SCREEN:
+#ifdef SINGLE_SCREEN
+        // the Apricorn descriptions are on the hidden screen
+        SingleScreen_HandleSwapKey();
+#endif
         *state = ApricornBox_State_RunBoxScreen(app);
         break;
     case APRICORN_BOX_STATE_OPEN_PARTY_MENU:
