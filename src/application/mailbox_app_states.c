@@ -372,6 +372,10 @@ static int MailboxApp_State_MailMenu(MailboxApp *app) {
         MailboxAppData_ShowCloseButton(app->data);
         MailboxAppData_MoveCursorToCloseButton(app->data);
         MailboxApp_ShowMail(app);
+#ifdef SINGLE_SCREEN
+        // the open mail is drawn on the hidden screen
+        SingleScreen_ShowSubEngine(TRUE);
+#endif
         return MAILBOX_STATE_READ_MAIL;
     case 1: // ERASE
         MailboxApp_CloseMailMenu(app);
@@ -407,6 +411,9 @@ static int MailboxApp_State_ReadMail(MailboxApp *app) {
 }
 
 static int MailboxApp_State_CloseMail(MailboxApp *app) {
+#ifdef SINGLE_SCREEN
+    SingleScreen_ShowSubEngine(FALSE);
+#endif
     MailboxApp_HideMail(app);
     MailboxApp_MoveCursor(app, GridInputHandler_GetNextInput(app->data->gridInput));
     MailboxAppData_ShowCancelButton(app->data);
