@@ -2371,6 +2371,10 @@ static int BallCapsuleEditor_EnterEdit(BallCapsuleEditor *editor) {
         ClearWindowTilemapAndCopyToVram(&editor->display.windows[3]);
         BallCapsuleEditor_PrintMessage(&editor->display.windows[0], 0, 0xFFFF, TRUE);
         GX_SetDispSelect(GX_DISP_SELECT_MAIN_SUB);
+#ifdef SINGLE_SCREEN
+        // the seal tray and buttons are on the sub engine: SELECT shows the message box
+        SingleScreen_ShowSubEngine(TRUE);
+#endif
         BallCapsuleEditor_FadeIn();
         editor->subState++;
         break;
@@ -2412,6 +2416,9 @@ static BOOL BallCapsuleEditor_LeaveEdit(BallCapsuleEditor *editor) {
         CopyWindowToVram(&editor->display.windows[3]);
         BallCapsuleEditor_PrintExitLabel(editor, TRUE);
         GX_SetDispSelect(GX_DISP_SELECT_SUB_MAIN);
+#ifdef SINGLE_SCREEN
+        SingleScreen_ShowSubEngine(FALSE);
+#endif
         BallCapsuleEditor_MoveSeals(editor, -1);
         BallCapsuleEditor_SetInputEnabled(editor, FALSE);
         BallCapsuleEditor_FadeIn();
@@ -3026,6 +3033,9 @@ static int BallCapsuleEditor_HandleEditKeys(BallCapsuleEditor *editor) {
     u32 keys;
 
     BallCapsuleEditor_UpdateMenuInputState(editor);
+#ifdef SINGLE_SCREEN
+    SingleScreen_HandleSwapKey();
+#endif
     keys = gSystem.newKeys;
     if (keys & PAD_BUTTON_A) {
         if (editor->display.heldSeal != BALL_CAPSULE_EDITOR_NONE) {
