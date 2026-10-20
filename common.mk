@@ -271,7 +271,7 @@ endif
 $(LCF): $(LSF) $(LCF_TEMPLATE)
 	$(WINE) $(MAKELCF) $(MAKELCF_FLAGS) $(LSF) $(LCF_TEMPLATE) $@
 ifeq ($(PROC),arm946e)
-	$(SED) -i '1i KEEP_SECTION\n{\n\t.exceptix\n}' $@
+	$(SED) -i '1i KEEP_SECTION\n{\n\t.exceptix,\n\t.bss.alias_4d60,\n\t.bss.snd_alarm,\n\t.bss.snd_command_ctrl,\n\t.bss.snd_main,\n\t.bss.snd_work,\n\t.bss.unified_00,\n\t.bss.unified_02,\n\t.bss.unified_03,\n\t.bss.unified_04,\n\t.bss.unified_05,\n\t.data.unified_00,\n\t.data.unified_01,\n\t.rodata.alias_d750,\n\t.rodata.snd_decibel,\n\t.rodata.snd_volume,\n\t.rodata.unified_00,\n\t.rodata.unified_01,\n\t.rodata.unified_02,\n\t.rodata.unified_03\n}' $@
 	python3 tools/nitro-section-renames/patch_nitro_lcf.py $@
 	python3 tools/nitro-section-renames/patch_os_thread_lcf.py $@
 	python3 tools/nitro-section-renames/patch_os_reset_lcf.py $@
