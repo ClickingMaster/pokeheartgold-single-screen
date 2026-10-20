@@ -53,6 +53,23 @@
 #include "sys_flags.h"
 #include "system.h"
 #include "task.h"
+#ifdef SINGLE_SCREEN
+#include "list_menu_2d.h"
+#include "list_menu_items.h"
+#endif
+
+#ifdef SINGLE_SCREEN
+static const WindowTemplate sSingleScreenYesNoTemplate = {
+    .bgId = GF_BG_LYR_MAIN_3,
+    .left = 25,
+    .top = 13,
+    .width = 6,
+    .height = 4,
+    .palette = 13,
+    .baseTile = 0x021F,
+};
+static struct ListMenu2D *sSingleScreenYesNo;
+#endif
 
 // What the following Pokemon and its surroundings look like when the player talks to it; compared against the
 // conditions of the interaction tables (FollowMonRule) to pick an interaction script.
@@ -1210,8 +1227,15 @@ static BOOL Task_FollowMonInteract(TaskManager *taskManager) {
     case FOLLOW_MON_TASK_STATE_QUESTION:
         switch (fieldSystem->followMonInteraction->state) {
         case INTERACTION_STATE_OPEN_CHOICE:
+#ifdef SINGLE_SCREEN
+            // The touch YES/NO buttons are on the hidden screen: use the field YES/NO window instead.
+            LoadUserFrameGfx1(fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, 0x3D9, 11, 0, HEAP_ID_FIELD1);
+            sSingleScreenYesNo = Std_CreateYesNoMenu(fieldSystem->bgConfig, &sSingleScreenYesNoTemplate, 0x3D9, 11, HEAP_ID_FIELD1);
+            fieldSystem->followMonInteraction->state = INTERACTION_STATE_WAIT_ANSWER;
+#else
             FieldSystem_SwitchBottomScreenApp(fieldSystem, BOTTOM_SCREEN_APP_CHOICE_MENU, 0);
             fieldSystem->followMonInteraction->state = INTERACTION_STATE_WAIT_CHOICE_APP;
+#endif
             break;
         case INTERACTION_STATE_WAIT_CHOICE_APP: {
             int a = FieldSystem_GetBottomScreenAppId(fieldSystem);
@@ -1223,17 +1247,30 @@ static BOOL Task_FollowMonInteract(TaskManager *taskManager) {
             break;
         }
         case INTERACTION_STATE_WAIT_ANSWER: {
+#ifdef SINGLE_SCREEN
+            int selection = Handle2dMenuInput_DeleteOnFinish(sSingleScreenYesNo, HEAP_ID_FIELD1);
+            if (selection != LIST_NOTHING_CHOSEN) {
+                fieldSystem->followMonInteraction->answer = (selection == 0) ? 0 : 1;
+                fieldSystem->followMonInteraction->state = INTERACTION_STATE_CLOSE_CHOICE;
+            }
+#else
             int a = FieldSystem_GetBottomScreenAppId(fieldSystem);
             int b = FieldSystem_GetTouchscreenChoiceMenuState(fieldSystem);
             if (a == BOTTOM_SCREEN_APP_CHOICE_MENU && b == 6) {
                 FieldSystem_SwitchBottomScreenApp(fieldSystem, BOTTOM_SCREEN_APP_TOUCHSCREEN_MENU, 0);
                 fieldSystem->followMonInteraction->state = INTERACTION_STATE_CLOSE_CHOICE;
             }
+#endif
             break;
         }
         case INTERACTION_STATE_CLOSE_CHOICE: {
             int a = FieldSystem_GetBottomScreenAppId(fieldSystem);
             int b = FieldSystem_GetBottomScreenAppState(fieldSystem);
+#ifdef SINGLE_SCREEN
+            // the bottom screen app was never switched
+            a = BOTTOM_SCREEN_APP_TOUCHSCREEN_MENU;
+            b = BOTTOM_SCREEN_APP_STATE_RUNNING;
+#endif
             if (a == BOTTOM_SCREEN_APP_TOUCHSCREEN_MENU && b == BOTTOM_SCREEN_APP_STATE_RUNNING) {
                 switch (fieldSystem->followMonInteraction->answer) {
                 case 0:
