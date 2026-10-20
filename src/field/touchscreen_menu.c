@@ -616,7 +616,10 @@ static void TouchscreenMenu_UpdateForStartMenu(TouchscreenMenuData *data) {
         break;
     case 2:
         if (data->fieldSystem->runningFieldMap && IsPaletteFadeFinished() && TouchscreenMenu_HandleTouchInput(data)) {
+#ifndef SINGLE_SCREEN
+            // The single-screen start menu moves its own list cursor.
             TouchscreenMenu_HandleDpadInput(data);
+#endif
         }
         break;
     case 3:

@@ -1,9 +1,16 @@
 #ifndef POKEHEARTGOLD_START_MENU_H
 #define POKEHEARTGOLD_START_MENU_H
 
+#include "global.h"
+
 #include "field_use_item.h"
 #include "party_menu.h"
 #include "task.h"
+
+#ifdef SINGLE_SCREEN
+#include "bg_window.h"
+#include "list_menu_2d.h"
+#endif
 
 typedef enum StartMenuIcon {
     START_MENU_ICON_POKEDEX,
@@ -66,6 +73,13 @@ typedef struct StartMenuTaskData {
     void *exitTaskEnvironment; // 380
     void *exitTaskEnvironment2;
     u8 filler_unk_388[4];
+#ifdef SINGLE_SCREEN
+    // The single-screen game lists the menu actions in a window on the field screen,
+    // in place of the touch-screen icons.
+    Window listWindow;
+    struct ListMenu2D *listMenu;
+    ListMenuItem *listItems;
+#endif
 } StartMenuTaskData;
 
 typedef struct StartMenuMailReturn {

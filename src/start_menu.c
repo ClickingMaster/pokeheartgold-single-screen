@@ -46,6 +46,24 @@
 #include "evolution_scene.h"
 #include "gear_phone_ring_manager.h"
 
+#ifdef SINGLE_SCREEN
+#include "msgdata/msg.naix"
+
+#include "font.h"
+#include "message_format.h"
+#include "render_window.h"
+
+// scr_seq_0003_005: show the save stats, ask to save and save.
+#define STD_SCRIPT_SAVE_FROM_MENU 2005
+
+#define START_MENU_LIST_MAX      10
+#define START_MENU_LIST_EXIT     0xFF
+#define START_MENU_LIST_BASETILE 0x3D
+#define START_MENU_FRAME_TILE    0x3D9
+#define START_MENU_FRAME_PLTT    11
+#define START_MENU_TEXT_PLTT     13
+#endif
+
 typedef enum StartMenuAction {
     START_MENU_ACTION_POKEDEX,
     START_MENU_ACTION_POKEMON,
@@ -157,6 +175,11 @@ static BOOL StartMenu_ReopenBagAtBerries(TaskManager *taskManager);
 static void StartMenu_ReturnToPartyMenuAfterMail(FieldSystem *fieldSystem, StartMenuTaskData *startMenu, u8 context);
 static void Task_StartMenu_Evolution(TaskManager *taskManager);
 static void Task_StartMenu_WaitEvolution(TaskManager *taskManager);
+#ifdef SINGLE_SCREEN
+static void StartMenu_CreateList(StartMenuTaskData *startMenu, FieldSystem *fieldSystem);
+static void StartMenu_DestroyList(StartMenuTaskData *startMenu);
+static BOOL StartMenu_HandleListInput(TaskManager *taskManager, FieldSystem *fieldSystem, StartMenuTaskData *startMenu);
+#endif
 
 static const int sActionToIconIndex[] = {
     0,
@@ -464,11 +487,15 @@ static void Task_StartMenu_DrawCursor(TaskManager *taskManager) {
             startMenu->lastButtonSelected = i;
         }
     }
+#ifdef SINGLE_SCREEN
+    StartMenu_CreateList(startMenu, fieldSystem);
+#else
     startMenu->cursorActive = TRUE;
     GfGfxLoader_LoadCharData(NARC_a_0_1_4, 12, fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, TRUE, HEAP_ID_FIELD2);
     GfGfxLoader_GXLoadPal(NARC_a_0_1_4, 15, GF_PAL_LOCATION_MAIN_BG, (enum GFPalSlotOffset)0x1C0, 0x20, HEAP_ID_FIELD2);
     GfGfxLoader_LoadScrnData(NARC_a_0_1_4, 13, fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, TRUE, HEAP_ID_FIELD2);
     StartMenu_CreateCursor(startMenu, startMenu->insertionOrder, numActiveButtons, PlayerProfile_GetTrainerGender(Save_PlayerData_GetProfile(fieldSystem->saveData)));
+#endif
 }
 
 static void StartMenuButton_Insert(u8 *insertionOrderDest, u8 *displayOrderDest, u32 *pLength, u8 item, vu32 position) {
@@ -523,9 +550,13 @@ static u32 StartMenu_BuildActionLists(StartMenuTaskData *startMenu, u8 *insertio
 }
 
 static void StartMenu_RemoveCursorAndIcons(StartMenuTaskData *startMenu, FieldSystem *fieldSystem) {
+#ifdef SINGLE_SCREEN
+    StartMenu_DestroyList(startMenu);
+#else
     StartMenu_DestroyCursor(startMenu);
     FillBgTilemapRect(fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, 0, 0x20, 0x18, 0);
     startMenu->cursorActive = FALSE;
+#endif
 }
 
 static BOOL FieldSystem_StartMenuActionIsAvailable(FieldSystem *fieldSystem, StartMenuAction action) {
@@ -565,6 +596,11 @@ static BOOL Task_StartMenu_HandleInput(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     StartMenuTaskData *startMenu = (StartMenuTaskData *)TaskManager_GetEnvironment(taskManager);
 
+#ifdef SINGLE_SCREEN
+    if (!FieldSystem_GetBottomScreenAppId(fieldSystem) && FieldSystem_GetBottomScreenAppState(fieldSystem) == TRUE) {
+        return StartMenu_HandleListInput(taskManager, fieldSystem, startMenu);
+    }
+#else
     if (!FieldSystem_GetBottomScreenAppId(fieldSystem) && FieldSystem_GetBottomScreenAppState(fieldSystem) == TRUE) {
         if (gSystem.newKeys & PAD_BUTTON_A) {
             if (!StartMenu_HandleKeyInput(taskManager, fieldSystem, startMenu)) {
@@ -585,6 +621,7 @@ static BOOL Task_StartMenu_HandleInput(TaskManager *taskManager) {
             }
         }
     }
+#endif
     return TRUE;
 }
 
@@ -1127,9 +1164,19 @@ static BOOL Task_StartMenu_HandleSelection_Save(TaskManager *taskManager) {
     StartMenuTaskData *startMenu = (StartMenuTaskData *)TaskManager_GetEnvironment(taskManager);
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
 
+#ifdef SINGLE_SCREEN
+    // The touch save app draws on the hidden screen, so save through the field's own
+    // save script instead: the same stats window, messages and yes/no box, on the field.
+    StartMenu_RemoveCursorAndIcons(startMenu, fieldSystem);
+    fieldSystem->startMenuState = 0;
+    StartScriptFromMenu(taskManager, STD_SCRIPT_SAVE_FROM_MENU, NULL);
+    Heap_Free(startMenu);
+    return FALSE;
+#else
     FieldSystem_SwitchBottomScreenApp(fieldSystem, 1, NULL);
     startMenu->state = START_MENU_STATE_SAVE;
     return TRUE;
+#endif
 }
 
 static void Task_StartMenu_WaitSaveAppOpen(TaskManager *taskManager) {
@@ -1500,3 +1547,113 @@ static void Task_StartMenu_WaitEvolution(TaskManager *taskManager) {
         StartMenu_SetExitTaskFunc(startMenu, Task_StartMenu_HandleReturn);
     }
 }
+
+#ifdef SINGLE_SCREEN
+
+static void StartMenu_CreateList(StartMenuTaskData *startMenu, FieldSystem *fieldSystem) {
+    MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0196_bin, HEAP_ID_FIELD2);
+    MessageFormat *msgFmt = MessageFormat_New(HEAP_ID_FIELD2);
+    struct ListMenu2DTemplate template;
+    u32 numRegular, maxWidth, width;
+    int numItems, initialSelection, i;
+
+    BufferPlayersName(msgFmt, 0, Save_PlayerData_GetProfile(fieldSystem->saveData));
+    startMenu->listItems = ListMenuItems_New(START_MENU_LIST_MAX, HEAP_ID_FIELD2);
+    numItems = 0;
+    initialSelection = 0;
+    maxWidth = 0;
+
+    // The last two actions are the touch menu's registered-item slots (7 and 8), which
+    // also overwrite whatever action would have gone at position 7.
+    numRegular = startMenu->numActiveButtons - 2;
+    if (numRegular > 7) {
+        numRegular = 7;
+    }
+    for (i = 0; i < numRegular; i++) {
+        StartMenuAction action = (StartMenuAction)startMenu->selectionToAction[i];
+        if (sStartMenuActions[action].func == STARTMENUTASKFUNC_CANCEL || !FieldSystem_StartMenuActionIsAvailable(fieldSystem, action)) {
+            continue;
+        }
+        String *string = ReadMsgData_ExpandPlaceholders(msgFmt, msgData, action == START_MENU_ACTION_12 ? msg_0196_00034 : sStartMenuActions[action].ident, HEAP_ID_FIELD2);
+        u32 strWidth = FontID_String_GetWidth(0, string, 0);
+        if (strWidth > maxWidth) {
+            maxWidth = strWidth;
+        }
+        ListMenuItems_AddItem(startMenu->listItems, string, i);
+        String_Delete(string);
+        if (i == fieldSystem->startMenuCursorPos) {
+            initialSelection = numItems;
+        }
+        numItems++;
+    }
+    {
+        String *string = ReadMsgData_ExpandPlaceholders(msgFmt, msgData, msg_0196_00006, HEAP_ID_FIELD2);
+        u32 strWidth = FontID_String_GetWidth(0, string, 0);
+        if (strWidth > maxWidth) {
+            maxWidth = strWidth;
+        }
+        ListMenuItems_AddItem(startMenu->listItems, string, START_MENU_LIST_EXIT);
+        String_Delete(string);
+        numItems++;
+    }
+    MessageFormat_Delete(msgFmt);
+    DestroyMsgData(msgData);
+
+    width = (maxWidth + 12 + 7) / 8;
+    AddWindowParameterized(fieldSystem->bgConfig, &startMenu->listWindow, GF_BG_LYR_MAIN_3, 31 - width, 1, width, numItems * 2, START_MENU_TEXT_PLTT, START_MENU_LIST_BASETILE);
+    LoadUserFrameGfx1(fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, START_MENU_FRAME_TILE, START_MENU_FRAME_PLTT, 0, HEAP_ID_FIELD2);
+    DrawFrameAndWindow1(&startMenu->listWindow, TRUE, START_MENU_FRAME_TILE, START_MENU_FRAME_PLTT);
+
+    template.items = startMenu->listItems;
+    template.window = &startMenu->listWindow;
+    template.fontId = 0;
+    template.itemsWide = 1;
+    template.itemsHigh = numItems;
+    template.yTop = 0;
+    template.cursorType = 0;
+    template.enableWrap = 1;
+    startMenu->listMenu = Create2dMenu(&template, initialSelection, HEAP_ID_FIELD2);
+    startMenu->listMenu->cancelKey = PAD_BUTTON_B | PAD_BUTTON_X;
+    ScheduleBgTilemapBufferTransfer(fieldSystem->bgConfig, GF_BG_LYR_MAIN_3);
+}
+
+static void StartMenu_DestroyList(StartMenuTaskData *startMenu) {
+    if (startMenu->listMenu == NULL) {
+        return;
+    }
+    Delete2dMenu(startMenu->listMenu, NULL);
+    startMenu->listMenu = NULL;
+    EraseFrameAndWindow1(&startMenu->listWindow, FALSE);
+    RemoveWindow(&startMenu->listWindow);
+    ListMenuItems_Delete(startMenu->listItems);
+    startMenu->listItems = NULL;
+}
+
+static BOOL StartMenu_HandleListInput(TaskManager *taskManager, FieldSystem *fieldSystem, StartMenuTaskData *startMenu) {
+    if (startMenu->listMenu == NULL) {
+        return TRUE;
+    }
+    int input = Handle2dMenuInput(startMenu->listMenu);
+    switch (input) {
+    case LIST_NOTHING_CHOSEN: {
+        int value = startMenu->listItems[Get2dMenuSelection(startMenu->listMenu)].value;
+        if (value != START_MENU_LIST_EXIT) {
+            fieldSystem->startMenuCursorPos = value;
+        }
+        return TRUE;
+    }
+    case LIST_CANCEL:
+    case START_MENU_LIST_EXIT:
+        startMenu->state = START_MENU_STATE_CLOSE;
+        return TRUE;
+    default:
+        fieldSystem->startMenuCursorPos = input;
+        if (!StartMenu_HandleKeyInput(taskManager, fieldSystem, startMenu)) {
+            return FALSE;
+        }
+        FieldSystem_ResetGearRingManagerIfNotSelectingSaveOrPokegear(fieldSystem);
+        return TRUE;
+    }
+}
+
+#endif
