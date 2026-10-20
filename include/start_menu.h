@@ -78,8 +78,14 @@ typedef struct StartMenuTaskData {
     // in place of the touch-screen icons.
     Window listWindow;
     Window titleWindow;
-    struct ListMenu2D *listMenu;
-    ListMenuItem *listItems;
+    Window labelWindows[8];
+    SpriteResource *iconChar[8];
+    SpriteResource *iconPltt[8];
+    SpriteResourcesHeader iconHeaders[8];
+    Sprite *iconSprites[8];
+    s8 slotValue[8];      // the action in each panel slot, or -1
+    u8 panelCursor;
+    BOOL panelActive;
 #endif
 } StartMenuTaskData;
 

@@ -53,6 +53,7 @@
 
 #include "font.h"
 #include "text.h"
+#include "obj_pltt_transfer.h"
 #include "message_format.h"
 #include "render_window.h"
 
@@ -1562,55 +1563,111 @@ static void Task_StartMenu_WaitEvolution(TaskManager *taskManager) {
 
 #ifdef SINGLE_SCREEN
 
+// Panel slots: 0-3 are the left column, 4-7 the right one; icon positions and the label
+// rows below them are those of the touch menu.
+#define START_MENU_PANEL_SLOTS 8
+static const u8 sPanelIconX[START_MENU_PANEL_SLOTS] = { 24, 24, 24, 24, 104, 104, 104, 104 };
+static const u8 sPanelIconY[START_MENU_PANEL_SLOTS] = { 22, 62, 102, 142, 22, 62, 102, 142 };
+static const u8 sPanelIconChar[7] = { 18, 21, 24, 30, 33, 36, 39 };
+
+// Text is printed with the font's background colour; use the panel's green instead.
+static void StartMenu_PaintWindowBackground(Window *window) {
+    u8 *pixels = window->pixelBuffer;
+    u32 i, n = window->width * window->height * 0x20;
+
+    for (i = 0; i < n; i++) {
+        u8 lo = pixels[i] & 0x0F, hi = pixels[i] >> 4;
+        pixels[i] = (lo == 0xF ? START_MENU_PANEL_FILL_COLOR : lo) | ((hi == 0xF ? START_MENU_PANEL_FILL_COLOR : hi) << 4);
+    }
+}
+
+static void StartMenu_CreatePanelIcons(StartMenuTaskData *startMenu, FieldSystem *fieldSystem, const u8 *slotIcon) {
+    SpriteTemplate template;
+    int i;
+
+    startMenu->spriteList = G2dRenderer_Init(START_MENU_PANEL_SLOTS, &startMenu->g2dRenderer, HEAP_ID_FIELD2);
+    for (i = 0; i < 4; i++) {
+        startMenu->gfxResMan[i] = Create2DGfxResObjMan(START_MENU_PANEL_SLOTS + 1, (GfGfxResType)i, HEAP_ID_FIELD2);
+    }
+    startMenu->gfxResObj[GF_GFX_RES_TYPE_CELL] = AddCellOrAnimResObjFromNarc(startMenu->gfxResMan[GF_GFX_RES_TYPE_CELL], NARC_a_0_1_4, 16, TRUE, 100, GF_GFX_RES_TYPE_CELL, HEAP_ID_FIELD2);
+    startMenu->gfxResObj[GF_GFX_RES_TYPE_ANIM] = AddCellOrAnimResObjFromNarc(startMenu->gfxResMan[GF_GFX_RES_TYPE_ANIM], NARC_a_0_1_4, 17, TRUE, 100, GF_GFX_RES_TYPE_ANIM, HEAP_ID_FIELD2);
+
+    template.spriteList = startMenu->spriteList;
+    template.position.z = 0;
+    template.scale.x = FX32_ONE;
+    template.scale.y = FX32_ONE;
+    template.scale.z = FX32_ONE;
+    template.rotation = 0;
+    template.drawPriority = 1;
+    template.whichScreen = NNS_G2D_VRAM_TYPE_2DMAIN;
+    template.heapID = HEAP_ID_FIELD2;
+    for (i = 0; i < START_MENU_PANEL_SLOTS; i++) {
+        startMenu->iconSprites[i] = NULL;
+        if (slotIcon[i] >= 7) {
+            continue;
+        }
+        startMenu->iconChar[i] = AddCharResObjFromNarc(startMenu->gfxResMan[GF_GFX_RES_TYPE_CHAR], NARC_a_0_1_4, sPanelIconChar[slotIcon[i]], TRUE, i, NNS_G2D_VRAM_TYPE_2DMAIN, HEAP_ID_FIELD2);
+        startMenu->iconPltt[i] = AddPlttResObjFromNarc(startMenu->gfxResMan[GF_GFX_RES_TYPE_PLTT], NARC_a_0_1_4, 14, FALSE, i, NNS_G2D_VRAM_TYPE_2DMAIN, 2, HEAP_ID_FIELD2);
+        SpriteTransfer_CreateCharTransferTask_AllocAtEnd(startMenu->iconChar[i]);
+        GF2DGfxResObj_FreeData(startMenu->iconChar[i]);
+        SpriteTransfer_CreatePlttTransferTask(startMenu->iconPltt[i]);
+        GF2DGfxResObj_FreeData(startMenu->iconPltt[i]);
+        CreateSpriteResourcesHeader(&startMenu->iconHeaders[i], i, i, 100, 100, -1, -1, FALSE, 0, startMenu->gfxResMan[GF_GFX_RES_TYPE_CHAR], startMenu->gfxResMan[GF_GFX_RES_TYPE_PLTT], startMenu->gfxResMan[GF_GFX_RES_TYPE_CELL], startMenu->gfxResMan[GF_GFX_RES_TYPE_ANIM], NULL, NULL);
+        template.header = &startMenu->iconHeaders[i];
+        template.position.x = FX32_CONST(sPanelIconX[i] - START_MENU_PANEL_SCROLL);
+        template.position.y = FX32_CONST(sPanelIconY[i]);
+        startMenu->iconSprites[i] = Sprite_CreateAffine(&template);
+        Sprite_SetAnimActiveFlag(startMenu->iconSprites[i], TRUE);
+        Sprite_SetPriority(startMenu->iconSprites[i], 0);
+        Sprite_SetAffineOverwriteMode(startMenu->iconSprites[i], NNS_G2D_RND_AFFINE_OVERWRITE_NORMAL);
+    }
+}
+
+static void StartMenu_DestroyPanelIcons(StartMenuTaskData *startMenu) {
+    int i;
+
+    for (i = 0; i < START_MENU_PANEL_SLOTS; i++) {
+        if (startMenu->iconSprites[i] != NULL) {
+            Sprite_Delete(startMenu->iconSprites[i]);
+            startMenu->iconSprites[i] = NULL;
+            SpriteTransfer_DeleteCharTransferTask(startMenu->iconChar[i]);
+            SpriteTransfer_DeletePlttTransferTask(startMenu->iconPltt[i]);
+        }
+    }
+    for (i = 0; i < 4; i++) {
+        Destroy2DGfxResObjMan(startMenu->gfxResMan[i]);
+    }
+    SpriteList_Delete(startMenu->spriteList);
+}
+
+// The selected slot's icon gets the touch menu's highlighted palette (the second of the two
+// loaded for it) and the others are drawn translucent.
+static void StartMenu_SetPanelCursor(StartMenuTaskData *startMenu, u8 slot) {
+    int i;
+
+    startMenu->panelCursor = slot;
+    for (i = 0; i < START_MENU_PANEL_SLOTS; i++) {
+        if (startMenu->iconSprites[i] != NULL) {
+            Sprite_SetPalOffset(startMenu->iconSprites[i], i == slot ? 1 : 0);
+            Sprite_SetOamMode(startMenu->iconSprites[i], i == slot ? GX_OAM_MODE_NORMAL : GX_OAM_MODE_XLU);
+        }
+    }
+}
+
 static void StartMenu_CreateList(StartMenuTaskData *startMenu, FieldSystem *fieldSystem) {
     MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0196_bin, HEAP_ID_FIELD2);
     MessageFormat *msgFmt = MessageFormat_New(HEAP_ID_FIELD2);
-    struct ListMenu2DTemplate template;
-    u32 numRegular, maxWidth;
-    int numItems, initialSelection, i;
+    String *titleString;
+    u8 slotIcon[START_MENU_PANEL_SLOTS];
+    u32 numRegular;
+    int i, slot, initialSlot;
 
     BufferPlayersName(msgFmt, 0, Save_PlayerData_GetProfile(fieldSystem->saveData));
-    startMenu->listItems = ListMenuItems_New(START_MENU_LIST_MAX, HEAP_ID_FIELD2);
-    numItems = 0;
-    initialSelection = 0;
-    maxWidth = 0;
-
-    // The last two actions are the touch menu's registered-item slots (7 and 8), which
-    // also overwrite whatever action would have gone at position 7.
-    numRegular = startMenu->numActiveButtons - 2;
-    if (numRegular > 7) {
-    String *titleString;
-        numRegular = 7;
+    for (i = 0; i < START_MENU_PANEL_SLOTS; i++) {
+        startMenu->slotValue[i] = -1;
+        slotIcon[i] = 0xFF;
     }
-    for (i = 0; i < numRegular; i++) {
-        StartMenuAction action = (StartMenuAction)startMenu->selectionToAction[i];
-        if (sStartMenuActions[action].func == STARTMENUTASKFUNC_CANCEL || !FieldSystem_StartMenuActionIsAvailable(fieldSystem, action)) {
-            continue;
-        }
-        String *string = ReadMsgData_ExpandPlaceholders(msgFmt, msgData, action == START_MENU_ACTION_12 ? msg_0196_00034 : sStartMenuActions[action].ident, HEAP_ID_FIELD2);
-        u32 strWidth = FontID_String_GetWidth(0, string, 0);
-        if (strWidth > maxWidth) {
-            maxWidth = strWidth;
-        }
-        ListMenuItems_AddItem(startMenu->listItems, string, i);
-        String_Delete(string);
-        if (i == fieldSystem->startMenuCursorPos) {
-            initialSelection = numItems;
-        }
-        numItems++;
-    }
-    {
-        String *string = ReadMsgData_ExpandPlaceholders(msgFmt, msgData, msg_0196_00006, HEAP_ID_FIELD2);
-        u32 strWidth = FontID_String_GetWidth(0, string, 0);
-        if (strWidth > maxWidth) {
-            maxWidth = strWidth;
-        }
-        ListMenuItems_AddItem(startMenu->listItems, string, START_MENU_LIST_EXIT);
-        String_Delete(string);
-        numItems++;
-    }
-    MessageFormat_Delete(msgFmt);
-    DestroyMsgData(msgData);
+    initialSlot = -1;
 
     GfGfxLoader_LoadCharData(NARC_a_0_1_4, 8, fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, 0, START_MENU_PANEL_TILES * 0x20, TRUE, HEAP_ID_FIELD2);
     GfGfxLoader_LoadScrnData(NARC_a_0_1_4, 9, fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, TRUE, HEAP_ID_FIELD2);
@@ -1619,57 +1676,84 @@ static void StartMenu_CreateList(StartMenuTaskData *startMenu, FieldSystem *fiel
     FillBgTilemapRect(fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, 0, START_MENU_PANEL_COLUMNS, 0, 32 - START_MENU_PANEL_COLUMNS, 24, 0);
     BgTilemapRectChangePalette(fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, START_MENU_PANEL_COLUMNS, 24, START_MENU_PANEL_PLTT);
     BgSetPosTextAndCommit(fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_SET_X, START_MENU_PANEL_SCROLL);
-    (void)maxWidth;
-    AddWindowParameterized(fieldSystem->bgConfig, &startMenu->listWindow, GF_BG_LYR_MAIN_3, 1, 4, START_MENU_PANEL_COLUMNS - 2, 8, START_MENU_PANEL_PLTT, START_MENU_LIST_BASETILE);
 
-    AddWindowParameterized(fieldSystem->bgConfig, &startMenu->titleWindow, GF_BG_LYR_MAIN_3, 5, 0, 10, 2, START_MENU_PANEL_PLTT, START_MENU_LIST_BASETILE + 0x98);
+    // The last two actions are the touch menu's registered-item slots (7 and 8), which
+    // also overwrite whatever action would have gone at position 7.
+    numRegular = startMenu->numActiveButtons - 2;
+    if (numRegular > 7) {
+        numRegular = 7;
+    }
+    for (i = 0; i < numRegular; i++) {
+        StartMenuAction action = (StartMenuAction)startMenu->selectionToAction[i];
+        int icon;
+
+        if (sStartMenuActions[action].func == STARTMENUTASKFUNC_CANCEL || !FieldSystem_StartMenuActionIsAvailable(fieldSystem, action)) {
+            continue;
+        }
+        // an action without an icon of its own takes the first free slot
+        icon = sActionToIconIndex[action];
+        slot = icon < 7 && startMenu->slotValue[icon] < 0 ? icon : -1;
+        if (slot < 0) {
+            for (slot = 0; slot < START_MENU_PANEL_SLOTS && startMenu->slotValue[slot] >= 0; slot++) {
+            }
+            if (slot >= START_MENU_PANEL_SLOTS) {
+                continue;
+            }
+            icon = 0xFF;
+        }
+        startMenu->slotValue[slot] = i;
+        slotIcon[slot] = icon;
+        {
+            const int cols = slot < 4 ? 1 : 11;
+            const int rows = 6 + 5 * (slot & 3);
+            String *string = ReadMsgData_ExpandPlaceholders(msgFmt, msgData, action == START_MENU_ACTION_12 ? msg_0196_00034 : sStartMenuActions[action].ident, HEAP_ID_FIELD2);
+            AddWindowParameterized(fieldSystem->bgConfig, &startMenu->labelWindows[slot], GF_BG_LYR_MAIN_3, cols, rows, 9, 2, START_MENU_PANEL_PLTT, START_MENU_LIST_BASETILE + slot * 0x12);
+            FillWindowPixelBuffer(&startMenu->labelWindows[slot], START_MENU_PANEL_FILL_COLOR);
+            AddTextPrinterParameterized(&startMenu->labelWindows[slot], 0, string, (72 - FontID_String_GetWidth(0, string, 0)) / 2, 0, TEXT_SPEED_NOTRANSFER, NULL);
+            StartMenu_PaintWindowBackground(&startMenu->labelWindows[slot]);
+            CopyWindowToVram(&startMenu->labelWindows[slot]);
+            String_Delete(string);
+        }
+        if (i == fieldSystem->startMenuCursorPos) {
+            initialSlot = slot;
+        }
+    }
+    if (initialSlot < 0) {
+        for (initialSlot = 0; initialSlot < START_MENU_PANEL_SLOTS && startMenu->slotValue[initialSlot] < 0; initialSlot++) {
+        }
+    }
+    titleString = ReadMsgData_ExpandPlaceholders(msgFmt, msgData, msg_0196_00012, HEAP_ID_FIELD2);
+    MessageFormat_Delete(msgFmt);
+    DestroyMsgData(msgData);
+
+    AddWindowParameterized(fieldSystem->bgConfig, &startMenu->titleWindow, GF_BG_LYR_MAIN_3, 5, 0, 10, 2, START_MENU_PANEL_PLTT, START_MENU_LIST_BASETILE + START_MENU_PANEL_SLOTS * 0x12);
     FillWindowPixelBuffer(&startMenu->titleWindow, START_MENU_PANEL_TITLE_COLOR);
     AddTextPrinterParameterizedWithColor(&startMenu->titleWindow, 0, titleString, (80 - FontID_String_GetWidth(0, titleString, 0)) / 2, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 1, START_MENU_PANEL_TITLE_COLOR), NULL);
     CopyWindowToVram(&startMenu->titleWindow);
     String_Delete(titleString);
 
-    template.items = startMenu->listItems;
-    template.window = &startMenu->listWindow;
-    template.fontId = 0;
-    titleString = ReadMsgData_ExpandPlaceholders(msgFmt, msgData, msg_0196_00012, HEAP_ID_FIELD2);
-    template.itemsWide = 2;
-    template.itemsHigh = (numItems + 1) / 2;
-    template.yTop = 0;
-    template.cursorType = 0;
-    template.enableWrap = 1;
-    startMenu->listMenu = Create2dMenu(&template, initialSelection, HEAP_ID_FIELD2);
-    startMenu->listMenu->cancelKey = PAD_BUTTON_B | PAD_BUTTON_X;
+    StartMenu_CreatePanelIcons(startMenu, fieldSystem, slotIcon);
+    startMenu->panelActive = TRUE;
+    StartMenu_SetPanelCursor(startMenu, initialSlot);
+    G2_SetBlendAlpha(GX_BLEND_PLANEMASK_NONE, GX_BLEND_PLANEMASK_BG3, 6, 9);
+    SpriteList_RenderAndAnimateSprites(startMenu->spriteList);
     ScheduleBgTilemapBufferTransfer(fieldSystem->bgConfig, GF_BG_LYR_MAIN_3);
 }
 
 static void StartMenu_DestroyList(StartMenuTaskData *startMenu, FieldSystem *fieldSystem) {
-    if (startMenu->listMenu == NULL) {
+    int i;
+
+    if (!startMenu->panelActive) {
         return;
     }
-    Delete2dMenu(startMenu->listMenu, NULL);
-    startMenu->listMenu = NULL;
-    {
-        // the menu paints its window in the font's background colour; use the panel's green instead
-        u8 *pixels = startMenu->listWindow.pixelBuffer;
-        u32 n = startMenu->listWindow.width * startMenu->listWindow.height * 0x20;
-        for (i = 0; i < n; i++) {
-            u8 lo = pixels[i] & 0x0F, hi = pixels[i] >> 4;
-            pixels[i] = (lo == 0xF ? START_MENU_PANEL_FILL_COLOR : lo) | ((hi == 0xF ? START_MENU_PANEL_FILL_COLOR : hi) << 4);
+    startMenu->panelActive = FALSE;
+    G2_BlendNone();
+    StartMenu_DestroyPanelIcons(startMenu);
+    for (i = 0; i < START_MENU_PANEL_SLOTS; i++) {
+        if (startMenu->slotValue[i] >= 0) {
+            RemoveWindow(&startMenu->labelWindows[i]);
         }
-        CopyWindowToVram(&startMenu->listWindow);
     }
-    RemoveWindow(&startMenu->listWindow);
-    ListMenuItems_Delete(startMenu->listItems);
-    startMenu->listItems = NULL;
-}
-
-static BOOL StartMenu_HandleListInput(TaskManager *taskManager, FieldSystem *fieldSystem, StartMenuTaskData *startMenu) {
-    if (startMenu->listMenu == NULL) {
-        return TRUE;
-    }
-    int input = Handle2dMenuInput(startMenu->listMenu);
-    switch (input) {
-    case LIST_NOTHING_CHOSEN: {
     RemoveWindow(&startMenu->titleWindow);
     FillBgTilemapRect(fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, 0, 32, 32, 0);
     BgSetPosTextAndCommit(fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_SET_X, 0);
@@ -1684,14 +1768,50 @@ static BOOL StartMenu_HandleListInput(TaskManager *taskManager, FieldSystem *fie
     case START_MENU_LIST_EXIT:
         startMenu->state = START_MENU_STATE_CLOSE;
         return TRUE;
-    default:
-        fieldSystem->startMenuCursorPos = input;
+    }
+    if (gSystem.newKeys & PAD_BUTTON_L) {
+        Bag *dbgBag = Save_Bag_Get(fieldSystem->saveData);
+        Bag_AddItem(dbgBag, ITEM_TM01, 1, HEAP_ID_FIELD1);
+        Bag_AddItem(dbgBag, ITEM_TM10, 1, HEAP_ID_FIELD1);
+        Bag_AddItem(dbgBag, ITEM_HM01, 1, HEAP_ID_FIELD1);
+        Bag_AddItem(dbgBag, ITEM_APRICORN_BOX, 1, HEAP_ID_FIELD1);
+        Bag_AddItem(dbgBag, ITEM_UNOWN_REPORT, 1, HEAP_ID_FIELD1);
+        Bag_AddItem(dbgBag, ITEM_BERRY_POTS, 1, HEAP_ID_FIELD1);
+        Bag_AddItem(dbgBag, ITEM_DOWSING_MCHN, 1, HEAP_ID_FIELD1);
+        Bag_AddItem(dbgBag, ITEM_ORAN_BERRY, 5, HEAP_ID_FIELD1);
+        Bag_AddItem(dbgBag, ITEM_RED_APRICORN, 5, HEAP_ID_FIELD1);
+        Bag_AddItem(dbgBag, ITEM_RARE_CANDY, 9, HEAP_ID_FIELD1);
+        for (int dbgApri = 0; dbgApri < 7; dbgApri++) {
+            ApricornBox_GiveApricorn(Save_ApricornBox_Get(fieldSystem->saveData), dbgApri, 5);
+        }
+        GiveMon(HEAP_ID_FIELD1, fieldSystem->saveData, SPECIES_PIKACHU, 10, 0, 0, ITEM_NONE, ITEM_POKE_BALL, 0);
+        GiveMon(HEAP_ID_FIELD1, fieldSystem->saveData, SPECIES_GEODUDE, 10, 0, 0, ITEM_NONE, ITEM_POKE_BALL, 0);
+    }
+#endif
+    SpriteList_RenderAndAnimateSprites(startMenu->spriteList);
+    if (gSystem.newKeys & (PAD_BUTTON_B | PAD_BUTTON_X)) {
+        PlaySE(SEQ_SE_DP_SELECT);
+        startMenu->state = START_MENU_STATE_CLOSE;
+        return TRUE;
+    }
+    if (gSystem.newKeys & PAD_BUTTON_A) {
+        PlaySE(SEQ_SE_DP_SELECT);
+        fieldSystem->startMenuCursorPos = startMenu->slotValue[startMenu->panelCursor];
         if (!StartMenu_HandleKeyInput(taskManager, fieldSystem, startMenu)) {
             return FALSE;
         }
         FieldSystem_ResetGearRingManagerIfNotSelectingSaveOrPokegear(fieldSystem);
         return TRUE;
     }
+    if (gSystem.newKeys & PAD_KEY_UP) {
+        StartMenu_MovePanelCursor(startMenu, 0, -1);
+    } else if (gSystem.newKeys & PAD_KEY_DOWN) {
+        StartMenu_MovePanelCursor(startMenu, 0, 1);
+    } else if (gSystem.newKeys & (PAD_KEY_LEFT | PAD_KEY_RIGHT)) {
+        StartMenu_MovePanelCursor(startMenu, 1, 0);
+    }
+    fieldSystem->startMenuCursorPos = startMenu->slotValue[startMenu->panelCursor];
+    return TRUE;
 }
 
 #endif
