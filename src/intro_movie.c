@@ -51,6 +51,9 @@ enum HeapID _deadstrip_00(int idx) {
 }
 
 static BOOL IntroMovie_Init(OverlayManager *man, int *state) {
+#ifdef SINGLE_SCREEN
+    SingleScreen_SetTwoScreenScene(TRUE); // the tall scene spans both screens
+#endif
     ScreenBrightnessData_InitAll();
     SetMasterBrightnessByColor(PM_LCD_TOP, RGB_BLACK);
     SetMasterBrightnessByColor(PM_LCD_BOTTOM, RGB_BLACK);
@@ -160,6 +163,9 @@ static BOOL IntroMovie_Exit(OverlayManager *man, int *state) {
     SetLCRNGSeed(data->savedLCRngSeed);
     OverlayManager_FreeData(man);
     Heap_Destroy(HEAP_ID_INTRO_MOVIE);
+#ifdef SINGLE_SCREEN
+    SingleScreen_SetTwoScreenScene(FALSE);
+#endif
     RegisterMainOverlay(FS_OVERLAY_ID(intro_title), &gApplication_TitleScreen);
     return TRUE;
 }

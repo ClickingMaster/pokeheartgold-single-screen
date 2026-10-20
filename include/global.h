@@ -31,6 +31,7 @@ extern const volatile u16 gSingleScreenDispSelectMask;
 // Puts the sub engine on the visible screen, for scenes that are drawn wholly with it, or
 // puts the main engine back.
 void SingleScreen_ShowSubEngine(BOOL show);
+void SingleScreen_SetTwoScreenScene(BOOL twoScreen);
 BOOL SingleScreen_IsSubEngineShown(void);
 // For scenes with something worth seeing on the hidden screen: SELECT swaps the screens.
 // Returns TRUE when it did.

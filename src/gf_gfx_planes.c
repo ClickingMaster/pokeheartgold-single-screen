@@ -11,7 +11,19 @@
 const volatile u16 gSingleScreenDispSelectMask = 0;
 
 // Lets the native recompilation (ssrecomp) recognise this build and show only the visible screen.
-const volatile char gSingleScreenBuildTag[] = "SSRECOMP-SINGLE-SCREEN-1";
+// The byte at offset 32 from the tag is read every frame: nonzero means the scene wants both
+// screens (the intro movie), zero means the visible screen alone.
+struct SingleScreenBuildInfo {
+    char tag[32];
+    volatile u8 twoScreenScene;
+};
+struct SingleScreenBuildInfo gSingleScreenBuildInfo = { "SSRECOMP-SINGLE-SCREEN-1", 0 };
+#define gSingleScreenBuildTag gSingleScreenBuildInfo.tag
+
+void SingleScreen_SetTwoScreenScene(BOOL twoScreen) {
+    gSingleScreenBuildInfo.twoScreenScene = twoScreen != FALSE;
+    SingleScreen_ShowSubEngine(twoScreen);
+}
 static volatile u8 sSingleScreenTagSink;
 
 void SingleScreen_ShowSubEngine(BOOL show) {
