@@ -4704,12 +4704,85 @@ enum SingleScreenMenuKind {
 #define SS_TEXT_COLOR_GREY   MAKE_TEXT_COLOR(3, 4, 15)
 #define SS_SELECTION_ALL     0x10
 
+// The command buttons are painted into the window in the colours of the touch menu's:
+// palette 12 holds the white, text and outline colours, then a border and a fill per button.
+#define SS_BUTTON_PALETTE    12
+#define SS_BUTTON_WIDTH      54
+#define SS_BUTTON_HEIGHT     22
+#define SS_BUTTON_TEXT_COLOR MAKE_TEXT_COLOR(2, 3, 15)
+#define SS_RGB(r, g, b)      ((r) | ((g) << 5) | ((b) << 10))
+
+static const u16 sSingleScreenButtonPalette[16] = {
+    SS_RGB(0, 0, 0),
+    SS_RGB(31, 31, 31), // top half of a button
+    SS_RGB(6, 6, 6),    // text
+    SS_RGB(19, 19, 19), // text shadow
+    SS_RGB(27, 8, 10),  // FIGHT border
+    SS_RGB(30, 10, 12), // FIGHT fill
+    SS_RGB(28, 20, 6),  // BAG border
+    SS_RGB(31, 23, 7),  // BAG fill
+    SS_RGB(11, 22, 8),  // POKéMON border
+    SS_RGB(16, 27, 12), // POKéMON fill
+    SS_RGB(6, 20, 28),  // RUN border
+    SS_RGB(7, 23, 30),  // RUN fill
+    SS_RGB(15, 15, 20), // move button border
+    SS_RGB(26, 26, 30), // move button fill
+    SS_RGB(31, 31, 4),  // outline of the selected button
+    SS_RGB(31, 31, 31),
+};
+
+static void SingleScreen_SetPixel(Window *window, int x, int y, int color) {
+    u8 *p = (u8 *)window->pixelBuffer + (((y >> 3) * window->width + (x >> 3)) << 5) + ((y & 7) << 2) + ((x & 7) >> 1);
+
+    if (x & 1) {
+        *p = (*p & 0x0F) | (color << 4);
+    } else {
+        *p = (*p & 0xF0) | color;
+    }
+}
+
+static int SingleScreen_GetPixel(Window *window, int x, int y) {
+    u8 p = ((u8 *)window->pixelBuffer)[(((y >> 3) * window->width + (x >> 3)) << 5) + ((y & 7) << 2) + ((x & 7) >> 1)];
+
+    return (x & 1) ? p >> 4 : p & 0x0F;
+}
+
+// Paints a rounded button behind whatever was printed there (pixels of the text background colour).
+static void SingleScreen_PaintButton(Window *window, int x, int y, int w, int h, int style, BOOL selected) {
+    int i, j;
+
+    for (j = 0; j < h; j++) {
+        for (i = 0; i < w; i++) {
+            int dx = i < 3 ? 3 - i : (i >= w - 3 ? i - (w - 4) : 0);
+            int dy = j < 3 ? 3 - j : (j >= h - 3 ? j - (h - 4) : 0);
+            int border, color;
+
+            if (dx + dy > 3 || (dx == 3 && dy == 3) || SingleScreen_GetPixel(window, x + i, y + j) != 15) {
+                continue;
+            }
+            border = i == 0 || j == 0 || i == w - 1 || j == h - 1 || (dx != 0 && dy != 0 && dx + dy == 3);
+            if (selected && (border || i == 1 || j == 1 || i == w - 2 || j == h - 2)) {
+                color = 14;
+            } else if (border) {
+                color = 2 + style * 2;
+            } else {
+                color = j < h / 2 ? 1 : 3 + style * 2;
+            }
+            SingleScreen_SetPixel(window, x + i, y + j, color);
+        }
+    }
+}
+
 typedef struct SingleScreenMenuItem {
     String *str;
     u8 x;
     u8 y;
     u8 selected;
     u8 grey;
+    u8 button; // 1-4: painted as a FIGHT, BAG, POKéMON or RUN button at x, y, 5: as a move button; 0: plain text
+    u8 width;  // of the button, or 0 for the default size
+    u8 height;
+    u8 noLabel; // paint the button without centring the text in it
 } SingleScreenMenuItem;
 
 static int BattleInput_SingleScreen_GetMenuKind(int menuId) {
@@ -4809,10 +4882,10 @@ static int BattleInput_SingleScreen_BuildItems(BattleInput *battleInput, int kin
     case SS_MENU_MAIN:
     case SS_MENU_FIGHT_ONLY: {
         static const u8 sPositions[4][2] = {
-            [CURSOR_INPUT_FIGHT] = { 8, 0 },
-            [CURSOR_INPUT_BAG] = { 62, 0 },
-            [CURSOR_INPUT_POKEMON] = { 8, 16 },
-            [CURSOR_INPUT_RUN] = { 62, 16 },
+            [CURSOR_INPUT_FIGHT] = { 1, 1 },
+            [CURSOR_INPUT_BAG] = { 57, 1 },
+            [CURSOR_INPUT_POKEMON] = { 1, 25 },
+            [CURSOR_INPUT_RUN] = { 57, 25 },
         };
         int msgIds[4];
 
@@ -4840,13 +4913,14 @@ static int BattleInput_SingleScreen_BuildItems(BattleInput *battleInput, int kin
             items[count].y = sPositions[i][1];
             items[count].selected = selection == i;
             items[count].grey = FALSE;
+            items[count].button = i + 1;
             count++;
         }
 
         rect[0] = 16;
-        rect[1] = 19;
-        rect[2] = 13;
-        rect[3] = 4;
+        rect[1] = 18;
+        rect[2] = 14;
+        rect[3] = 6;
         break;
     }
     case SS_MENU_PAL_PARK:
@@ -4875,8 +4949,11 @@ static int BattleInput_SingleScreen_BuildItems(BattleInput *battleInput, int kin
             } else {
                 items[count].str = GetMoveName(menu->moveNo[i], HEAP_ID_BATTLE);
             }
-            items[count].x = 8 + (i & 1) * 80;
-            items[count].y = (i >> 1) * 16;
+            items[count].x = 2 + (i & 1) * 82;
+            items[count].y = 2 + (i >> 1) * 26;
+            items[count].button = 5;
+            items[count].width = 80;
+            items[count].height = 24;
             items[count].selected = selectedMove == i;
             items[count].grey = FALSE;
             count++;
@@ -4893,15 +4970,15 @@ static int BattleInput_SingleScreen_BuildItems(BattleInput *battleInput, int kin
             String_Delete(strSlash);
 
             items[count].str = strPP;
-            items[count].x = 164;
-            items[count].y = 0;
+            items[count].x = 178;
+            items[count].y = 6;
             items[count].selected = FALSE;
             items[count].grey = menu->pp[selectedMove] == 0;
             count++;
 
             items[count].str = strNumbers;
-            items[count].x = 180;
-            items[count].y = 0;
+            items[count].x = 198;
+            items[count].y = 6;
             items[count].selected = FALSE;
             items[count].grey = menu->pp[selectedMove] == 0;
             count++;
@@ -4909,17 +4986,27 @@ static int BattleInput_SingleScreen_BuildItems(BattleInput *battleInput, int kin
             MsgData *typeNames = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0735_bin, HEAP_ID_BATTLE);
             items[count].str = NewString_ReadMsgData(typeNames, GetMoveAttr(menu->moveNo[selectedMove], MOVEATTR_TYPE));
             DestroyMsgData(typeNames);
-            items[count].x = 164;
-            items[count].y = 16;
+            items[count].x = 178;
+            items[count].y = 28;
             items[count].selected = FALSE;
             items[count].grey = FALSE;
             count++;
         }
 
-        rect[0] = 2;
-        rect[1] = 19;
-        rect[2] = 27;
-        rect[3] = 4;
+        // the panel for the selected move's PP and type
+        items[count].str = String_New(1, HEAP_ID_BATTLE);
+        items[count].x = 168;
+        items[count].y = 2;
+        items[count].button = 5;
+        items[count].width = 86;
+        items[count].height = 50;
+        items[count].noLabel = TRUE;
+        count++;
+
+        rect[0] = 0;
+        rect[1] = 17;
+        rect[2] = 32;
+        rect[3] = 7;
         break;
     }
     case SS_MENU_TARGET: {
@@ -5044,6 +5131,7 @@ static void BattleInput_SingleScreen_Update(BattleInput *battleInput) {
     SingleScreenMenuItem items[8];
     u8 rect[4];
     int kind, selection, count, i;
+    BOOL buttons;
 
     kind = BattleInput_SingleScreen_GetMenuKind(battleInput->curMenuId);
     if (kind == SS_MENU_NONE) {
@@ -5056,23 +5144,58 @@ static void BattleInput_SingleScreen_Update(BattleInput *battleInput) {
         return;
     }
 
+    MI_CpuClear8(items, sizeof(items));
     count = BattleInput_SingleScreen_BuildItems(battleInput, kind, selection, items, rect);
+    buttons = count > 0 && items[0].button != 0;
 
     if (battleInput->ssMenuId != battleInput->curMenuId) {
         BattleInput_SingleScreen_Hide(battleInput);
-        AddWindowParameterized(BattleSystem_GetBgConfig(battleInput->battleSystem), battleInput->ssWindow, GF_BG_LYR_MAIN_1, rect[0], rect[1], rect[2], rect[3], SS_WINDOW_PALETTE, SS_WINDOW_BASE_TILE);
-        DrawFrameAndWindow2(battleInput->ssWindow, TRUE, SS_FRAME_BASE_TILE, SS_FRAME_PALETTE);
+        if (buttons) {
+            PaletteData_LoadPalette(BattleSystem_GetPaletteData(battleInput->battleSystem), sSingleScreenButtonPalette, PLTTBUF_MAIN_BG, SS_BUTTON_PALETTE * 16, 0x20);
+            AddWindowParameterized(BattleSystem_GetBgConfig(battleInput->battleSystem), battleInput->ssWindow, GF_BG_LYR_MAIN_1, rect[0], rect[1], rect[2], rect[3], SS_BUTTON_PALETTE, SS_WINDOW_BASE_TILE);
+        } else {
+            AddWindowParameterized(BattleSystem_GetBgConfig(battleInput->battleSystem), battleInput->ssWindow, GF_BG_LYR_MAIN_1, rect[0], rect[1], rect[2], rect[3], SS_WINDOW_PALETTE, SS_WINDOW_BASE_TILE);
+            DrawFrameAndWindow2(battleInput->ssWindow, TRUE, SS_FRAME_BASE_TILE, SS_FRAME_PALETTE);
+        }
         battleInput->ssMenuId = battleInput->curMenuId;
     }
     battleInput->ssSelection = selection;
 
     FillWindowPixelBuffer(battleInput->ssWindow, 15);
     for (i = 0; i < count; i++) {
-        AddTextPrinterParameterizedWithColor(battleInput->ssWindow, 0, items[i].str, items[i].x, items[i].y, TEXT_SPEED_NOTRANSFER, items[i].grey ? SS_TEXT_COLOR_GREY : SS_TEXT_COLOR, NULL);
-        if (items[i].selected) {
-            ListMenuUpdateCursorObj(battleInput->ssCursor, battleInput->ssWindow, items[i].x - 8, items[i].y);
+        if (items[i].button) {
+            int w = items[i].width != 0 ? items[i].width : SS_BUTTON_WIDTH;
+            int h = items[i].height != 0 ? items[i].height : SS_BUTTON_HEIGHT;
+            int width = FontID_String_GetWidth(0, items[i].str, 0);
+            int textX = items[i].x + (w - width) / 2;
+
+            if (!items[i].noLabel) {
+                AddTextPrinterParameterizedWithColor(battleInput->ssWindow, 0, items[i].str, textX, items[i].y + (h - 16) / 2, TEXT_SPEED_NOTRANSFER, SS_BUTTON_TEXT_COLOR, NULL);
+            }
+        } else {
+            AddTextPrinterParameterizedWithColor(battleInput->ssWindow, 0, items[i].str, items[i].x, items[i].y, TEXT_SPEED_NOTRANSFER, buttons ? (items[i].grey ? MAKE_TEXT_COLOR(3, 1, 15) : SS_BUTTON_TEXT_COLOR) : (items[i].grey ? SS_TEXT_COLOR_GREY : SS_TEXT_COLOR), NULL);
+            if (items[i].selected) {
+                ListMenuUpdateCursorObj(battleInput->ssCursor, battleInput->ssWindow, items[i].x - 8, items[i].y);
+            }
         }
         String_Delete(items[i].str);
+    }
+    // The buttons go behind the text, in the pixels it left at the background colour.
+    for (i = 0; i < count; i++) {
+        if (items[i].button) {
+            SingleScreen_PaintButton(battleInput->ssWindow, items[i].x, items[i].y, items[i].width != 0 ? items[i].width : SS_BUTTON_WIDTH, items[i].height != 0 ? items[i].height : SS_BUTTON_HEIGHT, items[i].button, items[i].selected);
+        }
+    }
+    if (buttons) {
+        // what is left of the text background between the buttons lets the scene show through
+        int x, y;
+        for (y = 0; y < rect[3] * 8; y++) {
+            for (x = 0; x < rect[2] * 8; x++) {
+                if (SingleScreen_GetPixel(battleInput->ssWindow, x, y) == 15) {
+                    SingleScreen_SetPixel(battleInput->ssWindow, x, y, 0);
+                }
+            }
+        }
     }
     CopyWindowToVram(battleInput->ssWindow);
 }
