@@ -459,6 +459,9 @@ int TrainerCardMainApp_Exit(OverlayManager *manager, int *state) {
     Main_SetVBlankIntrCB(NULL, NULL);
     Heap_Destroy(HEAP_ID_25);
     GF_SndHandleSetPlayerVolume(1, 0x7f);
+#ifdef SINGLE_SCREEN
+    SingleScreen_ShowSubEngine(FALSE);
+#endif
     return TRUE;
 }
 
@@ -848,6 +851,13 @@ static int TrainerCardMain_HandleKeys(TrainerCardMain *cardMain) {
     if (gSystem.newKeys & (PAD_KEY_LEFT | PAD_KEY_RIGHT)) {
         return TRAINER_CARD_INPUT_FLIP;
     }
+#ifdef SINGLE_SCREEN
+    // the badge case is on the hidden screen; SELECT swaps it in for the card
+    if (gSystem.newKeys & PAD_BUTTON_SELECT) {
+        PlaySE(SEQ_SE_DP_SELECT);
+        SingleScreen_ShowSubEngine(!SingleScreen_IsSubEngineShown());
+    }
+#endif
     return TRAINER_CARD_INPUT_NONE;
 }
 
