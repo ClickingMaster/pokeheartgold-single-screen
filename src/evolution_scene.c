@@ -481,6 +481,10 @@ static void EvolutionScene_ShowMenu(EvolutionTaskData *data, BOOL deleteMoveProm
     ToggleBgLayer(GF_BG_LYR_SUB_1, GF_PLANE_TOGGLE_ON);
     ToggleBgLayer(GF_BG_LYR_SUB_2, GF_PLANE_TOGGLE_ON);
     ManagedSprite_SetDrawFlag(data->cursorSprite, TRUE);
+#ifdef SINGLE_SCREEN
+    // the menu is on the sub engine, SELECT goes back to the question
+    SingleScreen_ShowSubEngine(TRUE);
+#endif
 }
 
 static BOOL EvolutionScene_HandleMenuInput(EvolutionTaskData *data) {
@@ -545,6 +549,9 @@ static BOOL EvolutionScene_IsMenuCursorAnimDone(EvolutionTaskData *data) {
 static int EvolutionScene_RunMenu(EvolutionTaskData *data) {
     switch (data->menuState) {
     case EVO_MENU_STATE_INPUT:
+#ifdef SINGLE_SCREEN
+        SingleScreen_HandleSwapKey();
+#endif
         if (EvolutionScene_HandleMenuInput(data)) {
             data->menuState++;
         }
@@ -556,6 +563,9 @@ static int EvolutionScene_RunMenu(EvolutionTaskData *data) {
             ToggleBgLayer(GF_BG_LYR_SUB_1, GF_PLANE_TOGGLE_OFF);
             ToggleBgLayer(GF_BG_LYR_SUB_2, GF_PLANE_TOGGLE_OFF);
             ManagedSprite_SetDrawFlag(data->cursorSprite, FALSE);
+#ifdef SINGLE_SCREEN
+            SingleScreen_ShowSubEngine(FALSE);
+#endif
             return data->menuResult;
         }
         break;
