@@ -10,6 +10,10 @@
 #ifdef SINGLE_SCREEN
 const volatile u16 gSingleScreenDispSelectMask = 0;
 
+// Lets the native recompilation (ssrecomp) recognise this build and show only the visible screen.
+const volatile char gSingleScreenBuildTag[] = "SSRECOMP-SINGLE-SCREEN-1";
+static volatile u8 sSingleScreenTagSink;
+
 void SingleScreen_ShowSubEngine(BOOL show) {
     u32 dsel = (u32)(show ? GX_DISP_SELECT_MAIN_SUB : GX_DISP_SELECT_SUB_MAIN) << REG_GX_POWCNT_DSEL_SHIFT;
 
@@ -24,6 +28,7 @@ BOOL SingleScreen_HandleSwapKey(void) {
     if (!(gSystem.newKeys & PAD_BUTTON_SELECT)) {
         return FALSE;
     }
+    sSingleScreenTagSink = gSingleScreenBuildTag[gSystem.newKeys & 3]; // a real use, so the linker keeps the tag
     PlaySE(SEQ_SE_DP_SELECT);
     SingleScreen_ShowSubEngine(!SingleScreen_IsSubEngineShown());
     return TRUE;
