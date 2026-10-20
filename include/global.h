@@ -32,6 +32,9 @@ extern const volatile u16 gSingleScreenDispSelectMask;
 // puts the main engine back.
 void SingleScreen_ShowSubEngine(BOOL show);
 BOOL SingleScreen_IsSubEngineShown(void);
+// For scenes with something worth seeing on the hidden screen: SELECT swaps the screens.
+// Returns TRUE when it did.
+BOOL SingleScreen_HandleSwapKey(void);
 #endif
 
 #define NELEMS(a) (sizeof(a) / sizeof(*(a)))

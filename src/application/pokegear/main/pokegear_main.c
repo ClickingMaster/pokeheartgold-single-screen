@@ -100,9 +100,7 @@ BOOL Pokegear_Main(OverlayManager *man, int *state) {
 #ifdef SINGLE_SCREEN
     // SELECT swaps in the top screen (clock, map location details, radio show) while an app runs
     if (*state == POKEGEAR_APP_MAIN_STATE_RUN_RADIO || *state == POKEGEAR_APP_MAIN_STATE_RUN_MAP || *state == POKEGEAR_APP_MAIN_STATE_RUN_PHONE) {
-        if (gSystem.newKeys & PAD_BUTTON_SELECT) {
-            SingleScreen_ShowSubEngine(!SingleScreen_IsSubEngineShown());
-        }
+        SingleScreen_HandleSwapKey();
     } else {
         SingleScreen_ShowSubEngine(FALSE);
     }

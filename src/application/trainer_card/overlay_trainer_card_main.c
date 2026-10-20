@@ -853,10 +853,7 @@ static int TrainerCardMain_HandleKeys(TrainerCardMain *cardMain) {
     }
 #ifdef SINGLE_SCREEN
     // the badge case is on the hidden screen; SELECT swaps it in for the card
-    if (gSystem.newKeys & PAD_BUTTON_SELECT) {
-        PlaySE(SEQ_SE_DP_SELECT);
-        SingleScreen_ShowSubEngine(!SingleScreen_IsSubEngineShown());
-    }
+    SingleScreen_HandleSwapKey();
 #endif
     return TRAINER_CARD_INPUT_NONE;
 }

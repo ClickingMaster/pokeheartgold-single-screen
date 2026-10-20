@@ -2394,10 +2394,7 @@ BOOL VoltorbFlip_Main(OverlayManager *man, int *state) {
     VoltorbFlipAppData *work = OverlayManager_GetData(man);
 #ifdef SINGLE_SCREEN
     // the coin totals and the level are on the hidden screen; SELECT swaps them in
-    if (gSystem.newKeys & PAD_BUTTON_SELECT) {
-        PlaySE(SEQ_SE_DP_SELECT);
-        SingleScreen_ShowSubEngine(!SingleScreen_IsSubEngineShown());
-    }
+    SingleScreen_HandleSwapKey();
 #endif
     if (VoltorbFlipTaskEngine_Run(work->workflow)) {
         return TRUE;

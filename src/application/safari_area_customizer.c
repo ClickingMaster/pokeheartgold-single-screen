@@ -329,10 +329,7 @@ BOOL SafariAreaCustomizer_Main(OverlayManager *man, int *state) {
 
 #ifdef SINGLE_SCREEN
     // the zone layout and the swap preview are on the hidden screen; SELECT swaps them in
-    if (gSystem.newKeys & PAD_BUTTON_SELECT) {
-        PlaySE(SEQ_SE_DP_SELECT);
-        SingleScreen_ShowSubEngine(!SingleScreen_IsSubEngineShown());
-    }
+    SingleScreen_HandleSwapKey();
 #endif
     switch (*state) {
     case SAC_STATE_SETUP:

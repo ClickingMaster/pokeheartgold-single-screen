@@ -2,6 +2,9 @@
 
 #include "global.h"
 
+#include "constants/sndseq.h"
+
+#include "sound_playback.h"
 #include "system.h"
 
 #ifdef SINGLE_SCREEN
@@ -15,6 +18,15 @@ void SingleScreen_ShowSubEngine(BOOL show) {
 
 BOOL SingleScreen_IsSubEngineShown(void) {
     return (reg_GX_POWCNT >> REG_GX_POWCNT_DSEL_SHIFT) & 1;
+}
+
+BOOL SingleScreen_HandleSwapKey(void) {
+    if (!(gSystem.newKeys & PAD_BUTTON_SELECT)) {
+        return FALSE;
+    }
+    PlaySE(SEQ_SE_DP_SELECT);
+    SingleScreen_ShowSubEngine(!SingleScreen_IsSubEngineShown());
+    return TRUE;
 }
 #endif
 

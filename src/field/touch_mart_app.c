@@ -420,10 +420,7 @@ static void TouchMartApp_RunTask(SysTask *task, void *env) {
     TouchMartAppData *data = env;
     int selection;
 #ifdef SINGLE_SCREEN
-    if (gSystem.newKeys & PAD_BUTTON_SELECT) {
-        PlaySE(SEQ_SE_DP_SELECT);
-        SingleScreen_ShowSubEngine(!SingleScreen_IsSubEngineShown());
-    }
+    SingleScreen_HandleSwapKey();
 #endif
     switch (data->state) {
     case TOUCH_MART_STATE_WAIT_FADE:

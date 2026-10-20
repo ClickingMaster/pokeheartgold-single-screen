@@ -383,6 +383,10 @@ BOOL PokeathlonMedals_Exit(OverlayManager *man, int *state) {
 BOOL PokeathlonMedals_Main(OverlayManager *man, int *state) {
     PokeathlonMedals *work = OverlayManager_GetData(man);
 
+#ifdef SINGLE_SCREEN
+    // the chosen Pokemon's medals are on the hidden screen
+    SingleScreen_HandleSwapKey();
+#endif
     switch (*state) {
     case RECORD_SCREEN_STATE_FADE_IN:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, work->heapId);
