@@ -4709,14 +4709,14 @@ enum SingleScreenMenuKind {
 #define SS_BUTTON_PALETTE    12
 #define SS_BUTTON_WIDTH      54
 #define SS_BUTTON_HEIGHT     22
-#define SS_BUTTON_TEXT_COLOR MAKE_TEXT_COLOR(2, 3, 15)
+#define SS_BUTTON_TEXT_COLOR MAKE_TEXT_COLOR(2, 15, 15)
 #define SS_RGB(r, g, b)      ((r) | ((g) << 5) | ((b) << 10))
 
 static const u16 sSingleScreenButtonPalette[16] = {
     SS_RGB(0, 0, 0),
     SS_RGB(31, 31, 31), // top half of a button
     SS_RGB(6, 6, 6),    // text
-    SS_RGB(19, 19, 19), // text shadow
+    SS_RGB(9, 8, 8),    // text shadow, frame outline
     SS_RGB(27, 8, 10),  // FIGHT border
     SS_RGB(30, 10, 12), // FIGHT fill
     SS_RGB(28, 20, 6),  // BAG border
@@ -4727,8 +4727,8 @@ static const u16 sSingleScreenButtonPalette[16] = {
     SS_RGB(7, 23, 30),  // RUN fill
     SS_RGB(15, 15, 20), // move button border
     SS_RGB(26, 26, 30), // move button fill
-    SS_RGB(31, 31, 4),  // outline of the selected button
-    SS_RGB(31, 31, 31),
+    SS_RGB(31, 27, 13), // frame gold, outline of the selected button
+    SS_RGB(12, 12, 13), // panel body (text background until the buttons are painted)
 };
 
 static void SingleScreen_SetPixel(Window *window, int x, int y, int color) {
@@ -4882,9 +4882,9 @@ static int BattleInput_SingleScreen_BuildItems(BattleInput *battleInput, int kin
     case SS_MENU_MAIN:
     case SS_MENU_FIGHT_ONLY: {
         static const u8 sPositions[4][2] = {
-            [CURSOR_INPUT_FIGHT] = { 1, 1 },
-            [CURSOR_INPUT_BAG] = { 57, 1 },
-            [CURSOR_INPUT_POKEMON] = { 1, 25 },
+            [CURSOR_INPUT_FIGHT] = { 5, 5 },
+            [CURSOR_INPUT_BAG] = { 57, 5 },
+            [CURSOR_INPUT_POKEMON] = { 5, 25 },
             [CURSOR_INPUT_RUN] = { 57, 25 },
         };
         int msgIds[4];
@@ -4914,6 +4914,8 @@ static int BattleInput_SingleScreen_BuildItems(BattleInput *battleInput, int kin
             items[count].selected = selection == i;
             items[count].grey = FALSE;
             items[count].button = i + 1;
+            items[count].width = 50;
+            items[count].height = 18;
             count++;
         }
 
@@ -4949,11 +4951,11 @@ static int BattleInput_SingleScreen_BuildItems(BattleInput *battleInput, int kin
             } else {
                 items[count].str = GetMoveName(menu->moveNo[i], HEAP_ID_BATTLE);
             }
-            items[count].x = 2 + (i & 1) * 82;
-            items[count].y = 2 + (i >> 1) * 26;
+            items[count].x = 5 + (i & 1) * 80;
+            items[count].y = 5 + (i >> 1) * 24;
             items[count].button = 5;
-            items[count].width = 80;
-            items[count].height = 24;
+            items[count].width = 78;
+            items[count].height = 22;
             items[count].selected = selectedMove == i;
             items[count].grey = FALSE;
             count++;
@@ -4970,15 +4972,15 @@ static int BattleInput_SingleScreen_BuildItems(BattleInput *battleInput, int kin
             String_Delete(strSlash);
 
             items[count].str = strPP;
-            items[count].x = 178;
-            items[count].y = 6;
+            items[count].x = 174;
+            items[count].y = 9;
             items[count].selected = FALSE;
             items[count].grey = menu->pp[selectedMove] == 0;
             count++;
 
             items[count].str = strNumbers;
-            items[count].x = 198;
-            items[count].y = 6;
+            items[count].x = 194;
+            items[count].y = 9;
             items[count].selected = FALSE;
             items[count].grey = menu->pp[selectedMove] == 0;
             count++;
@@ -4986,8 +4988,8 @@ static int BattleInput_SingleScreen_BuildItems(BattleInput *battleInput, int kin
             MsgData *typeNames = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0735_bin, HEAP_ID_BATTLE);
             items[count].str = NewString_ReadMsgData(typeNames, GetMoveAttr(menu->moveNo[selectedMove], MOVEATTR_TYPE));
             DestroyMsgData(typeNames);
-            items[count].x = 178;
-            items[count].y = 28;
+            items[count].x = 174;
+            items[count].y = 30;
             items[count].selected = FALSE;
             items[count].grey = FALSE;
             count++;
@@ -4995,11 +4997,11 @@ static int BattleInput_SingleScreen_BuildItems(BattleInput *battleInput, int kin
 
         // the panel for the selected move's PP and type
         items[count].str = String_New(1, HEAP_ID_BATTLE);
-        items[count].x = 168;
-        items[count].y = 2;
+        items[count].x = 166;
+        items[count].y = 5;
         items[count].button = 5;
-        items[count].width = 86;
-        items[count].height = 50;
+        items[count].width = 82;
+        items[count].height = 46;
         items[count].noLabel = TRUE;
         count++;
 
@@ -5187,12 +5189,18 @@ static void BattleInput_SingleScreen_Update(BattleInput *battleInput) {
         }
     }
     if (buttons) {
-        // what is left of the text background between the buttons lets the scene show through
-        int x, y;
-        for (y = 0; y < rect[3] * 8; y++) {
-            for (x = 0; x < rect[2] * 8; x++) {
-                if (SingleScreen_GetPixel(battleInput->ssWindow, x, y) == 15) {
-                    SingleScreen_SetPixel(battleInput->ssWindow, x, y, 0);
+        // the panel takes the message box's frame: dark outline, gold line, grey body
+        int x, y, w = rect[2] * 8, h = rect[3] * 8;
+        for (y = 0; y < h; y++) {
+            for (x = 0; x < w; x++) {
+                int d = x < y ? x : y;
+                int e = (w - 1 - x) < (h - 1 - y) ? (w - 1 - x) : (h - 1 - y);
+                int edge = d < e ? d : e;
+
+                if (edge < 3) {
+                    SingleScreen_SetPixel(battleInput->ssWindow, x, y, 3);
+                } else if (edge == 3) {
+                    SingleScreen_SetPixel(battleInput->ssWindow, x, y, 14);
                 }
             }
         }
