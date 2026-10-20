@@ -239,6 +239,12 @@ BOOL Certificates_Main(OverlayManager *manager, int *state) {
     switch (*state) {
     case CERTIFICATES_EXECSTATE_SETUP:
         CertificatesApp_ResetScroll(data);
+#ifdef SINGLE_SCREEN
+        // the certificate would scroll down onto the sub engine; start it there instead
+        data->scrollY = -192;
+        CertificatesApp_ApplyScroll(data);
+        SingleScreen_ShowSubEngine(TRUE);
+#endif
         CertificatesApp_LoadBgGraphics(data);
         CertificatesApp_PrintText(data);
 
@@ -302,6 +308,9 @@ BOOL Certificates_Exit(OverlayManager *manager, int *state) {
         CertificatesApp_FreeSpriteRenderer(data);
     }
 
+#ifdef SINGLE_SCREEN
+    SingleScreen_ShowSubEngine(FALSE);
+#endif
     CertificatesApp_FreeWindowsAndText(data);
     CertificatesApp_FreeBgConfig(data);
 
