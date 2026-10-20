@@ -28,6 +28,9 @@ extern const volatile u16 gSingleScreenDispSelectMask;
 #undef REG_GX_POWCNT_DSEL_MASK
 #define REG_GX_POWCNT_DSEL_MASK gSingleScreenDispSelectMask
 #define GX_SetDispSelect(sel) GX_SetDispSelect(GX_DISP_SELECT_SUB_MAIN)
+// Puts the sub engine on the visible screen, for scenes that are drawn wholly with it, or
+// puts the main engine back.
+void SingleScreen_ShowSubEngine(BOOL show);
 #endif
 
 #define NELEMS(a) (sizeof(a) / sizeof(*(a)))

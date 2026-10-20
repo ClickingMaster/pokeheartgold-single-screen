@@ -229,6 +229,10 @@ void BattleBagMenu_Create(BattleBagContext *context) {
     if (BattleSystem_GetBattleType(menu->context->battleSystem) & BATTLE_TYPE_TUTORIAL) {
         menu->context->isTutorial = 1;
     }
+#ifdef SINGLE_SCREEN
+    // The bag is drawn wholly on the touch screen, so show that screen while it is open.
+    SingleScreen_ShowSubEngine(TRUE);
+#endif
 }
 
 enum {
@@ -645,6 +649,9 @@ static int BattleBagMenu_Exit(SysTask *task, BattleBagMenu *menu) {
         BagCursor_Battle_SetPocket(bagCursor, menu->pocket);
     }
     menu->context->done = TRUE;
+#ifdef SINGLE_SCREEN
+    SingleScreen_ShowSubEngine(FALSE);
+#endif
     DestroySysTaskAndEnvironment(task);
     return 1;
 }

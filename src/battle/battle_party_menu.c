@@ -556,6 +556,10 @@ void BattlePartyMenu_Create(BattlePartyContext *context) {
     menu->activeMon = context->selectedMon;
     menu->canToggleView = 0;
     menu->battlerPosition = BattleSystem_GetBattlerType(context->battleSystem, context->battlerId);
+#ifdef SINGLE_SCREEN
+    // The party list is drawn wholly on the touch screen, so show that screen while it is open.
+    SingleScreen_ShowSubEngine(TRUE);
+#endif
 }
 
 #pragma force_active reset
@@ -1289,6 +1293,9 @@ static int BattlePartyMenu_Exit(SysTask *task, BattlePartyMenu *menu) {
     BattleDpadCursor_Free(menu->cursor);
     FontID_Release(4);
     menu->context->done = TRUE;
+#ifdef SINGLE_SCREEN
+    SingleScreen_ShowSubEngine(FALSE);
+#endif
     DestroySysTaskAndEnvironment(task);
     return 1;
 }

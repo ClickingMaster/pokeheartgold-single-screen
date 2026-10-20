@@ -6,6 +6,12 @@
 
 #ifdef SINGLE_SCREEN
 const volatile u16 gSingleScreenDispSelectMask = 0;
+
+void SingleScreen_ShowSubEngine(BOOL show) {
+    u32 dsel = (u32)(show ? GX_DISP_SELECT_MAIN_SUB : GX_DISP_SELECT_SUB_MAIN) << REG_GX_POWCNT_DSEL_SHIFT;
+
+    reg_GX_POWCNT = (u16)((reg_GX_POWCNT & ~(1 << REG_GX_POWCNT_DSEL_SHIFT)) | dsel);
+}
 #endif
 
 static u32 sEngineBPlanes = 0;
