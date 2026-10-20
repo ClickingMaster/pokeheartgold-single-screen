@@ -1523,9 +1523,42 @@ static BOOL OakSpeech_TranslateOakPicHorizontally(OakSpeechData *data, int bgId,
     return FALSE;
 }
 
+#ifdef SINGLE_SCREEN
+// The menus and the gender pics are on the sub engine, so show it while they
+// take input; SELECT goes back to the question on the main engine.
+static void OakSpeech_SingleScreenUpdate(OakSpeechData *data) {
+    static BOOL sInMenu = FALSE;
+    BOOL inMenu;
+
+    switch (data->state) {
+    case OAK_SPEECH_MAIN_STATE_TUTORIAL_MENU_HANDLE_INPUT:
+    case OAK_SPEECH_MAIN_STATE_CONTROL_INFO_ASK_UNDERSTOOD_HANDLE_YESNO:
+    case OAK_SPEECH_MAIN_STATE_GENDER_SELECT_MENU_HANDLE_INPUT:
+    case OAK_SPEECH_MAIN_STATE_CONFIRM_GENDER_YESNO_HANDLE_INPUT:
+    case OAK_SPEECH_MAIN_STATE_CONFIRM_NAME_YESNO_HANDLE_INPUT:
+        inMenu = TRUE;
+        break;
+    default:
+        inMenu = FALSE;
+        break;
+    }
+    if (inMenu && !sInMenu) {
+        SingleScreen_ShowSubEngine(TRUE);
+    } else if (inMenu) {
+        SingleScreen_HandleSwapKey();
+    } else if (sInMenu) {
+        SingleScreen_ShowSubEngine(FALSE);
+    }
+    sInMenu = inMenu;
+}
+#endif
+
 static BOOL OakSpeech_DoMainTask(OakSpeechData *data) {
     BOOL ret = FALSE;
 
+#ifdef SINGLE_SCREEN
+    OakSpeech_SingleScreenUpdate(data);
+#endif
     switch (data->state) {
     case OAK_SPEECH_MAIN_STATE_START_TUTORIAL_MUSIC:
         ToggleBgLayer(GF_BG_LYR_SUB_2, GF_PLANE_TOGGLE_OFF);
