@@ -77,6 +77,7 @@ typedef struct StartMenuTaskData {
     // The single-screen game lists the menu actions in a window on the field screen,
     // in place of the touch-screen icons.
     Window listWindow;
+    Window titleWindow;
     struct ListMenu2D *listMenu;
     ListMenuItem *listItems;
 #endif

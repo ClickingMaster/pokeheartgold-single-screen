@@ -1,3 +1,5 @@
+#include "scrcmd_link_sync.h"
+#include "seal_case.h"
 #include "start_menu.h"
 
 #include "global.h"
@@ -50,6 +52,7 @@
 #include "msgdata/msg.naix"
 
 #include "font.h"
+#include "text.h"
 #include "message_format.h"
 #include "render_window.h"
 
@@ -58,7 +61,16 @@
 
 #define START_MENU_LIST_MAX      10
 #define START_MENU_LIST_EXIT     0xFF
-#define START_MENU_LIST_BASETILE 0x3D
+#define START_MENU_LIST_BASETILE 0x50
+// The touch menu's panel (tiles 0-0x41 of its character file and the left 21 columns of its
+// screen), drawn at the right of the main screen with its own palette slot.
+#define START_MENU_PANEL_TILES   0x42
+#define START_MENU_PANEL_COLUMNS 21
+#define START_MENU_PANEL_PLTT    14
+#define START_MENU_PANEL_SCROLL  (-88)
+// colour indices of the panel palette: the green of its body and of its title bar
+#define START_MENU_PANEL_FILL_COLOR  3
+#define START_MENU_PANEL_TITLE_COLOR 5
 #define START_MENU_FRAME_TILE    0x3D9
 #define START_MENU_FRAME_PLTT    11
 #define START_MENU_TEXT_PLTT     13
@@ -177,7 +189,7 @@ static void Task_StartMenu_Evolution(TaskManager *taskManager);
 static void Task_StartMenu_WaitEvolution(TaskManager *taskManager);
 #ifdef SINGLE_SCREEN
 static void StartMenu_CreateList(StartMenuTaskData *startMenu, FieldSystem *fieldSystem);
-static void StartMenu_DestroyList(StartMenuTaskData *startMenu);
+static void StartMenu_DestroyList(StartMenuTaskData *startMenu, FieldSystem *fieldSystem);
 static BOOL StartMenu_HandleListInput(TaskManager *taskManager, FieldSystem *fieldSystem, StartMenuTaskData *startMenu);
 #endif
 
@@ -551,7 +563,7 @@ static u32 StartMenu_BuildActionLists(StartMenuTaskData *startMenu, u8 *insertio
 
 static void StartMenu_RemoveCursorAndIcons(StartMenuTaskData *startMenu, FieldSystem *fieldSystem) {
 #ifdef SINGLE_SCREEN
-    StartMenu_DestroyList(startMenu);
+    StartMenu_DestroyList(startMenu, fieldSystem);
 #else
     StartMenu_DestroyCursor(startMenu);
     FillBgTilemapRect(fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, 0, 0x20, 0x18, 0);
@@ -1554,7 +1566,7 @@ static void StartMenu_CreateList(StartMenuTaskData *startMenu, FieldSystem *fiel
     MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0196_bin, HEAP_ID_FIELD2);
     MessageFormat *msgFmt = MessageFormat_New(HEAP_ID_FIELD2);
     struct ListMenu2DTemplate template;
-    u32 numRegular, maxWidth, width;
+    u32 numRegular, maxWidth;
     int numItems, initialSelection, i;
 
     BufferPlayersName(msgFmt, 0, Save_PlayerData_GetProfile(fieldSystem->saveData));
@@ -1567,6 +1579,7 @@ static void StartMenu_CreateList(StartMenuTaskData *startMenu, FieldSystem *fiel
     // also overwrite whatever action would have gone at position 7.
     numRegular = startMenu->numActiveButtons - 2;
     if (numRegular > 7) {
+    String *titleString;
         numRegular = 7;
     }
     for (i = 0; i < numRegular; i++) {
@@ -1599,16 +1612,28 @@ static void StartMenu_CreateList(StartMenuTaskData *startMenu, FieldSystem *fiel
     MessageFormat_Delete(msgFmt);
     DestroyMsgData(msgData);
 
-    width = (maxWidth + 12 + 7) / 8;
-    AddWindowParameterized(fieldSystem->bgConfig, &startMenu->listWindow, GF_BG_LYR_MAIN_3, 31 - width, 1, width, numItems * 2, START_MENU_TEXT_PLTT, START_MENU_LIST_BASETILE);
-    LoadUserFrameGfx1(fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, START_MENU_FRAME_TILE, START_MENU_FRAME_PLTT, 0, HEAP_ID_FIELD2);
-    DrawFrameAndWindow1(&startMenu->listWindow, TRUE, START_MENU_FRAME_TILE, START_MENU_FRAME_PLTT);
+    GfGfxLoader_LoadCharData(NARC_a_0_1_4, 8, fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, 0, START_MENU_PANEL_TILES * 0x20, TRUE, HEAP_ID_FIELD2);
+    GfGfxLoader_LoadScrnData(NARC_a_0_1_4, 9, fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, TRUE, HEAP_ID_FIELD2);
+    GfGfxLoader_GXLoadPal(NARC_a_0_1_4, 7, GF_PAL_LOCATION_MAIN_BG, (enum GFPalSlotOffset)(START_MENU_PANEL_PLTT * 0x20), 0x20, HEAP_ID_FIELD2);
+    // the rest of the screen is the touch menu's action button area
+    FillBgTilemapRect(fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, 0, START_MENU_PANEL_COLUMNS, 0, 32 - START_MENU_PANEL_COLUMNS, 24, 0);
+    BgTilemapRectChangePalette(fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, START_MENU_PANEL_COLUMNS, 24, START_MENU_PANEL_PLTT);
+    BgSetPosTextAndCommit(fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_SET_X, START_MENU_PANEL_SCROLL);
+    (void)maxWidth;
+    AddWindowParameterized(fieldSystem->bgConfig, &startMenu->listWindow, GF_BG_LYR_MAIN_3, 1, 4, START_MENU_PANEL_COLUMNS - 2, 8, START_MENU_PANEL_PLTT, START_MENU_LIST_BASETILE);
+
+    AddWindowParameterized(fieldSystem->bgConfig, &startMenu->titleWindow, GF_BG_LYR_MAIN_3, 5, 0, 10, 2, START_MENU_PANEL_PLTT, START_MENU_LIST_BASETILE + 0x98);
+    FillWindowPixelBuffer(&startMenu->titleWindow, START_MENU_PANEL_TITLE_COLOR);
+    AddTextPrinterParameterizedWithColor(&startMenu->titleWindow, 0, titleString, (80 - FontID_String_GetWidth(0, titleString, 0)) / 2, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 1, START_MENU_PANEL_TITLE_COLOR), NULL);
+    CopyWindowToVram(&startMenu->titleWindow);
+    String_Delete(titleString);
 
     template.items = startMenu->listItems;
     template.window = &startMenu->listWindow;
     template.fontId = 0;
-    template.itemsWide = 1;
-    template.itemsHigh = numItems;
+    titleString = ReadMsgData_ExpandPlaceholders(msgFmt, msgData, msg_0196_00012, HEAP_ID_FIELD2);
+    template.itemsWide = 2;
+    template.itemsHigh = (numItems + 1) / 2;
     template.yTop = 0;
     template.cursorType = 0;
     template.enableWrap = 1;
@@ -1617,13 +1642,22 @@ static void StartMenu_CreateList(StartMenuTaskData *startMenu, FieldSystem *fiel
     ScheduleBgTilemapBufferTransfer(fieldSystem->bgConfig, GF_BG_LYR_MAIN_3);
 }
 
-static void StartMenu_DestroyList(StartMenuTaskData *startMenu) {
+static void StartMenu_DestroyList(StartMenuTaskData *startMenu, FieldSystem *fieldSystem) {
     if (startMenu->listMenu == NULL) {
         return;
     }
     Delete2dMenu(startMenu->listMenu, NULL);
     startMenu->listMenu = NULL;
-    EraseFrameAndWindow1(&startMenu->listWindow, FALSE);
+    {
+        // the menu paints its window in the font's background colour; use the panel's green instead
+        u8 *pixels = startMenu->listWindow.pixelBuffer;
+        u32 n = startMenu->listWindow.width * startMenu->listWindow.height * 0x20;
+        for (i = 0; i < n; i++) {
+            u8 lo = pixels[i] & 0x0F, hi = pixels[i] >> 4;
+            pixels[i] = (lo == 0xF ? START_MENU_PANEL_FILL_COLOR : lo) | ((hi == 0xF ? START_MENU_PANEL_FILL_COLOR : hi) << 4);
+        }
+        CopyWindowToVram(&startMenu->listWindow);
+    }
     RemoveWindow(&startMenu->listWindow);
     ListMenuItems_Delete(startMenu->listItems);
     startMenu->listItems = NULL;
@@ -1636,6 +1670,10 @@ static BOOL StartMenu_HandleListInput(TaskManager *taskManager, FieldSystem *fie
     int input = Handle2dMenuInput(startMenu->listMenu);
     switch (input) {
     case LIST_NOTHING_CHOSEN: {
+    RemoveWindow(&startMenu->titleWindow);
+    FillBgTilemapRect(fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, 0, 32, 32, 0);
+    BgSetPosTextAndCommit(fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_SET_X, 0);
+    ScheduleBgTilemapBufferTransfer(fieldSystem->bgConfig, GF_BG_LYR_MAIN_3);
         int value = startMenu->listItems[Get2dMenuSelection(startMenu->listMenu)].value;
         if (value != START_MENU_LIST_EXIT) {
             fieldSystem->startMenuCursorPos = value;
