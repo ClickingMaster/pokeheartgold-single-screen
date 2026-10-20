@@ -39,5 +39,8 @@ void ScriptMenu_PrintItemHelpMessage(ScriptMenu *menu, int idx);
 u8 ScriptMenu_IsCancellable(ScriptMenu *menu);
 void ScriptMenu_SetAnchorRight(ScriptMenu *menu, int set);
 void ScriptMenu_SetAnchorBottom(ScriptMenu *menu, int set);
+#ifdef SINGLE_SCREEN
+void ScriptMenu_SetMenuPosition(ScriptMenu *menu, u8 x, u8 y);
+#endif
 
 #endif // POKEHEARTGOLD_FIELD_SCRIPT_MENU_H

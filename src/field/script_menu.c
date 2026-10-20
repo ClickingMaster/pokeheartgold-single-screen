@@ -866,3 +866,10 @@ void ScriptMenu_SetAnchorRight(ScriptMenu *menu, int set) {
 void ScriptMenu_SetAnchorBottom(ScriptMenu *menu, int set) {
     menu->anchorBottom = (u8)set;
 }
+
+#ifdef SINGLE_SCREEN
+void ScriptMenu_SetMenuPosition(ScriptMenu *menu, u8 x, u8 y) {
+    menu->x = x;
+    menu->y = y;
+}
+#endif

@@ -156,6 +156,7 @@ RenderResult RenderText(TextPrinter *printer) {
                 break;
 
             case 0x200:
+#ifndef SINGLE_SCREEN // there is no other screen to point at
                 field = MsgArray_ControlCodeGetField(
                     printer->template.currentChar.raw, 0);
 
@@ -166,6 +167,7 @@ RenderResult RenderText(TextPrinter *printer) {
                 if (printer->textSpeedTop != 0) {
                     CopyWindowToVram(printer->template.window);
                 }
+#endif
 
                 break;
             case 0x207:

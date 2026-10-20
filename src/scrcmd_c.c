@@ -6,6 +6,7 @@
 #include "constants/trainers.h"
 
 #include "field/field_camera.h"
+#include "field/script_menu.h"
 #include "field/legend_cutscene_camera.h"
 #include "field/map_load_manager.h"
 #include "field/map_prop.h"
@@ -4984,12 +4985,17 @@ BOOL ScrCmd_SetSavedBottomScreenApp(ScriptContext *ctx) {
 BOOL NativeScript_WaitTouchscreenMenuChoice(ScriptContext *ctx);
 
 BOOL ScrCmd_GetMenuChoice(ScriptContext *ctx) {
+#ifdef SINGLE_SCREEN
+    // The touch YES/NO buttons are on the hidden screen: use the field YES/NO window instead.
+    return ScrCmd_YesNo(ctx);
+#else
     FieldSystem *fieldSystem = ctx->fieldSystem;
     u16 var_ret = ScriptReadHalfword(ctx);
     ctx->data[0] = var_ret;
     FieldSystem_SetTouchscreenChoiceMenuState(fieldSystem, 3, 3, &ctx->data[1]);
     SetupNativeScript(ctx, NativeScript_WaitTouchscreenMenuChoice);
     return TRUE;
+#endif
 }
 
 BOOL NativeScript_WaitTouchscreenMenuChoice(ScriptContext *ctx) {
@@ -5005,18 +5011,26 @@ BOOL NativeScript_WaitTouchscreenMenuChoice(ScriptContext *ctx) {
     }
 }
 
+#ifdef SINGLE_SCREEN
+// The touch choice list is on the hidden screen: build an ordinary field list window instead.
+#define Script_GetTouchscreenMenu(ctx) ((struct ScriptMenu **)FieldSysGetAttrAddr((ctx)->fieldSystem, SCRIPTENV_MENU_WINDOW))
+BOOL NativeScript_WaitSingleScreenMenu(ScriptContext *ctx);
+#else
+#define Script_GetTouchscreenMenu(ctx) FieldSystem_GetTouchscreenChoiceMenuList((ctx)->fieldSystem)
+#endif
+
 BOOL ScrCmd_MenuInitStdGmm(ScriptContext *ctx) {
-    Script_CreateMenuFromArgs(ctx, FieldSystem_GetTouchscreenChoiceMenuList(ctx->fieldSystem), NULL);
+    Script_CreateMenuFromArgs(ctx, Script_GetTouchscreenMenu(ctx), NULL);
     return TRUE;
 }
 
 BOOL ScrCmd_MenuInit(ScriptContext *ctx) {
-    Script_CreateMenuFromArgs(ctx, FieldSystem_GetTouchscreenChoiceMenuList(ctx->fieldSystem), ctx->msgdata);
+    Script_CreateMenuFromArgs(ctx, Script_GetTouchscreenMenu(ctx), ctx->msgdata);
     return TRUE;
 }
 
 BOOL ScrCmd_MenuItemAdd(ScriptContext *ctx) {
-    struct ScriptMenu **p_menu = FieldSystem_GetTouchscreenChoiceMenuList(ctx->fieldSystem);
+    struct ScriptMenu **p_menu = Script_GetTouchscreenMenu(ctx);
     u16 msgId = ScriptGetVar(ctx);
     u16 where = ScriptGetVar(ctx);
     u16 value = ScriptGetVar(ctx);
@@ -5028,6 +5042,16 @@ BOOL NativeScript_WaitMenuExec(ScriptContext *ctx);
 BOOL MenuExec_PrintItemHelp(struct ScriptMenu *menu, int idx);
 
 BOOL ScrCmd_MenuExec(ScriptContext *ctx) {
+#ifdef SINGLE_SCREEN
+    struct ScriptMenu **p_menu = Script_GetTouchscreenMenu(ctx);
+    // B on the touch list picks the last row; keep that result.
+    ctx->data[1] = ScriptMenu_GetListItems(*p_menu)[ScriptMenu_GetCount(*p_menu) - 1].value;
+    ScriptMenu_SetAnchorRight(*p_menu, TRUE);
+    ScriptMenu_SetMenuPosition(*p_menu, 31, 1);
+    ScriptMenu_ShowList(*p_menu);
+    SetupNativeScript(ctx, NativeScript_WaitSingleScreenMenu);
+    return TRUE;
+#else
     FieldSystem *fieldSystem = ctx->fieldSystem;
     struct ScriptMenu **p_menu = FieldSystem_GetTouchscreenChoiceMenuList(fieldSystem);
     u16 *p_ret = GetVarPointer(fieldSystem, ctx->data[0]);
@@ -5035,7 +5059,21 @@ BOOL ScrCmd_MenuExec(ScriptContext *ctx) {
     FieldSystem_SetTouchscreenChoiceMenuCallback(fieldSystem, MenuExec_PrintItemHelp, *p_menu);
     SetupNativeScript(ctx, NativeScript_WaitMenuExec);
     return TRUE;
+#endif
 }
+
+#ifdef SINGLE_SCREEN
+BOOL NativeScript_WaitSingleScreenMenu(ScriptContext *ctx) {
+    u16 *p_ret = GetVarPointer(ctx->fieldSystem, ctx->data[0]);
+    if (*p_ret == 0xEEEE) {
+        return FALSE;
+    }
+    if (*p_ret == 0xFFFE) {
+        *p_ret = ctx->data[1];
+    }
+    return TRUE;
+}
+#endif
 
 BOOL NativeScript_WaitMenuExec(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
