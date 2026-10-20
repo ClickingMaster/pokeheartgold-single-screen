@@ -85,6 +85,10 @@ BOOL PalPad_Main(OverlayManager *man, int *state) {
     PalPadWork *work = OverlayManager_GetData(man);
     int result;
 
+#ifdef SINGLE_SCREEN
+    // the friend details are on the hidden screen
+    SingleScreen_HandleSwapKey();
+#endif
     switch (*state) {
     case PALPAD_STATE_RUN_SCREEN:
         switch (work->screen) {

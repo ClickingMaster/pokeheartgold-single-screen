@@ -631,6 +631,10 @@ BOOL PokeathlonCourseRecord_Exit(OverlayManager *man, int *state) {
 BOOL PokeathlonCourseRecord_Main(OverlayManager *man, int *state) {
     PokeathlonCourseRecord *work = OverlayManager_GetData(man);
 
+#ifdef SINGLE_SCREEN
+    // more records are on the hidden screen
+    SingleScreen_HandleSwapKey();
+#endif
     PokeathlonCourseRecord_UpdatePageScroll(work);
     if (work->selection.pageChanged == TRUE) {
         PokeathlonCourseRecord_ShowCoursePanel(work, work->selection.page);
