@@ -340,6 +340,10 @@ SysTask *TouchMartApp_Init(BgConfig *bgConfig, void *lastTouchMenuInput, FieldSy
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
     TextFlags_SetCanTouchSpeedUpPrint(TRUE);
     TextFlags_SetFastForwardTouchButtonHitbox(sTouchMartTextSkipHitbox);
+#ifdef SINGLE_SCREEN
+    // the shop counter is the hidden screen; SELECT swaps back to read the item description
+    SingleScreen_ShowSubEngine(TRUE);
+#endif
     return task;
 }
 
@@ -374,6 +378,9 @@ static void TouchMartApp_PrintCancel(TouchMartAppData *data, int leftAligned) {
 void TouchMartApp_Exit(BgConfig *bgConfig, SysTask *task) {
     TouchMartAppData *data = SysTask_GetData(task);
     TextFlags_SetCanTouchSpeedUpPrint(FALSE);
+#ifdef SINGLE_SCREEN
+    SingleScreen_ShowSubEngine(FALSE);
+#endif
     TouchMartApp_FreeWindows(data);
     TouchMartApp_FreeText(data);
     DestroySysTaskAndEnvironment(task);
@@ -412,6 +419,12 @@ static BOOL TouchMartApp_IsSelectionValid(TouchMartAppData *data, u32 selection)
 static void TouchMartApp_RunTask(SysTask *task, void *env) {
     TouchMartAppData *data = env;
     int selection;
+#ifdef SINGLE_SCREEN
+    if (gSystem.newKeys & PAD_BUTTON_SELECT) {
+        PlaySE(SEQ_SE_DP_SELECT);
+        SingleScreen_ShowSubEngine(!SingleScreen_IsSubEngineShown());
+    }
+#endif
     switch (data->state) {
     case TOUCH_MART_STATE_WAIT_FADE:
         if (IsPaletteFadeFinished() == TRUE) {
