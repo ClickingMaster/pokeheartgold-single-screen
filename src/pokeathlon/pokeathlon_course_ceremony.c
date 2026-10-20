@@ -1516,6 +1516,10 @@ static BOOL PokeathlonCourseCeremony_Init(PokeathlonCourseData *course) {
         ceremony->spriteResources = PokeathlonCourseSprites_CreateResources(ceremony->heapId, 6, 1);
         gSystem.screensFlipped = TRUE;
         GfGfx_SwapDisplay();
+#ifdef SINGLE_SCREEN
+        // the announcer and the scoreboard are on the sub engine
+        SingleScreen_ShowSubEngine(TRUE);
+#endif
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
     case CEREMONY_INIT_LOAD_MONS: {
@@ -1604,6 +1608,9 @@ static BOOL PokeathlonCourseCeremony_Exit(PokeathlonCourseData *course) {
     PokeathlonCourse_FreeWork(course);
     gSystem.screensFlipped = FALSE;
     GfGfx_SwapDisplay();
+#ifdef SINGLE_SCREEN
+    SingleScreen_ShowSubEngine(FALSE);
+#endif
     UnloadOverlayByID(FS_OVERLAY_ID(OVY_98));
     Heap_Destroy(HEAP_ID_135);
     return TRUE;

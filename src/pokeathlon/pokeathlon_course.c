@@ -106,6 +106,11 @@ BOOL PokeathlonCourse_Main(OverlayManager *manager, int *state) {
         }
     }
 
+#ifdef SINGLE_SCREEN
+    // the scoreboards and the announcer are on the hidden screen
+    SingleScreen_HandleSwapKey();
+#endif
+
     // Main state machine
     switch (courseState->mainState) {
     case POKEATHLON_STATE_IDLE:
