@@ -85,3 +85,7 @@ Pokémon HeartGold and SoulSilver, and the game data and graphics under
 is unofficial and not affiliated with or endorsed by them. It contains no ROM,
 Nintendo SDK or compiler: you supply your own legally obtained SoulSilver (USA)
 ROM, and the tools listed in [INSTALL.md](INSTALL.md).
+
+## License
+
+The single-screen changes and the recompilation frontend (`frontend/`) by ClickingMaster are released under the MIT license (see `frontend/LICENSE`), with the added requirement that derivative works credit "ClickingMaster" by name. The rest of the repository is the upstream pokeheartgold decompilation and is covered by its original terms (upstream has no license file); bundled tools in `tools/` keep their own licenses. No game assets are included, and the game itself belongs to Nintendo, Game Freak and The Pokémon Company.

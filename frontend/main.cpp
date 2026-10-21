@@ -1412,6 +1412,7 @@ int main(int argc, char** argv)
     // The start-menu probe flickers while the ROM slides the menu in; hold it for a few frames so the panel stays put.
     // age counts frames since the held state began (0 when not held).
     uint32_t xPressed = 0, bPressed = 0;
+    bool menuUnconfirmed = false; // menuHeld is true only on the X press so far; the probe has not seen a menu
     bool menuShown = false; // the start menu was composed as open on the last frame
     auto menuHeld = [&](unsigned* age = nullptr) {
         static unsigned lastOn = 0, since = 0, lastCalled = ~0u;
@@ -1420,13 +1421,16 @@ int main(int argc, char** argv)
         if (f != lastCalled)
         {
             lastCalled = f;
-            const bool held = lastOn && f - lastOn <= 8;
+            const unsigned lat = fromX ? 0 : bPressed && f - bPressed <= 30 ? 1 : 8; // fromX: the probe hasn't confirmed a menu // closing: drop the latch as soon as the probe ends
+            const bool held = lastOn && f - lastOn <= lat;
             if (probeActive(probeStartMenu) && fieldActive()) { if (!held || fromX) since = f; lastOn = f; fromX = false; }
             // The probe lags the X press by a few frames, and the ROM's setup frames in between are garbage.
-            else if (xPressed && f - xPressed <= 6 && fieldActive()) { if (!held) { since = f; fromX = true; } lastOn = f; }
+            else if (xPressed && f - xPressed <= 3 && fieldActive()) { if (!held) { since = f; fromX = true; } lastOn = f; }
             else if (!held) lastOn = 0;
         }
-        const bool held = lastOn && f - lastOn <= 8;
+        const unsigned lat = fromX ? 0 : bPressed && f - bPressed <= 30 ? 1 : 8; // fromX: the probe hasn't confirmed a menu
+        const bool held = lastOn && f - lastOn <= lat;
+        menuUnconfirmed = held && fromX;
         if (age) *age = held ? f - since : 0;
         return held;
     };
@@ -2982,11 +2986,11 @@ int main(int argc, char** argv)
                     static std::deque<Pic> history;
                     static int quiet = 100;
                     static Pic frozen;
-                    const bool menuNow = singleView() && menuHeld();
+                    const bool menuNow = singleView() && menuHeld() && !menuUnconfirmed;
                     // The scene was picked before the menu showed: its first frames are the ROM's setup, hide them.
                     if (menuNow && scene.items.size() == 1 && std::strcmp(scene.name, "start-menu")) { scene.wide = true; scene.items[0].drop = 0x7F; scene.items[0].sw = 0; }
                     quiet = menuNow ? 0 : quiet + 1;
-                    if (quiet > 40)
+                    if (quiet > 4)
                     {
                         history.push_back({ melonDS::Wide.Front, melonDS::Wide.FrontW, melonDS::Wide.FrontH });
                         if (history.size() > 12) history.pop_front();
@@ -3162,7 +3166,6 @@ int main(int argc, char** argv)
                 static bool prevX = false;
                 const bool nowX = keys & (1u << KEY_X);
                 if (nowX && !prevX) { xPressed = rc_current_frame(); bPressed = menuShown ? xPressed : 0; } // X on an open menu closes it
-                else if (nowX) xPressed = rc_current_frame();
                 prevX = nowX;
             }
             if (keys & (1u << KEY_B)) bPressed = rc_current_frame();
