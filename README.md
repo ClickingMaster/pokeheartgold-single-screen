@@ -43,11 +43,19 @@ Setup programs for Windows and Linux are on the [Releases page](https://github.c
 - `pokeheartgold-single-screen-setup-windows-x86_64.exe`
 - `pokeheartgold-single-screen-setup-linux-x86_64`
 
+What you give the setup program:
+
+- **mwccarm:** a folder or zip with `mwccarm/2.0/sp2p2/mwccarm.exe`.
+- **Nitro SDK:** one folder or zip holding `tools/bin`, `ARM9-TS.lcf.template`, `ARM7-TS.lcf.template`, `mwldarm.response.template` and, next to each other, the library folders `NitroSDK`, `NitroSystem`, `NitroDWC`, `NitroWiFi`, `MSL_C`, `libCPS`, `libVCT`, `asm`, `src` and `include`.
+- **ROM:** your own SoulSilver (USA) `.nds`.
+
+On Linux you also need `make`, `python3`, `pkg-config`, `arm-none-eabi-gcc` and `wine`. The setup tells you what is missing.
+
 They carry the source only. You supply your own mwccarm compiler, the Nitro SDK (tools and the `lib/` library sources) and your own SoulSilver (USA) ROM, from which the setup extracts the raw game files (the remaining sources are fetched from pret/pokeheartgold by `tools/fetch_assets.py`, see [INSTALL.md](INSTALL.md)); the setup places them, checks your build tools and builds `SoulSilver-single-screen.nds`. No ROM, compiler or SDK is distributed, and only the part of `files/` that matches upstream pret/pokeheartgold is tracked. See [INSTALL.md](INSTALL.md) for the build tools each platform needs.
 
 ## Building
 
-Setup is in [INSTALL.md](INSTALL.md). This repository builds the following ROMs:
+Setup is in [INSTALL.md](INSTALL.md). The single-screen build is for **SoulSilver (USA)**; it is the only version the setup programs and asset script are tested with. This repository's build system can also make the following ROMs:
 
 * **pokeheartgold.us.nds** `sha1: 4fcded0e2713dc03929845de631d0932ea2b5a37`
 * **pokesoulsilver.us.nds** `sha1: f8dc38ea20c17541a43b58c5e6d18c1732c7e582`
