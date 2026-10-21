@@ -33,7 +33,7 @@ The single-screen ROM running in the [ssrecomp](https://github.com/ClickingMaste
 
 | | |
 |---|---|
-| ![Field: the X menu](docs/screenshots/field-menu.png) | ![Battle: choosing a command](docs/screenshots/battle-commands.png) |
+| ![Field: a Pokémon Center](docs/screenshots/field-menu.png) | ![Battle: choosing a command](docs/screenshots/battle-commands.png) |
 | ![Battle: choosing a move](docs/screenshots/battle-moves.png) | ![Battle: the bag](docs/screenshots/battle-bag.png) |
 
 ## Building
