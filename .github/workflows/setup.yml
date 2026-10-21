@@ -1,0 +1,45 @@
+name: Setup executables
+
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            asset: pokeheartgold-single-screen-setup-linux-x86_64
+            built: dist/pokeheartgold-single-screen-setup
+          - os: windows-latest
+            asset: pokeheartgold-single-screen-setup-windows-x86_64.exe
+            built: dist/pokeheartgold-single-screen-setup.exe
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Tk (Linux)
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y python3-tk
+      - run: pip install "pyinstaller>=6"
+      - run: python tools/package_setup.py
+      - name: Rename
+        shell: bash
+        run: mv "${{ matrix.built }}" "dist/${{ matrix.asset }}"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.asset }}
+          path: dist/${{ matrix.asset }}
+      - name: Attach to release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/${{ matrix.asset }}
