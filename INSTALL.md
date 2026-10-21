@@ -237,6 +237,19 @@ refresh the build first. The report records the Git commit, tracked working
 tree state, and map hashes for provenance. A passing ROM checksum establishes
 retail binary equivalence, not complete decompilation or portability.
 
+## Quick build guide (this repo)
+
+This repo does not include everything the build needs, so a fresh clone will not build until you add the pieces below. All of them are proprietary or game data and must come from your own legally obtained copies.
+
+1. **Clone and build tools.** `git clone https://github.com/ClickingMaster/pokeheartgold-single-screen` and install the tools for your platform from the sections above (make, python3, pkg-config, arm-none-eabi-gcc, libpng, pugixml; wine on Linux/macOS).
+2. **Compiler.** Copy your `mwccarm` folder (with `2.0/sp2p2/mwccarm.exe`) to `tools/mwccarm`.
+3. **Nitro SDK tools.** Copy the SDK's `tools/bin` to `tools/bin`, `ARM7-TS.lcf.template` to `sub/`, and `ARM9-TS.lcf.template` and `mwldarm.response.template` to the project root.
+4. **Nitro library sources.** Put your copies of `NitroSDK`, `NitroSystem`, `NitroDWC`, `NitroWiFi`, `MSL_C`, `libCPS`, `libVCT`, `asm`, `src` and `include` into `lib/` (so e.g. `lib/NitroSDK/...`).
+5. **Game assets.** About 8,600 files in `files/` are tracked here. The remainder of the unpacked asset tree (`files/`) must be supplied by you, e.g. from a complete pret/pokeheartgold checkout or your own extraction (`tools/extract_rom.py ROM.nds` only extracts raw NitroFS files and does not recreate the whole tree). `make` stops with "No rule to make target 'files/...'" while files are missing.
+6. **Build.** `make -j8 soulsilver COMPARE=0`. The ROM is `build/soulsilver.us/pokesoulsilver.us.nds`.
+
+Alternatively, run `pokeheartgold_setup.py` (window or CLI), which does steps 2, 3 and 6 for you and tells you what is still missing.
+
 ## Game asset tree (`files/`)
 
 The `files/` directory (unpacked and converted game assets) is game data owned by Nintendo, Game Freak and Creature Inc. and is **not** included in this repository. The build needs it, so it must be produced from your own copy of the game. `tools/extract_rom.py ROM.nds [OUT_DIR]` extracts the raw NitroFS files from your ROM, but that alone does not recreate the unpacked asset tree the Makefiles expect.
