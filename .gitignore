@@ -108,3 +108,4 @@ __pycache__
 .local-tools/
 .venv/
 *.pyc
+files/

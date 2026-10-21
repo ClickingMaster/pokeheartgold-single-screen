@@ -43,7 +43,7 @@ Setup programs for Windows and Linux are on the [Releases page](https://github.c
 - `pokeheartgold-single-screen-setup-windows-x86_64.exe`
 - `pokeheartgold-single-screen-setup-linux-x86_64`
 
-They carry the source only. You supply your own mwccarm compiler and Nitro SDK tools; the setup places them, checks your build tools and builds `SoulSilver-single-screen.nds`. No ROM, game code, compiler or SDK is distributed. See [INSTALL.md](INSTALL.md) for the build tools each platform needs.
+They carry the source only. You supply your own mwccarm compiler, Nitro SDK tools and the `files/` game asset tree (see [INSTALL.md](INSTALL.md)); the setup places them, checks your build tools and builds `SoulSilver-single-screen.nds`. No ROM, game data, game code, compiler or SDK is distributed. See [INSTALL.md](INSTALL.md) for the build tools each platform needs.
 
 ## Building
 

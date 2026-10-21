@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Builds the one-file setup program with PyInstaller.
 
-The bundle is `git archive HEAD`: tracked source and extracted game data only, never a ROM,
+The bundle is `git archive HEAD`: tracked source only, never a ROM,
 mwccarm or the Nitro SDK (those are untracked and supplied by the user).
 """
 import hashlib

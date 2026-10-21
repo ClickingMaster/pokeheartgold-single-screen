@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Setup program for the single-screen Pokemon SoulSilver decompilation.
 
-It carries the decomp's source only (no game code, no ROM, no compiler). You supply the
+It carries the decomp's source only (no game data, no ROM, no compiler). You supply the
 Metrowerks mwccarm compiler and the Nitro SDK tools yourself (see INSTALL.md); this
 program places them, checks the build tools, builds the single-screen ROM and copies it
 to a folder of your choice.
@@ -124,6 +124,9 @@ def place_toolchain(src, mwcc, sdk, log):
 
 def check_ready(src):
     problems = []
+    if not os.path.isdir(os.path.join(src, 'files', 'data')):
+        problems.append('The files/ asset tree is missing. It is game data and is not distributed with this repo; '
+                        'see INSTALL.md.')
     if not os.path.exists(os.path.join(src, 'tools', 'mwccarm', '2.0', 'sp2p2', 'mwccarm.exe')):
         problems.append('mwccarm is missing (choose it in step 1).')
     if not os.path.exists(os.path.join(src, 'tools', 'bin', 'makelcf.exe')):

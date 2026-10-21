@@ -236,3 +236,7 @@ old build corresponds to newly edited source. Use `build.sh progress` to
 refresh the build first. The report records the Git commit, tracked working
 tree state, and map hashes for provenance. A passing ROM checksum establishes
 retail binary equivalence, not complete decompilation or portability.
+
+## Game asset tree (`files/`)
+
+The `files/` directory (unpacked and converted game assets) is game data owned by Nintendo, Game Freak and Creature Inc. and is **not** included in this repository. The build needs it, so it must be produced from your own copy of the game. `tools/extract_rom.py ROM.nds [OUT_DIR]` extracts the raw NitroFS files from your ROM, but that alone does not recreate the unpacked asset tree the Makefiles expect.
