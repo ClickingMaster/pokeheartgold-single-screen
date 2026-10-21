@@ -122,6 +122,19 @@ def place_toolchain(src, mwcc, sdk, log):
             log('Placed the Nitro SDK tools.\n')
 
 
+def fetch_assets(src, rom, log):
+    sys.path.insert(0, os.path.join(src, 'tools'))
+    import fetch_assets as fa
+    import contextlib
+    class W:
+        def write(self, t): log(t)
+        def flush(self): pass
+    with contextlib.redirect_stdout(W()):
+        fa.fetch_pret(None, False)
+        if rom:
+            fa.fetch_rom(rom, False)
+
+
 def check_ready(src):
     problems = []
     if not os.path.isdir(os.path.join(src, 'files', 'data')):
@@ -199,6 +212,7 @@ def default_jobs():
 def cli(args):
     src = unpack(work_dir(), sys.stdout.write)
     place_toolchain(src, args.mwcc, args.sdk, sys.stdout.write)
+    fetch_assets(src, args.rom, sys.stdout.write)
     problems = check_ready(src)
     if problems:
         raise SystemExit('Not ready:\n  ' + '\n  '.join(problems))
@@ -212,13 +226,14 @@ def gui(args):
     root.title('Pokemon SoulSilver single-screen setup')
     root.geometry('720x520')
     q = queue.Queue()
-    v = {k: tk.StringVar(value=getattr(args, k) or '') for k in ('mwcc', 'sdk', 'out')}
+    v = {k: tk.StringVar(value=getattr(args, k) or '') for k in ('mwcc', 'sdk', 'rom', 'out')}
     if not v['out'].get():
         v['out'].set(os.path.expanduser('~'))
     f = ttk.Frame(root, padding=12)
     f.pack(fill='both', expand=True)
     rows = [('1. mwccarm (folder or zip)', 'mwcc', True), ('2. Nitro SDK tools (folder or zip)', 'sdk', True),
-            ('3. Save the ROM in', 'out', False)]
+            ('3. Your SoulSilver (USA) .nds', 'rom', True),
+            ('4. Save the ROM in', 'out', False)]
     for i, (label, key, pick_file) in enumerate(rows):
         ttk.Label(f, text=label).grid(row=i, column=0, sticky='w', pady=3)
         ttk.Entry(f, textvariable=v[key], width=48).grid(row=i, column=1, padx=6)
@@ -227,11 +242,11 @@ def gui(args):
             if p:
                 v[key].set(p)
         ttk.Button(f, text='Browse', command=browse).grid(row=i, column=2)
-    ttk.Label(f, text='You supply the compiler and SDK; no ROM, compiler or Nintendo SDK is bundled, and files/ and lib/ must be completed from your own copies (see INSTALL.md).',
-              wraplength=680).grid(row=3, column=0, columnspan=3, sticky='w', pady=6)
+    ttk.Label(f, text='You supply the compiler and SDK; no ROM, compiler or Nintendo SDK is bundled, game files are extracted from your own ROM, and the Nitro library sources in lib/ still come from your own copy (see INSTALL.md).',
+              wraplength=680).grid(row=4, column=0, columnspan=3, sticky='w', pady=6)
     logbox = scrolledtext.ScrolledText(f, height=18, state='disabled')
-    logbox.grid(row=5, column=0, columnspan=3, sticky='nsew')
-    f.rowconfigure(5, weight=1)
+    logbox.grid(row=6, column=0, columnspan=3, sticky='nsew')
+    f.rowconfigure(6, weight=1)
     f.columnconfigure(1, weight=1)
 
     def log(text):
@@ -248,10 +263,11 @@ def gui(args):
             pass
         root.after(100, pump)
 
-    def work(mwcc, sdk, out):
+    def work(mwcc, sdk, out, rom):
         try:
             src = unpack(work_dir(), log)
             place_toolchain(src, mwcc or None, sdk or None, log)
+            fetch_assets(src, rom or None, log)
             problems = check_ready(src)
             if problems:
                 raise SystemExit('Not ready:\n  ' + '\n  '.join(problems))
@@ -265,10 +281,10 @@ def gui(args):
 
     def start():
         button.configure(state='disabled')
-        threading.Thread(target=work, args=(v['mwcc'].get(), v['sdk'].get(), v['out'].get()), daemon=True).start()
+        threading.Thread(target=work, args=(v['mwcc'].get(), v['sdk'].get(), v['out'].get(), v['rom'].get()), daemon=True).start()
 
     button = ttk.Button(f, text='Build', command=start)
-    button.grid(row=4, column=0, columnspan=3, pady=6)
+    button.grid(row=5, column=0, columnspan=3, pady=6)
     pump()
     root.mainloop()
 
@@ -277,6 +293,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('--mwcc', help='folder or zip holding mwccarm/ (with 2.0/sp2p2/mwccarm.exe)')
     ap.add_argument('--sdk', help='folder or zip holding the Nitro SDK tools/bin and the .template files')
+    ap.add_argument('--rom', help='your own SoulSilver (USA) .nds, used to extract the raw game files')
     ap.add_argument('--out', default=os.getcwd(), help='folder for %s' % OUT_NAME)
     ap.add_argument('--jobs', type=int, default=default_jobs())
     args = ap.parse_args()

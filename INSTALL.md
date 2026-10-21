@@ -245,13 +245,13 @@ This repo does not include everything the build needs, so a fresh clone will not
 2. **Compiler.** Copy your `mwccarm` folder (with `2.0/sp2p2/mwccarm.exe`) to `tools/mwccarm`.
 3. **Nitro SDK tools.** Copy the SDK's `tools/bin` to `tools/bin`, `ARM7-TS.lcf.template` to `sub/`, and `ARM9-TS.lcf.template` and `mwldarm.response.template` to the project root.
 4. **Nitro library sources.** Put your copies of `NitroSDK`, `NitroSystem`, `NitroDWC`, `NitroWiFi`, `MSL_C`, `libCPS`, `libVCT`, `asm`, `src` and `include` into `lib/` (so e.g. `lib/NitroSDK/...`).
-5. **Game assets.** About 8,600 files in `files/` are tracked here. The remainder of the unpacked asset tree (`files/`) must be supplied by you, e.g. from a complete pret/pokeheartgold checkout or your own extraction (`tools/extract_rom.py ROM.nds` only extracts raw NitroFS files and does not recreate the whole tree). `make` stops with "No rule to make target 'files/...'" while files are missing.
+5. **Game assets.** Run `python3 tools/fetch_assets.py --rom "your SoulSilver (USA).nds"`. It downloads the missing script/message/event sources from pret/pokeheartgold at the commit this fork branched from, and extracts the raw game files (`files/a/...`) from your own ROM. It never overwrites a tracked file. Without `--rom` only the sources are fetched and `make` stops at the raw files.
 6. **Build.** `make -j8 soulsilver COMPARE=0`. The ROM is `build/soulsilver.us/pokesoulsilver.us.nds`.
 
 Alternatively, run `pokeheartgold_setup.py` (window or CLI), which does steps 2, 3 and 6 for you and tells you what is still missing.
 
 ## What is and is not in this repo
 
-- **`files/`**: only the ~8,600 files that are byte-identical to upstream pret/pokeheartgold are tracked. The rest of the unpacked asset tree is game data and must come from your own copy of the game or a complete pret checkout. `tools/extract_rom.py ROM.nds [OUT_DIR]` extracts raw NitroFS files from your ROM but does not recreate the unpacked tree the Makefiles expect.
+- **`files/`**: only the ~8,600 files that are byte-identical to upstream pret/pokeheartgold are tracked. `tools/fetch_assets.py` fills in the rest (sources from pret at the base commit, raw data from your ROM); `tools/extract_rom.py ROM.nds [OUT_DIR]` alone extracts only the raw NitroFS files.
 - **`lib/`**: only `lib/dsprot` and `lib/syscall` (also published upstream) are tracked. `NitroSDK`, `NitroSystem`, `NitroDWC`, `NitroWiFi`, `MSL_C`, `libCPS`, `libVCT`, `asm`, `src` and `include` are not included.
 - **Not included at all**: ROMs, `mwccarm`, Nitro SDK binaries/templates.
