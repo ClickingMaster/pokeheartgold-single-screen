@@ -236,7 +236,7 @@ This repo does not include everything the build needs, so a fresh clone will not
 5. **Game assets.** Run `python3 tools/fetch_assets.py --rom "your SoulSilver (USA).nds"`. It downloads the missing script/message/event sources from pret/pokeheartgold at the commit this fork branched from, and extracts the raw game files (`files/a/...`) from your own ROM. It never overwrites a tracked file. Without `--rom` only the sources are fetched and `make` stops at the raw files.
 6. **Build.** `make -j8 soulsilver COMPARE=0`. The ROM is `build/soulsilver.us/pokesoulsilver.us.nds`.
 
-Alternatively, run `pokeheartgold_setup.py` (window or CLI), which does steps 2, 3, 5 (when you give it your ROM) and 6 for you (and step 4 when the folder or zip you give it as the SDK also holds the library folders `NitroSDK`, `NitroSystem`, ...) and tells you what is still missing.
+Alternatively, run `pokeheartgold_setup.py` (window or CLI), which does steps 2, 3, 5 (when you give it your ROM) and 6 for you (and step 4 when the folder or zip you give it as the SDK also holds the library folders `NitroSDK`, `NitroSystem`, ...) and tells you what is still missing. It can also import an existing save (`.sav`, or a DeSmuME `.dsv`; window field 4 or `--save FILE`), copying it next to the built ROM as `SoulSilver-single-screen.nds.sav`, where the frontend looks for it; an existing save there is kept as `.bak`.
 
 ## What is and is not in this repo
 

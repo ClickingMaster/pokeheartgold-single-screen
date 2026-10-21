@@ -7,7 +7,7 @@ program places them, checks the build tools, builds the single-screen ROM and co
 to a folder of your choice.
 
     python3 pokeheartgold_setup.py                 # window
-    python3 pokeheartgold_setup.py --mwcc DIR_OR_ZIP --sdk DIR_OR_ZIP [--out DIR] [--jobs N]
+    python3 pokeheartgold_setup.py --mwcc DIR_OR_ZIP --sdk DIR_OR_ZIP [--save FILE.sav] [--out DIR] [--jobs N]
 """
 import argparse
 import hashlib
@@ -24,6 +24,8 @@ NAME = 'pokeheartgold-single-screen'
 ROM_REL = os.path.join('build', 'soulsilver.us', 'pokesoulsilver.us.nds')
 OUT_NAME = 'SoulSilver-single-screen.nds'
 LIBS = ['NitroSDK', 'NitroSystem', 'NitroDWC', 'NitroWiFi', 'MSL_C', 'libCPS', 'libVCT', 'asm', 'src', 'include']
+SAVE_SIZE = 512 * 1024
+DSV_FOOTER = 122
 TEMPLATES = {'ARM9-TS.lcf.template': '.', 'mwldarm.response.template': '.', 'ARM7-TS.lcf.template': 'sub'}
 HERE = os.path.dirname(os.path.abspath(sys.executable if getattr(sys, 'frozen', False) else __file__))
 
@@ -213,6 +215,22 @@ def run_build(src, jobs, out, log):
     return dest
 
 
+def import_save(sav, rom, log):
+    """Copies an existing save next to the built ROM, where the frontend looks for it (<rom>.sav)."""
+    data = open(sav, 'rb').read()
+    if len(data) == SAVE_SIZE + DSV_FOOTER:
+        data = data[:SAVE_SIZE]  # DeSmuME .dsv: raw save plus a footer
+    if len(data) != SAVE_SIZE:
+        raise SystemExit('Not a SoulSilver save (%d bytes, expected %d): %s' % (len(data), SAVE_SIZE, sav))
+    dest = rom + '.sav'
+    if os.path.exists(dest):
+        shutil.copy2(dest, dest + '.bak')
+        log('Existing save kept as %s.bak\n' % dest)
+    with open(dest, 'wb') as f:
+        f.write(data)
+    log('Imported save: %s\n' % dest)
+
+
 def default_jobs():
     return max(1, min(8, (os.cpu_count() or 2)))
 
@@ -224,7 +242,9 @@ def cli(args):
     problems = check_ready(src)
     if problems:
         raise SystemExit('Not ready:\n  ' + '\n  '.join(problems))
-    run_build(src, args.jobs, args.out, sys.stdout.write)
+    rom = run_build(src, args.jobs, args.out, sys.stdout.write)
+    if args.save:
+        import_save(args.save, rom, sys.stdout.write)
 
 
 def gui(args):
@@ -234,14 +254,15 @@ def gui(args):
     root.title('Pokemon SoulSilver single-screen setup')
     root.geometry('720x520')
     q = queue.Queue()
-    v = {k: tk.StringVar(value=getattr(args, k) or '') for k in ('mwcc', 'sdk', 'rom', 'out')}
+    v = {k: tk.StringVar(value=getattr(args, k) or '') for k in ('mwcc', 'sdk', 'rom', 'save', 'out')}
     if not v['out'].get():
         v['out'].set(os.path.expanduser('~'))
     f = ttk.Frame(root, padding=12)
     f.pack(fill='both', expand=True)
     rows = [('1. mwccarm (folder or zip)', 'mwcc', True), ('2. Nitro SDK tools (folder or zip)', 'sdk', True),
             ('3. Your SoulSilver (USA) .nds', 'rom', True),
-            ('4. Save the ROM in', 'out', False)]
+            ('4. Existing save to import (optional .sav)', 'save', True),
+            ('5. Save the ROM in', 'out', False)]
     for i, (label, key, pick_file) in enumerate(rows):
         ttk.Label(f, text=label).grid(row=i, column=0, sticky='w', pady=3)
         ttk.Entry(f, textvariable=v[key], width=48).grid(row=i, column=1, padx=6)
@@ -251,10 +272,10 @@ def gui(args):
                 v[key].set(p)
         ttk.Button(f, text='Browse', command=browse).grid(row=i, column=2)
     ttk.Label(f, text='You supply the compiler and SDK; no ROM, compiler or Nintendo SDK is bundled, game files are extracted from your own ROM, and the Nitro library sources in lib/ still come from your own copy (see INSTALL.md).',
-              wraplength=680).grid(row=4, column=0, columnspan=3, sticky='w', pady=6)
+              wraplength=680).grid(row=5, column=0, columnspan=3, sticky='w', pady=6)
     logbox = scrolledtext.ScrolledText(f, height=18, state='disabled')
-    logbox.grid(row=6, column=0, columnspan=3, sticky='nsew')
-    f.rowconfigure(6, weight=1)
+    logbox.grid(row=7, column=0, columnspan=3, sticky='nsew')
+    f.rowconfigure(7, weight=1)
     f.columnconfigure(1, weight=1)
 
     def log(text):
@@ -271,7 +292,7 @@ def gui(args):
             pass
         root.after(100, pump)
 
-    def work(mwcc, sdk, out, rom):
+    def work(mwcc, sdk, out, rom, sav):
         try:
             src = unpack(work_dir(), log)
             place_toolchain(src, mwcc or None, sdk or None, log)
@@ -279,7 +300,9 @@ def gui(args):
             problems = check_ready(src)
             if problems:
                 raise SystemExit('Not ready:\n  ' + '\n  '.join(problems))
-            run_build(src, args.jobs, out, log)
+            dest = run_build(src, args.jobs, out, log)
+            if sav:
+                import_save(sav, dest, log)
         except SystemExit as e:
             log('\n%s\n' % e)
         except Exception as e:
@@ -289,10 +312,10 @@ def gui(args):
 
     def start():
         button.configure(state='disabled')
-        threading.Thread(target=work, args=(v['mwcc'].get(), v['sdk'].get(), v['out'].get(), v['rom'].get()), daemon=True).start()
+        threading.Thread(target=work, args=(v['mwcc'].get(), v['sdk'].get(), v['out'].get(), v['rom'].get(), v['save'].get()), daemon=True).start()
 
     button = ttk.Button(f, text='Build', command=start)
-    button.grid(row=5, column=0, columnspan=3, pady=6)
+    button.grid(row=6, column=0, columnspan=3, pady=6)
     pump()
     root.mainloop()
 
@@ -302,6 +325,7 @@ def main():
     ap.add_argument('--mwcc', help='folder or zip holding mwccarm/ (with 2.0/sp2p2/mwccarm.exe)')
     ap.add_argument('--sdk', help='folder or zip holding the Nitro SDK tools/bin, the .template files and (next to each other) the library sources NitroSDK, NitroSystem, ...')
     ap.add_argument('--rom', help='your own SoulSilver (USA) .nds, used to extract the raw game files')
+    ap.add_argument('--save', help='an existing SoulSilver .sav (or DeSmuME .dsv) to copy next to the built ROM')
     ap.add_argument('--out', default=os.getcwd(), help='folder for %s' % OUT_NAME)
     ap.add_argument('--jobs', type=int, default=default_jobs())
     args = ap.parse_args()
