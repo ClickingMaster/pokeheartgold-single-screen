@@ -34,8 +34,8 @@ The single-screen ROM running in the [ssrecomp](https://github.com/ClickingMaste
 
 | | |
 |---|---|
-| ![Field: a Pokémon Center](docs/screenshots/field-menu.png) | ![Battle: choosing a command](docs/screenshots/battle-commands.png) |
-| ![Battle: choosing a move](docs/screenshots/battle-moves.png) | ![Battle: the bag](docs/screenshots/battle-bag.png) |
+| ![Overworld: Violet City in widescreen](docs/screenshots/overworld-violet-city.png) | ![Overworld: the start menu](docs/screenshots/overworld-menu.png) |
+| ![Battle: choosing a move](docs/screenshots/battle-moves.png) | ![Battle: Razor Leaf](docs/screenshots/battle-razor-leaf.png) |
 
 ## Downloads
 
