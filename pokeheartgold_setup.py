@@ -7,17 +7,20 @@ program places them, checks the build tools, builds the single-screen ROM and co
 to a folder of your choice.
 
     python3 pokeheartgold_setup.py                 # window
-    python3 pokeheartgold_setup.py --mwcc DIR_OR_ZIP --sdk DIR_OR_ZIP [--save FILE.sav] [--out DIR] [--jobs N]
+    python3 pokeheartgold_setup.py --mwcc DIR_OR_ZIP --sdk DIR_OR_ZIP [--save FILE.sav] [--android] [--out DIR] [--jobs N]
 """
 import argparse
 import hashlib
+import importlib.util
 import os
 import queue
 import shutil
 import subprocess
 import sys
+import tarfile
 import tempfile
 import threading
+import urllib.request
 import zipfile
 
 NAME = 'pokeheartgold-single-screen'
@@ -231,6 +234,47 @@ def import_save(sav, rom, log):
     log('Imported save: %s\n' % dest)
 
 
+SSRECOMP_REF = '20c04ad8d43fe750c5e7a6169cf390d9d3e6d0c1'    # a pinned commit of the public ssrecomp
+SSRECOMP_URL = 'https://github.com/ClickingMaster/ssrecomp/archive/%s.tar.gz' % SSRECOMP_REF
+APK_NAME = 'SoulSilver-single-screen.apk'
+
+
+def build_android(src, rom, out, jobs, log):
+    """Makes an APK from the built ROM with ssrecomp's own Android steps (NDK and SDL2 are
+    downloaded on the first run). The source is the pinned public ssrecomp commit with this
+    repository's frontend/ laid over it (that commit and the frontend differ in these files only)."""
+    for tool in ('cmake', 'ninja'):
+        if not shutil.which(tool):
+            raise SystemExit('Missing %s: install it first (see INSTALL.md).' % tool)
+    base = os.path.join(work_dir(), 'ssrecomp-android')
+    root = os.path.join(base, 'ssrecomp-' + SSRECOMP_REF)
+    if not os.path.isdir(root):
+        os.makedirs(base, exist_ok=True)
+        log('Downloading ssrecomp %s\n' % SSRECOMP_REF[:7])
+        tgz = os.path.join(base, 'ssrecomp.tar.gz')
+        with urllib.request.urlopen(SSRECOMP_URL) as r, open(tgz, 'wb') as f:
+            shutil.copyfileobj(r, f)
+        with tarfile.open(tgz) as t:
+            t.extractall(base)
+        if not os.path.isdir(root):
+            raise SystemExit('Unexpected ssrecomp archive layout in %s' % base)
+    shutil.copytree(os.path.join(src, 'frontend'), os.path.join(root, 'frontend'), dirs_exist_ok=True)
+    spec = importlib.util.spec_from_file_location('ssrecomp_setup', os.path.join(root, 'ssrecomp_setup.py'))
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+
+    def progress(f, label):
+        log('%s\n' % label)
+    try:
+        mod.run_steps(rom, jobs, log, progress, android=True)
+    except RuntimeError as e:
+        raise SystemExit(str(e))
+    dest = os.path.join(out, APK_NAME)
+    shutil.copy2(mod.ANDROID_APK, dest)
+    log('Done: %s\nIt contains your copy of the game: do not share it.\n' % dest)
+    return dest
+
+
 def default_jobs():
     return max(1, min(8, (os.cpu_count() or 2)))
 
@@ -245,6 +289,8 @@ def cli(args):
     rom = run_build(src, args.jobs, args.out, sys.stdout.write)
     if args.save:
         import_save(args.save, rom, sys.stdout.write)
+    if args.android:
+        build_android(src, rom, args.out, args.jobs, sys.stdout.write)
 
 
 def gui(args):
@@ -292,7 +338,7 @@ def gui(args):
             pass
         root.after(100, pump)
 
-    def work(mwcc, sdk, out, rom, sav):
+    def work(mwcc, sdk, out, rom, sav, android):
         try:
             src = unpack(work_dir(), log)
             place_toolchain(src, mwcc or None, sdk or None, log)
@@ -303,19 +349,27 @@ def gui(args):
             dest = run_build(src, args.jobs, out, log)
             if sav:
                 import_save(sav, dest, log)
+            if android:
+                build_android(src, dest, out, args.jobs, log)
         except SystemExit as e:
             log('\n%s\n' % e)
         except Exception as e:
             log('\nError: %s\n' % e)
         finally:
-            root.after(0, lambda: button.configure(state='normal'))
+            root.after(0, lambda: [b.configure(state='normal') for b in buttons])
 
-    def start():
-        button.configure(state='disabled')
-        threading.Thread(target=work, args=(v['mwcc'].get(), v['sdk'].get(), v['out'].get(), v['rom'].get(), v['save'].get()), daemon=True).start()
+    def start(android=False):
+        for b in buttons:
+            b.configure(state='disabled')
+        threading.Thread(target=work, args=(v['mwcc'].get(), v['sdk'].get(), v['out'].get(), v['rom'].get(), v['save'].get(), android), daemon=True).start()
 
-    button = ttk.Button(f, text='Build', command=start)
-    button.grid(row=6, column=0, columnspan=3, pady=6)
+    bar = ttk.Frame(f)
+    bar.grid(row=6, column=0, columnspan=3, pady=6)
+    button = ttk.Button(bar, text='Build', command=start)
+    button.pack(side='left', padx=4)
+    android_button = ttk.Button(bar, text='Build + Android app', command=lambda: start(True))
+    android_button.pack(side='left', padx=4)
+    buttons = [button, android_button]
     pump()
     root.mainloop()
 
@@ -326,6 +380,7 @@ def main():
     ap.add_argument('--sdk', help='folder or zip holding the Nitro SDK tools/bin, the .template files and (next to each other) the library sources NitroSDK, NitroSystem, ...')
     ap.add_argument('--rom', help='your own SoulSilver (USA) .nds, used to extract the raw game files')
     ap.add_argument('--save', help='an existing SoulSilver .sav (or DeSmuME .dsv) to copy next to the built ROM')
+    ap.add_argument('--android', action='store_true', help='also make an Android APK (arm64) from the built ROM')
     ap.add_argument('--out', default=os.getcwd(), help='folder for %s' % OUT_NAME)
     ap.add_argument('--jobs', type=int, default=default_jobs())
     args = ap.parse_args()
