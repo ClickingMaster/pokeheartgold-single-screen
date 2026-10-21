@@ -109,3 +109,11 @@ __pycache__
 .venv/
 *.pyc
 files/
+
+# Copyrighted / third-party, supplied locally (see INSTALL.md): SDK and
+# libraries under lib/ (only lib/dsprot and lib/syscall are tracked)
+/lib/*
+!/lib/dsprot/
+!/lib/syscall/
+*.nds
+*.srl
