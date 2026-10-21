@@ -1,0 +1,35 @@
+{
+  "kind": "anim",
+  "graphics": [
+    {
+      "narc": "NARC_application_pokegear_map_pgmap_gra",
+      "file": 6,
+      "compressed": false,
+      "id": 0,
+      "extra": [
+        144,
+        144
+      ]
+    },
+    {
+      "narc": "NARC_application_pokegear_map_pgmap_gra",
+      "file": 3,
+      "compressed": false,
+      "id": 1,
+      "extra": [
+        144,
+        144
+      ]
+    },
+    {
+      "narc": "NARC_application_pokegear_map_pgmap_gra",
+      "file": 9,
+      "compressed": false,
+      "id": 2,
+      "extra": [
+        144,
+        144
+      ]
+    }
+  ]
+}

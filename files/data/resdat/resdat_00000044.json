@@ -1,0 +1,15 @@
+{
+  "kind": "anim",
+  "graphics": [
+    {
+      "narc": "NARC_application_pokegear_phone_pgphone_gra",
+      "file": 3,
+      "compressed": false,
+      "id": 0,
+      "extra": [
+        146,
+        146
+      ]
+    }
+  ]
+}

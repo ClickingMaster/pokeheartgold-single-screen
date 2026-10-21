@@ -1,0 +1,25 @@
+{
+  "kind": "pltt",
+  "graphics": [
+    {
+      "narc": "NARC_application_pokegear_configure_pgconf_gra",
+      "file": 0,
+      "compressed": false,
+      "id": 0,
+      "extra": [
+        1,
+        11
+      ]
+    },
+    {
+      "narc": "NARC_application_pokegear_configure_pgconf_gra",
+      "file": 0,
+      "compressed": false,
+      "id": 1,
+      "extra": [
+        2,
+        11
+      ]
+    }
+  ]
+}

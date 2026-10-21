@@ -1,0 +1,68 @@
+{{ doNotModifyHeader }}
+#include "constants/scrcmd.h"
+{% if exists("header") %}#include "{{ header }}"{% endif %}
+
+	.rodata
+
+## if exists("bgs")
+	.word {{ length(bgs) }};
+## for bg in bgs
+	.short {{ bg.scriptId }}
+	.short {{ bg.type }}
+	.word {{ bg.x }}
+	.word {{ bg.z }}
+	.word {{ bg.y }}
+	.word {{ bg.dir }}
+## endfor
+## else
+	.word 0
+## endif
+## if exists("objects")
+	.word {{ length(objects) }}
+## for object in objects
+	.short {{ object.id }}
+	.short {{ object.spriteId }}
+	.short {{ object.movement }}
+	.short {{ object.type }}
+	.short {{ object.eventFlag }}
+	.short {{ object.scriptId }}
+	.short {{ object.facingDirection }}
+	.short {{ object.param0 }}
+	.short {{ object.param1 }}
+	.short {{ object.param2 }}
+	.short {{ object.xRange }}
+	.short {{ object.yRange }}
+	.short {{ object.x }}
+	.short {{ object.z }}
+	.word {{ object.y }}
+## endfor
+## else
+	.word 0
+## endif
+## if exists("warps")
+	.word {{ length(warps) }}
+## for warp in warps
+	.short {{ warp.x }}
+	.short {{ warp.z }}
+	.short {{ warp.header }}
+	.short {{ warp.anchor }}
+	.word {{ warp.y }}
+## endfor
+## else
+	.word 0
+## endif
+## if exists("coords")
+	.word {{ length(coords) }}
+## for coord in coords
+	.short {{ coord.scriptId }}
+	.short {{ coord.x }}
+	.short {{ coord.z }}
+	.short {{ coord.w }}
+	.short {{ coord.h }}
+	.short {{ coord.y }}
+	.short {{ coord.val }}
+	.short {{ coord.var }}
+## endfor
+## else
+	.word 0
+## endif

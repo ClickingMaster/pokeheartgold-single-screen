@@ -1,0 +1,85 @@
+{
+  "kind": "pltt",
+  "graphics": [
+    {
+      "narc": "NARC_a_1_6_2",
+      "file": 49,
+      "compressed": false,
+      "id": 0,
+      "extra": [
+        1,
+        1
+      ]
+    },
+    {
+      "narc": "NARC_demo_intro_intro",
+      "file": 11,
+      "compressed": false,
+      "id": 1,
+      "extra": [
+        1,
+        1
+      ]
+    },
+    {
+      "narc": "NARC_demo_intro_intro",
+      "file": 16,
+      "compressed": false,
+      "id": 2,
+      "extra": [
+        3,
+        1
+      ]
+    },
+    {
+      "narc": "NARC_demo_intro_intro",
+      "file": 21,
+      "compressed": false,
+      "id": 3,
+      "extra": [
+        3,
+        1
+      ]
+    },
+    {
+      "narc": "NARC_demo_intro_intro",
+      "file": 31,
+      "compressed": false,
+      "id": 4,
+      "extra": [
+        2,
+        1
+      ]
+    },
+    {
+      "narc": "NARC_demo_intro_intro",
+      "file": 59,
+      "compressed": false,
+      "id": 5,
+      "extra": [
+        2,
+        1
+      ]
+    },
+    {
+      "narc": "NARC_a_2_3_7",
+      "file": 11,
+      "compressed": false,
+      "id": 6,
+      "extra": [
+        2,
+        1
+      ]
+    },
+    {
+      "narc": "NARC_demo_intro_intro",
+      "file": 63,
+      "compressed": false,
+      "id": 7,
+      "extra": [
+        1,
+        2
+      ]
+    }
+  ]
+}

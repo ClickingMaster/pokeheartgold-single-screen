@@ -1,0 +1,15 @@
+{
+  "kind": "char",
+  "graphics": [
+    {
+      "narc": "NARC_application_pokegear_phone_pgphone_gra",
+      "file": 1,
+      "compressed": false,
+      "id": 0,
+      "extra": [
+        1,
+        146
+      ]
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "kind": "char",
+  "graphics": [
+    {
+      "narc": "NARC_a_2_4_2",
+      "file": 1,
+      "compressed": true,
+      "id": 0,
+      "extra": [
+        1,
+        244
+      ]
+    }
+  ]
+}

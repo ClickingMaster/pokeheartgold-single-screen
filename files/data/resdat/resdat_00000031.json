@@ -1,0 +1,55 @@
+{
+  "kind": "pltt",
+  "graphics": [
+    {
+      "narc": "NARC_a_2_1_6",
+      "file": 6,
+      "compressed": false,
+      "id": 0,
+      "extra": [
+        1,
+        9
+      ]
+    },
+    {
+      "narc": "NARC_a_2_1_6",
+      "file": 12,
+      "compressed": false,
+      "id": 1,
+      "extra": [
+        1,
+        1
+      ]
+    },
+    {
+      "narc": "NARC_a_2_1_6",
+      "file": 13,
+      "compressed": false,
+      "id": 2,
+      "extra": [
+        1,
+        1
+      ]
+    },
+    {
+      "narc": "NARC_a_2_1_6",
+      "file": 14,
+      "compressed": false,
+      "id": 3,
+      "extra": [
+        1,
+        1
+      ]
+    },
+    {
+      "narc": "NARC_a_2_1_6",
+      "file": 15,
+      "compressed": false,
+      "id": 4,
+      "extra": [
+        1,
+        1
+      ]
+    }
+  ]
+}

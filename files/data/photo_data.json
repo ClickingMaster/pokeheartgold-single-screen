@@ -1,0 +1,1213 @@
+{
+    "photos": [
+        {
+            "map": "MAP_NEW_BARK",
+            "icon": 5,
+            "x": 695,
+            "y": 399,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_CHERRYGROVE",
+            "icon": 7,
+            "x": 562,
+            "y": 398,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                22,
+                0
+            ]
+        },
+        {
+            "map": "MAP_CELADON_DEPARTMENT_STORE_4F",
+            "icon": 6,
+            "x": 12,
+            "y": 5,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": "SPRITE_GSLEADER1",
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_RUINS_OF_ALPH",
+            "icon": 5,
+            "x": 435,
+            "y": 280,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_RUINS_OF_ALPH_HALL_ENTRANCE",
+            "icon": 4,
+            "x": 4,
+            "y": 4,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_ROUTE_32",
+            "icon": 9,
+            "x": 468,
+            "y": 395,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_SLOWPOKE_WELL_ENTRANCE",
+            "icon": 4,
+            "x": 16,
+            "y": 6,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_NATIONAL_PARK",
+            "icon": 7,
+            "x": 58,
+            "y": 40,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": "SPRITE_GSLEADER2",
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_ILEX_FOREST",
+            "icon": 8,
+            "x": 11,
+            "y": 20,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_ROUTE_34",
+            "icon": 5,
+            "x": 363,
+            "y": 410,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": "SPRITE_GSOLDMAN1",
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_GOLDENROD_TUNNEL_B1F",
+            "icon": 6,
+            "x": 17,
+            "y": 6,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                131,
+                0
+            ]
+        },
+        {
+            "map": "MAP_ROUTE_35",
+            "icon": 9,
+            "x": 372,
+            "y": 303,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_ROUTE_35_NATIONAL_PARK_POKEATHALON_GATEHOUSE",
+            "icon": 6,
+            "x": 10,
+            "y": 5,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_POKEATHLON_DOME",
+            "icon": 7,
+            "x": 19,
+            "y": 26,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_POKEATHLON_DOME",
+            "icon": 5,
+            "x": 41,
+            "y": 25,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                184,
+                0
+            ]
+        },
+        {
+            "map": "MAP_GOLDENROD_DEPARTMENT_STORE_6F",
+            "icon": 6,
+            "x": 3,
+            "y": 4,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": "SPRITE_GSLEADER3",
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_NATIONAL_PARK",
+            "icon": 9,
+            "x": 54,
+            "y": 48,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_NATIONAL_PARK",
+            "icon": 7,
+            "x": 52,
+            "y": 78,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_ROUTE_36",
+            "icon": 8,
+            "x": 396,
+            "y": 220,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_ECRUTEAK",
+            "icon": 5,
+            "x": 390,
+            "y": 156,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_BELLCHIME_TOWER",
+            "icon": 8,
+            "x": 31,
+            "y": 12,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": "SPRITE_GSLEADER4",
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_ECRUTEAK_DANCE_THEATER",
+            "icon": 6,
+            "x": 5,
+            "y": 6,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": "SPRITE_DANCER",
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_BELL_TOWER_7F",
+            "icon": 6,
+            "x": 7,
+            "y": 8,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_OLIVINE",
+            "icon": 5,
+            "x": 278,
+            "y": 253,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_OLIVINE_GYM",
+            "icon": 6,
+            "x": 5,
+            "y": 6,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": "SPRITE_GSLEADER6",
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_OLIVINE_CAFE",
+            "icon": 6,
+            "x": 6,
+            "y": 4,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_SS_AQUA_OLIVINE_PORT_EXTERIOR",
+            "icon": 1,
+            "x": 23,
+            "y": 23,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": "SPRITE_SEAMAN_2",
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_OLIVINE_LIGHTHOUSE_5F",
+            "icon": 6,
+            "x": 2,
+            "y": 10,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_ROUTE_39",
+            "icon": 5,
+            "x": 262,
+            "y": 168,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_BATTLE_FRONTIER_FRONTIER_ACCESS",
+            "icon": 5,
+            "x": 13,
+            "y": 12,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_FIGHT_AREA_UNUSED_5",
+            "icon": 6,
+            "x": 6,
+            "y": 8,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": "SPRITE_TOWERBOSS",
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_BATTLE_FRONTIER",
+            "icon": 5,
+            "x": 70,
+            "y": 35,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_ROUTE_40",
+            "icon": 1,
+            "x": 240,
+            "y": 269,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_ROUTE_41",
+            "icon": 1,
+            "x": 206,
+            "y": 344,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_WHIRL_ISLANDS_B1F",
+            "icon": 4,
+            "x": 73,
+            "y": 10,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_CIANWOOD",
+            "icon": 1,
+            "x": 185,
+            "y": 351,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                90,
+                0
+            ]
+        },
+        {
+            "map": "MAP_CIANWOOD_GYM",
+            "icon": 6,
+            "x": 12,
+            "y": 16,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": "SPRITE_GSLEADER5",
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_ROUTE_48",
+            "icon": 7,
+            "x": 101,
+            "y": 339,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_SAFARI_ZONE_GATE",
+            "icon": 5,
+            "x": 87,
+            "y": 296,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_MOUNT_MORTAR_1F_BACK",
+            "icon": 4,
+            "x": 25,
+            "y": 18,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_MAHOGANY_GYM_LEADER_ROOM",
+            "icon": 6,
+            "x": 6,
+            "y": 5,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": "SPRITE_GSLEADER7",
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_LAKE_OF_RAGE",
+            "icon": 9,
+            "x": 526,
+            "y": 85,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_ROUTE_44",
+            "icon": 0,
+            "x": 562,
+            "y": 182,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_ICE_PATH_1F",
+            "icon": 4,
+            "x": 38,
+            "y": 17,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_BLACKTHORN",
+            "icon": 5,
+            "x": 684,
+            "y": 171,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_BLACKTHORN_GYM",
+            "icon": 4,
+            "x": 11,
+            "y": 4,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": "SPRITE_GSLEADER8",
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_DRAGONS_DEN_SHRINE",
+            "icon": 6,
+            "x": 5,
+            "y": 11,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": "SPRITE_CHOUROU",
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_ROUTE_45",
+            "icon": 7,
+            "x": 648,
+            "y": 254,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_ROUTE_26",
+            "icon": 8,
+            "x": 914,
+            "y": 386,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_VERMILION_GYM",
+            "icon": 6,
+            "x": 5,
+            "y": 5,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": "SPRITE_GSLEADER9",
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_VERMILION",
+            "icon": 7,
+            "x": 1318,
+            "y": 302,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_SAFFRON_GYM",
+            "icon": 6,
+            "x": 14,
+            "y": 13,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": "SPRITE_GSLEADER10",
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_SAFFRON",
+            "icon": 5,
+            "x": 1287,
+            "y": 211,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                253,
+                0
+            ]
+        },
+        {
+            "map": "MAP_SAFFRON",
+            "icon": 5,
+            "x": 1307,
+            "y": 232,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                253,
+                252
+            ]
+        },
+        {
+            "map": "MAP_CERULEAN_GYM",
+            "icon": 6,
+            "x": 14,
+            "y": 4,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": "SPRITE_GSLEADER11",
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_CERULEAN",
+            "icon": 9,
+            "x": 1325,
+            "y": 104,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                32,
+                0
+            ]
+        },
+        {
+            "map": "MAP_CELADON_GYM",
+            "icon": 6,
+            "x": 6,
+            "y": 4,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": "SPRITE_GSLEADER12",
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_CELADON",
+            "icon": 7,
+            "x": 1200,
+            "y": 252,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_CELADON_DEPARTMENT_STORE_2F",
+            "icon": 6,
+            "x": 3,
+            "y": 6,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_ROUTE_12",
+            "icon": 1,
+            "x": 1427,
+            "y": 275,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_ROUTE_14",
+            "icon": 1,
+            "x": 1357,
+            "y": 387,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_FUCHSIA_GYM",
+            "icon": 6,
+            "x": 6,
+            "y": 15,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": "SPRITE_GSLEADER13",
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_FUCHSIA",
+            "icon": 5,
+            "x": 1201,
+            "y": 441,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                246,
+                0
+            ]
+        },
+        {
+            "map": "MAP_ROUTE_17",
+            "icon": 5,
+            "x": 1142,
+            "y": 403,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_PEWTER_GYM",
+            "icon": 6,
+            "x": 6,
+            "y": 5,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": "SPRITE_GSLEADER14",
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_PEWTER_MUSEUM_OF_SCIENCE",
+            "icon": 6,
+            "x": 8,
+            "y": 4,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_PEWTER",
+            "icon": 5,
+            "x": 1047,
+            "y": 81,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                294,
+                0
+            ]
+        },
+        {
+            "map": "MAP_VIRIDIAN_FOREST",
+            "icon": 8,
+            "x": 26,
+            "y": 71,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": "SPRITE_GSLEADER2",
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_VIRIDIAN_GYM",
+            "icon": 6,
+            "x": 4,
+            "y": 5,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": "SPRITE_GSLEADER16",
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_VIRIDIAN",
+            "icon": 5,
+            "x": 1037,
+            "y": 256,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_ROUTE_22_POKEMON_LEAGUE_RECEPTION_GATE",
+            "icon": 6,
+            "x": 10,
+            "y": 8,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": "SPRITE_GSLEADER13",
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_ROUTE_22",
+            "icon": 0,
+            "x": 952,
+            "y": 267,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_ROUTE_1",
+            "icon": 8,
+            "x": 1036,
+            "y": 316,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_PALLET",
+            "icon": 5,
+            "x": 1031,
+            "y": 367,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_ROUTE_21",
+            "icon": 1,
+            "x": 1043,
+            "y": 412,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_SEAFOAM_ISLANDS_B1F",
+            "icon": 4,
+            "x": 33,
+            "y": 9,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_SEAFOAM_ISLANDS_CINNABAR_GYM",
+            "icon": 4,
+            "x": 12,
+            "y": 12,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": "SPRITE_GSLEADER15",
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_MOUNT_SILVER",
+            "icon": 5,
+            "x": 820,
+            "y": 267,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_MOUNT_SILVER_CAVE_1F",
+            "icon": 4,
+            "x": 12,
+            "y": 36,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": 0,
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_ECRUTEAK_GYM",
+            "icon": 4,
+            "x": 9,
+            "y": 9,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": "SPRITE_GSLEADER4",
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_ROUTE_39",
+            "icon": 0,
+            "x": 261,
+            "y": 188,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": "SPRITE_GSLEADER9",
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_CELADON",
+            "icon": 7,
+            "x": 1200,
+            "y": 252,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": "SPRITE_GSLEADER12",
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_CELADON",
+            "icon": 5,
+            "x": 1205,
+            "y": 239,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": "SPRITE_GSLEADER6",
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_DRAGONS_DEN",
+            "icon": 4,
+            "x": 27,
+            "y": 13,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": "SPRITE_GSLEADER8",
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_ROUTE_25",
+            "icon": 0,
+            "x": 1420,
+            "y": 44,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": "SPRITE_GSLEADER11",
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_CINNABAR_ISLAND",
+            "icon": 1,
+            "x": 1035,
+            "y": 504,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": "SPRITE_GSLEADER15",
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_DIGLETT_CAVE",
+            "icon": 4,
+            "x": 35,
+            "y": 5,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": "SPRITE_GSLEADER14",
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_VIRIDIAN_FOREST",
+            "icon": 8,
+            "x": 26,
+            "y": 71,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": "SPRITE_GSLEADER2",
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_SS_AQUA_OLIVINE_PORT_EXTERIOR",
+            "icon": 1,
+            "x": 16,
+            "y": 22,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": "SPRITE_GSLEADER10",
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_OLIVINE_CAFE",
+            "icon": 6,
+            "x": 7,
+            "y": 5,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": "SPRITE_GSLEADER6",
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_PALLET_TOWN_OAKS_LAB",
+            "icon": 6,
+            "x": 6,
+            "y": 6,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": "SPRITE_OOKIDO",
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_ROUTE_47",
+            "icon": 0,
+            "x": 79,
+            "y": 371,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": "SPRITE_GSLEADER5",
+            "param": [
+                0,
+                0
+            ]
+        },
+        {
+            "map": "MAP_CINNABAR_ISLAND",
+            "icon": 1,
+            "x": 1034,
+            "y": 495,
+            "unk8": 1,
+            "unk9": 255,
+            "subject": "SPRITE_GSLEADER16",
+            "param": [
+                0,
+                0
+            ]
+        }
+    ]
+}

@@ -240,3 +240,9 @@ retail binary equivalence, not complete decompilation or portability.
 ## Game asset tree (`files/`)
 
 The `files/` directory (unpacked and converted game assets) is game data owned by Nintendo, Game Freak and Creature Inc. and is **not** included in this repository. The build needs it, so it must be produced from your own copy of the game. `tools/extract_rom.py ROM.nds [OUT_DIR]` extracts the raw NitroFS files from your ROM, but that alone does not recreate the unpacked asset tree the Makefiles expect.
+
+## Third-party library sources (`lib/`)
+
+Only the parts of `lib/` that upstream pret/pokeheartgold also publishes (`lib/dsprot`, `lib/syscall`) are tracked. The Nintendo/Metrowerks library sources (`lib/NitroSDK`, `NitroSystem`, `NitroDWC`, `NitroWiFi`, `MSL_C`, `libCPS`, `libVCT`, `lib/asm`, `lib/src`, `lib/include`) are not included and must be supplied by you.
+
+Of `files/`, only the files that are byte-identical to upstream pret/pokeheartgold are tracked; the rest of the asset tree must come from your own copy of the game.

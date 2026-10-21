@@ -1,0 +1,15 @@
+{
+  "kind": "pltt",
+  "graphics": [
+    {
+      "narc": "NARC_a_2_4_2",
+      "file": 0,
+      "compressed": false,
+      "id": 0,
+      "extra": [
+        1,
+        4
+      ]
+    }
+  ]
+}
