@@ -1,6 +1,8 @@
 # Installation
 
-Build the US versions of Pokémon HeartGold and SoulSilver from source.
+Build the single-screen (widescreen-friendly) US version of Pokémon SoulSilver from source. This is a fork of pret/pokeheartgold: it does **not** contain the compiler, the Nitro SDK, the SDK library sources, a ROM, or all of the game's `files/` assets. See "Quick build guide (this repo)" below for exactly what you must supply, then use the per-platform tool setup in "Manual setup".
+
+The macOS helper scripts and the sections on progress reports are inherited from upstream and have not been tested for this fork.
 
 ## macOS quick start
 
@@ -141,13 +143,11 @@ $ brew install wine-crossover
 
 ### 4. Build ROM
 
-Run `make` to build the ROM. The ROM will be output as `build/heartgold.us/pokeheartgold.us.nds`
-
-To build Pokemon SoulSilver, run `make soulsilver`. You do not need to clean your working tree in between compiling. Pokemon SoulSilver will be built as `build/soulsilver.us/pokesoulsilver.us.nds`.
+This fork targets SoulSilver. Run `make -j8 soulsilver COMPARE=0`; the ROM is `build/soulsilver.us/pokesoulsilver.us.nds`. `COMPARE=0` is required: the single-screen layout intentionally differs from the retail ROM, so the checksum step cannot pass. (Plain `make` builds HeartGold as upstream does; it is not what this fork is for.)
 
 There are targets for building and testing changes to individual components without repackaging the ROM. For the ARM9 modules, run `make main`. For the ARM7 module, run `make sub`. For the filesystem, run `make filesystem`. To build these for SoulSilver, append `GAME_VERSION=SOULSILVER` to the appropriate command.
 
-At the end of building each of these, there is a checksum verification step. This makes sure that the final product is byte-for-byte equivalent to the retail ROM. To disable this, append `COMPARE=0` to your command.
+Upstream's checksum step verifies a byte-for-byte match with the retail ROM; it does not apply to this fork, so always pass `COMPARE=0`.
 
 #### Windows
 
@@ -167,11 +167,11 @@ Note: Docker may not run at a full performance if its underlying Linux kernel is
 
 #### After updating this repository
 
-This repository is still in a volatile state, and several files may be moved around or renamed. If you update this repository and experience errors rebuilding, try the following troubleshooting steps, **one line at a time** until you get the non_npc_msg `build/heartgold.us/pokeheartgold.us.nds: OK`:
+This repository is still in a volatile state, and several files may be moved around or renamed. If you update this repository and experience errors rebuilding, try the following troubleshooting steps, **one line at a time** until the build succeeds:
 
 ```shell
-make tidy && make compare
-make clean && make compare
+make tidy && make soulsilver COMPARE=0
+make clean && make soulsilver COMPARE=0
 ```
 
 If errors persist, report them in this repository.
@@ -250,12 +250,8 @@ This repo does not include everything the build needs, so a fresh clone will not
 
 Alternatively, run `pokeheartgold_setup.py` (window or CLI), which does steps 2, 3 and 6 for you and tells you what is still missing.
 
-## Game asset tree (`files/`)
+## What is and is not in this repo
 
-The `files/` directory (unpacked and converted game assets) is game data owned by Nintendo, Game Freak and Creature Inc. and is **not** included in this repository. The build needs it, so it must be produced from your own copy of the game. `tools/extract_rom.py ROM.nds [OUT_DIR]` extracts the raw NitroFS files from your ROM, but that alone does not recreate the unpacked asset tree the Makefiles expect.
-
-## Third-party library sources (`lib/`)
-
-Only the parts of `lib/` that upstream pret/pokeheartgold also publishes (`lib/dsprot`, `lib/syscall`) are tracked. The Nintendo/Metrowerks library sources (`lib/NitroSDK`, `NitroSystem`, `NitroDWC`, `NitroWiFi`, `MSL_C`, `libCPS`, `libVCT`, `lib/asm`, `lib/src`, `lib/include`) are not included and must be supplied by you.
-
-Of `files/`, only the files that are byte-identical to upstream pret/pokeheartgold are tracked; the rest of the asset tree must come from your own copy of the game.
+- **`files/`**: only the ~8,600 files that are byte-identical to upstream pret/pokeheartgold are tracked. The rest of the unpacked asset tree is game data and must come from your own copy of the game or a complete pret checkout. `tools/extract_rom.py ROM.nds [OUT_DIR]` extracts raw NitroFS files from your ROM but does not recreate the unpacked tree the Makefiles expect.
+- **`lib/`**: only `lib/dsprot` and `lib/syscall` (also published upstream) are tracked. `NitroSDK`, `NitroSystem`, `NitroDWC`, `NitroWiFi`, `MSL_C`, `libCPS`, `libVCT`, `asm`, `src` and `include` are not included.
+- **Not included at all**: ROMs, `mwccarm`, Nitro SDK binaries/templates.

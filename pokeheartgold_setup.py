@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Setup program for the single-screen Pokemon SoulSilver decompilation.
 
-It carries the decomp's source only (no game data, no ROM, no compiler). You supply the
+It carries only the decomp's tracked source (no ROM, no compiler, no SDK, and not the full files/ and lib/ trees). You supply the
 Metrowerks mwccarm compiler and the Nitro SDK tools yourself (see INSTALL.md); this
 program places them, checks the build tools, builds the single-screen ROM and copies it
 to a folder of your choice.
@@ -125,8 +125,10 @@ def place_toolchain(src, mwcc, sdk, log):
 def check_ready(src):
     problems = []
     if not os.path.isdir(os.path.join(src, 'files', 'data')):
-        problems.append('The files/ asset tree is missing. It is game data and is not distributed with this repo; '
+        problems.append('The files/ asset tree is missing or incomplete. Only part of it is in this repo; '
                         'see INSTALL.md.')
+    if not os.path.isdir(os.path.join(src, 'lib', 'NitroSDK')):
+        problems.append('The Nitro library sources (lib/NitroSDK, NitroSystem, ... see INSTALL.md) are missing.')
     if not os.path.exists(os.path.join(src, 'tools', 'mwccarm', '2.0', 'sp2p2', 'mwccarm.exe')):
         problems.append('mwccarm is missing (choose it in step 1).')
     if not os.path.exists(os.path.join(src, 'tools', 'bin', 'makelcf.exe')):
@@ -225,7 +227,7 @@ def gui(args):
             if p:
                 v[key].set(p)
         ttk.Button(f, text='Browse', command=browse).grid(row=i, column=2)
-    ttk.Label(f, text='You supply the compiler and SDK; nothing of the game or of Nintendo/Metrowerks is bundled.',
+    ttk.Label(f, text='You supply the compiler and SDK; no ROM, compiler or Nintendo SDK is bundled, and files/ and lib/ must be completed from your own copies (see INSTALL.md).',
               wraplength=680).grid(row=3, column=0, columnspan=3, sticky='w', pady=6)
     logbox = scrolledtext.ScrolledText(f, height=18, state='disabled')
     logbox.grid(row=5, column=0, columnspan=3, sticky='nsew')
