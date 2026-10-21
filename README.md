@@ -36,6 +36,15 @@ The single-screen ROM running in the [ssrecomp](https://github.com/ClickingMaste
 | ![Field: a Pokémon Center](docs/screenshots/field-menu.png) | ![Battle: choosing a command](docs/screenshots/battle-commands.png) |
 | ![Battle: choosing a move](docs/screenshots/battle-moves.png) | ![Battle: the bag](docs/screenshots/battle-bag.png) |
 
+## Downloads
+
+Setup programs for Windows and Linux are on the [Releases page](https://github.com/ClickingMaster/pokeheartgold-single-screen/releases/latest):
+
+- `pokeheartgold-single-screen-setup-windows-x86_64.exe`
+- `pokeheartgold-single-screen-setup-linux-x86_64`
+
+They carry the source only. You supply your own mwccarm compiler and Nitro SDK tools; the setup places them, checks your build tools and builds `SoulSilver-single-screen.nds`. No ROM, game code, compiler or SDK is distributed. See [INSTALL.md](INSTALL.md) for the build tools each platform needs.
+
 ## Building
 
 Setup is in [INSTALL.md](INSTALL.md). This repository builds the following ROMs:
