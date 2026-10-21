@@ -101,6 +101,15 @@ BOOL PokeathlonBox_Main(OverlayManager *manager) {
 
     case BOX_STATE_SELECT:
         int res = BoxMonSelector_Run(data->monSelector);
+#ifdef SINGLE_SCREEN_DEBUG
+        if (gSystem.newKeys & PAD_BUTTON_START) {
+            for (int i = 0; i < 3; i++) {
+                data->selectedMons[i].page = NUM_BOXES;
+                data->selectedMons[i].slot = i;
+            }
+            res = 2;
+        }
+#endif
         if (res == 2) {
             data->cancelled = FALSE;
             data->state = BOX_STATE_FADE_OUT;
