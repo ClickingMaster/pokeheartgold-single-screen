@@ -64,3 +64,16 @@ it from your ROM and recompiles the result.
 
 * [docs/DECOMP-NOTES.md](docs/DECOMP-NOTES.md): work log of the decompilation.
 * [CREDITS.md](CREDITS.md): credits.
+
+## License and attribution
+
+This is a fork of [pret/pokeheartgold](https://github.com/pret/pokeheartgold)
+(the decompilation by the pret community and its contributors), with the
+single-screen changes added on top. It follows pret's terms; the single-screen
+changes are offered under the same terms.
+
+Pokémon HeartGold and SoulSilver, and the game data and graphics under
+`files/`, belong to Nintendo, Creatures Inc. and GAME FREAK inc. This project
+is unofficial and not affiliated with or endorsed by them. It contains no ROM,
+Nintendo SDK or compiler: you supply your own legally obtained SoulSilver (USA)
+ROM, and the tools listed in [INSTALL.md](INSTALL.md).
