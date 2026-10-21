@@ -290,7 +290,7 @@ static void Task_BattleHpBarBob(SysTask *task, void *data);
 static const ManagedSpriteTemplate sSpriteTemplate_HpBarSinglePlayer = {
     .x = 0xC0,
 #ifdef SINGLE_SCREEN
-    .y = 0x6C,
+    .y = 0x6A,
 #else
     .y = 0x74,
 #endif
