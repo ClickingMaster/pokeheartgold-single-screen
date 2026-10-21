@@ -4,8 +4,9 @@ A decompilation of Pokémon HeartGold and SoulSilver with a single-screen
 build mode (`SINGLE_SCREEN`). It is the source that
 [ssrecomp](https://github.com/ClickingMaster/ssrecomp) recompiles into a native
 build of Pokémon SoulSilver for single-screen devices. The code is a fork of
-[pret/pokeheartgold](https://github.com/pret/pokeheartgold), and the original
-tooling and decompilation are pret's work.
+[ctrl-cheeb-del/pokeheartgold](https://github.com/ctrl-cheeb-del/pokeheartgold/tree/master),
+itself based on [pret/pokeheartgold](https://github.com/pret/pokeheartgold);
+the original tooling and decompilation are pret's work.
 
 Fully decompiled: everything is C/C++ and both ROMs build byte-for-byte in the
 normal configuration. The single-screen build changes the game so that
@@ -75,7 +76,8 @@ it from your ROM and recompiles the result.
 
 ## License and attribution
 
-This is a fork of [pret/pokeheartgold](https://github.com/pret/pokeheartgold)
+This is a fork of [ctrl-cheeb-del/pokeheartgold](https://github.com/ctrl-cheeb-del/pokeheartgold/tree/master),
+which is based on [pret/pokeheartgold](https://github.com/pret/pokeheartgold)
 (the decompilation by the pret community and its contributors), with the
 single-screen changes added on top. It follows pret's terms; the single-screen
 changes are offered under the same terms.

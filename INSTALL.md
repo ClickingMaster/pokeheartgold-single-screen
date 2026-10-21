@@ -1,6 +1,6 @@
 # Installation
 
-Build the single-screen (widescreen-friendly) US version of Pokémon SoulSilver from source. This is a fork of pret/pokeheartgold: it does **not** contain the compiler, the Nitro SDK, the SDK library sources, a ROM, or all of the game's `files/` assets. See "Quick build guide (this repo)" below for exactly what you must supply, then use the per-platform tool setup in "Manual setup".
+Build the single-screen (widescreen-friendly) US version of Pokémon SoulSilver from source. This is a fork of [ctrl-cheeb-del/pokeheartgold](https://github.com/ctrl-cheeb-del/pokeheartgold/tree/master) (based on pret/pokeheartgold): it does **not** contain the compiler, the Nitro SDK, the SDK library sources, a ROM, or all of the game's `files/` assets. See "Quick build guide (this repo)" below for exactly what you must supply, then use the per-platform tool setup in "Manual setup".
 
 The macOS helper scripts and the sections on progress reports are inherited from upstream and have not been tested for this fork.
 
