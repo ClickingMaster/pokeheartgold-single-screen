@@ -29,17 +29,12 @@ here upstream or ask them about it.
 
 ## Screenshots
 
-What the single-screen ROM itself outputs, both DS screens side by side
-(captured from `pokesoulsilver.us.nds` running in the ssrecomp frontend's
-side-by-side layout, with no widescreen processing):
+The single-screen ROM running in the [ssrecomp](https://github.com/ClickingMaster/ssrecomp) frontend, drawn across a 16:9 screen:
 
 | | |
 |---|---|
 | ![Field: the X menu](docs/screenshots/field-menu.png) | ![Battle: choosing a command](docs/screenshots/battle-commands.png) |
 | ![Battle: choosing a move](docs/screenshots/battle-moves.png) | ![Battle: the bag](docs/screenshots/battle-bag.png) |
-
-The finished widescreen result is in the
-[ssrecomp](https://github.com/ClickingMaster/ssrecomp) README.
 
 ## Building
 
