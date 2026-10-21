@@ -29,14 +29,17 @@ here upstream or ask them about it.
 
 ## Screenshots
 
-The result in ssrecomp: the overworld and battles drawn across a 16:9 screen,
-with the touch-screen buttons laid out along the bottom in battle (one screen,
-played with a controller):
+What the single-screen ROM itself outputs, both DS screens side by side
+(captured from `pokesoulsilver.us.nds` running in the ssrecomp frontend's
+side-by-side layout, with no widescreen processing):
 
 | | |
 |---|---|
-| ![Route 29 in widescreen](docs/screenshots/route-widescreen.png) | ![Violet City in widescreen](docs/screenshots/town-widescreen.png) |
-| ![Battle: choosing a command](docs/screenshots/battle-commands.png) | ![Battle: choosing a move](docs/screenshots/battle-moves.png) |
+| ![Field: the X menu](docs/screenshots/field-menu.png) | ![Battle: choosing a command](docs/screenshots/battle-commands.png) |
+| ![Battle: choosing a move](docs/screenshots/battle-moves.png) | ![Battle: the bag](docs/screenshots/battle-bag.png) |
+
+The finished widescreen result is in the
+[ssrecomp](https://github.com/ClickingMaster/ssrecomp) README.
 
 ## Building
 
