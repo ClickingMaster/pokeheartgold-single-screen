@@ -23,6 +23,7 @@ import zipfile
 NAME = 'pokeheartgold-single-screen'
 ROM_REL = os.path.join('build', 'soulsilver.us', 'pokesoulsilver.us.nds')
 OUT_NAME = 'SoulSilver-single-screen.nds'
+LIBS = ['NitroSDK', 'NitroSystem', 'NitroDWC', 'NitroWiFi', 'MSL_C', 'libCPS', 'libVCT', 'asm', 'src', 'include']
 TEMPLATES = {'ARM9-TS.lcf.template': '.', 'mwldarm.response.template': '.', 'ARM7-TS.lcf.template': 'sub'}
 HERE = os.path.dirname(os.path.abspath(sys.executable if getattr(sys, 'frozen', False) else __file__))
 
@@ -120,6 +121,13 @@ def place_toolchain(src, mwcc, sdk, log):
                 if f:
                     shutil.copy2(f, os.path.join(src, where, name))
             log('Placed the Nitro SDK tools.\n')
+            nsdk = find_dir(root, 'NitroSDK')
+            if nsdk:
+                libroot = os.path.dirname(nsdk)
+                for name in LIBS:
+                    if os.path.isdir(os.path.join(libroot, name)):
+                        shutil.copytree(os.path.join(libroot, name), os.path.join(src, 'lib', name), dirs_exist_ok=True)
+                log('Placed the Nitro library sources.\n')
 
 
 def fetch_assets(src, rom, log):
@@ -292,7 +300,7 @@ def gui(args):
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('--mwcc', help='folder or zip holding mwccarm/ (with 2.0/sp2p2/mwccarm.exe)')
-    ap.add_argument('--sdk', help='folder or zip holding the Nitro SDK tools/bin and the .template files')
+    ap.add_argument('--sdk', help='folder or zip holding the Nitro SDK tools/bin, the .template files and (next to each other) the library sources NitroSDK, NitroSystem, ...')
     ap.add_argument('--rom', help='your own SoulSilver (USA) .nds, used to extract the raw game files')
     ap.add_argument('--out', default=os.getcwd(), help='folder for %s' % OUT_NAME)
     ap.add_argument('--jobs', type=int, default=default_jobs())
