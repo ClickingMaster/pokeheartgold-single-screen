@@ -32,7 +32,9 @@ def main():
            '--specpath', STAGE,
            '--add-data', os.path.join(proj) + sep + 'project',
            '--add-data', os.path.join(STAGE, 'bundle.id') + sep + '.',
-           '--hidden-import', 'tkinter', '--hidden-import', 'zipfile']
+           '--hidden-import', 'tkinter', '--hidden-import', 'zipfile',
+           # tools/fetch_assets.py and tools/extract_rom.py are imported from the unpacked project at run time
+           '--hidden-import', 'urllib.request', '--hidden-import', 'tarfile', '--hidden-import', 'struct']
     if sys.platform == 'win32':
         cmd.append('--windowed')
     cmd.append(os.path.join(ROOT, 'pokeheartgold_setup.py'))
