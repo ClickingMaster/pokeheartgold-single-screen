@@ -119,6 +119,9 @@ static void BattleInput_SingleScreen_Update(BattleInput *battleInput);
 static void BattleInput_SingleScreen_Hide(BattleInput *battleInput);
 static BOOL BattleInput_IsMultiTarget(int monTargetType);
 static u32 BattleCursor_CheckKeyInput_SingleScreenMainMenu(BattleMenuCursor *cursor);
+static int BattleInput_SingleScreen_GetMenuKind(int menuId);
+static int BattleInput_SingleScreen_GetSelection(BattleInput *battleInput, int kind);
+void SingleScreen_SetBattleMenu(int kind, int selection);
 #endif
 
 // Data
@@ -1726,7 +1729,6 @@ int BattleInput_CheckTouch(BattleInput *battleInput) {
     int keyPressed = 0;
 
     GF_ASSERT(battleInput->curMenuId != BATTLE_MENU_NONE);
-
     const BattleMenuTemplate *menuTemplate = &sBattleMenuTemplates[battleInput->curMenuId];
 
     if ((menuTemplate->touchscreenRect == NULL) || (battleInput->isTouchDisabled == TRUE)) {
@@ -1760,6 +1762,14 @@ int BattleInput_CheckTouch(BattleInput *battleInput) {
         if (ret != -1) {
             if (menuTemplate->funcSaveCursorPos != NULL) {
                 menuTemplate->funcSaveCursorPos(battleInput, rectHit);
+#ifdef SINGLE_SCREEN
+                // A key press chose by cursor position, so remember that position, not the rect index.
+                if (keyPressed && menuTemplate->funcSaveCursorPos == BattleInput_CursorSave_MainMenu) {
+                    BattleCursorPosition *pos = OpponentData_GetCursorPosition(BattleSystem_GetOpponentData(battleInput->battleSystem, BattleSystem_GetBattlerFromBattlerType(battleInput->battleSystem, battleInput->battlerType)));
+                    pos->commandX = battleInput->menuCursor.menuX;
+                    pos->commandY = battleInput->menuCursor.menuY;
+                }
+#endif
             }
 
             MI_CpuClear8(&battleInput->menuCursor, sizeof(BattleMenuCursor));
@@ -1778,6 +1788,11 @@ int BattleInput_CheckTouch(BattleInput *battleInput) {
         BattleInput_SingleScreen_Hide(battleInput);
     } else {
         BattleInput_SingleScreen_Update(battleInput);
+        // The frontend draws its own buttons, so keep it told where the cursor is every frame.
+        if (battleInput->ssMenuId != BATTLE_MENU_NONE) {
+            int kind = BattleInput_SingleScreen_GetMenuKind(battleInput->curMenuId);
+            SingleScreen_SetBattleMenu(kind, BattleInput_SingleScreen_GetSelection(battleInput, kind));
+        }
     }
 #endif
 
@@ -4682,6 +4697,8 @@ static BOOL BattleSystem_IsInFrontier(BattleSystem *battleSystem) {
 }
 
 #ifdef SINGLE_SCREEN
+void SingleScreen_SetBattleMenu(int kind, int selection);
+
 // The battle menus live on the touch screen, which single-screen builds do not show, so the
 // menus are also drawn as text windows over the message box on the main screen. They follow
 // the button cursor, which is always on.
@@ -5124,6 +5141,7 @@ static void BattleInput_SingleScreen_Hide(BattleInput *battleInput) {
     ClearFrameAndWindow2(battleInput->ssWindow, FALSE);
     RemoveWindow(battleInput->ssWindow);
     battleInput->ssMenuId = BATTLE_MENU_NONE;
+    SingleScreen_SetBattleMenu(0, 0);
 
     // The menu covered the message box, so draw it again.
     DrawFrameAndWindow2(BattleSystem_GetWindow(battleInput->battleSystem, 0), FALSE, SS_FRAME_BASE_TILE, SS_FRAME_PALETTE);
@@ -5162,6 +5180,7 @@ static void BattleInput_SingleScreen_Update(BattleInput *battleInput) {
         battleInput->ssMenuId = battleInput->curMenuId;
     }
     battleInput->ssSelection = selection;
+    SingleScreen_SetBattleMenu(kind, selection);
 
     FillWindowPixelBuffer(battleInput->ssWindow, 15);
     for (i = 0; i < count; i++) {
@@ -5218,22 +5237,23 @@ static u32 BattleCursor_CheckKeyInput_SingleScreenMainMenu(BattleMenuCursor *cur
         [CURSOR_INPUT_RUN] = { 1, 1 },
     };
     int input = sCursorArrayMainMenu[cursor->menuY][cursor->menuX];
-    int x = input & 1;
-    int y = input >> 1;
+    int next = input;
     u32 key;
 
-    if (gSystem.newKeys & PAD_KEY_UP) {
-        y = 0;
-        key = PAD_KEY_UP;
-    } else if (gSystem.newKeys & PAD_KEY_DOWN) {
-        y = 1;
-        key = PAD_KEY_DOWN;
-    } else if (gSystem.newKeys & PAD_KEY_LEFT) {
-        x = 0;
+    // The buttons are drawn in one row in input order: FIGHT BAG POKéMON RUN.
+    if (gSystem.newKeys & PAD_KEY_LEFT) {
+        next = input > 0 ? input - 1 : input;
         key = PAD_KEY_LEFT;
     } else if (gSystem.newKeys & PAD_KEY_RIGHT) {
-        x = 1;
+        next = input < 3 ? input + 1 : input;
         key = PAD_KEY_RIGHT;
+    } else if (gSystem.newKeys & PAD_KEY_UP) {
+        // 2x2 grid: FIGHT BAG / POKéMON RUN
+        next = input >= 2 ? input - 2 : input;
+        key = PAD_KEY_UP;
+    } else if (gSystem.newKeys & PAD_KEY_DOWN) {
+        next = input < 2 ? input + 2 : input;
+        key = PAD_KEY_DOWN;
     } else if (gSystem.newKeys & PAD_BUTTON_A) {
         return PAD_BUTTON_A;
     } else if (gSystem.newKeys & PAD_BUTTON_B) {
@@ -5242,13 +5262,12 @@ static u32 BattleCursor_CheckKeyInput_SingleScreenMainMenu(BattleMenuCursor *cur
         return 0;
     }
 
-    if (y * 2 + x == input) {
+    if (next == input) {
         return 0;
     }
 
-    input = y * 2 + x;
-    cursor->menuX = sTouchCoords[input][0];
-    cursor->menuY = sTouchCoords[input][1];
+    cursor->menuX = sTouchCoords[next][0];
+    cursor->menuY = sTouchCoords[next][1];
     PlaySE(SEQ_SE_DP_SELECT);
 
     return key;

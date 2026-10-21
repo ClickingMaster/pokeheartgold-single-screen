@@ -16,17 +16,26 @@ const volatile u16 gSingleScreenDispSelectMask = 0;
 struct SingleScreenBuildInfo {
     char tag[32];
     volatile u8 twoScreenScene;
+    volatile u8 battleMenu;      // battle command panel shown: 0 none, else SS_MENU_* kind
+    volatile u8 battleSelection; // its selected item
+    volatile u8 subEngineShown;  // the sub engine is on the visible screen (battle bag, party)
 };
-struct SingleScreenBuildInfo gSingleScreenBuildInfo = { "SSRECOMP-SINGLE-SCREEN-1", 0 };
+struct SingleScreenBuildInfo gSingleScreenBuildInfo = { "SSRECOMP-SINGLE-SCREEN-1", 0, 0, 0, 0 };
 #define gSingleScreenBuildTag gSingleScreenBuildInfo.tag
 
 void SingleScreen_SetTwoScreenScene(BOOL twoScreen) {
     gSingleScreenBuildInfo.twoScreenScene = twoScreen != FALSE;
     SingleScreen_ShowSubEngine(twoScreen);
 }
+void SingleScreen_SetBattleMenu(int kind, int selection);
+void SingleScreen_SetBattleMenu(int kind, int selection) {
+    gSingleScreenBuildInfo.battleMenu = kind;
+    gSingleScreenBuildInfo.battleSelection = selection;
+}
 static volatile u8 sSingleScreenTagSink;
 
 void SingleScreen_ShowSubEngine(BOOL show) {
+    gSingleScreenBuildInfo.subEngineShown = show != FALSE;
     u32 dsel = (u32)(show ? GX_DISP_SELECT_MAIN_SUB : GX_DISP_SELECT_SUB_MAIN) << REG_GX_POWCNT_DSEL_SHIFT;
 
     reg_GX_POWCNT = (u16)((reg_GX_POWCNT & ~(1 << REG_GX_POWCNT_DSEL_SHIFT)) | dsel);

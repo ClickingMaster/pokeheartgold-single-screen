@@ -289,7 +289,11 @@ static void Task_BattleHpBarBob(SysTask *task, void *data);
 
 static const ManagedSpriteTemplate sSpriteTemplate_HpBarSinglePlayer = {
     .x = 0xC0,
+#ifdef SINGLE_SCREEN
+    .y = 0x6C,
+#else
     .y = 0x74,
+#endif
     .z = 0,
     .animation = 0,
     .drawPriority = 0x17,
@@ -309,7 +313,11 @@ static const ManagedSpriteTemplate sSpriteTemplate_HpBarSinglePlayer = {
 
 static const ManagedSpriteTemplate sSpriteTemplate_HpBarSingleEnemy = {
     .x = 0x3A,
+#ifdef SINGLE_SCREEN
+    .y = 0x1C,
+#else
     .y = 0x24,
+#endif
     .z = 0,
     .animation = 0,
     .drawPriority = 0x18,
@@ -348,7 +356,7 @@ static const ManagedSpriteTemplate sSpriteTemplate_HpBarDoublePlayerLHS = {
 };
 
 static const ManagedSpriteTemplate sSpriteTemplate_HpBarDoubleEnemyLHS = {
-    .x = 0x40,
+    .x = 0x3A,
     .y = 0x10,
     .z = 0,
     .animation = 0,
