@@ -18,6 +18,7 @@ import os
 import re
 import sys
 import tarfile
+import ssl
 import tempfile
 import urllib.request
 
@@ -25,6 +26,27 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PRET_COMMIT = 'a6ebf56ab7a454d91cc4715c73b62e93c305dc29'
 PRET_URL = 'https://codeload.github.com/pret/pokeheartgold/tar.gz/' + PRET_COMMIT
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+
+CA_BUNDLES = (
+    '/etc/ssl/certs/ca-certificates.crt',
+    '/etc/pki/tls/certs/ca-bundle.crt',
+    '/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem',
+    '/etc/ssl/ca-bundle.pem',
+    '/etc/ssl/cert.pem',
+)
+
+
+def ssl_context():
+    """Frozen (PyInstaller) builds look for CAs where the build machine kept them,
+    which is often wrong on the user's distro, so try the usual locations."""
+    ctx = ssl.create_default_context()
+    if ctx.cert_store_stats()['x509_ca'] or os.environ.get('SSL_CERT_FILE'):
+        return ctx
+    for path in CA_BUNDLES:
+        if os.path.exists(path):
+            return ssl.create_default_context(cafile=path)
+    return ctx
 
 
 def load_renames():
@@ -62,7 +84,7 @@ def fetch_pret(pret_dir, dry):
         source = members()
     else:
         print('Downloading pret/pokeheartgold @ %s ...' % PRET_COMMIT[:9])
-        blob = urllib.request.urlopen(PRET_URL).read()
+        blob = urllib.request.urlopen(PRET_URL, context=ssl_context()).read()
         tar = tarfile.open(fileobj=io.BytesIO(blob))
 
         def members2():
