@@ -35,6 +35,15 @@ inline uint8_t LayerClass(uint8_t flag)
     return LAYER_BACKDROP;
 }
 
+// Background covers can continue beyond the DS screen. Sprites such as rain
+// and snow must stay at their own coordinates; repeating an edge particle
+// across the margin would paint a horizontal streak through the world.
+inline bool WideEdgeFillAllowed(uint8_t flag, uint8_t drop)
+{
+    const uint8_t layer = LayerClass(flag);
+    return layer != LAYER_3D && layer != LAYER_OBJ && !(layer & drop);
+}
+
 // One piece of the merged view: a rectangle of one DS screen drawn somewhere in it.
 // Positions are in base pixels: the 256x192 area a full screen occupies when the
 // view is 4:3. On wider outputs the view extends left and right of that area.
@@ -478,9 +487,9 @@ inline void MergedCompose(const Scene& scene, const ScreenImage screens[2], int 
                     if (sy >= 0 && sy < 192)
                     {
                         const int left = (int)v.originX, right = (int)(v.originX + 256 * v.unit);
-                        if (LayerClass(top.flags[sy * 256]) != LAYER_3D)
+                        if (WideEdgeFillAllowed(top.flags[sy * 256], scene.items[0].drop))
                             std::fill(dst, dst + std::min(left, outW), 0xFF000000 | top.pixels[sy * 256]);
-                        if (LayerClass(top.flags[sy * 256 + 255]) != LAYER_3D && right < outW)
+                        if (WideEdgeFillAllowed(top.flags[sy * 256 + 255], scene.items[0].drop) && right < outW)
                             std::fill(dst + std::max(right, 0), dst + outW, 0xFF000000 | top.pixels[sy * 256 + 255]);
                     }
                 }
