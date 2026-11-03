@@ -1,4 +1,5 @@
 #include "battle/battle_anim_battler_util.h"
+#include "battle/battle_anim_ball.h"
 
 #include "global.h"
 
@@ -111,6 +112,11 @@ int BattleAnimUtil_GetOpposingBattlerType(int battlerType) {
 void BattleAnimUtil_GetBattlerTypePosition(int battlerType, int unused, BattleAnimPosition *pos) {
     BattleAnimBattlerTypePositions table = gBattleAnimBattlerTypePositions;
     *pos = table.positions[battlerType];
+#ifdef SINGLE_SCREEN
+    if (battlerType >= 2 && battlerType <= 5) {
+        pos->y = BattleAnimUtil_GetBattlerTypeCoord(battlerType, 1);
+    }
+#endif
 }
 
 void BattleAnimUtil_GetBattlerPosition(BattleAnimSystem *system, int battler, BattleAnimPosition *pos) {
@@ -129,6 +135,15 @@ void BattleAnimUtil_GetEmitterPosition(int battlerType, VecFx32 *pos, int unused
     pos->x = x;
     pos->y = y;
     pos->z = z;
+#ifdef SINGLE_SCREEN
+    if (battlerType >= 2 && battlerType <= 5) {
+        int delta = gBattleAnimBattlerTypePositions.positions[battlerType].y - BattleAnimUtil_GetBattlerTypeCoord(battlerType, 1);
+        // The particle camera stands four units from the target. Its 90-degree
+        // view spans 192 pixels; perspective anchors also retain their depth.
+        fx32 depth = 4 * FX32_ONE - (perspective == 0 ? z : 0);
+        pos->y += delta * depth / 96;
+    }
+#endif
 }
 
 // BattleAnimUtil_GetEmitterPosition with a fixed kind

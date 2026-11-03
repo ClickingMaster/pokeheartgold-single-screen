@@ -1162,6 +1162,7 @@ int main(int argc, char** argv)
     const uint8_t* singleScreenFlag = nullptr; // set by the ROM: nonzero while a scene needs both screens
     LayoutMode preSingleLayout = LayoutMode::Merged;
     uint32_t singleFieldFrame = 0; // the last frame the overworld ran in a single-screen build
+    bool singleScreenLayoutV2 = false; // version 2 publishes its doubles arena layout
     bool singleScreenRom = false; // a SINGLE_SCREEN build of the decompilation (see the main loop)
     AutoFocus focus;
     focus.mode = cfg.focusMode;
@@ -2897,12 +2898,13 @@ int main(int argc, char** argv)
         // and a flag next to it that the game sets while a scene needs both screens (the intro).
         if (!singleScreenRom && !opt.layoutGiven && frame % 30 == 15 && frame < 1800)
         {
-            static const char tag[] = "SSRECOMP-SINGLE-SCREEN-1";
+            static const char tag[] = "SSRECOMP-SINGLE-SCREEN-";
             const uint8_t* ram = nds->MainRAM;
             const uint8_t* end = ram + nds->MainRAMMask + 1;
             const uint8_t* hit = std::search(ram, end, tag, tag + sizeof(tag) - 1);
-            if (hit != end)
+            if (end - hit >= 37 && (hit[sizeof(tag) - 1] == '1' || hit[sizeof(tag) - 1] == '2') && hit[sizeof(tag)] == 0)
             {
+                singleScreenLayoutV2 = hit[sizeof(tag) - 1] == '2';
                 singleScreenRom = true;
                 singleScreenFlag = hit + 32; // the build info struct: 32 bytes of tag, then the flag
                 preSingleLayout = layout.mode;
@@ -2965,7 +2967,8 @@ int main(int argc, char** argv)
                 battleWide.MonLift = cfg.monLift;
                 battleWide.GroundLift = cfg.groundLift;
                 battleWide.PlayerGroundLift = cfg.playerGroundLift;
-                if (vw >= 300 && battleWide.Build(*nds, topImage, (int)std::ceil((vw - 256) / 2), &world, vw, wideImage, tu))
+                const bool compactDoubles = singleView() && singleScreenLayoutV2 && singleScreenFlag[4] && !singleScreenFlag[3];
+                if (vw >= 300 && battleWide.Build(*nds, topImage, (int)std::ceil((vw - 256) / 2), &world, vw, wideImage, tu, compactDoubles))
                 {
                     scene.wide = true;
                     return;

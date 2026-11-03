@@ -530,6 +530,17 @@ static const TouchscreenHitbox sTouchscreenRectTargetMenuButtons[] = {
      }
 };
 
+#ifdef SINGLE_SCREEN
+// Original callback order: player left, opponent right, player right, opponent left.
+static const TouchscreenHitbox sSingleScreenTargetTouchRects[] = {
+    { .rect = { 163, 192, 14, 122 } },
+    { .rect = { 131, 160, 134, 242 } },
+    { .rect = { 163, 192, 134, 242 } },
+    { .rect = { 131, 160, 14, 122 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END, 0, 0, 0 } },
+};
+#endif
+
 static const int sTouchArrayTargetMenu[] = {
     BATTLE_INPUT_TARGET_PLAYER_LEFT,
     BATTLE_INPUT_TARGET_OPPONENT_RIGHT,
@@ -1740,7 +1751,14 @@ int BattleInput_CheckTouch(BattleInput *battleInput) {
     if (BattleSystem_GetBattleType(battleInput->battleSystem) & BATTLE_TYPE_TUTORIAL) {
         rectHit = BattleInput_CatchingTutorialMain(battleInput);
     } else {
-        rectHit = TouchscreenHitbox_FindRectAtTouchNew(menuTemplate->touchscreenRect);
+#ifdef SINGLE_SCREEN
+        if (battleInput->curMenuId == BATTLE_MENU_TARGET) {
+            rectHit = TouchscreenHitbox_FindRectAtTouchNew(sSingleScreenTargetTouchRects);
+        } else
+#endif
+        {
+            rectHit = TouchscreenHitbox_FindRectAtTouchNew(menuTemplate->touchscreenRect);
+        }
 
         if (rectHit == -1) {
             rectHit = BattleInput_CheckCursorInput(battleInput);
@@ -4778,7 +4796,9 @@ static void SingleScreen_PaintButton(Window *window, int x, int y, int w, int h,
                 continue;
             }
             border = i == 0 || j == 0 || i == w - 1 || j == h - 1 || (dx != 0 && dy != 0 && dx + dy == 3);
-            if (selected && (border || i == 1 || j == 1 || i == w - 2 || j == h - 2)) {
+            if (style == 6) {
+                color = border ? 12 : 15;
+            } else if (selected && (border || i == 1 || j == 1 || i == w - 2 || j == h - 2)) {
                 color = 14;
             } else if (border) {
                 color = 2 + style * 2;
@@ -5043,10 +5063,10 @@ static int BattleInput_SingleScreen_BuildItems(BattleInput *battleInput, int kin
     case SS_MENU_TARGET: {
         // Same arrangement as the touch screen: opponents on the top row, the player's side below.
         static const u8 sPositions[4][2] = {
-            [CURSOR_INPUT_TARGET_PLAYER_LEFT] = { 8, 16 },
-            [CURSOR_INPUT_TARGET_OPPONENT_RIGHT] = { 112, 0 },
-            [CURSOR_INPUT_TARGET_PLAYER_RIGHT] = { 112, 16 },
-            [CURSOR_INPUT_TARGET_OPPONENT_LEFT] = { 8, 0 },
+            [CURSOR_INPUT_TARGET_PLAYER_LEFT] = { 14, 35 },
+            [CURSOR_INPUT_TARGET_OPPONENT_RIGHT] = { 134, 3 },
+            [CURSOR_INPUT_TARGET_PLAYER_RIGHT] = { 134, 35 },
+            [CURSOR_INPUT_TARGET_OPPONENT_LEFT] = { 14, 3 },
         };
         BattleInputTargetMenu *menu = &battleInput->menu.target;
         u8 monsHit[4], monsSelected[4];
@@ -5079,15 +5099,19 @@ static int BattleInput_SingleScreen_BuildItems(BattleInput *battleInput, int kin
 
             items[count].x = sPositions[i][0];
             items[count].y = sPositions[i][1];
+            items[count].button = monsHit[i] ? 5 : 6;
+            items[count].width = 108;
+            items[count].height = 29;
+            items[count].topLabel = FALSE;
             items[count].selected = monsSelected[i];
             items[count].grey = monsHit[i] == 0;
             count++;
         }
 
-        rect[0] = 2;
-        rect[1] = 19;
-        rect[2] = 27;
-        rect[3] = 4;
+        rect[0] = 0;
+        rect[1] = 16;
+        rect[2] = 32;
+        rect[3] = 8;
         break;
     }
     case SS_MENU_TWO_OPTIONS: {
@@ -5229,7 +5253,7 @@ static void BattleInput_SingleScreen_Update(BattleInput *battleInput) {
     if (buttons) {
         // the panel takes the message box's frame: dark outline, gold line, grey body
         int x, y, w = rect[2] * 8, h = rect[3] * 8;
-        int frameWidth = kind == SS_MENU_FIGHT ? 1 : 3; // the move buttons need the room
+        int frameWidth = (kind == SS_MENU_FIGHT || kind == SS_MENU_TARGET) ? 1 : 3; // the move buttons need the room
         for (y = 0; y < h; y++) {
             for (x = 0; x < w; x++) {
                 int d = x < y ? x : y;

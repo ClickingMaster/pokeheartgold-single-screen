@@ -19,14 +19,20 @@ struct SingleScreenBuildInfo {
     volatile u8 battleMenu;      // battle command panel shown: 0 none, else SS_MENU_* kind
     volatile u8 battleSelection; // its selected item
     volatile u8 subEngineShown;  // the sub engine is on the visible screen (battle bag, party)
+    volatile u8 doublesLayout;   // version 2: compact doubles arena, including move animations
 };
-struct SingleScreenBuildInfo gSingleScreenBuildInfo = { "SSRECOMP-SINGLE-SCREEN-1", 0, 0, 0, 0 };
+struct SingleScreenBuildInfo gSingleScreenBuildInfo = { "SSRECOMP-SINGLE-SCREEN-2", 0, 0, 0, 0, 0 };
 #define gSingleScreenBuildTag gSingleScreenBuildInfo.tag
 
 void SingleScreen_SetTwoScreenScene(BOOL twoScreen) {
     gSingleScreenBuildInfo.twoScreenScene = twoScreen != FALSE;
     SingleScreen_ShowSubEngine(twoScreen);
 }
+void SingleScreen_SetBattleLayout(BOOL doubles);
+void SingleScreen_SetBattleLayout(BOOL doubles) {
+    gSingleScreenBuildInfo.doublesLayout = doubles != FALSE;
+}
+
 void SingleScreen_SetBattleMenu(int kind, int selection);
 void SingleScreen_SetBattleMenu(int kind, int selection) {
     gSingleScreenBuildInfo.battleMenu = kind;
