@@ -24,10 +24,10 @@ public:
     // sweeping past as a battle opens, a Pokémon or trainer crossing the edge). Returns
     // false (and the battle is drawn as before) if the top screen is not built the way
     // described above.
-    bool Build(melonDS::NDS& nds, const ScreenImage& top, int extend, const WideImage* world, float viewWidth, WideImage& out, int unitNum)
+    bool Build(melonDS::NDS& nds, const ScreenImage& top, int extend, const WideImage* world, float viewWidth, WideImage& out, int unitNum, uint8_t fixedUiLayers = 0)
     {
         using namespace melonDS;
-        if (extend <= 0 || !top.flags) return false;
+        if (extend < 0 || (extend == 0 && !fixedUiLayers) || !top.flags) return false;
         const GPU2D::Unit& unit = unitNum == 0 ? nds.GPU.GPU2D_A : nds.GPU.GPU2D_B;
         const u32 dispcnt = unit.DispCnt;
         if ((dispcnt & 7) != 0 || ((dispcnt >> 16) & 3) != 1) return false; // all text layers, normal display
@@ -67,7 +67,7 @@ public:
         // size of its map. They are not continued beyond the screen, stay where the game
         // put them, in front, and are not moved with the wild Pokémon's side (which would
         // cut one in two at the bottom of its rows).
-        uint8_t windowLayers = 0;
+        uint8_t windowLayers = fixedUiLayers & ((dispcnt >> 8) & 0x0F);
         {
             // One pass over the screen for all four backgrounds.
             int n[4] = {}, x0[4] = { 256, 256, 256, 256 }, x1[4] = { -1, -1, -1, -1 };
@@ -283,6 +283,31 @@ public:
             }
         }
 
+        // Read a text layer independently of the sprites covering it. Choice windows
+        // share BG1 with the message box, and must remain readable over the moved HUD.
+        auto textPixel = [&](const Layer& l, int x, int y) -> uint32_t {
+            const int mapW = (unit.BGCnt[l.num] & 0x4000) ? 512 : 256;
+            const int sx = (renderer->LineScroll[unitNum][y][l.num][0] + x) & (mapW - 1);
+            const int sy = (renderer->LineScroll[unitNum][y][l.num][1] + y) & (l.mapH - 1);
+            const int tx = sx >> 3, ty = sy >> 3;
+            const u32 block = (tx >> 5) + ((ty >> 5) * (mapW >> 8));
+            const u16 e = vram16(l.mapBase + block * 0x800 + (((ty & 31) << 5) + (tx & 31)) * 2);
+            int px = sx & 7, py = sy & 7;
+            if (e & 0x400) px = 7 - px;
+            if (e & 0x800) py = 7 - py;
+            int idx;
+            if (l.c256)
+                idx = vram8(l.charBase + (e & 0x3FF) * 64 + py * 8 + px);
+            else
+            {
+                const u8 two = vram8(l.charBase + (e & 0x3FF) * 32 + py * 4 + (px >> 1));
+                idx = (px & 1) ? two >> 4 : two & 0xF;
+                if (idx) idx += (e >> 12) * 16;
+            }
+
+            return idx ? colour(palette(idx * 2), l.num, y) : 0;
+        };
+
         // The 2D layers at a point: the colour and the priority of the frontmost (4 for the
         // backdrop), and whether it is a sprite (in front of a background of the same priority).
         auto layerPixel = [&](int x, int y, int& prio, bool& obj) -> uint32_t {
@@ -307,27 +332,11 @@ public:
                 }
                 if (i == nLayers) break;
                 const Layer& l = layers[i];
-                const int sx = (renderer->LineScroll[unitNum][y][l.num][0] + x) & 511;
-                const int sy = (renderer->LineScroll[unitNum][y][l.num][1] + y) & (l.mapH - 1);
-                const int tx = sx >> 3, ty = sy >> 3;
-                const u32 block = (tx >> 5) + ((ty >> 5) << 1);
-                const u16 e = vram16(l.mapBase + block * 0x800 + (((ty & 31) << 5) + (tx & 31)) * 2);
-                int px = sx & 7, py = sy & 7;
-                if (e & 0x400) px = 7 - px;
-                if (e & 0x800) py = 7 - py;
-                int idx;
-                if (l.c256)
-                    idx = vram8(l.charBase + (e & 0x3FF) * 64 + py * 8 + px);
-                else
-                {
-                    const u8 two = vram8(l.charBase + (e & 0x3FF) * 32 + py * 4 + (px >> 1));
-                    idx = (px & 1) ? two >> 4 : two & 0xF;
-                    if (idx) idx += (e >> 12) * 16;
-                }
-                if (idx)
+                const uint32_t c = textPixel(l, x, y);
+                if (c)
                 {
                     prio = l.prio;
-                    return colour(palette(idx * 2), l.num, y);
+                    return c;
                 }
             }
             prio = 4;
@@ -495,7 +504,7 @@ public:
         if (!wasSettled && platRight > platLeft && (platLeft + platRight) / 2 >= 192) { PlatL = platLeft; PlatR = platRight; PlatT = platTop; PlatB = platBottom; Plat = PlatNow; }
         const int enemyShift = (int)std::lround(extend * Glide);
         // The wild Pokémon and its ground stand two pixels short of the far edge; the player's Pokémon goes out to the near edge, as on a 4:3 screen.
-        const int monShift = (int)std::lround((extend - 2) * Glide);
+        const int monShift = (int)std::lround(std::max(0, extend - 2) * Glide);
         const int playerShift = enemyShift;
 
         const int w = 256 + 2 * extend;
@@ -794,6 +803,34 @@ public:
                     const bool mine = x + playerShift < w && MoveP[d + playerShift];
                     if (mine || boxRow[y] || Ui[d] || HpMask[d] || Ui[s] || HpMask[s]) continue;
                     Pixels[d] = x + playerShift < w && MoveP[s + playerShift] ? Plain[s] : Snap[s];
+                }
+        }
+        // The single-screen ROM publishes when a choice window is open. Its BG1
+        // pixels include parts hidden by priority-zero HP sprites in the DS frame;
+        // recover them from VRAM and draw the complete dialog after moving the HUD.
+        // Transparent tiles leave the battle visible. Use the same scroll, palette
+        // snapshot and line brightness as the surrounding picture.
+        for (int b = 3; b >= 0; b--)
+        {
+            if (!(fixedUiLayers & (1 << b)) || !(dispcnt & (0x100 << b))) continue;
+            const u16 cnt = unit.BGCnt[b];
+            Layer l;
+            l.num = b;
+            l.prio = cnt & 3;
+            l.c256 = cnt & 0x80;
+            l.mapH = (cnt & 0x8000) ? 512 : 256;
+            l.charBase = ((cnt >> 2) & 0xF) * 0x4000;
+            l.mapBase = ((cnt >> 8) & 0x1F) * 0x800;
+            if (unitNum == 0)
+            {
+                l.charBase += ((dispcnt >> 24) & 7) * 0x10000;
+                l.mapBase += ((dispcnt >> 27) & 7) * 0x10000;
+            }
+            for (int y = 0; y < 192; y++)
+                for (int x = 0; x < 256; x++)
+                {
+                    const uint32_t c = textPixel(l, x, y);
+                    if (c) Pixels[outIndex(x, y)] = c;
                 }
         }
         out = WideImage();

@@ -2949,7 +2949,7 @@ int main(int argc, char** argv)
         auto takeWideImage = [&]() {
             wideImage = WideImage();
             // A battle on a wide view: the screen widened (battlewide.h) instead of the bars.
-            if (scene.edgeFill && cfg.wide && !opt.noWide)
+            if (cfg.wide && !opt.noWide && (scene.edgeFill || (singleView() && singleScreenFlag[1] == 6)))
             {
                 WideImage world;
                 if (wideFrames > 3 && !melonDS::Wide.Front.empty())
@@ -2965,7 +2965,10 @@ int main(int argc, char** argv)
                 battleWide.MonLift = cfg.monLift;
                 battleWide.GroundLift = cfg.groundLift;
                 battleWide.PlayerGroundLift = cfg.playerGroundLift;
-                if (vw >= 300 && battleWide.Build(*nds, topImage, (int)std::ceil((vw - 256) / 2), &world, vw, wideImage, tu))
+                // BG1 holds the question and both choices. Keep this dialog above the
+                // widened battle, including HP sprites that covered it on the DS frame.
+                const uint8_t fixedUi = singleView() && singleScreenFlag[1] == 6 ? LAYER_BG1 : 0;
+                if ((vw >= 300 || fixedUi) && battleWide.Build(*nds, topImage, std::max(0, (int)std::ceil((vw - 256) / 2)), &world, vw, wideImage, tu, fixedUi))
                 {
                     scene.wide = true;
                     return;
