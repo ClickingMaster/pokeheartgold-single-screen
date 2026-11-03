@@ -29,9 +29,17 @@ ALIGN(4)
 static const s8 sHpBarArrowXOffsets[] = {
     72,
     0,
+#ifdef SINGLE_SCREEN
+    48,
+#else
     72,
+#endif
     0,
+#ifdef SINGLE_SCREEN
+    48,
+#else
     72,
+#endif
     0,
 };
 
@@ -336,8 +344,13 @@ static const ManagedSpriteTemplate sSpriteTemplate_HpBarSingleEnemy = {
 };
 
 static const ManagedSpriteTemplate sSpriteTemplate_HpBarDoublePlayerLHS = {
+#ifdef SINGLE_SCREEN
+    .x = 64,
+    .y = 116,
+#else
     .x = 0xC0,
     .y = 0x67,
+#endif
     .z = 0,
     .animation = 0,
     .drawPriority = 0x1C,
@@ -356,8 +369,13 @@ static const ManagedSpriteTemplate sSpriteTemplate_HpBarDoublePlayerLHS = {
 };
 
 static const ManagedSpriteTemplate sSpriteTemplate_HpBarDoubleEnemyLHS = {
+#ifdef SINGLE_SCREEN
+    .x = 192,
+    .y = 12,
+#else
     .x = 0x3A,
     .y = 0x10,
+#endif
     .z = 0,
     .animation = 0,
     .drawPriority = 0x19,
@@ -376,8 +394,13 @@ static const ManagedSpriteTemplate sSpriteTemplate_HpBarDoubleEnemyLHS = {
 };
 
 static const ManagedSpriteTemplate sSpriteTemplate_HpBarDoublePlayerRHS = {
+#ifdef SINGLE_SCREEN
+    .x = 192,
+    .y = 116,
+#else
     .x = 0xC6,
     .y = 0x84,
+#endif
     .z = 0,
     .animation = 0,
     .drawPriority = 0x1A,
@@ -396,8 +419,13 @@ static const ManagedSpriteTemplate sSpriteTemplate_HpBarDoublePlayerRHS = {
 };
 
 static const ManagedSpriteTemplate sSpriteTemplate_HpBarDoubleEnemyRHS = {
+#ifdef SINGLE_SCREEN
+    .x = 64,
+    .y = 12,
+#else
     .x = 0x3A,
     .y = 0x2D,
+#endif
     .z = 0,
     .animation = 0,
     .drawPriority = 0x1B,
@@ -457,6 +485,78 @@ static const ManagedSpriteTemplate sSpriteTemplate_HpBarSafariOrPark = {
 
 #include "battle/battle_hp_bar_data.h"
 
+/* All four doubles cells use the compact card. Their existing
+ * NCERs have two 64x64 objects at (-64,-28)/(0,-28), tiles 0/32 in
+ * 64-byte OBJ mapping, backed by the original 0x1000-byte char allocation. */
+static BOOL BattleHpBar_IsCompact(u8 type) {
+#ifdef SINGLE_SCREEN
+    return type >= HP_BAR_TYPE_DOUBLE_PLAYER_LHS && type <= HP_BAR_TYPE_DOUBLE_ENEMY_RHS;
+#else
+    return FALSE;
+#endif
+}
+
+#ifdef SINGLE_SCREEN
+static u8 *BattleHpBar_CompactVram(ManagedSprite *sprite) {
+    NNSG2dImageProxy *proxy = Sprite_GetImageProxy(sprite->sprite);
+    return (u8 *)G2_GetOBJCharPtr() + proxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN];
+}
+
+/* OBJ VRAM requires halfword stores. Read/modify/write preserves the other
+ * three pixels, including adjacent fields that share a tile or halfword. */
+static void BattleHpBar_CompactPutPixel(u8 *vram, int x, int y, u8 color) {
+    int px, py, address, shift;
+    volatile u16 *packed;
+    GF_ASSERT(x >= 0 && x < 128 && y >= 0 && y < 24 && color < 16);
+    px = x % 64;
+    py = y + 16;
+    address = (x / 64) * 0x800 + ((py / 8) * 8 + px / 8) * 32 + (py % 8) * 4 + (px % 8) / 2;
+    GF_ASSERT(address >= 0 && address < 0x1000);
+    packed = (volatile u16 *)(vram + (address & ~1));
+    shift = (address & 1) * 8 + (px & 1) * 4;
+    *packed = (*packed & ~(15 << shift)) | (color << shift);
+}
+
+/* Inputs are canonical window/printer/component tiles, never the old field
+ * locations in VRAM: those locations cease to be authoritative after repack. */
+static void BattleHpBar_CompactBlit(BattleHpBar *hpBar, const u8 *src, int tilesWide, int srcX, int srcY, int x, int y, int width, int height) {
+    int dx, dy;
+    u8 *vram = BattleHpBar_CompactVram(hpBar->boxObj);
+    GF_ASSERT(tilesWide > 0 && srcX >= 0 && srcY >= 0 && srcX + width <= tilesWide * 8);
+    GF_ASSERT(x >= 0 && y >= 0 && width > 0 && height > 0 && x + width <= 128 && y + height <= 24);
+    for (dy = 0; dy < height; ++dy) {
+        for (dx = 0; dx < width; ++dx) {
+            int sx = srcX + dx;
+            int sy = srcY + dy;
+            int address = ((sy / 8) * tilesWide + sx / 8) * 32 + (sy % 8) * 4 + (sx % 8) / 2;
+            u8 color = (src[address] >> ((sx & 1) * 4)) & 15;
+            BattleHpBar_CompactPutPixel(vram, x + dx, y + dy, color);
+        }
+    }
+}
+
+static void BattleHpBar_CompactInitialize(ManagedSprite *sprite, u8 type) {
+    int x, y;
+    u8 *vram = BattleHpBar_CompactVram(sprite);
+    MI_CpuFill16(vram, 0, 0x1000);
+    for (y = 0; y < 24; ++y) {
+        for (x = 0; x < 128; ++x) {
+            /* Opaque gutter connects the native left edge to the card body. */
+            u8 color = (x == 0 || y == 23) ? 3 : 15;
+            if (x >= 24 && x < 72 && (y == 16 || y == 20)) {
+                color = 3;
+            }
+            BattleHpBar_CompactPutPixel(vram, x, y, color);
+        }
+    }
+    /* Native eight-pixel separator cell between the two three-digit fields. */
+    for (y = 0; !(type & 1) && y < 7; ++y) {
+        BattleHpBar_CompactPutPixel(vram, 102 - y, 16 + y, 14);
+        BattleHpBar_CompactPutPixel(vram, 103 - y, 16 + y, 2);
+    }
+}
+#endif
+
 static void BattleHpBar_LoadBoxResources(SpriteSystem *spriteSystem, SpriteManager *spriteManager, NARC *narc, PaletteData *plttData, int barType) {
     const ManagedSpriteTemplate *pRes = BattleHpBar_Util_GetHpBoxSpriteTemplate(barType);
 
@@ -486,6 +586,11 @@ static ManagedSprite *BattleHpBar_CreateBoxSprite(SpriteSystem *spriteSystem, Sp
 
     ManagedSprite *ret = SpriteSystem_NewSprite(spriteSystem, spriteManager, pRes);
     Sprite_TickFrame(ret->sprite);
+#ifdef SINGLE_SCREEN
+    if (BattleHpBar_IsCompact(barType)) {
+        BattleHpBar_CompactInitialize(ret, barType);
+    }
+#endif
     return ret;
 }
 
@@ -507,6 +612,14 @@ void BattleHpBar_Draw(BattleHpBar *hpBar, u32 num, u32 flag) {
     case HP_BAR_TYPE_DOUBLE_PLAYER_LHS:
     case HP_BAR_TYPE_DOUBLE_PLAYER_RHS:
         flag &= ~0x220;
+        if (BattleHpBar_IsCompact(hpBar->type)) {
+            /* Gauge-only initialization must also populate both numbers.
+             * Numeric animation draws (flag 2) must not step/reset the gauge. */
+            if (flag & 1) {
+                flag |= 6;
+            }
+            break;
+        }
         if (hpBar->showHpNumbers == 0) {
             flag &= ~6;
         } else {
@@ -671,6 +784,11 @@ void BattleHpBar_ToggleHpNumbers(BattleHpBar *hpBar) {
     case HP_BAR_TYPE_DOUBLE_PLAYER_LHS:
     case HP_BAR_TYPE_DOUBLE_PLAYER_RHS:
         hpBar->showHpNumbers ^= 1;
+        if (BattleHpBar_IsCompact(hpBar->type)) {
+            /* Both fields remain visible; do not replace old shared-address
+             * art or redraw a stale hp value during an active animation. */
+            return;
+        }
         vramBaseAddr = G2_GetOBJCharPtr();
         imgProxy = Sprite_GetImageProxy(hpBar->boxObj->sprite);
         if (hpBar->showHpNumbers == 1) {
@@ -810,7 +928,10 @@ void BattleHpBar_StartSlide(BattleHpBar *hpBar, BOOL slideOut) {
     GF_ASSERT(hpBar->boxObj != NULL);
     hpBar->slideDone = FALSE;
     hpBar->slideOut = slideOut;
-    if (!slideOut) {
+    if (BattleHpBar_IsCompact(hpBar->type)) {
+        int direction = BattleHpBar_Util_GetHpBoxSpriteTemplate(hpBar->type)->x < 128 ? -1 : 1;
+        BattleHpBar_SetOffset(hpBar, slideOut ? 0 : direction * 256, 0);
+    } else if (!slideOut) {
         switch (hpBar->type) {
         case HP_BAR_TYPE_SINGLE_PLAYER:
         case HP_BAR_TYPE_DOUBLE_PLAYER_LHS:
@@ -839,7 +960,19 @@ static void Task_BattleHpBarSlide(SysTask *task, void *data) {
     template = BattleHpBar_Util_GetHpBoxSpriteTemplate(hpBar->type);
     ManagedSprite_GetPositionXY(hpBar->boxObj, &x, &y);
 
-    switch (hpBar->type) {
+    if (BattleHpBar_IsCompact(hpBar->type)) {
+        int direction = BattleHpBar_Util_GetHpBoxSpriteTemplate(hpBar->type)->x < 128 ? -1 : 1;
+        int distance = (x - template->x) * direction;
+        distance += hpBar->slideOut ? 24 : -24;
+        if (distance <= 0 && !hpBar->slideOut) {
+            distance = 0;
+            done++;
+        } else if (distance >= 256 && hpBar->slideOut) {
+            distance = 256;
+            done++;
+        }
+        x = template->x + direction * distance;
+    } else switch (hpBar->type) {
     case HP_BAR_TYPE_SINGLE_PLAYER:
     case HP_BAR_TYPE_DOUBLE_PLAYER_LHS:
     case HP_BAR_TYPE_DOUBLE_PLAYER_RHS:
@@ -914,6 +1047,15 @@ static void BattleHpBar_DrawNickname(BattleHpBar *hpBar) {
     AddTextWindowTopLeftCorner(bgConfig, &window, 8, 2, 0, 15);
     AddTextPrinterParameterizedWithColorAndSpacing(&window, 0, string, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(14, 2, 15), 0, 0, NULL);
     srcBuf = window.pixelBuffer;
+#ifdef SINGLE_SCREEN
+    if (BattleHpBar_IsCompact(hpBar->type)) {
+        BattleHpBar_CompactBlit(hpBar, srcBuf, 8, 0, 0, 24, 0, 64, 15);
+        RemoveWindow(&window);
+        String_Delete(string);
+        String_Delete(string2);
+        return;
+    }
+#endif
 
     {
         void *vramAddr;
@@ -950,6 +1092,15 @@ static void BattleHpBar_DrawGenderIcon(BattleHpBar *hpBar) {
     }
     const u8 *bottomGraphic = BattleHpBar_Util_GetComponentRawGraphic(bottomComponentId);
     const u8 *topGraphic = BattleHpBar_Util_GetComponentRawGraphic(topComponentId);
+#ifdef SINGLE_SCREEN
+    if (BattleHpBar_IsCompact(hpBar->type)) {
+        ALIGN(4) u8 graphic[0x80];
+        MI_CpuCopy16(topGraphic, graphic, 0x40);
+        MI_CpuCopy16(bottomGraphic, graphic + 0x40, 0x40);
+        BattleHpBar_CompactBlit(hpBar, graphic, 2, 0, 3, 88, 0, 16, 9);
+        return;
+    }
+#endif
     NNSG2dImageProxy *imgProxy = Sprite_GetImageProxy(hpBar->boxObj->sprite);
     void *vramAddr = G2_GetOBJCharPtr();
     MI_CpuCopy16(topGraphic, (void *)((u32)vramAddr + sGenderIconVramRegions[hpBar->type][0].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), sGenderIconVramRegions[hpBar->type][0].size);
@@ -957,6 +1108,15 @@ static void BattleHpBar_DrawGenderIcon(BattleHpBar *hpBar) {
 }
 
 static void BattleHpBar_DrawLevel(BattleHpBar *hpBar) {
+#ifdef SINGLE_SCREEN
+    if (BattleHpBar_IsCompact(hpBar->type)) {
+        ALIGN(4) u8 numberBuf[0x60];
+        MI_CpuFill8(numberBuf, 0xFF, sizeof(numberBuf));
+        BattleNumberPrinter_PrintUInt(BattleSystem_GetLevelNumPrinter(hpBar->battleSystem), hpBar->level, 3, PRINTING_MODE_LEFT_ALIGN, (void *)numberBuf);
+        BattleHpBar_CompactBlit(hpBar, numberBuf, 3, 0, 1, 104, 0, 24, 7);
+        return;
+    }
+#endif
     int j, i, k;
     u8 *numberBuf = Heap_Alloc(HEAP_ID_BATTLE, 0x60);
     u8 *tileBuf = Heap_Alloc(HEAP_ID_BATTLE, 0xC0);
@@ -984,6 +1144,15 @@ static void BattleHpBar_DrawLevel(BattleHpBar *hpBar) {
 }
 
 static void BattleHpBar_DrawCurrentHp(BattleHpBar *hpBar, u32 num) {
+#ifdef SINGLE_SCREEN
+    if (BattleHpBar_IsCompact(hpBar->type)) {
+        ALIGN(4) u8 numberBuf[0x60];
+        MI_CpuFill8(numberBuf, 0xFF, sizeof(numberBuf));
+        BattleNumberPrinter_PrintUInt(BattleSystem_GetHpNumPrinter(hpBar->battleSystem), num, 3, PRINTING_MODE_RIGHT_ALIGN, (void *)numberBuf);
+        BattleHpBar_CompactBlit(hpBar, numberBuf, 3, 0, 1, 72, 16, 24, 7);
+        return;
+    }
+#endif
     u8 *numberBuf = Heap_Alloc(HEAP_ID_BATTLE, 0x60);
     MI_CpuFill8(numberBuf, 0xFF, 0x60);
     BattleNumberPrinter_PrintUInt(BattleSystem_GetHpNumPrinter(hpBar->battleSystem), num, 3, PRINTING_MODE_RIGHT_ALIGN, (void *)numberBuf);
@@ -996,6 +1165,15 @@ static void BattleHpBar_DrawCurrentHp(BattleHpBar *hpBar, u32 num) {
 }
 
 static void BattleHpBar_DrawMaxHp(BattleHpBar *hpBar) {
+#ifdef SINGLE_SCREEN
+    if (BattleHpBar_IsCompact(hpBar->type)) {
+        ALIGN(4) u8 numberBuf[0x60];
+        MI_CpuFill8(numberBuf, 0xFF, sizeof(numberBuf));
+        BattleNumberPrinter_PrintUInt(BattleSystem_GetHpNumPrinter(hpBar->battleSystem), hpBar->maxHp, 3, PRINTING_MODE_LEFT_ALIGN, (void *)numberBuf);
+        BattleHpBar_CompactBlit(hpBar, numberBuf, 3, 0, 1, 104, 16, 24, 7);
+        return;
+    }
+#endif
     u8 *numberBuf = Heap_Alloc(HEAP_ID_BATTLE, 0x60);
     MI_CpuFill8(numberBuf, 0xFF, 0x60);
     BattleNumberPrinter_PrintUInt(BattleSystem_GetHpNumPrinter(hpBar->battleSystem), hpBar->maxHp, 3, PRINTING_MODE_LEFT_ALIGN, (void *)numberBuf);
@@ -1013,6 +1191,12 @@ static void BattleHpBar_DrawCaughtIcon(BattleHpBar *hpBar) {
     } else {
         graphic = BattleHpBar_Util_GetComponentRawGraphic(38);
     }
+#ifdef SINGLE_SCREEN
+    if (BattleHpBar_IsCompact(hpBar->type)) {
+        BattleHpBar_CompactBlit(hpBar, graphic, 1, 0, 0, 8, 8, 8, 8);
+        return;
+    }
+#endif
     NNSG2dImageProxy *imgProxy = Sprite_GetImageProxy(hpBar->boxObj->sprite);
     void *vramAddr = G2_GetOBJCharPtr();
 
@@ -1021,6 +1205,12 @@ static void BattleHpBar_DrawCaughtIcon(BattleHpBar *hpBar) {
 
 static void BattleHpBar_DrawStatusIcon(BattleHpBar *hpBar, int componentId) {
     const u8 *graphic = BattleHpBar_Util_GetComponentRawGraphic(componentId);
+#ifdef SINGLE_SCREEN
+    if (BattleHpBar_IsCompact(hpBar->type)) {
+        BattleHpBar_CompactBlit(hpBar, graphic, 3, 0, 0, 104, 8, 24, 8);
+        return;
+    }
+#endif
     NNSG2dImageProxy *imgProxy = Sprite_GetImageProxy(hpBar->boxObj->sprite);
     void *vramAddr = G2_GetOBJCharPtr();
 
@@ -1124,7 +1314,7 @@ static int BattleHpBar_StepGauge(BattleHpBar *hpBar, BOOL isExp) {
         }
         ret = BattleHpBar_CalculatePixelsChangeFrame(hpBar->maxExp, hpBar->exp, hpBar->gainedExp, &hpBar->expCalc, 12, abs(hpBar->gainedExp / denom));
     }
-    if (isExp != FALSE || hpBar->showHpNumbers != TRUE) {
+    if (isExp != FALSE || hpBar->showHpNumbers != TRUE || BattleHpBar_IsCompact(hpBar->type)) {
         BattleHpBar_DrawGauge(hpBar, isExp);
     }
     if (ret == -1) {
@@ -1165,6 +1355,14 @@ static void BattleHpBar_DrawGauge(BattleHpBar *hpBar, u8 isExp) {
             break;
         }
         src = BattleHpBar_Util_GetComponentRawGraphic(componentId);
+#ifdef SINGLE_SCREEN
+        if (BattleHpBar_IsCompact(hpBar->type)) {
+            for (i = 0; i < 6; ++i) {
+                BattleHpBar_CompactBlit(hpBar, src + pixelBuffer[i] * 32, 1, 0, 2, 24 + i * 8, 17, 8, 3);
+            }
+            break;
+        }
+#endif
         sizeTop = sHpGaugeVramRegions[hpBar->type][0].size / 32;
         for (i = 0; i < 6; ++i) {
             if (i < sizeTop) {
@@ -1465,6 +1663,9 @@ void BattleHpBar_MenuCloseDummy(BattleHpBar *hpBar) {
 }
 
 static void BattleHpBar_StartBobTask(BattleHpBar *hpBar) {
+    if (BattleHpBar_IsCompact(hpBar->type)) {
+        return;
+    }
     if (hpBar->sysTask == NULL) {
         hpBar->bobAngle = 0;
         hpBar->sysTask = SysTask_CreateOnMainQueue(Task_BattleHpBarBob, hpBar, 1010);
@@ -1482,6 +1683,10 @@ static void BattleHpBar_StopBobTask(BattleHpBar *hpBar) {
 
 static void Task_BattleHpBarBob(SysTask *task, void *data) {
     BattleHpBar *hpBar = data;
+    if (BattleHpBar_IsCompact(hpBar->type)) {
+        BattleHpBar_SetOffset(hpBar, 0, 0);
+        return;
+    }
     hpBar->bobAngle += 20;
     if (hpBar->bobAngle >= 360) {
         hpBar->bobAngle -= 360;

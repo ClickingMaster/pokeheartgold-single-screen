@@ -246,6 +246,10 @@ static const GraphicsBanks sSubMenuGraphicsBanks = {
     .texpltt = GX_VRAM_TEXPLTT_01_FG,
 };
 
+#ifdef SINGLE_SCREEN
+void SingleScreen_SetBattleLayout(BOOL doubles);
+#endif
+
 void Battle_BattleInit(OverlayManager *manager) {
     BattleSystem *battleSystem = OverlayManager_GetData(manager);
     BattleSetup *setup = OverlayManager_GetArgs(manager);
@@ -256,6 +260,9 @@ void Battle_BattleInit(OverlayManager *manager) {
     int colorIndex;
     u32 gender;
 
+#ifdef SINGLE_SCREEN
+    SingleScreen_SetBattleLayout((setup->battleType & BATTLE_TYPE_DOUBLES) != 0);
+#endif
     paletteSize = GetMainBgPlttSize();
     MIi_CpuClear16(0, GetMainBgPlttAddr(), paletteSize);
     paletteSize = GetSubBgPlttSize();
@@ -385,6 +392,9 @@ void Battle_BattleExit(OverlayManager *man) {
     int color;
     int i;
 
+#ifdef SINGLE_SCREEN
+    SingleScreen_SetBattleLayout(FALSE);
+#endif
     setup->randSeed = battleSystem->randTemp;
     setup->battleSpecial = battleSystem->battleSpecial;
     if (!(battleSystem->battleSpecial & BATTLE_SPECIAL_RECORDING)) {

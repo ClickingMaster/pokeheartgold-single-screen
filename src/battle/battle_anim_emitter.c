@@ -1,4 +1,5 @@
 #include "battle/battle_anim_emitter.h"
+#include "battle/battle_anim_ball.h"
 
 #include <string.h>
 
@@ -1539,6 +1540,12 @@ void BattleAnimUtil_LookupScreenPos(int set, int index, s16 *x, s16 *y) {
         *x = gBattleAnimBattlerScreenPositions[set][index * 2];
     }
     if (y != NULL) {
+#ifdef SINGLE_SCREEN
+        if (set == 1 && index >= 2 && index <= 5) {
+            *y = BattleAnimUtil_GetBattlerTypeCoord(index, 1);
+            return;
+        }
+#endif
         *y = gBattleAnimBattlerScreenPositionsY[set][index * 2];
     }
 }
@@ -1567,7 +1574,11 @@ s16 BattleAnimSystem_GetBattlerScreenCoord(BattleAnimSystem *system, int battler
         return gBattleAnimBattlerScreenPositions[set][index * 2];
     case 1:
     case 3:
-        return gBattleAnimBattlerScreenPositionsY[set][index * 2];
+        {
+            s16 y;
+            BattleAnimUtil_LookupScreenPos(set, index, NULL, &y);
+            return y;
+        }
     default:
         GF_ASSERT(FALSE);
         return 0;

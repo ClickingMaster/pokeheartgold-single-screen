@@ -24,7 +24,7 @@ public:
     // sweeping past as a battle opens, a Pokémon or trainer crossing the edge). Returns
     // false (and the battle is drawn as before) if the top screen is not built the way
     // described above.
-    bool Build(melonDS::NDS& nds, const ScreenImage& top, int extend, const WideImage* world, float viewWidth, WideImage& out, int unitNum)
+    bool Build(melonDS::NDS& nds, const ScreenImage& top, int extend, const WideImage* world, float viewWidth, WideImage& out, int unitNum, bool compactDoubles = false)
     {
         using namespace melonDS;
         if (extend <= 0 || !top.flags) return false;
@@ -493,7 +493,7 @@ public:
         // Kept as the sprite last showed it while the battle opened; coming back from the bag the
         // platform slides in again, and that slide must not move it.
         if (!wasSettled && platRight > platLeft && (platLeft + platRight) / 2 >= 192) { PlatL = platLeft; PlatR = platRight; PlatT = platTop; PlatB = platBottom; Plat = PlatNow; }
-        const int enemyShift = (int)std::lround(extend * Glide);
+        const int enemyShift = compactDoubles ? 0 : (int)std::lround(extend * Glide);
         // The wild Pokémon and its ground stand two pixels short of the far edge; the player's Pokémon goes out to the near edge, as on a 4:3 screen.
         const int monShift = (int)std::lround((extend - 2) * Glide);
         const int playerShift = enemyShift;

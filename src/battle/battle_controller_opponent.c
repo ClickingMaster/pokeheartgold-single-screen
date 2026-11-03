@@ -6492,6 +6492,11 @@ static Pokepic *BattleControllerOpponent_CreatePokepic(BattleSystem *battleSyste
 
     charData = MonPicData_GetCharBuffer(BattleSystem_GetMonPicDataList(battleSystem), battlerId);
     battlerType = BattleSystem_GetBattlerType(battleSystem, battlerId);
+#ifdef SINGLE_SCREEN
+    if (battlerType >= 2 && battlerType <= 5) {
+        y = BattleAnimUtil_GetBattlerTypeCoord(battlerType, 1);
+    }
+#endif
     isEnemy = battlerType & BATTLER_TYPE_IS_ENEMY;
     if (isEnemy) {
         facing = 2;

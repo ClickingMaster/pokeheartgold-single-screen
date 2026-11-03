@@ -1977,6 +1977,12 @@ void BattleAnimUtil_LoadSubstituteIntoPic(BattleAnimBattlerPicParams *params, en
 }
 
 s16 BattleAnimUtil_GetBattlerTypeCoord(u32 battlerType, u32 index) {
+#ifdef SINGLE_SCREEN
+    // The 80-pixel doubles sprites fit between the two 24-pixel HP rows.
+    if (index == 1 && battlerType >= 2 && battlerType <= 5) {
+        return 64;
+    }
+#endif
     if (index == 0) {
         return gBattlerSlideInTargetX[battlerType][0];
     }
