@@ -191,8 +191,7 @@ private:
             bool any = false;
             for (int y = 0; y < 192; y++)
             {
-                const uint8_t lc = LayerClass(top.flags[y * 256 + sx]);
-                bool ext = lc != LAYER_3D && !(lc & dropped);
+                bool ext = WideEdgeFillAllowed(top.flags[y * 256 + sx], dropped);
                 Edge[y] = ext ? (0xFF000000 | top.pixels[y * 256 + sx]) : 0;
                 any |= ext;
             }
