@@ -502,7 +502,10 @@ public:
         // Kept as the sprite last showed it while the battle opened; coming back from the bag the
         // platform slides in again, and that slide must not move it.
         if (!wasSettled && platRight > platLeft && (platLeft + platRight) / 2 >= 192) { PlatL = platLeft; PlatR = platRight; PlatT = platTop; PlatB = platBottom; Plat = PlatNow; }
-        const int enemyShift = (int)std::lround(extend * Glide);
+        // A dialog can hide the centre of a Pokemon and split its visible pixels.
+        // Keep the scene in the game's coordinates while it is open: moving only
+        // the exposed fragments would tear it, and no hidden 3D image is guaranteed.
+        const int enemyShift = fixedUiLayers ? 0 : (int)std::lround(extend * Glide);
         // The wild Pokémon and its ground stand two pixels short of the far edge; the player's Pokémon goes out to the near edge, as on a 4:3 screen.
         const int monShift = (int)std::lround(std::max(0, extend - 2) * Glide);
         const int playerShift = enemyShift;

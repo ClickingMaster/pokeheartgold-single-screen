@@ -93,6 +93,42 @@ int main() {
   assert(at(110,110)!=0xfffbfbfb); // transparent UI tiles do not cover the battle
   assert(at(250+extend,110)==0xff0000ff); // health panel still moves to the edge
  }
+ // A wide confirmation covers the right side of the player. Some visible
+ // pixels still touch its centre; detached flame tips do not. Moving fragments
+ // independently, or exposing pixels hidden by BG1, breaks the silhouette.
+ memset(gpu.bg+0x8000,0,0x800);
+ for(int ty=11;ty<17;ty++) for(int tx=8;tx<28;tx++) put16(gpu.bg,0x8000+(ty*32+tx)*2,2);
+ for(int ty=19;ty<23;ty++) for(int tx=2;tx<29;tx++) put16(gpu.bg,0x8000+(ty*32+tx)*2,2);
+ gpu.GPU2D_A.DispCnt |= 0x108; // BG0 is the 3D Pokemon layer
+ gpu.GPU2D_A.BGCnt[0]=1;
+ for(int y=0;y<192;y++) for(int x=0;x<256;x++) {
+  int i=y*256+x;
+  bool ui=(x>=64&&x<224&&y>=88&&y<136)||(x>=16&&x<232&&y>=152&&y<184);
+  bool mon=(x>=48&&x<80&&y>=68&&y<145)||(x>=86&&x<90&&y>=68&&y<75);
+  pixels[i]=ui?0xfbfbfb:mon?0xfb0000:0x00fb00;
+  flags[i]=ui?LAYER_BG1:mon?LAYER_3D:LAYER_BG3;
+ }
+ for(int extend: {24,43,64}) {
+  int w=256+2*extend;
+  std::vector<uint32_t> raw3d(w*192,0);
+  for(int y=68;y<145;y++) for(int x=48;x<80;x++) raw3d[y*w+x+extend]=0xfffb0000;
+  for(int y=68;y<75;y++) for(int x=86;x<90;x++) raw3d[y*w+x+extend]=0xfffb0000;
+  WideImage world;world.pixels=raw3d.data();world.w=w;world.h=192;
+  BattleWide battle;WideImage out;
+  for(bool hasWorld: {false,true}) {
+   for(int i=0;i<325;i++) assert(battle.Build(nds,{pixels,flags},extend,hasWorld?&world:nullptr,w,out,0/*EXTRA*/));
+   // Head, exposed centre, feet and detached flame all keep the game's coordinates.
+   for(int y: {72,110,140}) {
+    int x=60;
+    if(out.pixels[y*out.w+x+extend]!=0xfffb0000) {
+     fprintf(stderr,"player split at extension %d, y %d: %08x\n",extend,y,out.pixels[y*out.w+x+extend]);return 1;
+    }
+   }
+   assert(out.pixels[70*out.w+87+extend]==0xfffb0000);
+   assert(out.pixels[72*out.w+30+extend]!=0xfffb0000); // no shifted duplicate
+   assert(out.pixels[110*out.w+100+extend]==0xfffbfbfb); // dialog remains in front
+  }
+ }
  return 0;
 }
 '''.replace('/*EXTRA*/', extra))
